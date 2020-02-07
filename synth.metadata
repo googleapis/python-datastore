@@ -1,5 +1,5 @@
 {
-  "updateTime": "2020-02-07T00:36:36.462894Z",
+  "updateTime": "2020-02-07T13:12:24.919904Z",
   "sources": [
     {
       "generator": {
@@ -12,8 +12,9 @@
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "68477017c4173c98addac0373950c6aa9d7b375f",
-        "internalRef": "293703548"
+        "sha": "e46f761cd6ec15a9e3d5ed4ff321a4bcba8e8585",
+        "internalRef": "293710856",
+        "log": "e46f761cd6ec15a9e3d5ed4ff321a4bcba8e8585\nGenerate the Bazel build file for recommendengine public api\n\nPiperOrigin-RevId: 293710856\n\n"
       }
     },
     {
