@@ -108,10 +108,10 @@ class TestDatastoreSave(TestDatastore):
 
     def _get_post(self, id_or_name=None, post_content=None):
         post_content = post_content or {
-            "title": "How to make the perfect pizza in your grill",
-            "tags": ["pizza", "grill"],
+            "title": u"How to make the perfect pizza in your grill",
+            "tags": [u"pizza", u"grill"],
             "publishedAt": datetime.datetime(2001, 1, 1, tzinfo=UTC),
-            "author": "Silvano",
+            "author": u"Silvano",
             "isDraft": False,
             "wordCount": 400,
             "rating": 5.0,
@@ -161,10 +161,10 @@ class TestDatastoreSave(TestDatastore):
             self.case_entities_to_delete.append(entity1)
 
             second_post_content = {
-                "title": "How to make the perfect homemade pasta",
-                "tags": ["pasta", "homemade"],
+                "title": u"How to make the perfect homemade pasta",
+                "tags": [u"pasta", u"homemade"],
                 "publishedAt": datetime.datetime(2001, 1, 1),
-                "author": "Silvano",
+                "author": u"Silvano",
                 "isDraft": False,
                 "wordCount": 450,
                 "rating": 4.5,
@@ -193,7 +193,7 @@ class TestDatastoreSave(TestDatastore):
         entity["truthy"] = True
         entity["float"] = 2.718281828
         entity["int"] = 3735928559
-        entity["words"] = "foo"
+        entity["words"] = u"foo"
         entity["blob"] = b"seekretz"
         entity_stored = datastore.Entity(key=key_stored)
         entity_stored["hi"] = "bye"
@@ -216,7 +216,7 @@ class TestDatastoreSaveKeys(TestDatastore):
         parent_key = Config.CLIENT.key("Residence", "NewYork")
         key = Config.CLIENT.key("Person", "name", parent=parent_key)
         entity = datastore.Entity(key=key)
-        entity["fullName"] = "Full name"
+        entity["fullName"] = u"Full name"
         entity["linkedTo"] = key  # Self reference.
 
         Config.CLIENT.put(entity)
@@ -476,7 +476,8 @@ class TestDatastoreQueryOffsets(TestDatastore):
         cls.CLIENT = clone_client(Config.CLIENT)
         # Remove the namespace from the cloned client, since these
         # query tests rely on the entities to be already stored
-        cls.CLIENT.namespace = cls.NAMESPACE
+        # cls.CLIENT.namespace = cls.NAMESPACE
+        cls.CLIENT.namespace = None
 
         # Populating the datastore if necessary.
         populate_datastore.add_large_character_entities(client=cls.CLIENT)
@@ -525,7 +526,7 @@ class TestDatastoreQueryOffsets(TestDatastore):
 class TestDatastoreTransaction(TestDatastore):
     def test_transaction_via_with_statement(self):
         entity = datastore.Entity(key=Config.CLIENT.key("Company", "Google"))
-        entity["url"] = "www.google.com"
+        entity["url"] = u"www.google.com"
 
         with Config.CLIENT.transaction() as xact:
             result = Config.CLIENT.get(entity.key)
@@ -581,7 +582,7 @@ class TestDatastoreTransaction(TestDatastore):
         # and updated outside it with a contentious value.
         key = local_client.key("BreakTxn", 1234)
         orig_entity = datastore.Entity(key=key)
-        orig_entity["foo"] = "bar"
+        orig_entity["foo"] = u"bar"
         local_client.put(orig_entity)
         self.case_entities_to_delete.append(orig_entity)
 
@@ -590,12 +591,12 @@ class TestDatastoreTransaction(TestDatastore):
                 entity_in_txn = local_client.get(key)
 
                 # Update the original entity outside the transaction.
-                orig_entity[contention_prop_name] = "outside"
+                orig_entity[contention_prop_name] = u"outside"
                 Config.CLIENT.put(orig_entity)
 
                 # Try to update the entity which we already updated outside the
                 # transaction.
-                entity_in_txn[contention_prop_name] = "inside"
+                entity_in_txn[contention_prop_name] = u"inside"
                 txn.put(entity_in_txn)
 
     def test_empty_array_put(self):
