@@ -430,9 +430,6 @@ class TestDatastoreQuery(TestDatastore):
         self.assertEqual(entities[1]["name"], "Jon Snow")
         self.assertEqual(entities[2]["name"], "Arya")
 
-    
-
-
     def test_query_paginate_with_start_cursor(self):
         page_query = self._base_query()
         page_query.order = "appearances"
