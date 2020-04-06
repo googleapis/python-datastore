@@ -515,10 +515,11 @@ class TestDatastoreQueryOffsets(TestDatastore):
         # Offset beyond items larger Verify 200 items found")
         self._verify(limit=200, offset=1100, expected=200)
 
-    def test_query_out_of_bounds_offsets(self):
+    def test_query_partially_out_of_bounds_offsets(self):
         # Offset within range, expect 50 despite larger limit")
         self._verify(limit=100, offset=self.TOTAL_OBJECTS-50, expected=50)
-
+    
+    def test_query_out_of_bounds_offsets(self):
         # Offset beyond items larger Verify no items found")
         self._verify(limit=200, offset=self.TOTAL_OBJECTS+1000, expected=0)
 
