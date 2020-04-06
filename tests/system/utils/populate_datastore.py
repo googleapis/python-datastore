@@ -42,19 +42,19 @@ KEY_PATHS = (
     EDDARD + ("Character", "Jon Snow"),
 )
 CHARACTERS = (
-    {"name": u"Rickard", "family": u"Stark", "appearances": 0, "alive": False},
-    {"name": u"Eddard", "family": u"Stark", "appearances": 9, "alive": False},
+    {"name": "Rickard", "family": "Stark", "appearances": 0, "alive": False},
+    {"name": "Eddard", "family": "Stark", "appearances": 9, "alive": False},
     {
-        "name": u"Catelyn",
-        "family": [u"Stark", u"Tully"],
+        "name": "Catelyn",
+        "family": ["Stark", "Tully"],
         "appearances": 26,
         "alive": False,
     },
-    {"name": u"Arya", "family": u"Stark", "appearances": 33, "alive": True},
-    {"name": u"Sansa", "family": u"Stark", "appearances": 31, "alive": True},
-    {"name": u"Robb", "family": u"Stark", "appearances": 22, "alive": False},
-    {"name": u"Bran", "family": u"Stark", "appearances": 25, "alive": True},
-    {"name": u"Jon Snow", "family": u"Stark", "appearances": 32, "alive": True},
+    {"name": "Arya", "family": "Stark", "appearances": 33, "alive": True},
+    {"name": "Sansa", "family": "Stark", "appearances": 31, "alive": True},
+    {"name": "Robb", "family": "Stark", "appearances": 22, "alive": False},
+    {"name": "Bran", "family": "Stark", "appearances": 25, "alive": True},
+    {"name": "Jon Snow", "family": "Stark", "appearances": 32, "alive": True},
 )
 
 
@@ -62,24 +62,22 @@ def print_func(message):
     if os.getenv("GOOGLE_CLOUD_NO_PRINT") != "true":
         print(message)
 
+
 def add_large_character_entities(client=None):
     TOTAL_OBJECTS = 2500
-    NAMESPACE="LargeCharacterEntity"
-    KIND="LargeCharacter"
+    NAMESPACE = "LargeCharacterEntity"
+    KIND = "LargeCharacter"
     MAX_STRING = (string.ascii_lowercase * 58)[:1500]
 
     client.namespace = NAMESPACE
 
     # Query used for all tests
-    page_query = client.query(
-        kind=KIND,
-        namespace=NAMESPACE,
-    )
+    page_query = client.query(kind=KIND, namespace=NAMESPACE,)
 
     def put_objects(count):
         remaining = count
-        current=0
-        
+        current = 0
+
         # Can only do 500 operations in a transaction with an overall
         # size limit.
         ENTITIES_TO_BATCH = 25
@@ -88,23 +86,23 @@ def add_large_character_entities(client=None):
             end = min(current + ENTITIES_TO_BATCH, count)
             with client.transaction() as xact:
                 # The name/ID for the new entity
-                for i in range(start,end):
-                    name = f'character{i:05d}'
+                for i in range(start, end):
+                    name = f"character{i:05d}"
                     # The Cloud Datastore key for the new entity
                     task_key = client.key(KIND, name)
 
                     # Prepares the new entity
                     task = datastore.Entity(key=task_key)
-                    task['name'] = f"{i:05d}"
-                    task['family'] = 'Stark'
-                    task['alive'] = False
+                    task["name"] = f"{i:05d}"
+                    task["family"] = "Stark"
+                    task["alive"] = False
 
                     for i in string.ascii_lowercase:
-                        task[f'space-{i}'] = MAX_STRING
-                        
+                        task[f"space-{i}"] = MAX_STRING
+
                     # Saves the entity
-                    xact.put(task)         
-            current += ENTITIES_TO_BATCH                     
+                    xact.put(task)
+            current += ENTITIES_TO_BATCH
 
     # Ensure we have 1500 entities for tests. If not, clean up type and add
     # new entities equal to TOTAL_OBJECTS
@@ -117,6 +115,7 @@ def add_large_character_entities(client=None):
             client.delete_multi([e.key for e in entities])
         # Put objects
         put_objects(TOTAL_OBJECTS)
+
 
 def add_characters(client=None):
     if client is None:

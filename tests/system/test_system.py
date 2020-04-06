@@ -108,10 +108,10 @@ class TestDatastoreSave(TestDatastore):
 
     def _get_post(self, id_or_name=None, post_content=None):
         post_content = post_content or {
-            "title": u"How to make the perfect pizza in your grill",
-            "tags": [u"pizza", u"grill"],
+            "title": "How to make the perfect pizza in your grill",
+            "tags": ["pizza", "grill"],
             "publishedAt": datetime.datetime(2001, 1, 1, tzinfo=UTC),
-            "author": u"Silvano",
+            "author": "Silvano",
             "isDraft": False,
             "wordCount": 400,
             "rating": 5.0,
@@ -161,10 +161,10 @@ class TestDatastoreSave(TestDatastore):
             self.case_entities_to_delete.append(entity1)
 
             second_post_content = {
-                "title": u"How to make the perfect homemade pasta",
-                "tags": [u"pasta", u"homemade"],
+                "title": "How to make the perfect homemade pasta",
+                "tags": ["pasta", "homemade"],
                 "publishedAt": datetime.datetime(2001, 1, 1),
-                "author": u"Silvano",
+                "author": "Silvano",
                 "isDraft": False,
                 "wordCount": 450,
                 "rating": 4.5,
@@ -193,7 +193,7 @@ class TestDatastoreSave(TestDatastore):
         entity["truthy"] = True
         entity["float"] = 2.718281828
         entity["int"] = 3735928559
-        entity["words"] = u"foo"
+        entity["words"] = "foo"
         entity["blob"] = b"seekretz"
         entity_stored = datastore.Entity(key=key_stored)
         entity_stored["hi"] = "bye"
@@ -216,7 +216,7 @@ class TestDatastoreSaveKeys(TestDatastore):
         parent_key = Config.CLIENT.key("Residence", "NewYork")
         key = Config.CLIENT.key("Person", "name", parent=parent_key)
         entity = datastore.Entity(key=key)
-        entity["fullName"] = u"Full name"
+        entity["fullName"] = "Full name"
         entity["linkedTo"] = key  # Self reference.
 
         Config.CLIENT.put(entity)
@@ -465,6 +465,7 @@ class TestDatastoreQuery(TestDatastore):
         self.assertEqual(entities[0]["name"], "Catelyn")
         self.assertEqual(entities[1]["name"], "Arya")
 
+
 class TestDatastoreQueryOffsets(TestDatastore):
     TOTAL_OBJECTS = 2500
     NAMESPACE = "LargeCharacterEntity"
@@ -489,16 +490,13 @@ class TestDatastoreQueryOffsets(TestDatastore):
 
     def _base_query(self):
         # Use the client for this test instead of the global.
-        return self.CLIENT.query(
-            kind=self.KIND,
-            namespace=self.NAMESPACE
-        )
+        return self.CLIENT.query(kind=self.KIND, namespace=self.NAMESPACE)
 
     def _verify(self, limit, offset, expected):
         # Query used for all tests
         page_query = self._base_query()
         page_query.add_filter("family", "=", "Stark")
-        page_query.add_filter("alive",  "=", False)
+        page_query.add_filter("alive", "=", False)
 
         iterator = page_query.fetch(limit=limit, offset=offset)
         entities = [e for e in iterator]
@@ -508,25 +506,26 @@ class TestDatastoreQueryOffsets(TestDatastore):
     def test_query_in_bounds_offsets(self):
         # Verify that with no offset there are the correct # of results
         self._verify(limit=None, offset=None, expected=self.TOTAL_OBJECTS)
-        
+
         # Verify that with no limit there are results (offset provided)")
-        self._verify(limit=None, offset=900, expected=self.TOTAL_OBJECTS-900)    
+        self._verify(limit=None, offset=900, expected=self.TOTAL_OBJECTS - 900)
 
         # Offset beyond items larger Verify 200 items found")
         self._verify(limit=200, offset=1100, expected=200)
 
     def test_query_partially_out_of_bounds_offsets(self):
         # Offset within range, expect 50 despite larger limit")
-        self._verify(limit=100, offset=self.TOTAL_OBJECTS-50, expected=50)
-    
+        self._verify(limit=100, offset=self.TOTAL_OBJECTS - 50, expected=50)
+
     def test_query_out_of_bounds_offsets(self):
         # Offset beyond items larger Verify no items found")
-        self._verify(limit=200, offset=self.TOTAL_OBJECTS+1000, expected=0)
+        self._verify(limit=200, offset=self.TOTAL_OBJECTS + 1000, expected=0)
+
 
 class TestDatastoreTransaction(TestDatastore):
     def test_transaction_via_with_statement(self):
         entity = datastore.Entity(key=Config.CLIENT.key("Company", "Google"))
-        entity["url"] = u"www.google.com"
+        entity["url"] = "www.google.com"
 
         with Config.CLIENT.transaction() as xact:
             result = Config.CLIENT.get(entity.key)
@@ -582,7 +581,7 @@ class TestDatastoreTransaction(TestDatastore):
         # and updated outside it with a contentious value.
         key = local_client.key("BreakTxn", 1234)
         orig_entity = datastore.Entity(key=key)
-        orig_entity["foo"] = u"bar"
+        orig_entity["foo"] = "bar"
         local_client.put(orig_entity)
         self.case_entities_to_delete.append(orig_entity)
 
@@ -591,12 +590,12 @@ class TestDatastoreTransaction(TestDatastore):
                 entity_in_txn = local_client.get(key)
 
                 # Update the original entity outside the transaction.
-                orig_entity[contention_prop_name] = u"outside"
+                orig_entity[contention_prop_name] = "outside"
                 Config.CLIENT.put(orig_entity)
 
                 # Try to update the entity which we already updated outside the
                 # transaction.
-                entity_in_txn[contention_prop_name] = u"inside"
+                entity_in_txn[contention_prop_name] = "inside"
                 txn.put(entity_in_txn)
 
     def test_empty_array_put(self):
