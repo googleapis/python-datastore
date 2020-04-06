@@ -72,7 +72,7 @@ def add_large_character_entities(client=None):
     client.namespace = NAMESPACE
 
     # Query used for all tests
-    page_query = client.query(kind=KIND, namespace=NAMESPACE,)
+    page_query = client.query(kind=KIND, namespace=NAMESPACE)
 
     def put_objects(count):
         remaining = count

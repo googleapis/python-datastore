@@ -540,7 +540,10 @@ class Iterator(page_iterator.Iterator):
             self._query.project, partition_id, read_options, query=query_pb
         )
 
-        while response_pb.batch.more_results == _NOT_FINISHED and response_pb.batch.skipped_results < query_pb.offset:
+        while (
+            response_pb.batch.more_results == _NOT_FINISHED
+            and response_pb.batch.skipped_results < query_pb.offset
+        ):
             # We haven't finished processing. A likely reason is we haven't
             # skipped all of the results yet. Don't return any results.
             # Instead, rerun query, adjusting offsets. Datastore doesn't process
