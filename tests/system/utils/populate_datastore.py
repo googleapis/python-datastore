@@ -63,7 +63,7 @@ def print_func(message):
         print(message)
 
 def add_large_character_entities(client=None):
-    TOTAL_OBJECTS = 1500
+    TOTAL_OBJECTS = 2500
     NAMESPACE="LargeCharacterEntity"
     KIND="LargeCharacter"
     MAX_STRING = (string.ascii_lowercase * 58)[:1500]
@@ -77,7 +77,6 @@ def add_large_character_entities(client=None):
     )
 
     def put_objects(count):
-        breakpoint()
         remaining = count
         current=0
         

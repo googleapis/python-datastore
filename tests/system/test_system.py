@@ -466,7 +466,7 @@ class TestDatastoreQuery(TestDatastore):
         self.assertEqual(entities[1]["name"], "Arya")
 
 class TestDatastoreQueryOffsets(TestDatastore):
-    TOTAL_OBJECTS = 1500
+    TOTAL_OBJECTS = 2500
     NAMESPACE = "LargeCharacterEntity"
     KIND = "LargeCharacter"
 
