@@ -87,18 +87,18 @@ def add_large_character_entities(client=None):
             with client.transaction() as xact:
                 # The name/ID for the new entity
                 for i in range(start, end):
-                    name = f"character{i:05d}"
+                    name = "character{0:05d}".format(i)
                     # The Cloud Datastore key for the new entity
                     task_key = client.key(KIND, name)
 
                     # Prepares the new entity
                     task = datastore.Entity(key=task_key)
-                    task["name"] = f"{i:05d}"
+                    task["name"] = "{0:05d}".format(i)
                     task["family"] = "Stark"
                     task["alive"] = False
 
                     for i in string.ascii_lowercase:
-                        task[f"space-{i}"] = MAX_STRING
+                        task["space-{}".format(i)] = MAX_STRING
 
                     # Saves the entity
                     xact.put(task)

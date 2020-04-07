@@ -501,8 +501,7 @@ class TestDatastoreQueryOffsets(TestDatastore):
 
         iterator = page_query.fetch(limit=limit, offset=offset)
         entities = [e for e in iterator]
-        if len(entities) != expected:
-            self.fail(f"{limit}, {offset}, {expected}. Returned: {len(entities)}")
+        self.assertEqual(len(entities), expected)
 
     def test_query_in_bounds_offsets(self):
         # Verify that with no offset there are the correct # of results
