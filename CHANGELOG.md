@@ -4,6 +4,13 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+### [1.11.1](https://www.github.com/googleapis/python-datastore/compare/v1.11.0...v1.11.1) (2020-04-07)
+
+
+### Bug Fixes
+
+* Address queries not fully satisfying requested offset ([#18](https://www.github.com/googleapis/python-datastore/issues/18)) ([e7b5fc9](https://www.github.com/googleapis/python-datastore/commit/e7b5fc99e91078e94d1eaab64e1ea2158220ae98))
+
 ## [1.11.0](https://www.github.com/googleapis/python-datastore/compare/v1.10.0...v1.11.0) (2020-02-27)
 
 
