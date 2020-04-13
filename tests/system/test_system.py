@@ -601,7 +601,6 @@ class TestDatastoreTransaction(TestDatastore):
         local_client = clone_client(Config.CLIENT)
 
         key = local_client.key("EmptyArray", 1234)
-        local_client = datastore.Client()
         entity = datastore.Entity(key=key)
         entity["children"] = []
         local_client.put(entity)
