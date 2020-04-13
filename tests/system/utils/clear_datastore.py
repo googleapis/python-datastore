@@ -84,7 +84,11 @@ def remove_all_entities(client):
     query = client.query()
     results = list(query.fetch())
     keys = [entity.key for entity in results]
-    client.delete_multi(keys)
+    BATCH_SIZE = 500  # Datastore API only allows 500 mutations in a single call.
+    while keys:
+      batch = keys[:BATCH_SIZE]
+      keys = keys[BATCH_SIZE:]
+      client.delete_multi(batch)
 
 
 def main():
