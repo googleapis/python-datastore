@@ -497,6 +497,7 @@ class TestDatastoreQueryOffsets(TestDatastore):
     def _verify(self, limit, offset, expected):
         # Query used for all tests
         page_query = self._base_query()
+        page_query.keys_only()  # Work around bug in the datastore emulator where it fails to take into account the size of the response (and fails due to a grpc response too large error).
         page_query.add_filter("family", "=", "Stark")
         page_query.add_filter("alive", "=", False)
 
