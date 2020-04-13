@@ -156,8 +156,9 @@ def add_timestamp_keys(client=None):
         # Get a client that uses the test dataset.
         client = datastore.Client()
 
-    num_batches = 2
+    num_batches = 21
     batch_size = 500
+    assert num_batches * batch_size > 10000, 'test_query_offset_timestamp_keys requires at least 10k entries, otherwise it fails'
 
     timestamp_micros = set()
     for batch_num in range(num_batches):
