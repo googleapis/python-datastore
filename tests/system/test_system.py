@@ -19,13 +19,13 @@ import unittest
 import requests
 import six
 
+import google.auth.credentials
 from google.cloud._helpers import UTC
 from google.cloud import datastore
 from google.cloud.datastore.helpers import GeoPoint
 from google.cloud.environment_vars import GCD_DATASET
 from google.cloud.exceptions import Conflict
 
-from test_utils.system import EmulatorCreds
 from test_utils.system import unique_resource_id
 
 from tests.system.utils import clear_datastore
@@ -59,7 +59,7 @@ def setUpModule():
     if emulator_dataset is None:
         Config.CLIENT = datastore.Client(namespace=test_namespace)
     else:
-        credentials = EmulatorCreds()
+        credentials = google.auth.credentials.AnonymousCredentials()
         http = requests.Session()  # Un-authorized.
         Config.CLIENT = datastore.Client(
             project=emulator_dataset,
