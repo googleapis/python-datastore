@@ -374,7 +374,7 @@ class TestDatastoreQuery(TestDatastore):
                 self.assertNotIn(uuid_str, seen, uuid_str)
                 seen.add(uuid_str)
 
-        self.assertTrue(page_count > 1)
+        self.assertGreater(page_count, 1)
 
     def test_query_paginate_simple_timestamp_keys(self):
 
@@ -391,7 +391,7 @@ class TestDatastoreQuery(TestDatastore):
                 self.assertNotIn(timestamp, seen, timestamp)
                 seen.add(timestamp)
 
-        self.assertTrue(page_count > 1)
+        self.assertGreater(page_count, 1)
 
     def test_query_offset_timestamp_keys(self):
         # See issue #4675
