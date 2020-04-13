@@ -81,14 +81,24 @@ def remove_kind(kind, client):
 
 
 def remove_all_entities(client):
+    BATCH_SIZE = 500  # Datastore API only allows 500 mutations in a single call.
+    KEY_BYTES_LIMIT = 3 << 20 # grpc limit is ~4MiB, so use a 3MiB limit (to work around any encoding issues)
+
     query = client.query()
+    query.keys_only()
     results = list(query.fetch())
     keys = [entity.key for entity in results]
-    BATCH_SIZE = 500  # Datastore API only allows 500 mutations in a single call.
     while keys:
-      batch = keys[:BATCH_SIZE]
-      keys = keys[BATCH_SIZE:]
-      client.delete_multi(batch)
+        key_bytes = 0
+        batch = []
+        # Grab keys to delete, while ensuring we stay within our bounds.
+        while len(batch) < BATCH_SIZE and key_bytes < KEY_BYTES_LIMIT and keys:
+            batch.append(keys.pop())
+            if batch[-1].name is None:
+                key_bytes += 9  # It takes 9 bytes for the largest varint encoded number
+            else:
+                key_bytes += len(batch[-1].name)
+        client.delete_multi(batch)
 
 
 def main():

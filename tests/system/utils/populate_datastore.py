@@ -63,55 +63,84 @@ def print_func(message):
         print(message)
 
 
+def _estimate_entity_size(entity):
+    def _estimate_value_size(value):
+        if isinstance(value, six.integer_types):
+            return 9  # Max varint size
+        elif isinstance(value, float):
+            return 8
+        elif isinstance(value, six.string_types) or isinstance(value, six.binary_type):
+            return len(value)
+        elif isinstance(value, (list, tuple)):
+            return sum(_estimate_entity_size(elem) for elem in value)
+        elif isinstance(value, dict):
+            return _estimate_entity_size(value)
+    result = 0
+    for key, value in entity.items():
+        result += len(key)  # The number of runes is fine, no point forcing a utf-8 encoding here.
+        result += _estimate_value_size(value)
+    return result
+
 def add_large_character_entities(client=None):
     TOTAL_OBJECTS = 2500
     NAMESPACE = "LargeCharacterEntity"
     KIND = "LargeCharacter"
     MAX_STRING = (string.ascii_lowercase * 58)[:1500]
 
+    BATCH_SIZE = 500  # Datastore API only allows 500 mutations in a single call.
+    RPC_BYTES_LIMIT = 3 << 20 # grpc limit is ~4MiB, so use a 3MiB limit (to work around any encoding issues)
+
     client.namespace = NAMESPACE
 
     # Query used for all tests
     page_query = client.query(kind=KIND, namespace=NAMESPACE)
+    page_query.keys_only()
 
     def put_objects(count):
-        current = 0
+        remaining = count
+        entities = []
+        # The name/ID for the new entity
+        for i in range(count):
+            name = "character{0:05d}".format(i)
+            # The Cloud Datastore key for the new entity
+            task_key = client.key(KIND, name)
 
-        # Can only do 500 operations in a transaction with an overall
-        # size limit.
-        ENTITIES_TO_BATCH = 25
-        while current < count:
-            start = current
-            end = min(current + ENTITIES_TO_BATCH, count)
-            with client.transaction() as xact:
-                # The name/ID for the new entity
-                for i in range(start, end):
-                    name = "character{0:05d}".format(i)
-                    # The Cloud Datastore key for the new entity
-                    task_key = client.key(KIND, name)
+            # Prepares the new entity
+            task = datastore.Entity(key=task_key)
+            task["name"] = "{0:05d}".format(i)
+            task["family"] = "Stark"
+            task["alive"] = False
+            for i in string.ascii_lowercase:
+                task["space-{}".format(i)] = MAX_STRING
+            entities.append(task)
 
-                    # Prepares the new entity
-                    task = datastore.Entity(key=task_key)
-                    task["name"] = "{0:05d}".format(i)
-                    task["family"] = "Stark"
-                    task["alive"] = False
+        # Now lets try to insert all of the entities, in batches.
+        while entities:
+            approx_rpc_bytes = 0
+            batch = []
+            while entities and len(batch) < BATCH_SIZE and approx_rpc_bytes < RPC_BYTES_LIMIT:
+                batch.append(entities.pop())
+                approx_rpc_bytes += _estimate_entity_size(batch[-1])
+            # These entities are all in different entity groups, so there is no
+            # benefit in placing them in a transaction.
+            client.put_multi(batch)
 
-                    for i in string.ascii_lowercase:
-                        task["space-{}".format(i)] = MAX_STRING
-
-                    # Saves the entity
-                    xact.put(task)
-            current += ENTITIES_TO_BATCH
-
-    # Ensure we have 1500 entities for tests. If not, clean up type and add
+    # Ensure we have 2500 entities for tests. If not, clean up type and add
     # new entities equal to TOTAL_OBJECTS
-    all_entities = [e for e in page_query.fetch()]
-    if len(all_entities) != TOTAL_OBJECTS:
-        # Cleanup Collection if not an exact match
-        while all_entities:
-            entities = all_entities[:500]
-            all_entities = all_entities[500:]
-            client.delete_multi([e.key for e in entities])
+    all_keys = [e.key for e in page_query.fetch()]
+    if len(all_keys) != TOTAL_OBJECTS:
+        # Remove all of the entites that exist of this kind in this namespace.
+        while all_keys:
+            key_bytes = 0
+            batch = []
+            # Grab keys to delete, while ensuring we stay within our bounds.
+            while len(batch) < BATCH_SIZE and key_bytes < RPC_BYTES_LIMIT and all_keys:
+                batch.append(all_keys.pop())
+                if batch[-1].name is None:
+                    key_bytes += 9  # It takes 9 bytes for the largest varint encoded number
+                else:
+                    key_bytes += len(batch[-1].name)
+            client.delete_multi(batch)
         # Put objects
         put_objects(TOTAL_OBJECTS)
 
