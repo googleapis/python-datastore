@@ -30,7 +30,7 @@ if os.path.exists("samples"):
     BLACK_PATHS.append("samples")
 
 
-@nox.session(python="3.7")
+@nox.session(python=["3.7", "3.8"])
 def lint(session):
     """Run linters.
 
@@ -56,7 +56,7 @@ def blacken(session):
     session.run("black", *BLACK_PATHS)
 
 
-@nox.session(python="3.7")
+@nox.session(python=["3.7", "3.8"])
 def lint_setup_py(session):
     """Verify that setup.py is valid (including RST check)."""
     session.install("docutils", "pygments")
@@ -90,7 +90,7 @@ def unit(session):
     default(session)
 
 
-@nox.session(python=["2.7", "3.7"])
+@nox.session(python=["2.7", "3.7", "3.8"])
 def system(session):
     """Run the system test suite."""
     system_test_path = os.path.join("tests", "system.py")
@@ -120,7 +120,7 @@ def system(session):
         session.run("py.test", "--quiet", system_test_folder_path, *session.posargs)
 
 
-@nox.session(python="3.7")
+@nox.session(python=["3.7", "3.8"])
 def cover(session):
     """Run the final coverage report.
 
