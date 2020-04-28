@@ -4,6 +4,25 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+## [1.12.0](https://www.github.com/googleapis/python-datastore/compare/v1.11.0...v1.12.0) (2020-04-07)
+
+
+### Features
+
+* **datastore:** add missing method for system test with emulator ([#19](https://www.github.com/googleapis/python-datastore/issues/19)) ([bf8b897](https://www.github.com/googleapis/python-datastore/commit/bf8b897dc86e28e4ad79e05f24383c1387eddbf6))
+
+
+### Bug Fixes
+
+* Address queries not fully satisfying requested offset ([#18](https://www.github.com/googleapis/python-datastore/issues/18)) ([e7b5fc9](https://www.github.com/googleapis/python-datastore/commit/e7b5fc99e91078e94d1eaab64e1ea2158220ae98))
+
+## [1.11.0](https://www.github.com/googleapis/python-datastore/compare/v1.10.0...v1.11.0) (2020-02-27)
+
+
+### Features
+
+* **datastore:** add return query object in add filter method ([#12](https://www.github.com/googleapis/python-datastore/issues/12)) ([6a9efab](https://www.github.com/googleapis/python-datastore/commit/6a9efabe1560d5137986df70f1b4f79731deac02))
+
 ## 1.10.0
 
 10-10-2019 12:20 PDT
