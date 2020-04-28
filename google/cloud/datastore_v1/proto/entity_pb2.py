@@ -747,9 +747,8 @@ PartitionId = _reflection.GeneratedProtocolMessageType(
     dict(
         DESCRIPTOR=_PARTITIONID,
         __module__="google.cloud.datastore_v1.proto.entity_pb2",
-        __doc__="""A partition ID identifies a grouping of entities. The
-  grouping is always by project and namespace, however the namespace ID
-  may be empty.
+        __doc__="""A partition ID identifies a grouping of entities. The grouping is always
+  by project and namespace, however the namespace ID may be empty.
   
   A partition ID contains several dimensions: project ID and namespace ID.
   
@@ -861,9 +860,9 @@ ArrayValue = _reflection.GeneratedProtocolMessageType(
   
   Attributes:
       values:
-          Values in the array. The order of values in an array is
-          preserved as long as all values have identical settings for
-          'exclude\_from\_indexes'.
+          Values in the array. The order of this array may not be
+          preserved if it contains a mix of indexed and unindexed
+          values.
   """,
         # @@protoc_insertion_point(class_scope:google.datastore.v1.ArrayValue)
     ),
@@ -876,8 +875,8 @@ Value = _reflection.GeneratedProtocolMessageType(
     dict(
         DESCRIPTOR=_VALUE,
         __module__="google.cloud.datastore_v1.proto.entity_pb2",
-        __doc__="""A message that can hold any of the supported value types
-  and associated metadata.
+        __doc__="""A message that can hold any of the supported value types and associated
+  metadata.
   
   
   Attributes:
