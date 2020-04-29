@@ -1292,8 +1292,6 @@ EntityResult = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_ENTITYRESULT,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""The result of fetching an entity from Datastore.
-  
-  
   Attributes:
       entity:
           The resulting entity.
@@ -1324,8 +1322,6 @@ Query = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_QUERY,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A query for entities.
-  
-  
   Attributes:
       projection:
           The projection to return. Defaults to returning all
@@ -1373,8 +1369,6 @@ KindExpression = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_KINDEXPRESSION,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A representation of a kind.
-  
-  
   Attributes:
       name:
           The name of the kind.
@@ -1391,8 +1385,6 @@ PropertyReference = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_PROPERTYREFERENCE,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A reference to a property relative to the kind expressions.
-  
-  
   Attributes:
       name:
           The name of the property. If name includes "."s, it may be
@@ -1410,8 +1402,6 @@ Projection = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_PROJECTION,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A representation of a property in a projection.
-  
-  
   Attributes:
       property:
           The property to project.
@@ -1428,8 +1418,6 @@ PropertyOrder = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_PROPERTYORDER,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""The desired order for a specific property.
-  
-  
   Attributes:
       property:
           The property to order by.
@@ -1448,8 +1436,6 @@ Filter = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_FILTER,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A holder for any type of filter.
-  
-  
   Attributes:
       filter_type:
           The type of filter.
@@ -1470,8 +1456,6 @@ CompositeFilter = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_COMPOSITEFILTER,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A filter that merges multiple other filters using the given operator.
-  
-  
   Attributes:
       op:
           The operator for combining multiple filters.
@@ -1491,8 +1475,6 @@ PropertyFilter = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_PROPERTYFILTER,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A filter on a specific property.
-  
-  
   Attributes:
       property:
           The property to filter by.
@@ -1521,10 +1503,8 @@ GqlQuery = _reflection.GeneratedProtocolMessageType(
         ),
         DESCRIPTOR=_GQLQUERY,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
-        __doc__="""A `GQL
-  query <https://cloud.google.com/datastore/docs/apis/gql/gql_reference>`__.
-  
-  
+        __doc__="""A `GQL query
+  <https://cloud.google.com/datastore/docs/apis/gql/gql_reference>`__.
   Attributes:
       query_string:
           A string of the format described `here <https://cloud.google.c
@@ -1560,8 +1540,6 @@ GqlQueryParameter = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_GQLQUERYPARAMETER,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A binding parameter for a GQL query.
-  
-  
   Attributes:
       parameter_type:
           The type of parameter.
@@ -1583,8 +1561,6 @@ QueryResultBatch = _reflection.GeneratedProtocolMessageType(
         DESCRIPTOR=_QUERYRESULTBATCH,
         __module__="google.cloud.datastore_v1.proto.query_pb2",
         __doc__="""A batch of results produced by a query.
-  
-  
   Attributes:
       skipped_results:
           The number of results skipped, typically because of an offset.

@@ -10,16 +10,16 @@
     {
       "git": {
         "name": ".",
-        "remote": "git@github.com:googleapis/python-datastore",
-        "sha": "f9c0937f24f3a9874db6a8710e260c6ce2907069"
+        "remote": "https://github.com/googleapis/python-datastore.git",
+        "sha": "6218d95761bfd9ce57e0eb2b5deea3ec75ac0637"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "756b174de4a122461993c1c583345533d819936d",
-        "internalRef": "308824110"
+        "sha": "3f5f8a2258c6a41f9fbf7b80acbca631dda0a952",
+        "internalRef": "308922843"
       }
     },
     {
