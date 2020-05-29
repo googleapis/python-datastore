@@ -740,9 +740,8 @@ PartitionId = _reflection.GeneratedProtocolMessageType(
     {
         "DESCRIPTOR": _PARTITIONID,
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
-        "__doc__": """A partition ID identifies a grouping of entities. The
-  grouping is always by project and namespace, however the namespace ID
-  may be empty.
+        "__doc__": """A partition ID identifies a grouping of entities. The grouping is always
+  by project and namespace, however the namespace ID may be empty.
   
   A partition ID contains several dimensions: project ID and namespace ID.
   
