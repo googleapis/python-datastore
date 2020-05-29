@@ -809,8 +809,8 @@ Key = _reflection.GeneratedProtocolMessageType(
         ),
         "DESCRIPTOR": _KEY,
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
-        "__doc__": """A unique identifier for an entity. If a key’s partition ID or any of its
-  path kinds or names are reserved/read-only, the key is
+        "__doc__": """A unique identifier for an entity. If a key’s partition ID
+  or any of its path kinds or names are reserved/read-only, the key is
   reserved/read-only. A reserved/read-only key is forbidden in certain
   documented contexts.
   
@@ -891,8 +891,8 @@ Value = _reflection.GeneratedProtocolMessageType(
           A key value.
       string_value:
           A UTF-8 encoded string value. When ``exclude_from_indexes`` is
-          false (it is indexed) , may have at most 1500 bytes.
-          Otherwise, may be set to at least 1,000,000 bytes.
+          false (it is indexed), may have at most 1500 bytes. Otherwise,
+          may be set to at most 1,000,000 bytes.
       blob_value:
           A blob value. May have at most 1,000,000 bytes. When
           ``exclude_from_indexes`` is false, may have at most 1500

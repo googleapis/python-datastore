@@ -1677,6 +1677,7 @@ RollbackResponse = _reflection.GeneratedProtocolMessageType(
         "__doc__": """The response for
   [Datastore.Rollback][google.datastore.v1.Datastore.Rollback]. (an empty
   message).
+  
   """,
         # @@protoc_insertion_point(class_scope:google.datastore.v1.RollbackResponse)
     },
