@@ -740,26 +740,18 @@ PartitionId = _reflection.GeneratedProtocolMessageType(
     {
         "DESCRIPTOR": _PARTITIONID,
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
-        "__doc__": """A partition ID identifies a grouping of entities. The
-  grouping is always by project and namespace, however the namespace ID
-  may be empty.
-  
-  A partition ID contains several dimensions: project ID and namespace ID.
-  
-  Partition dimensions:
-  
-  -  May be ``""``.
-  -  Must be valid UTF-8 bytes.
-  -  Must have values that match regex ``[A-Za-z\d\.\-_]{1,100}`` If the
-     value of any dimension matches regex ``__.*__``, the partition is
-     reserved/read-only. A reserved/read-only partition ID is forbidden in
-     certain documented contexts.
-  
-  Foreign partition IDs (in which the project ID does not match the
-  context project ID ) are discouraged. Reads and writes of foreign
-  partition IDs may fail if the project is not in an active state.
-  
-  
+        "__doc__": """A partition ID identifies a grouping of entities. The grouping is
+  always by project and namespace, however the namespace ID may be
+  empty.  A partition ID contains several dimensions: project ID and
+  namespace ID.  Partition dimensions:  -  May be ``""``. -  Must be
+  valid UTF-8 bytes. -  Must have values that match regex
+  ``[A-Za-z\d\.\-_]{1,100}`` If the    value of any dimension matches
+  regex ``__.*__``, the partition is    reserved/read-only. A
+  reserved/read-only partition ID is forbidden in    certain documented
+  contexts.  Foreign partition IDs (in which the project ID does not
+  match the context project ID ) are discouraged. Reads and writes of
+  foreign partition IDs may fail if the project is not in an active
+  state.
   Attributes:
       project_id:
           The ID of the project to which the entities belong.
@@ -782,12 +774,9 @@ Key = _reflection.GeneratedProtocolMessageType(
             {
                 "DESCRIPTOR": _KEY_PATHELEMENT,
                 "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
-                "__doc__": """A (kind, ID/name) pair used to construct a key path.
-    
-    If either name or ID is set, the element is complete. If neither is set,
-    the element is incomplete.
-    
-    
+                "__doc__": """A (kind, ID/name) pair used to construct a key path.  If either name
+    or ID is set, the element is complete. If neither is set, the element
+    is incomplete.
     Attributes:
         kind:
             The kind of the entity. A kind matching regex ``__.*__`` is
@@ -809,12 +798,10 @@ Key = _reflection.GeneratedProtocolMessageType(
         ),
         "DESCRIPTOR": _KEY,
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
-        "__doc__": """A unique identifier for an entity. If a key’s partition ID
-  or any of its path kinds or names are reserved/read-only, the key is
+        "__doc__": """A unique identifier for an entity. If a key’s partition ID or any of
+  its path kinds or names are reserved/read-only, the key is
   reserved/read-only. A reserved/read-only key is forbidden in certain
   documented contexts.
-  
-  
   Attributes:
       partition_id:
           Entities are partitioned into subsets, currently identified by
@@ -850,8 +837,6 @@ ArrayValue = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _ARRAYVALUE,
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
         "__doc__": """An array value.
-  
-  
   Attributes:
       values:
           Values in the array. The order of values in an array is
@@ -869,10 +854,8 @@ Value = _reflection.GeneratedProtocolMessageType(
     {
         "DESCRIPTOR": _VALUE,
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
-        "__doc__": """A message that can hold any of the supported value types
-  and associated metadata.
-  
-  
+        "__doc__": """A message that can hold any of the supported value types and
+  associated metadata.
   Attributes:
       value_type:
           Must have a value set.
@@ -934,13 +917,9 @@ Entity = _reflection.GeneratedProtocolMessageType(
         ),
         "DESCRIPTOR": _ENTITY,
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
-        "__doc__": """A Datastore data object.
-  
-  An entity is limited to 1 megabyte when stored. That *roughly*
-  corresponds to a limit of 1 megabyte for the serialized form of this
-  message.
-  
-  
+        "__doc__": """A Datastore data object.  An entity is limited to 1 megabyte when
+  stored. That *roughly* corresponds to a limit of 1 megabyte for the
+  serialized form of this message.
   Attributes:
       key:
           The entity’s key.  An entity must have a key, unless otherwise
