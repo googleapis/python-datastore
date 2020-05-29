@@ -28,6 +28,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package="google.datastore.v1",
     syntax="proto3",
     serialized_options=b"\n\027com.google.datastore.v1B\016DatastoreProtoP\001Z<google.golang.org/genproto/googleapis/datastore/v1;datastore\252\002\031Google.Cloud.Datastore.V1\312\002\031Google\\Cloud\\Datastore\\V1",
+    create_key=_descriptor._internal_create_key,
     serialized_pb=b'\n/google/cloud/datastore_v1/proto/datastore.proto\x12\x13google.datastore.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a,google/cloud/datastore_v1/proto/entity.proto\x1a+google/cloud/datastore_v1/proto/query.proto"\x8d\x01\n\rLookupRequest\x12\x17\n\nproject_id\x18\x08 \x01(\tB\x03\xe0\x41\x02\x12\x36\n\x0cread_options\x18\x01 \x01(\x0b\x32 .google.datastore.v1.ReadOptions\x12+\n\x04keys\x18\x03 \x03(\x0b\x32\x18.google.datastore.v1.KeyB\x03\xe0\x41\x02"\xa2\x01\n\x0eLookupResponse\x12\x30\n\x05\x66ound\x18\x01 \x03(\x0b\x32!.google.datastore.v1.EntityResult\x12\x32\n\x07missing\x18\x02 \x03(\x0b\x32!.google.datastore.v1.EntityResult\x12*\n\x08\x64\x65\x66\x65rred\x18\x03 \x03(\x0b\x32\x18.google.datastore.v1.Key"\x89\x02\n\x0fRunQueryRequest\x12\x17\n\nproject_id\x18\x08 \x01(\tB\x03\xe0\x41\x02\x12\x36\n\x0cpartition_id\x18\x02 \x01(\x0b\x32 .google.datastore.v1.PartitionId\x12\x36\n\x0cread_options\x18\x01 \x01(\x0b\x32 .google.datastore.v1.ReadOptions\x12+\n\x05query\x18\x03 \x01(\x0b\x32\x1a.google.datastore.v1.QueryH\x00\x12\x32\n\tgql_query\x18\x07 \x01(\x0b\x32\x1d.google.datastore.v1.GqlQueryH\x00\x42\x0c\n\nquery_type"s\n\x10RunQueryResponse\x12\x34\n\x05\x62\x61tch\x18\x01 \x01(\x0b\x32%.google.datastore.v1.QueryResultBatch\x12)\n\x05query\x18\x02 \x01(\x0b\x32\x1a.google.datastore.v1.Query"x\n\x17\x42\x65ginTransactionRequest\x12\x17\n\nproject_id\x18\x08 \x01(\tB\x03\xe0\x41\x02\x12\x44\n\x13transaction_options\x18\n \x01(\x0b\x32\'.google.datastore.v1.TransactionOptions"/\n\x18\x42\x65ginTransactionResponse\x12\x13\n\x0btransaction\x18\x01 \x01(\x0c"D\n\x0fRollbackRequest\x12\x17\n\nproject_id\x18\x08 \x01(\tB\x03\xe0\x41\x02\x12\x18\n\x0btransaction\x18\x01 \x01(\x0c\x42\x03\xe0\x41\x02"\x12\n\x10RollbackResponse"\x88\x02\n\rCommitRequest\x12\x17\n\nproject_id\x18\x08 \x01(\tB\x03\xe0\x41\x02\x12\x35\n\x04mode\x18\x05 \x01(\x0e\x32\'.google.datastore.v1.CommitRequest.Mode\x12\x15\n\x0btransaction\x18\x01 \x01(\x0cH\x00\x12\x30\n\tmutations\x18\x06 \x03(\x0b\x32\x1d.google.datastore.v1.Mutation"F\n\x04Mode\x12\x14\n\x10MODE_UNSPECIFIED\x10\x00\x12\x11\n\rTRANSACTIONAL\x10\x01\x12\x15\n\x11NON_TRANSACTIONAL\x10\x02\x42\x16\n\x14transaction_selector"f\n\x0e\x43ommitResponse\x12=\n\x10mutation_results\x18\x03 \x03(\x0b\x32#.google.datastore.v1.MutationResult\x12\x15\n\rindex_updates\x18\x04 \x01(\x05"Z\n\x12\x41llocateIdsRequest\x12\x17\n\nproject_id\x18\x08 \x01(\tB\x03\xe0\x41\x02\x12+\n\x04keys\x18\x01 \x03(\x0b\x32\x18.google.datastore.v1.KeyB\x03\xe0\x41\x02"=\n\x13\x41llocateIdsResponse\x12&\n\x04keys\x18\x01 \x03(\x0b\x32\x18.google.datastore.v1.Key"n\n\x11ReserveIdsRequest\x12\x17\n\nproject_id\x18\x08 \x01(\tB\x03\xe0\x41\x02\x12\x13\n\x0b\x64\x61tabase_id\x18\t \x01(\t\x12+\n\x04keys\x18\x01 \x03(\x0b\x32\x18.google.datastore.v1.KeyB\x03\xe0\x41\x02"\x14\n\x12ReserveIdsResponse"\x87\x02\n\x08Mutation\x12-\n\x06insert\x18\x04 \x01(\x0b\x32\x1b.google.datastore.v1.EntityH\x00\x12-\n\x06update\x18\x05 \x01(\x0b\x32\x1b.google.datastore.v1.EntityH\x00\x12-\n\x06upsert\x18\x06 \x01(\x0b\x32\x1b.google.datastore.v1.EntityH\x00\x12*\n\x06\x64\x65lete\x18\x07 \x01(\x0b\x32\x18.google.datastore.v1.KeyH\x00\x12\x16\n\x0c\x62\x61se_version\x18\x08 \x01(\x03H\x01\x42\x0b\n\toperationB\x1d\n\x1b\x63onflict_detection_strategy"c\n\x0eMutationResult\x12%\n\x03key\x18\x03 \x01(\x0b\x32\x18.google.datastore.v1.Key\x12\x0f\n\x07version\x18\x04 \x01(\x03\x12\x19\n\x11\x63onflict_detected\x18\x05 \x01(\x08"\xd5\x01\n\x0bReadOptions\x12L\n\x10read_consistency\x18\x01 \x01(\x0e\x32\x30.google.datastore.v1.ReadOptions.ReadConsistencyH\x00\x12\x15\n\x0btransaction\x18\x02 \x01(\x0cH\x00"M\n\x0fReadConsistency\x12 \n\x1cREAD_CONSISTENCY_UNSPECIFIED\x10\x00\x12\n\n\x06STRONG\x10\x01\x12\x0c\n\x08\x45VENTUAL\x10\x02\x42\x12\n\x10\x63onsistency_type"\xe3\x01\n\x12TransactionOptions\x12G\n\nread_write\x18\x01 \x01(\x0b\x32\x31.google.datastore.v1.TransactionOptions.ReadWriteH\x00\x12\x45\n\tread_only\x18\x02 \x01(\x0b\x32\x30.google.datastore.v1.TransactionOptions.ReadOnlyH\x00\x1a)\n\tReadWrite\x12\x1c\n\x14previous_transaction\x18\x01 \x01(\x0c\x1a\n\n\x08ReadOnlyB\x06\n\x04mode2\x93\n\n\tDatastore\x12\x9d\x01\n\x06Lookup\x12".google.datastore.v1.LookupRequest\x1a#.google.datastore.v1.LookupResponse"J\x82\xd3\xe4\x93\x02%" /v1/projects/{project_id}:lookup:\x01*\xda\x41\x1cproject_id,read_options,keys\x12\x86\x01\n\x08RunQuery\x12$.google.datastore.v1.RunQueryRequest\x1a%.google.datastore.v1.RunQueryResponse"-\x82\xd3\xe4\x93\x02\'""/v1/projects/{project_id}:runQuery:\x01*\x12\xb3\x01\n\x10\x42\x65ginTransaction\x12,.google.datastore.v1.BeginTransactionRequest\x1a-.google.datastore.v1.BeginTransactionResponse"B\x82\xd3\xe4\x93\x02/"*/v1/projects/{project_id}:beginTransaction:\x01*\xda\x41\nproject_id\x12\xc2\x01\n\x06\x43ommit\x12".google.datastore.v1.CommitRequest\x1a#.google.datastore.v1.CommitResponse"o\x82\xd3\xe4\x93\x02%" /v1/projects/{project_id}:commit:\x01*\xda\x41%project_id,mode,transaction,mutations\xda\x41\x19project_id,mode,mutations\x12\x9f\x01\n\x08Rollback\x12$.google.datastore.v1.RollbackRequest\x1a%.google.datastore.v1.RollbackResponse"F\x82\xd3\xe4\x93\x02\'""/v1/projects/{project_id}:rollback:\x01*\xda\x41\x16project_id,transaction\x12\xa4\x01\n\x0b\x41llocateIds\x12\'.google.datastore.v1.AllocateIdsRequest\x1a(.google.datastore.v1.AllocateIdsResponse"B\x82\xd3\xe4\x93\x02*"%/v1/projects/{project_id}:allocateIds:\x01*\xda\x41\x0fproject_id,keys\x12\xa0\x01\n\nReserveIds\x12&.google.datastore.v1.ReserveIdsRequest\x1a\'.google.datastore.v1.ReserveIdsResponse"A\x82\xd3\xe4\x93\x02)"$/v1/projects/{project_id}:reserveIds:\x01*\xda\x41\x0fproject_id,keys\x1av\xca\x41\x18\x64\x61tastore.googleapis.com\xd2\x41Xhttps://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/datastoreB\xa1\x01\n\x17\x63om.google.datastore.v1B\x0e\x44\x61tastoreProtoP\x01Z<google.golang.org/genproto/googleapis/datastore/v1;datastore\xaa\x02\x19Google.Cloud.Datastore.V1\xca\x02\x19Google\\Cloud\\Datastore\\V1b\x06proto3',
     dependencies=[
         google_dot_api_dot_annotations__pb2.DESCRIPTOR,
@@ -44,6 +45,7 @@ _COMMITREQUEST_MODE = _descriptor.EnumDescriptor(
     full_name="google.datastore.v1.CommitRequest.Mode",
     filename=None,
     file=DESCRIPTOR,
+    create_key=_descriptor._internal_create_key,
     values=[
         _descriptor.EnumValueDescriptor(
             name="MODE_UNSPECIFIED",
@@ -51,9 +53,15 @@ _COMMITREQUEST_MODE = _descriptor.EnumDescriptor(
             number=0,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="TRANSACTIONAL", index=1, number=1, serialized_options=None, type=None
+            name="TRANSACTIONAL",
+            index=1,
+            number=1,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
             name="NON_TRANSACTIONAL",
@@ -61,6 +69,7 @@ _COMMITREQUEST_MODE = _descriptor.EnumDescriptor(
             number=2,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     containing_type=None,
@@ -75,6 +84,7 @@ _READOPTIONS_READCONSISTENCY = _descriptor.EnumDescriptor(
     full_name="google.datastore.v1.ReadOptions.ReadConsistency",
     filename=None,
     file=DESCRIPTOR,
+    create_key=_descriptor._internal_create_key,
     values=[
         _descriptor.EnumValueDescriptor(
             name="READ_CONSISTENCY_UNSPECIFIED",
@@ -82,12 +92,23 @@ _READOPTIONS_READCONSISTENCY = _descriptor.EnumDescriptor(
             number=0,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="STRONG", index=1, number=1, serialized_options=None, type=None
+            name="STRONG",
+            index=1,
+            number=1,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="EVENTUAL", index=2, number=2, serialized_options=None, type=None
+            name="EVENTUAL",
+            index=2,
+            number=2,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     containing_type=None,
@@ -104,6 +125,7 @@ _LOOKUPREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -122,6 +144,7 @@ _LOOKUPREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="read_options",
@@ -140,6 +163,7 @@ _LOOKUPREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="keys",
@@ -158,6 +182,7 @@ _LOOKUPREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -179,6 +204,7 @@ _LOOKUPRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="found",
@@ -197,6 +223,7 @@ _LOOKUPRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="missing",
@@ -215,6 +242,7 @@ _LOOKUPRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="deferred",
@@ -233,6 +261,7 @@ _LOOKUPRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -254,6 +283,7 @@ _RUNQUERYREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -272,6 +302,7 @@ _RUNQUERYREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="partition_id",
@@ -290,6 +321,7 @@ _RUNQUERYREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="read_options",
@@ -308,6 +340,7 @@ _RUNQUERYREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="query",
@@ -326,6 +359,7 @@ _RUNQUERYREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="gql_query",
@@ -344,6 +378,7 @@ _RUNQUERYREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -359,6 +394,7 @@ _RUNQUERYREQUEST = _descriptor.Descriptor(
             full_name="google.datastore.v1.RunQueryRequest.query_type",
             index=0,
             containing_type=None,
+            create_key=_descriptor._internal_create_key,
             fields=[],
         )
     ],
@@ -373,6 +409,7 @@ _RUNQUERYRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="batch",
@@ -391,6 +428,7 @@ _RUNQUERYRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="query",
@@ -409,6 +447,7 @@ _RUNQUERYRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -430,6 +469,7 @@ _BEGINTRANSACTIONREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -448,6 +488,7 @@ _BEGINTRANSACTIONREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="transaction_options",
@@ -466,6 +507,7 @@ _BEGINTRANSACTIONREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -487,6 +529,7 @@ _BEGINTRANSACTIONRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="transaction",
@@ -505,6 +548,7 @@ _BEGINTRANSACTIONRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         )
     ],
     extensions=[],
@@ -526,6 +570,7 @@ _ROLLBACKREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -544,6 +589,7 @@ _ROLLBACKREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="transaction",
@@ -562,6 +608,7 @@ _ROLLBACKREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -583,6 +630,7 @@ _ROLLBACKRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[],
     extensions=[],
     nested_types=[],
@@ -603,6 +651,7 @@ _COMMITREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -621,6 +670,7 @@ _COMMITREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="mode",
@@ -639,6 +689,7 @@ _COMMITREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="transaction",
@@ -657,6 +708,7 @@ _COMMITREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="mutations",
@@ -675,6 +727,7 @@ _COMMITREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -690,6 +743,7 @@ _COMMITREQUEST = _descriptor.Descriptor(
             full_name="google.datastore.v1.CommitRequest.transaction_selector",
             index=0,
             containing_type=None,
+            create_key=_descriptor._internal_create_key,
             fields=[],
         )
     ],
@@ -704,6 +758,7 @@ _COMMITRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="mutation_results",
@@ -722,6 +777,7 @@ _COMMITRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="index_updates",
@@ -740,6 +796,7 @@ _COMMITRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -761,6 +818,7 @@ _ALLOCATEIDSREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -779,6 +837,7 @@ _ALLOCATEIDSREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="keys",
@@ -797,6 +856,7 @@ _ALLOCATEIDSREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -818,6 +878,7 @@ _ALLOCATEIDSRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="keys",
@@ -836,6 +897,7 @@ _ALLOCATEIDSRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         )
     ],
     extensions=[],
@@ -857,6 +919,7 @@ _RESERVEIDSREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -875,6 +938,7 @@ _RESERVEIDSREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="database_id",
@@ -893,6 +957,7 @@ _RESERVEIDSREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="keys",
@@ -911,6 +976,7 @@ _RESERVEIDSREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -932,6 +998,7 @@ _RESERVEIDSRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[],
     extensions=[],
     nested_types=[],
@@ -952,6 +1019,7 @@ _MUTATION = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="insert",
@@ -970,6 +1038,7 @@ _MUTATION = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="update",
@@ -988,6 +1057,7 @@ _MUTATION = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="upsert",
@@ -1006,6 +1076,7 @@ _MUTATION = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="delete",
@@ -1024,6 +1095,7 @@ _MUTATION = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="base_version",
@@ -1042,6 +1114,7 @@ _MUTATION = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -1057,6 +1130,7 @@ _MUTATION = _descriptor.Descriptor(
             full_name="google.datastore.v1.Mutation.operation",
             index=0,
             containing_type=None,
+            create_key=_descriptor._internal_create_key,
             fields=[],
         ),
         _descriptor.OneofDescriptor(
@@ -1064,6 +1138,7 @@ _MUTATION = _descriptor.Descriptor(
             full_name="google.datastore.v1.Mutation.conflict_detection_strategy",
             index=1,
             containing_type=None,
+            create_key=_descriptor._internal_create_key,
             fields=[],
         ),
     ],
@@ -1078,6 +1153,7 @@ _MUTATIONRESULT = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="key",
@@ -1096,6 +1172,7 @@ _MUTATIONRESULT = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="version",
@@ -1114,6 +1191,7 @@ _MUTATIONRESULT = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="conflict_detected",
@@ -1132,6 +1210,7 @@ _MUTATIONRESULT = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -1153,6 +1232,7 @@ _READOPTIONS = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="read_consistency",
@@ -1171,6 +1251,7 @@ _READOPTIONS = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="transaction",
@@ -1189,6 +1270,7 @@ _READOPTIONS = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -1204,6 +1286,7 @@ _READOPTIONS = _descriptor.Descriptor(
             full_name="google.datastore.v1.ReadOptions.consistency_type",
             index=0,
             containing_type=None,
+            create_key=_descriptor._internal_create_key,
             fields=[],
         )
     ],
@@ -1218,6 +1301,7 @@ _TRANSACTIONOPTIONS_READWRITE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="previous_transaction",
@@ -1236,6 +1320,7 @@ _TRANSACTIONOPTIONS_READWRITE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         )
     ],
     extensions=[],
@@ -1256,6 +1341,7 @@ _TRANSACTIONOPTIONS_READONLY = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[],
     extensions=[],
     nested_types=[],
@@ -1275,6 +1361,7 @@ _TRANSACTIONOPTIONS = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="read_write",
@@ -1293,6 +1380,7 @@ _TRANSACTIONOPTIONS = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="read_only",
@@ -1311,6 +1399,7 @@ _TRANSACTIONOPTIONS = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -1326,6 +1415,7 @@ _TRANSACTIONOPTIONS = _descriptor.Descriptor(
             full_name="google.datastore.v1.TransactionOptions.mode",
             index=0,
             containing_type=None,
+            create_key=_descriptor._internal_create_key,
             fields=[],
         )
     ],
@@ -1969,6 +2059,7 @@ _DATASTORE = _descriptor.ServiceDescriptor(
     file=DESCRIPTOR,
     index=0,
     serialized_options=b"\312A\030datastore.googleapis.com\322AXhttps://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/datastore",
+    create_key=_descriptor._internal_create_key,
     serialized_start=2680,
     serialized_end=3979,
     methods=[
@@ -1980,6 +2071,7 @@ _DATASTORE = _descriptor.ServiceDescriptor(
             input_type=_LOOKUPREQUEST,
             output_type=_LOOKUPRESPONSE,
             serialized_options=b'\202\323\344\223\002%" /v1/projects/{project_id}:lookup:\001*\332A\034project_id,read_options,keys',
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="RunQuery",
@@ -1989,6 +2081,7 @@ _DATASTORE = _descriptor.ServiceDescriptor(
             input_type=_RUNQUERYREQUEST,
             output_type=_RUNQUERYRESPONSE,
             serialized_options=b'\202\323\344\223\002\'""/v1/projects/{project_id}:runQuery:\001*',
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="BeginTransaction",
@@ -1998,6 +2091,7 @@ _DATASTORE = _descriptor.ServiceDescriptor(
             input_type=_BEGINTRANSACTIONREQUEST,
             output_type=_BEGINTRANSACTIONRESPONSE,
             serialized_options=b'\202\323\344\223\002/"*/v1/projects/{project_id}:beginTransaction:\001*\332A\nproject_id',
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="Commit",
@@ -2007,6 +2101,7 @@ _DATASTORE = _descriptor.ServiceDescriptor(
             input_type=_COMMITREQUEST,
             output_type=_COMMITRESPONSE,
             serialized_options=b'\202\323\344\223\002%" /v1/projects/{project_id}:commit:\001*\332A%project_id,mode,transaction,mutations\332A\031project_id,mode,mutations',
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="Rollback",
@@ -2016,6 +2111,7 @@ _DATASTORE = _descriptor.ServiceDescriptor(
             input_type=_ROLLBACKREQUEST,
             output_type=_ROLLBACKRESPONSE,
             serialized_options=b'\202\323\344\223\002\'""/v1/projects/{project_id}:rollback:\001*\332A\026project_id,transaction',
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="AllocateIds",
@@ -2025,6 +2121,7 @@ _DATASTORE = _descriptor.ServiceDescriptor(
             input_type=_ALLOCATEIDSREQUEST,
             output_type=_ALLOCATEIDSRESPONSE,
             serialized_options=b'\202\323\344\223\002*"%/v1/projects/{project_id}:allocateIds:\001*\332A\017project_id,keys',
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="ReserveIds",
@@ -2034,6 +2131,7 @@ _DATASTORE = _descriptor.ServiceDescriptor(
             input_type=_RESERVEIDSREQUEST,
             output_type=_RESERVEIDSRESPONSE,
             serialized_options=b'\202\323\344\223\002)"$/v1/projects/{project_id}:reserveIds:\001*\332A\017project_id,keys',
+            create_key=_descriptor._internal_create_key,
         ),
     ],
 )
