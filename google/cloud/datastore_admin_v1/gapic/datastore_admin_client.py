@@ -45,7 +45,7 @@ from google.protobuf import empty_pb2
 
 
 _GAPIC_LIBRARY_VERSION = pkg_resources.get_distribution(
-    "google-cloud-datastore-admin"
+    "google-cloud-datastore-admin",
 ).version
 
 
@@ -228,12 +228,12 @@ class DatastoreAdminClient(object):
                 self.transport = transport
         else:
             self.transport = datastore_admin_grpc_transport.DatastoreAdminGrpcTransport(
-                address=api_endpoint, channel=channel, credentials=credentials
+                address=api_endpoint, channel=channel, credentials=credentials,
             )
 
         if client_info is None:
             client_info = google.api_core.gapic_v1.client_info.ClientInfo(
-                gapic_version=_GAPIC_LIBRARY_VERSION
+                gapic_version=_GAPIC_LIBRARY_VERSION,
             )
         else:
             client_info.gapic_version = _GAPIC_LIBRARY_VERSION
@@ -244,7 +244,7 @@ class DatastoreAdminClient(object):
         # (Ordinarily, these are the defaults specified in the `*_config.py`
         # file next to this one.)
         self._method_configs = google.api_core.gapic_v1.config.parse_method_configs(
-            client_config["interfaces"][self._INTERFACE_NAME]
+            client_config["interfaces"][self._INTERFACE_NAME],
         )
 
         # Save a dictionary of cached API call functions.
@@ -553,7 +553,7 @@ class DatastoreAdminClient(object):
             )
 
         request = datastore_admin_pb2.GetIndexRequest(
-            project_id=project_id, index_id=index_id
+            project_id=project_id, index_id=index_id,
         )
         return self._inner_api_calls["get_index"](
             request, retry=retry, timeout=timeout, metadata=metadata
@@ -634,7 +634,7 @@ class DatastoreAdminClient(object):
             )
 
         request = datastore_admin_pb2.ListIndexesRequest(
-            project_id=project_id, filter=filter_, page_size=page_size
+            project_id=project_id, filter=filter_, page_size=page_size,
         )
         if metadata is None:
             metadata = []

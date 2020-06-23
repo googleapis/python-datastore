@@ -39,7 +39,7 @@ from google.cloud.datastore_v1.proto import query_pb2
 
 
 _GAPIC_LIBRARY_VERSION = pkg_resources.get_distribution(
-    "google-cloud-datastore"
+    "google-cloud-datastore",
 ).version
 
 
@@ -167,12 +167,12 @@ class DatastoreClient(object):
                 self.transport = transport
         else:
             self.transport = datastore_grpc_transport.DatastoreGrpcTransport(
-                address=api_endpoint, channel=channel, credentials=credentials
+                address=api_endpoint, channel=channel, credentials=credentials,
             )
 
         if client_info is None:
             client_info = google.api_core.gapic_v1.client_info.ClientInfo(
-                gapic_version=_GAPIC_LIBRARY_VERSION
+                gapic_version=_GAPIC_LIBRARY_VERSION,
             )
         else:
             client_info.gapic_version = _GAPIC_LIBRARY_VERSION
@@ -183,7 +183,7 @@ class DatastoreClient(object):
         # (Ordinarily, these are the defaults specified in the `*_config.py`
         # file next to this one.)
         self._method_configs = google.api_core.gapic_v1.config.parse_method_configs(
-            client_config["interfaces"][self._INTERFACE_NAME]
+            client_config["interfaces"][self._INTERFACE_NAME],
         )
 
         # Save a dictionary of cached API call functions.
@@ -259,7 +259,7 @@ class DatastoreClient(object):
             )
 
         request = datastore_pb2.LookupRequest(
-            project_id=project_id, keys=keys, read_options=read_options
+            project_id=project_id, keys=keys, read_options=read_options,
         )
         if metadata is None:
             metadata = []
@@ -355,7 +355,9 @@ class DatastoreClient(object):
 
         # Sanity check: We have some fields which are mutually exclusive;
         # raise ValueError if more than one is sent.
-        google.api_core.protobuf_helpers.check_oneof(query=query, gql_query=gql_query)
+        google.api_core.protobuf_helpers.check_oneof(
+            query=query, gql_query=gql_query,
+        )
 
         request = datastore_pb2.RunQueryRequest(
             project_id=project_id,
@@ -446,7 +448,7 @@ class DatastoreClient(object):
             )
 
         request = datastore_pb2.ReserveIdsRequest(
-            project_id=project_id, keys=keys, database_id=database_id
+            project_id=project_id, keys=keys, database_id=database_id,
         )
         if metadata is None:
             metadata = []
@@ -523,7 +525,7 @@ class DatastoreClient(object):
             )
 
         request = datastore_pb2.BeginTransactionRequest(
-            project_id=project_id, transaction_options=transaction_options
+            project_id=project_id, transaction_options=transaction_options,
         )
         if metadata is None:
             metadata = []
@@ -620,7 +622,7 @@ class DatastoreClient(object):
 
         # Sanity check: We have some fields which are mutually exclusive;
         # raise ValueError if more than one is sent.
-        google.api_core.protobuf_helpers.check_oneof(transaction=transaction)
+        google.api_core.protobuf_helpers.check_oneof(transaction=transaction,)
 
         request = datastore_pb2.CommitRequest(
             project_id=project_id,
@@ -704,7 +706,7 @@ class DatastoreClient(object):
             )
 
         request = datastore_pb2.RollbackRequest(
-            project_id=project_id, transaction=transaction
+            project_id=project_id, transaction=transaction,
         )
         if metadata is None:
             metadata = []
@@ -785,7 +787,7 @@ class DatastoreClient(object):
                 client_info=self._client_info,
             )
 
-        request = datastore_pb2.AllocateIdsRequest(project_id=project_id, keys=keys)
+        request = datastore_pb2.AllocateIdsRequest(project_id=project_id, keys=keys,)
         if metadata is None:
             metadata = []
         metadata = list(metadata)

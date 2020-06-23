@@ -56,7 +56,7 @@ class DatastoreGrpcTransport(object):
         # exception (channels come with credentials baked in already).
         if channel is not None and credentials is not None:
             raise ValueError(
-                "The `channel` and `credentials` arguments are mutually " "exclusive."
+                "The `channel` and `credentials` arguments are mutually " "exclusive.",
             )
 
         # Create the channel.
@@ -74,7 +74,9 @@ class DatastoreGrpcTransport(object):
 
         # gRPC uses objects called "stubs" that are bound to the
         # channel and provide a basic method for each RPC.
-        self._stubs = {"datastore_stub": datastore_pb2_grpc.DatastoreStub(channel)}
+        self._stubs = {
+            "datastore_stub": datastore_pb2_grpc.DatastoreStub(channel),
+        }
 
     @classmethod
     def create_channel(
