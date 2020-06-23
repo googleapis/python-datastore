@@ -1321,8 +1321,6 @@ CommonMetadata = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _COMMONMETADATA,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
         "__doc__": """Metadata common to all Datastore Admin operations.
-  
-  
   Attributes:
       start_time:
           The time that work began on the operation.
@@ -1351,8 +1349,6 @@ Progress = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _PROGRESS,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
         "__doc__": """Measures the progress of a particular metric.
-  
-  
   Attributes:
       work_completed:
           The amount of work that has been completed. Note that this may
@@ -1381,10 +1377,8 @@ ExportEntitiesRequest = _reflection.GeneratedProtocolMessageType(
         ),
         "DESCRIPTOR": _EXPORTENTITIESREQUEST,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The request for
-  [google.datastore.admin.v1.DatastoreAdmin.ExportEntities][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
-  
-  
+        "__doc__": """The request for [google.datastore.admin.v1.DatastoreAdmin.ExportEntiti
+  es][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
   Attributes:
       project_id:
           Required. Project ID against which to make the request.
@@ -1434,10 +1428,8 @@ ImportEntitiesRequest = _reflection.GeneratedProtocolMessageType(
         ),
         "DESCRIPTOR": _IMPORTENTITIESREQUEST,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The request for
-  [google.datastore.admin.v1.DatastoreAdmin.ImportEntities][google.datastore.admin.v1.DatastoreAdmin.ImportEntities].
-  
-  
+        "__doc__": """The request for [google.datastore.admin.v1.DatastoreAdmin.ImportEntiti
+  es][google.datastore.admin.v1.DatastoreAdmin.ImportEntities].
   Attributes:
       project_id:
           Required. Project ID against which to make the request.
@@ -1477,10 +1469,8 @@ ExportEntitiesResponse = _reflection.GeneratedProtocolMessageType(
     {
         "DESCRIPTOR": _EXPORTENTITIESRESPONSE,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The response for
-  [google.datastore.admin.v1.DatastoreAdmin.ExportEntities][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
-  
-  
+        "__doc__": """The response for [google.datastore.admin.v1.DatastoreAdmin.ExportEntit
+  ies][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
   Attributes:
       output_url:
           Location of the output metadata file. This can be used to
@@ -1502,8 +1492,6 @@ ExportEntitiesMetadata = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _EXPORTENTITIESMETADATA,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
         "__doc__": """Metadata for ExportEntities operations.
-  
-  
   Attributes:
       common:
           Metadata common to all Datastore Admin operations.
@@ -1534,8 +1522,6 @@ ImportEntitiesMetadata = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _IMPORTENTITIESMETADATA,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
         "__doc__": """Metadata for ImportEntities operations.
-  
-  
   Attributes:
       common:
           Metadata common to all Datastore Admin operations.
@@ -1562,25 +1548,15 @@ EntityFilter = _reflection.GeneratedProtocolMessageType(
     {
         "DESCRIPTOR": _ENTITYFILTER,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """Identifies a subset of entities in a project. This is
-  specified as combinations of kinds and namespaces (either or both of
-  which may be all, as described in the following examples). Example
-  usage:
-  
-  Entire project: kinds=[], namespace_ids=[]
-  
-  Kinds Foo and Bar in all namespaces: kinds=[‘Foo’, ‘Bar’],
-  namespace_ids=[]
-  
-  Kinds Foo and Bar only in the default namespace: kinds=[‘Foo’, ‘Bar’],
-  namespace_ids=[’’]
-  
-  Kinds Foo and Bar in both the default and Baz namespaces: kinds=[‘Foo’,
-  ‘Bar’], namespace_ids=[’‘, ’Baz’]
-  
-  The entire Baz namespace: kinds=[], namespace_ids=[‘Baz’]
-  
-  
+        "__doc__": """Identifies a subset of entities in a project. This is specified as
+  combinations of kinds and namespaces (either or both of which may be
+  all, as described in the following examples). Example usage:  Entire
+  project: kinds=[], namespace_ids=[]  Kinds Foo and Bar in all
+  namespaces: kinds=[‘Foo’, ‘Bar’], namespace_ids=[]  Kinds Foo and Bar
+  only in the default namespace: kinds=[‘Foo’, ‘Bar’],
+  namespace_ids=[’’]  Kinds Foo and Bar in both the default and Baz
+  namespaces: kinds=[‘Foo’, ‘Bar’], namespace_ids=[’‘, ’Baz’]  The
+  entire Baz namespace: kinds=[], namespace_ids=[‘Baz’]
   Attributes:
       kinds:
           If empty, then this represents all kinds.
@@ -1603,10 +1579,8 @@ GetIndexRequest = _reflection.GeneratedProtocolMessageType(
     {
         "DESCRIPTOR": _GETINDEXREQUEST,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The request for
-  [google.datastore.admin.v1.DatastoreAdmin.GetIndex][google.datastore.admin.v1.DatastoreAdmin.GetIndex].
-  
-  
+        "__doc__": """The request for [google.datastore.admin.v1.DatastoreAdmin.GetIndex][go
+  ogle.datastore.admin.v1.DatastoreAdmin.GetIndex].
   Attributes:
       project_id:
           Project ID against which to make the request.
@@ -1624,10 +1598,8 @@ ListIndexesRequest = _reflection.GeneratedProtocolMessageType(
     {
         "DESCRIPTOR": _LISTINDEXESREQUEST,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The request for
-  [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
-  
-  
+        "__doc__": """The request for [google.datastore.admin.v1.DatastoreAdmin.ListIndexes]
+  [google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
   Attributes:
       project_id:
           Project ID against which to make the request.
@@ -1649,10 +1621,8 @@ ListIndexesResponse = _reflection.GeneratedProtocolMessageType(
     {
         "DESCRIPTOR": _LISTINDEXESRESPONSE,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The response for
-  [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
-  
-  
+        "__doc__": """The response for [google.datastore.admin.v1.DatastoreAdmin.ListIndexes
+  ][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
   Attributes:
       indexes:
           The indexes.
@@ -1671,8 +1641,6 @@ IndexOperationMetadata = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _INDEXOPERATIONMETADATA,
         "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
         "__doc__": """Metadata for Index operations.
-  
-  
   Attributes:
       common:
           Metadata common to all Datastore Admin operations.

@@ -323,8 +323,6 @@ Index = _reflection.GeneratedProtocolMessageType(
                 "DESCRIPTOR": _INDEX_INDEXEDPROPERTY,
                 "__module__": "google.cloud.datastore_admin_v1.proto.index_pb2",
                 "__doc__": """A property of an index.
-    
-    
     Attributes:
         name:
             Required. The property name to index.
@@ -338,8 +336,6 @@ Index = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _INDEX,
         "__module__": "google.cloud.datastore_admin_v1.proto.index_pb2",
         "__doc__": """A minimal index definition.
-  
-  
   Attributes:
       project_id:
           Output only. Project ID.
