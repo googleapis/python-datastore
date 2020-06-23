@@ -21,6 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package="google.datastore.admin.v1",
     syntax="proto3",
     serialized_options=b"\n\035com.google.datastore.admin.v1B\nIndexProtoP\001Z>google.golang.org/genproto/googleapis/datastore/admin/v1;admin\252\002\037Google.Cloud.Datastore.Admin.V1",
+    create_key=_descriptor._internal_create_key,
     serialized_pb=b'\n1google/cloud/datastore_admin_v1/proto/index.proto\x12\x19google.datastore.admin.v1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/api/annotations.proto"\xe6\x04\n\x05Index\x12\x17\n\nproject_id\x18\x01 \x01(\tB\x03\xe0\x41\x03\x12\x15\n\x08index_id\x18\x03 \x01(\tB\x03\xe0\x41\x03\x12\x11\n\x04kind\x18\x04 \x01(\tB\x03\xe0\x41\x02\x12\x44\n\x08\x61ncestor\x18\x05 \x01(\x0e\x32-.google.datastore.admin.v1.Index.AncestorModeB\x03\xe0\x41\x02\x12I\n\nproperties\x18\x06 \x03(\x0b\x32\x30.google.datastore.admin.v1.Index.IndexedPropertyB\x03\xe0\x41\x02\x12:\n\x05state\x18\x07 \x01(\x0e\x32&.google.datastore.admin.v1.Index.StateB\x03\xe0\x41\x03\x1ah\n\x0fIndexedProperty\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x42\n\tdirection\x18\x02 \x01(\x0e\x32*.google.datastore.admin.v1.Index.DirectionB\x03\xe0\x41\x02"J\n\x0c\x41ncestorMode\x12\x1d\n\x19\x41NCESTOR_MODE_UNSPECIFIED\x10\x00\x12\x08\n\x04NONE\x10\x01\x12\x11\n\rALL_ANCESTORS\x10\x02"E\n\tDirection\x12\x19\n\x15\x44IRECTION_UNSPECIFIED\x10\x00\x12\r\n\tASCENDING\x10\x01\x12\x0e\n\nDESCENDING\x10\x02"P\n\x05State\x12\x15\n\x11STATE_UNSPECIFIED\x10\x00\x12\x0c\n\x08\x43REATING\x10\x01\x12\t\n\x05READY\x10\x02\x12\x0c\n\x08\x44\x45LETING\x10\x03\x12\t\n\x05\x45RROR\x10\x04\x42\x8f\x01\n\x1d\x63om.google.datastore.admin.v1B\nIndexProtoP\x01Z>google.golang.org/genproto/googleapis/datastore/admin/v1;admin\xaa\x02\x1fGoogle.Cloud.Datastore.Admin.V1b\x06proto3',
     dependencies=[
         google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,
@@ -34,6 +35,7 @@ _INDEX_ANCESTORMODE = _descriptor.EnumDescriptor(
     full_name="google.datastore.admin.v1.Index.AncestorMode",
     filename=None,
     file=DESCRIPTOR,
+    create_key=_descriptor._internal_create_key,
     values=[
         _descriptor.EnumValueDescriptor(
             name="ANCESTOR_MODE_UNSPECIFIED",
@@ -41,12 +43,23 @@ _INDEX_ANCESTORMODE = _descriptor.EnumDescriptor(
             number=0,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="NONE", index=1, number=1, serialized_options=None, type=None
+            name="NONE",
+            index=1,
+            number=1,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="ALL_ANCESTORS", index=2, number=2, serialized_options=None, type=None
+            name="ALL_ANCESTORS",
+            index=2,
+            number=2,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     containing_type=None,
@@ -61,6 +74,7 @@ _INDEX_DIRECTION = _descriptor.EnumDescriptor(
     full_name="google.datastore.admin.v1.Index.Direction",
     filename=None,
     file=DESCRIPTOR,
+    create_key=_descriptor._internal_create_key,
     values=[
         _descriptor.EnumValueDescriptor(
             name="DIRECTION_UNSPECIFIED",
@@ -68,12 +82,23 @@ _INDEX_DIRECTION = _descriptor.EnumDescriptor(
             number=0,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="ASCENDING", index=1, number=1, serialized_options=None, type=None
+            name="ASCENDING",
+            index=1,
+            number=1,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="DESCENDING", index=2, number=2, serialized_options=None, type=None
+            name="DESCENDING",
+            index=2,
+            number=2,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     containing_type=None,
@@ -88,6 +113,7 @@ _INDEX_STATE = _descriptor.EnumDescriptor(
     full_name="google.datastore.admin.v1.Index.State",
     filename=None,
     file=DESCRIPTOR,
+    create_key=_descriptor._internal_create_key,
     values=[
         _descriptor.EnumValueDescriptor(
             name="STATE_UNSPECIFIED",
@@ -95,18 +121,39 @@ _INDEX_STATE = _descriptor.EnumDescriptor(
             number=0,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="CREATING", index=1, number=1, serialized_options=None, type=None
+            name="CREATING",
+            index=1,
+            number=1,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="READY", index=2, number=2, serialized_options=None, type=None
+            name="READY",
+            index=2,
+            number=2,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="DELETING", index=3, number=3, serialized_options=None, type=None
+            name="DELETING",
+            index=3,
+            number=3,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="ERROR", index=4, number=4, serialized_options=None, type=None
+            name="ERROR",
+            index=4,
+            number=4,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     containing_type=None,
@@ -123,6 +170,7 @@ _INDEX_INDEXEDPROPERTY = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="name",
@@ -141,6 +189,7 @@ _INDEX_INDEXEDPROPERTY = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="direction",
@@ -159,6 +208,7 @@ _INDEX_INDEXEDPROPERTY = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -179,6 +229,7 @@ _INDEX = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -197,6 +248,7 @@ _INDEX = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\003",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="index_id",
@@ -215,6 +267,7 @@ _INDEX = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\003",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="kind",
@@ -233,6 +286,7 @@ _INDEX = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="ancestor",
@@ -251,6 +305,7 @@ _INDEX = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="properties",
@@ -269,6 +324,7 @@ _INDEX = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="state",
@@ -287,6 +343,7 @@ _INDEX = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\003",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],

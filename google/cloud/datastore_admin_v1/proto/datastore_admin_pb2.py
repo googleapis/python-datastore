@@ -30,6 +30,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package="google.datastore.admin.v1",
     syntax="proto3",
     serialized_options=b"\n\035com.google.datastore.admin.v1B\023DatastoreAdminProtoP\001Z>google.golang.org/genproto/googleapis/datastore/admin/v1;admin\252\002\037Google.Cloud.Datastore.Admin.V1",
+    create_key=_descriptor._internal_create_key,
     serialized_pb=b'\n;google/cloud/datastore_admin_v1/proto/datastore_admin.proto\x12\x19google.datastore.admin.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x31google/cloud/datastore_admin_v1/proto/index.proto\x1a#google/longrunning/operations.proto\x1a\x1fgoogle/protobuf/timestamp.proto"\xf4\x03\n\x0e\x43ommonMetadata\x12.\n\nstart_time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12@\n\x0eoperation_type\x18\x03 \x01(\x0e\x32(.google.datastore.admin.v1.OperationType\x12\x45\n\x06labels\x18\x04 \x03(\x0b\x32\x35.google.datastore.admin.v1.CommonMetadata.LabelsEntry\x12>\n\x05state\x18\x05 \x01(\x0e\x32/.google.datastore.admin.v1.CommonMetadata.State\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"\x8b\x01\n\x05State\x12\x15\n\x11STATE_UNSPECIFIED\x10\x00\x12\x10\n\x0cINITIALIZING\x10\x01\x12\x0e\n\nPROCESSING\x10\x02\x12\x0e\n\nCANCELLING\x10\x03\x12\x0e\n\nFINALIZING\x10\x04\x12\x0e\n\nSUCCESSFUL\x10\x05\x12\n\n\x06\x46\x41ILED\x10\x06\x12\r\n\tCANCELLED\x10\x07":\n\x08Progress\x12\x16\n\x0ework_completed\x18\x01 \x01(\x03\x12\x16\n\x0ework_estimated\x18\x02 \x01(\x03"\x8d\x02\n\x15\x45xportEntitiesRequest\x12\x17\n\nproject_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12L\n\x06labels\x18\x02 \x03(\x0b\x32<.google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry\x12>\n\rentity_filter\x18\x03 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x1e\n\x11output_url_prefix\x18\x04 \x01(\tB\x03\xe0\x41\x02\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"\x85\x02\n\x15ImportEntitiesRequest\x12\x17\n\nproject_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12L\n\x06labels\x18\x02 \x03(\x0b\x32<.google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry\x12\x16\n\tinput_url\x18\x03 \x01(\tB\x03\xe0\x41\x02\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01",\n\x16\x45xportEntitiesResponse\x12\x12\n\noutput_url\x18\x01 \x01(\t"\xab\x02\n\x16\x45xportEntitiesMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12;\n\x0eprogress_bytes\x18\x03 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x19\n\x11output_url_prefix\x18\x05 \x01(\t"\xa3\x02\n\x16ImportEntitiesMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12;\n\x0eprogress_bytes\x18\x03 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x11\n\tinput_url\x18\x05 \x01(\t"4\n\x0c\x45ntityFilter\x12\r\n\x05kinds\x18\x01 \x03(\t\x12\x15\n\rnamespace_ids\x18\x02 \x03(\t"7\n\x0fGetIndexRequest\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x10\n\x08index_id\x18\x03 \x01(\t"_\n\x12ListIndexesRequest\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x0e\n\x06\x66ilter\x18\x03 \x01(\t\x12\x11\n\tpage_size\x18\x04 \x01(\x05\x12\x12\n\npage_token\x18\x05 \x01(\t"a\n\x13ListIndexesResponse\x12\x31\n\x07indexes\x18\x01 \x03(\x0b\x32 .google.datastore.admin.v1.Index\x12\x17\n\x0fnext_page_token\x18\x02 \x01(\t"\xa5\x01\n\x16IndexOperationMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12\x10\n\x08index_id\x18\x03 \x01(\t*}\n\rOperationType\x12\x1e\n\x1aOPERATION_TYPE_UNSPECIFIED\x10\x00\x12\x13\n\x0f\x45XPORT_ENTITIES\x10\x01\x12\x13\n\x0fIMPORT_ENTITIES\x10\x02\x12\x10\n\x0c\x43REATE_INDEX\x10\x03\x12\x10\n\x0c\x44\x45LETE_INDEX\x10\x04\x32\x9c\x07\n\x0e\x44\x61tastoreAdmin\x12\xf6\x01\n\x0e\x45xportEntities\x12\x30.google.datastore.admin.v1.ExportEntitiesRequest\x1a\x1d.google.longrunning.Operation"\x92\x01\x82\xd3\xe4\x93\x02%" /v1/projects/{project_id}:export:\x01*\xda\x41\x31project_id,labels,entity_filter,output_url_prefix\xca\x41\x30\n\x16\x45xportEntitiesResponse\x12\x16\x45xportEntitiesMetadata\x12\xed\x01\n\x0eImportEntities\x12\x30.google.datastore.admin.v1.ImportEntitiesRequest\x1a\x1d.google.longrunning.Operation"\x89\x01\x82\xd3\xe4\x93\x02%" /v1/projects/{project_id}:import:\x01*\xda\x41)project_id,labels,input_url,entity_filter\xca\x41/\n\x15google.protobuf.Empty\x12\x16ImportEntitiesMetadata\x12\x8e\x01\n\x08GetIndex\x12*.google.datastore.admin.v1.GetIndexRequest\x1a .google.datastore.admin.v1.Index"4\x82\xd3\xe4\x93\x02.\x12,/v1/projects/{project_id}/indexes/{index_id}\x12\x97\x01\n\x0bListIndexes\x12-.google.datastore.admin.v1.ListIndexesRequest\x1a..google.datastore.admin.v1.ListIndexesResponse")\x82\xd3\xe4\x93\x02#\x12!/v1/projects/{project_id}/indexes\x1av\xca\x41\x18\x64\x61tastore.googleapis.com\xd2\x41Xhttps://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/datastoreB\x98\x01\n\x1d\x63om.google.datastore.admin.v1B\x13\x44\x61tastoreAdminProtoP\x01Z>google.golang.org/genproto/googleapis/datastore/admin/v1;admin\xaa\x02\x1fGoogle.Cloud.Datastore.Admin.V1b\x06proto3',
     dependencies=[
         google_dot_api_dot_annotations__pb2.DESCRIPTOR,
@@ -46,6 +47,7 @@ _OPERATIONTYPE = _descriptor.EnumDescriptor(
     full_name="google.datastore.admin.v1.OperationType",
     filename=None,
     file=DESCRIPTOR,
+    create_key=_descriptor._internal_create_key,
     values=[
         _descriptor.EnumValueDescriptor(
             name="OPERATION_TYPE_UNSPECIFIED",
@@ -53,6 +55,7 @@ _OPERATIONTYPE = _descriptor.EnumDescriptor(
             number=0,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
             name="EXPORT_ENTITIES",
@@ -60,6 +63,7 @@ _OPERATIONTYPE = _descriptor.EnumDescriptor(
             number=1,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
             name="IMPORT_ENTITIES",
@@ -67,12 +71,23 @@ _OPERATIONTYPE = _descriptor.EnumDescriptor(
             number=2,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="CREATE_INDEX", index=3, number=3, serialized_options=None, type=None
+            name="CREATE_INDEX",
+            index=3,
+            number=3,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="DELETE_INDEX", index=4, number=4, serialized_options=None, type=None
+            name="DELETE_INDEX",
+            index=4,
+            number=4,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     containing_type=None,
@@ -95,6 +110,7 @@ _COMMONMETADATA_STATE = _descriptor.EnumDescriptor(
     full_name="google.datastore.admin.v1.CommonMetadata.State",
     filename=None,
     file=DESCRIPTOR,
+    create_key=_descriptor._internal_create_key,
     values=[
         _descriptor.EnumValueDescriptor(
             name="STATE_UNSPECIFIED",
@@ -102,27 +118,63 @@ _COMMONMETADATA_STATE = _descriptor.EnumDescriptor(
             number=0,
             serialized_options=None,
             type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="INITIALIZING", index=1, number=1, serialized_options=None, type=None
+            name="INITIALIZING",
+            index=1,
+            number=1,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="PROCESSING", index=2, number=2, serialized_options=None, type=None
+            name="PROCESSING",
+            index=2,
+            number=2,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="CANCELLING", index=3, number=3, serialized_options=None, type=None
+            name="CANCELLING",
+            index=3,
+            number=3,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="FINALIZING", index=4, number=4, serialized_options=None, type=None
+            name="FINALIZING",
+            index=4,
+            number=4,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="SUCCESSFUL", index=5, number=5, serialized_options=None, type=None
+            name="SUCCESSFUL",
+            index=5,
+            number=5,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="FAILED", index=6, number=6, serialized_options=None, type=None
+            name="FAILED",
+            index=6,
+            number=6,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.EnumValueDescriptor(
-            name="CANCELLED", index=7, number=7, serialized_options=None, type=None
+            name="CANCELLED",
+            index=7,
+            number=7,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     containing_type=None,
@@ -139,6 +191,7 @@ _COMMONMETADATA_LABELSENTRY = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="key",
@@ -157,6 +210,7 @@ _COMMONMETADATA_LABELSENTRY = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="value",
@@ -175,6 +229,7 @@ _COMMONMETADATA_LABELSENTRY = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -195,6 +250,7 @@ _COMMONMETADATA = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="start_time",
@@ -213,6 +269,7 @@ _COMMONMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="end_time",
@@ -231,6 +288,7 @@ _COMMONMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="operation_type",
@@ -249,6 +307,7 @@ _COMMONMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="labels",
@@ -267,6 +326,7 @@ _COMMONMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="state",
@@ -285,6 +345,7 @@ _COMMONMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -306,6 +367,7 @@ _PROGRESS = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="work_completed",
@@ -324,6 +386,7 @@ _PROGRESS = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="work_estimated",
@@ -342,6 +405,7 @@ _PROGRESS = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -363,6 +427,7 @@ _EXPORTENTITIESREQUEST_LABELSENTRY = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="key",
@@ -381,6 +446,7 @@ _EXPORTENTITIESREQUEST_LABELSENTRY = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="value",
@@ -399,6 +465,7 @@ _EXPORTENTITIESREQUEST_LABELSENTRY = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -419,6 +486,7 @@ _EXPORTENTITIESREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -437,6 +505,7 @@ _EXPORTENTITIESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="labels",
@@ -455,6 +524,7 @@ _EXPORTENTITIESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="entity_filter",
@@ -473,6 +543,7 @@ _EXPORTENTITIESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="output_url_prefix",
@@ -491,6 +562,7 @@ _EXPORTENTITIESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -512,6 +584,7 @@ _IMPORTENTITIESREQUEST_LABELSENTRY = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="key",
@@ -530,6 +603,7 @@ _IMPORTENTITIESREQUEST_LABELSENTRY = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="value",
@@ -548,6 +622,7 @@ _IMPORTENTITIESREQUEST_LABELSENTRY = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -568,6 +643,7 @@ _IMPORTENTITIESREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -586,6 +662,7 @@ _IMPORTENTITIESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="labels",
@@ -604,6 +681,7 @@ _IMPORTENTITIESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="input_url",
@@ -622,6 +700,7 @@ _IMPORTENTITIESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=b"\340A\002",
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="entity_filter",
@@ -640,6 +719,7 @@ _IMPORTENTITIESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -661,6 +741,7 @@ _EXPORTENTITIESRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="output_url",
@@ -679,6 +760,7 @@ _EXPORTENTITIESRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         )
     ],
     extensions=[],
@@ -700,6 +782,7 @@ _EXPORTENTITIESMETADATA = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="common",
@@ -718,6 +801,7 @@ _EXPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="progress_entities",
@@ -736,6 +820,7 @@ _EXPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="progress_bytes",
@@ -754,6 +839,7 @@ _EXPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="entity_filter",
@@ -772,6 +858,7 @@ _EXPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="output_url_prefix",
@@ -790,6 +877,7 @@ _EXPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -811,6 +899,7 @@ _IMPORTENTITIESMETADATA = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="common",
@@ -829,6 +918,7 @@ _IMPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="progress_entities",
@@ -847,6 +937,7 @@ _IMPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="progress_bytes",
@@ -865,6 +956,7 @@ _IMPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="entity_filter",
@@ -883,6 +975,7 @@ _IMPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="input_url",
@@ -901,6 +994,7 @@ _IMPORTENTITIESMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -922,6 +1016,7 @@ _ENTITYFILTER = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="kinds",
@@ -940,6 +1035,7 @@ _ENTITYFILTER = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="namespace_ids",
@@ -958,6 +1054,7 @@ _ENTITYFILTER = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -979,6 +1076,7 @@ _GETINDEXREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -997,6 +1095,7 @@ _GETINDEXREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="index_id",
@@ -1015,6 +1114,7 @@ _GETINDEXREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -1036,6 +1136,7 @@ _LISTINDEXESREQUEST = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="project_id",
@@ -1054,6 +1155,7 @@ _LISTINDEXESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="filter",
@@ -1072,6 +1174,7 @@ _LISTINDEXESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="page_size",
@@ -1090,6 +1193,7 @@ _LISTINDEXESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="page_token",
@@ -1108,6 +1212,7 @@ _LISTINDEXESREQUEST = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -1129,6 +1234,7 @@ _LISTINDEXESRESPONSE = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="indexes",
@@ -1147,6 +1253,7 @@ _LISTINDEXESRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="next_page_token",
@@ -1165,6 +1272,7 @@ _LISTINDEXESRESPONSE = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -1186,6 +1294,7 @@ _INDEXOPERATIONMETADATA = _descriptor.Descriptor(
     filename=None,
     file=DESCRIPTOR,
     containing_type=None,
+    create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
             name="common",
@@ -1204,6 +1313,7 @@ _INDEXOPERATIONMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="progress_entities",
@@ -1222,6 +1332,7 @@ _INDEXOPERATIONMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
             name="index_id",
@@ -1240,6 +1351,7 @@ _INDEXOPERATIONMETADATA = _descriptor.Descriptor(
             extension_scope=None,
             serialized_options=None,
             file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
         ),
     ],
     extensions=[],
@@ -1670,6 +1782,7 @@ _DATASTOREADMIN = _descriptor.ServiceDescriptor(
     file=DESCRIPTOR,
     index=0,
     serialized_options=b"\312A\030datastore.googleapis.com\322AXhttps://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/datastore",
+    create_key=_descriptor._internal_create_key,
     serialized_start=2643,
     serialized_end=3567,
     methods=[
@@ -1681,6 +1794,7 @@ _DATASTOREADMIN = _descriptor.ServiceDescriptor(
             input_type=_EXPORTENTITIESREQUEST,
             output_type=google_dot_longrunning_dot_operations__pb2._OPERATION,
             serialized_options=b'\202\323\344\223\002%" /v1/projects/{project_id}:export:\001*\332A1project_id,labels,entity_filter,output_url_prefix\312A0\n\026ExportEntitiesResponse\022\026ExportEntitiesMetadata',
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="ImportEntities",
@@ -1690,6 +1804,7 @@ _DATASTOREADMIN = _descriptor.ServiceDescriptor(
             input_type=_IMPORTENTITIESREQUEST,
             output_type=google_dot_longrunning_dot_operations__pb2._OPERATION,
             serialized_options=b'\202\323\344\223\002%" /v1/projects/{project_id}:import:\001*\332A)project_id,labels,input_url,entity_filter\312A/\n\025google.protobuf.Empty\022\026ImportEntitiesMetadata',
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="GetIndex",
@@ -1699,6 +1814,7 @@ _DATASTOREADMIN = _descriptor.ServiceDescriptor(
             input_type=_GETINDEXREQUEST,
             output_type=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2._INDEX,
             serialized_options=b"\202\323\344\223\002.\022,/v1/projects/{project_id}/indexes/{index_id}",
+            create_key=_descriptor._internal_create_key,
         ),
         _descriptor.MethodDescriptor(
             name="ListIndexes",
@@ -1708,6 +1824,7 @@ _DATASTOREADMIN = _descriptor.ServiceDescriptor(
             input_type=_LISTINDEXESREQUEST,
             output_type=_LISTINDEXESRESPONSE,
             serialized_options=b"\202\323\344\223\002#\022!/v1/projects/{project_id}/indexes",
+            create_key=_descriptor._internal_create_key,
         ),
     ],
 )
