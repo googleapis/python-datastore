@@ -787,6 +787,7 @@ PartitionId = _reflection.GeneratedProtocolMessageType(
   match the context project ID ) are discouraged. Reads and writes of
   foreign partition IDs may fail if the project is not in an active
   state.
+  
   Attributes:
       project_id:
           The ID of the project to which the entities belong.
@@ -812,6 +813,7 @@ Key = _reflection.GeneratedProtocolMessageType(
                 "__doc__": """A (kind, ID/name) pair used to construct a key path.  If either name
     or ID is set, the element is complete. If neither is set, the element
     is incomplete.
+    
     Attributes:
         kind:
             The kind of the entity. A kind matching regex ``__.*__`` is
@@ -837,6 +839,7 @@ Key = _reflection.GeneratedProtocolMessageType(
   its path kinds or names are reserved/read-only, the key is
   reserved/read-only. A reserved/read-only key is forbidden in certain
   documented contexts.
+  
   Attributes:
       partition_id:
           Entities are partitioned into subsets, currently identified by
@@ -872,6 +875,7 @@ ArrayValue = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _ARRAYVALUE,
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
         "__doc__": """An array value.
+  
   Attributes:
       values:
           Values in the array. The order of values in an array is
@@ -891,6 +895,7 @@ Value = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.entity_pb2",
         "__doc__": """A message that can hold any of the supported value types and
   associated metadata.
+  
   Attributes:
       value_type:
           Must have a value set.
@@ -955,6 +960,7 @@ Entity = _reflection.GeneratedProtocolMessageType(
         "__doc__": """A Datastore data object.  An entity is limited to 1 megabyte when
   stored. That *roughly* corresponds to a limit of 1 megabyte for the
   serialized form of this message.
+  
   Attributes:
       key:
           The entity’s key.  An entity must have a key, unless otherwise

@@ -1593,6 +1593,7 @@ LookupRequest = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The request for
   [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
+  
   Attributes:
       project_id:
           Required. The ID of the project against which to make the
@@ -1615,6 +1616,7 @@ LookupResponse = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The response for
   [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
+  
   Attributes:
       found:
           Entities found as ``ResultType.FULL`` entities. The order of
@@ -1642,6 +1644,7 @@ RunQueryRequest = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The request for
   [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
+  
   Attributes:
       project_id:
           Required. The ID of the project against which to make the
@@ -1673,6 +1676,7 @@ RunQueryResponse = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The response for
   [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
+  
   Attributes:
       batch:
           A batch of query results (always present).
@@ -1693,6 +1697,7 @@ BeginTransactionRequest = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The request for [Datastore.BeginTransaction][google.datastore.v1.Datas
   tore.BeginTransaction].
+  
   Attributes:
       project_id:
           Required. The ID of the project against which to make the
@@ -1713,6 +1718,7 @@ BeginTransactionResponse = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The response for [Datastore.BeginTransaction][google.datastore.v1.Data
   store.BeginTransaction].
+  
   Attributes:
       transaction:
           The transaction identifier (always present).
@@ -1730,6 +1736,7 @@ RollbackRequest = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The request for
   [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
+  
   Attributes:
       project_id:
           Required. The ID of the project against which to make the
@@ -1766,6 +1773,7 @@ CommitRequest = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The request for
   [Datastore.Commit][google.datastore.v1.Datastore.Commit].
+  
   Attributes:
       project_id:
           Required. The ID of the project against which to make the
@@ -1802,6 +1810,7 @@ CommitResponse = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The response for
   [Datastore.Commit][google.datastore.v1.Datastore.Commit].
+  
   Attributes:
       mutation_results:
           The result of performing the mutations. The i-th mutation
@@ -1823,6 +1832,7 @@ AllocateIdsRequest = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The request for
   [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
+  
   Attributes:
       project_id:
           Required. The ID of the project against which to make the
@@ -1844,6 +1854,7 @@ AllocateIdsResponse = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The response for
   [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
+  
   Attributes:
       keys:
           The keys specified in the request (in the same order), each
@@ -1862,6 +1873,7 @@ ReserveIdsRequest = _reflection.GeneratedProtocolMessageType(
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The request for
   [Datastore.ReserveIds][google.datastore.v1.Datastore.ReserveIds].
+  
   Attributes:
       project_id:
           Required. The ID of the project against which to make the
@@ -1898,6 +1910,7 @@ Mutation = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _MUTATION,
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """A mutation to apply to an entity.
+  
   Attributes:
       operation:
           The mutation operation.  For ``insert``, ``update``, and
@@ -1941,6 +1954,7 @@ MutationResult = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _MUTATIONRESULT,
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The result of applying a mutation.
+  
   Attributes:
       key:
           The automatically allocated key. Set only when the mutation
@@ -1969,6 +1983,7 @@ ReadOptions = _reflection.GeneratedProtocolMessageType(
         "DESCRIPTOR": _READOPTIONS,
         "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
         "__doc__": """The options shared by read requests.
+  
   Attributes:
       consistency_type:
           If not specified, lookups and ancestor queries default to
@@ -1999,6 +2014,7 @@ TransactionOptions = _reflection.GeneratedProtocolMessageType(
                 "DESCRIPTOR": _TRANSACTIONOPTIONS_READWRITE,
                 "__module__": "google.cloud.datastore_v1.proto.datastore_pb2",
                 "__doc__": """Options specific to read / write transactions.
+    
     Attributes:
         previous_transaction:
             The transaction identifier of the transaction being retried.
@@ -2023,6 +2039,7 @@ TransactionOptions = _reflection.GeneratedProtocolMessageType(
   .v1.Datastore.BeginTransaction] or implicitly by setting [ReadOptions.
   new_transaction][google.datastore.v1.ReadOptions.new_transaction] in
   read requests.
+  
   Attributes:
       mode:
           The ``mode`` of the transaction, indicating whether write
