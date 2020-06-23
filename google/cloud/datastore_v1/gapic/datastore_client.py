@@ -381,6 +381,90 @@ class DatastoreClient(object):
             request, retry=retry, timeout=timeout, metadata=metadata
         )
 
+    def reserve_ids(
+        self,
+        project_id,
+        keys,
+        database_id=None,
+        retry=google.api_core.gapic_v1.method.DEFAULT,
+        timeout=google.api_core.gapic_v1.method.DEFAULT,
+        metadata=None,
+    ):
+        """
+        Prevents the supplied keys' IDs from being auto-allocated by Cloud
+        Datastore.
+
+        Example:
+            >>> from google.cloud import datastore_v1
+            >>>
+            >>> client = datastore_v1.DatastoreClient()
+            >>>
+            >>> # TODO: Initialize `project_id`:
+            >>> project_id = ''
+            >>>
+            >>> # TODO: Initialize `keys`:
+            >>> keys = []
+            >>>
+            >>> response = client.reserve_ids(project_id, keys)
+
+        Args:
+            project_id (str): Required. The ID of the project against which to make the request.
+            keys (list[Union[dict, ~google.cloud.datastore_v1.types.Key]]): Required. A list of keys with complete key paths whose numeric IDs should not be
+                auto-allocated.
+
+                If a dict is provided, it must be of the same form as the protobuf
+                message :class:`~google.cloud.datastore_v1.types.Key`
+            database_id (str): If not empty, the ID of the database against which to make the request.
+            retry (Optional[google.api_core.retry.Retry]):  A retry object used
+                to retry requests. If ``None`` is specified, requests will
+                be retried using a default configuration.
+            timeout (Optional[float]): The amount of time, in seconds, to wait
+                for the request to complete. Note that if ``retry`` is
+                specified, the timeout applies to each individual attempt.
+            metadata (Optional[Sequence[Tuple[str, str]]]): Additional metadata
+                that is provided to the method.
+
+        Returns:
+            A :class:`~google.cloud.datastore_v1.types.ReserveIdsResponse` instance.
+
+        Raises:
+            google.api_core.exceptions.GoogleAPICallError: If the request
+                    failed for any reason.
+            google.api_core.exceptions.RetryError: If the request failed due
+                    to a retryable error and retry attempts failed.
+            ValueError: If the parameters are invalid.
+        """
+        # Wrap the transport method to add retry and timeout logic.
+        if "reserve_ids" not in self._inner_api_calls:
+            self._inner_api_calls[
+                "reserve_ids"
+            ] = google.api_core.gapic_v1.method.wrap_method(
+                self.transport.reserve_ids,
+                default_retry=self._method_configs["ReserveIds"].retry,
+                default_timeout=self._method_configs["ReserveIds"].timeout,
+                client_info=self._client_info,
+            )
+
+        request = datastore_pb2.ReserveIdsRequest(
+            project_id=project_id, keys=keys, database_id=database_id
+        )
+        if metadata is None:
+            metadata = []
+        metadata = list(metadata)
+        try:
+            routing_header = [("project_id", project_id)]
+        except AttributeError:
+            pass
+        else:
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
+                routing_header
+            )
+            metadata.append(routing_metadata)
+
+        return self._inner_api_calls["reserve_ids"](
+            request, retry=retry, timeout=timeout, metadata=metadata
+        )
+
     def begin_transaction(
         self,
         project_id,
@@ -716,89 +800,5 @@ class DatastoreClient(object):
             metadata.append(routing_metadata)
 
         return self._inner_api_calls["allocate_ids"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
-
-    def reserve_ids(
-        self,
-        project_id,
-        keys,
-        database_id=None,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
-        """
-        Prevents the supplied keys' IDs from being auto-allocated by Cloud
-        Datastore.
-
-        Example:
-            >>> from google.cloud import datastore_v1
-            >>>
-            >>> client = datastore_v1.DatastoreClient()
-            >>>
-            >>> # TODO: Initialize `project_id`:
-            >>> project_id = ''
-            >>>
-            >>> # TODO: Initialize `keys`:
-            >>> keys = []
-            >>>
-            >>> response = client.reserve_ids(project_id, keys)
-
-        Args:
-            project_id (str): Required. The ID of the project against which to make the request.
-            keys (list[Union[dict, ~google.cloud.datastore_v1.types.Key]]): Required. A list of keys with complete key paths whose numeric IDs should not be
-                auto-allocated.
-
-                If a dict is provided, it must be of the same form as the protobuf
-                message :class:`~google.cloud.datastore_v1.types.Key`
-            database_id (str): If not empty, the ID of the database against which to make the request.
-            retry (Optional[google.api_core.retry.Retry]):  A retry object used
-                to retry requests. If ``None`` is specified, requests will
-                be retried using a default configuration.
-            timeout (Optional[float]): The amount of time, in seconds, to wait
-                for the request to complete. Note that if ``retry`` is
-                specified, the timeout applies to each individual attempt.
-            metadata (Optional[Sequence[Tuple[str, str]]]): Additional metadata
-                that is provided to the method.
-
-        Returns:
-            A :class:`~google.cloud.datastore_v1.types.ReserveIdsResponse` instance.
-
-        Raises:
-            google.api_core.exceptions.GoogleAPICallError: If the request
-                    failed for any reason.
-            google.api_core.exceptions.RetryError: If the request failed due
-                    to a retryable error and retry attempts failed.
-            ValueError: If the parameters are invalid.
-        """
-        # Wrap the transport method to add retry and timeout logic.
-        if "reserve_ids" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "reserve_ids"
-            ] = google.api_core.gapic_v1.method.wrap_method(
-                self.transport.reserve_ids,
-                default_retry=self._method_configs["ReserveIds"].retry,
-                default_timeout=self._method_configs["ReserveIds"].timeout,
-                client_info=self._client_info,
-            )
-
-        request = datastore_pb2.ReserveIdsRequest(
-            project_id=project_id, keys=keys, database_id=database_id
-        )
-        if metadata is None:
-            metadata = []
-        metadata = list(metadata)
-        try:
-            routing_header = [("project_id", project_id)]
-        except AttributeError:
-            pass
-        else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
-            metadata.append(routing_metadata)
-
-        return self._inner_api_calls["reserve_ids"](
             request, retry=retry, timeout=timeout, metadata=metadata
         )

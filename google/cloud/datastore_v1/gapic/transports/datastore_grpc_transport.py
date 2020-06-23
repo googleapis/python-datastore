@@ -135,6 +135,20 @@ class DatastoreGrpcTransport(object):
         return self._stubs["datastore_stub"].RunQuery
 
     @property
+    def reserve_ids(self):
+        """Return the gRPC stub for :meth:`DatastoreClient.reserve_ids`.
+
+        Prevents the supplied keys' IDs from being auto-allocated by Cloud
+        Datastore.
+
+        Returns:
+            Callable: A callable which accepts the appropriate
+                deserialized request object and returns a
+                deserialized response object.
+        """
+        return self._stubs["datastore_stub"].ReserveIds
+
+    @property
     def begin_transaction(self):
         """Return the gRPC stub for :meth:`DatastoreClient.begin_transaction`.
 
@@ -187,17 +201,3 @@ class DatastoreGrpcTransport(object):
                 deserialized response object.
         """
         return self._stubs["datastore_stub"].AllocateIds
-
-    @property
-    def reserve_ids(self):
-        """Return the gRPC stub for :meth:`DatastoreClient.reserve_ids`.
-
-        Prevents the supplied keys' IDs from being auto-allocated by Cloud
-        Datastore.
-
-        Returns:
-            Callable: A callable which accepts the appropriate
-                deserialized request object and returns a
-                deserialized response object.
-        """
-        return self._stubs["datastore_stub"].ReserveIds
