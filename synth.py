@@ -48,7 +48,6 @@ s.move(
 )
 
 s.move(library / "google/cloud/datastore_admin_v1/proto")
-#s.move(library / "google/cloud/datastore_admin_v1/__init__.py")
 
 # TODO(busunkim): Remove during the microgenerator transition.
 # This re-orders the parameters to avoid breaking existing code.
