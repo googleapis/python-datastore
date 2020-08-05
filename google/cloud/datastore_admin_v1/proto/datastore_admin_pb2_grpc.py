@@ -2,9 +2,15 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from google.cloud.datastore_admin_v1.proto import datastore_admin_pb2 as google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2
-from google.cloud.datastore_admin_v1.proto import index_pb2 as google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2
-from google.longrunning import operations_pb2 as google_dot_longrunning_dot_operations__pb2
+from google.cloud.datastore_admin_v1.proto import (
+    datastore_admin_pb2 as google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2,
+)
+from google.cloud.datastore_admin_v1.proto import (
+    index_pb2 as google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2,
+)
+from google.longrunning import (
+    operations_pb2 as google_dot_longrunning_dot_operations__pb2,
+)
 
 
 class DatastoreAdminStub(object):
@@ -78,25 +84,25 @@ class DatastoreAdminStub(object):
             channel: A grpc.Channel.
         """
         self.ExportEntities = channel.unary_unary(
-                '/google.datastore.admin.v1.DatastoreAdmin/ExportEntities',
-                request_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ExportEntitiesRequest.SerializeToString,
-                response_deserializer=google_dot_longrunning_dot_operations__pb2.Operation.FromString,
-                )
+            "/google.datastore.admin.v1.DatastoreAdmin/ExportEntities",
+            request_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ExportEntitiesRequest.SerializeToString,
+            response_deserializer=google_dot_longrunning_dot_operations__pb2.Operation.FromString,
+        )
         self.ImportEntities = channel.unary_unary(
-                '/google.datastore.admin.v1.DatastoreAdmin/ImportEntities',
-                request_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ImportEntitiesRequest.SerializeToString,
-                response_deserializer=google_dot_longrunning_dot_operations__pb2.Operation.FromString,
-                )
+            "/google.datastore.admin.v1.DatastoreAdmin/ImportEntities",
+            request_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ImportEntitiesRequest.SerializeToString,
+            response_deserializer=google_dot_longrunning_dot_operations__pb2.Operation.FromString,
+        )
         self.GetIndex = channel.unary_unary(
-                '/google.datastore.admin.v1.DatastoreAdmin/GetIndex',
-                request_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.GetIndexRequest.SerializeToString,
-                response_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2.Index.FromString,
-                )
+            "/google.datastore.admin.v1.DatastoreAdmin/GetIndex",
+            request_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.GetIndexRequest.SerializeToString,
+            response_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2.Index.FromString,
+        )
         self.ListIndexes = channel.unary_unary(
-                '/google.datastore.admin.v1.DatastoreAdmin/ListIndexes',
-                request_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesRequest.SerializeToString,
-                response_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesResponse.FromString,
-                )
+            "/google.datastore.admin.v1.DatastoreAdmin/ListIndexes",
+            request_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesRequest.SerializeToString,
+            response_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesResponse.FromString,
+        )
 
 
 class DatastoreAdminServicer(object):
@@ -174,8 +180,8 @@ class DatastoreAdminServicer(object):
         Cloud Storage.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def ImportEntities(self, request, context):
         """Imports entities into Google Cloud Datastore. Existing entities with the
@@ -185,15 +191,15 @@ class DatastoreAdminServicer(object):
         that a subset of the data has already been imported to Cloud Datastore.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def GetIndex(self, request, context):
         """Gets an index.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def ListIndexes(self, request, context):
         """Lists the indexes that match the specified filters.  Datastore uses an
@@ -201,39 +207,40 @@ class DatastoreAdminServicer(object):
         occasionally return stale results.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_DatastoreAdminServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'ExportEntities': grpc.unary_unary_rpc_method_handler(
-                    servicer.ExportEntities,
-                    request_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ExportEntitiesRequest.FromString,
-                    response_serializer=google_dot_longrunning_dot_operations__pb2.Operation.SerializeToString,
-            ),
-            'ImportEntities': grpc.unary_unary_rpc_method_handler(
-                    servicer.ImportEntities,
-                    request_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ImportEntitiesRequest.FromString,
-                    response_serializer=google_dot_longrunning_dot_operations__pb2.Operation.SerializeToString,
-            ),
-            'GetIndex': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetIndex,
-                    request_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.GetIndexRequest.FromString,
-                    response_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2.Index.SerializeToString,
-            ),
-            'ListIndexes': grpc.unary_unary_rpc_method_handler(
-                    servicer.ListIndexes,
-                    request_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesRequest.FromString,
-                    response_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesResponse.SerializeToString,
-            ),
+        "ExportEntities": grpc.unary_unary_rpc_method_handler(
+            servicer.ExportEntities,
+            request_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ExportEntitiesRequest.FromString,
+            response_serializer=google_dot_longrunning_dot_operations__pb2.Operation.SerializeToString,
+        ),
+        "ImportEntities": grpc.unary_unary_rpc_method_handler(
+            servicer.ImportEntities,
+            request_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ImportEntitiesRequest.FromString,
+            response_serializer=google_dot_longrunning_dot_operations__pb2.Operation.SerializeToString,
+        ),
+        "GetIndex": grpc.unary_unary_rpc_method_handler(
+            servicer.GetIndex,
+            request_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.GetIndexRequest.FromString,
+            response_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2.Index.SerializeToString,
+        ),
+        "ListIndexes": grpc.unary_unary_rpc_method_handler(
+            servicer.ListIndexes,
+            request_deserializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesRequest.FromString,
+            response_serializer=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'google.datastore.admin.v1.DatastoreAdmin', rpc_method_handlers)
+        "google.datastore.admin.v1.DatastoreAdmin", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class DatastoreAdmin(object):
     """Google Cloud Datastore Admin API
 
@@ -299,65 +306,109 @@ class DatastoreAdmin(object):
     """
 
     @staticmethod
-    def ExportEntities(request,
+    def ExportEntities(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/google.datastore.admin.v1.DatastoreAdmin/ExportEntities',
+            "/google.datastore.admin.v1.DatastoreAdmin/ExportEntities",
             google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ExportEntitiesRequest.SerializeToString,
             google_dot_longrunning_dot_operations__pb2.Operation.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def ImportEntities(request,
+    def ImportEntities(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/google.datastore.admin.v1.DatastoreAdmin/ImportEntities',
+            "/google.datastore.admin.v1.DatastoreAdmin/ImportEntities",
             google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ImportEntitiesRequest.SerializeToString,
             google_dot_longrunning_dot_operations__pb2.Operation.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def GetIndex(request,
+    def GetIndex(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/google.datastore.admin.v1.DatastoreAdmin/GetIndex',
+            "/google.datastore.admin.v1.DatastoreAdmin/GetIndex",
             google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.GetIndexRequest.SerializeToString,
             google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2.Index.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def ListIndexes(request,
+    def ListIndexes(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/google.datastore.admin.v1.DatastoreAdmin/ListIndexes',
+            "/google.datastore.admin.v1.DatastoreAdmin/ListIndexes",
             google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesRequest.SerializeToString,
             google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_datastore__admin__pb2.ListIndexesResponse.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
