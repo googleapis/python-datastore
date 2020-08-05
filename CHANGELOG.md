@@ -4,6 +4,29 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+### [1.13.2](https://www.github.com/googleapis/python-datastore/compare/v1.13.1...v1.13.2) (2020-07-17)
+
+
+### Bug Fixes
+
+* modify admin pkg name in gapic ([#47](https://www.github.com/googleapis/python-datastore/issues/47)) ([5b5011d](https://www.github.com/googleapis/python-datastore/commit/5b5011daf74133ecdd579bf19bbcf356e6f40dad))
+
+### [1.13.1](https://www.github.com/googleapis/python-datastore/compare/v1.13.0...v1.13.1) (2020-07-13)
+
+
+### Bug Fixes
+
+* add missing datastore admin client files ([#43](https://www.github.com/googleapis/python-datastore/issues/43)) ([0d40f87](https://www.github.com/googleapis/python-datastore/commit/0d40f87eeacd2a256d4b45ccb742599b5df93096))
+
+## [1.13.0](https://www.github.com/googleapis/python-datastore/compare/v1.12.0...v1.13.0) (2020-07-01)
+
+
+### Features
+
+* add datastore admin client ([#39](https://www.github.com/googleapis/python-datastore/issues/39)) ([1963fd8](https://www.github.com/googleapis/python-datastore/commit/1963fd84c012cc7985e44ed0fc03c15a6429833b))
+* add synth config to generate datastore_admin_v1 ([#27](https://www.github.com/googleapis/python-datastore/issues/27)) ([83c636e](https://www.github.com/googleapis/python-datastore/commit/83c636efc6e5bd02bd8dc614e4114f9477c74972))
+* Create CODEOWNERS ([#28](https://www.github.com/googleapis/python-datastore/issues/28)) ([0198419](https://www.github.com/googleapis/python-datastore/commit/0198419a759d4d3932fa92c268772f18aa29e2ca))
+
 ## [1.12.0](https://www.github.com/googleapis/python-datastore/compare/v1.11.0...v1.12.0) (2020-04-07)
 
 
