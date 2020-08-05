@@ -7,7 +7,6 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -16,84 +15,58 @@ _sym_db = _symbol_database.Default()
 from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from google.api import client_pb2 as google_dot_api_dot_client__pb2
 from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
-from google.cloud.datastore_admin_v1.proto import (
-    index_pb2 as google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2,
-)
-from google.longrunning import (
-    operations_pb2 as google_dot_longrunning_dot_operations__pb2,
-)
+from google.cloud.datastore_admin_v1.proto import index_pb2 as google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2
+from google.longrunning import operations_pb2 as google_dot_longrunning_dot_operations__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
-    name="google/cloud/datastore_admin_v1/proto/datastore_admin.proto",
-    package="google.datastore.admin.v1",
-    syntax="proto3",
-    serialized_options=b"\n\035com.google.datastore.admin.v1B\023DatastoreAdminProtoP\001Z>google.golang.org/genproto/googleapis/datastore/admin/v1;admin\252\002\037Google.Cloud.Datastore.Admin.V1\352\002#Google::Cloud::Datastore::Admin::V1",
-    create_key=_descriptor._internal_create_key,
-    serialized_pb=b'\n;google/cloud/datastore_admin_v1/proto/datastore_admin.proto\x12\x19google.datastore.admin.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x31google/cloud/datastore_admin_v1/proto/index.proto\x1a#google/longrunning/operations.proto\x1a\x1fgoogle/protobuf/timestamp.proto"\xf4\x03\n\x0e\x43ommonMetadata\x12.\n\nstart_time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12@\n\x0eoperation_type\x18\x03 \x01(\x0e\x32(.google.datastore.admin.v1.OperationType\x12\x45\n\x06labels\x18\x04 \x03(\x0b\x32\x35.google.datastore.admin.v1.CommonMetadata.LabelsEntry\x12>\n\x05state\x18\x05 \x01(\x0e\x32/.google.datastore.admin.v1.CommonMetadata.State\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"\x8b\x01\n\x05State\x12\x15\n\x11STATE_UNSPECIFIED\x10\x00\x12\x10\n\x0cINITIALIZING\x10\x01\x12\x0e\n\nPROCESSING\x10\x02\x12\x0e\n\nCANCELLING\x10\x03\x12\x0e\n\nFINALIZING\x10\x04\x12\x0e\n\nSUCCESSFUL\x10\x05\x12\n\n\x06\x46\x41ILED\x10\x06\x12\r\n\tCANCELLED\x10\x07":\n\x08Progress\x12\x16\n\x0ework_completed\x18\x01 \x01(\x03\x12\x16\n\x0ework_estimated\x18\x02 \x01(\x03"\x8d\x02\n\x15\x45xportEntitiesRequest\x12\x17\n\nproject_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12L\n\x06labels\x18\x02 \x03(\x0b\x32<.google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry\x12>\n\rentity_filter\x18\x03 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x1e\n\x11output_url_prefix\x18\x04 \x01(\tB\x03\xe0\x41\x02\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"\x85\x02\n\x15ImportEntitiesRequest\x12\x17\n\nproject_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12L\n\x06labels\x18\x02 \x03(\x0b\x32<.google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry\x12\x16\n\tinput_url\x18\x03 \x01(\tB\x03\xe0\x41\x02\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01",\n\x16\x45xportEntitiesResponse\x12\x12\n\noutput_url\x18\x01 \x01(\t"\xab\x02\n\x16\x45xportEntitiesMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12;\n\x0eprogress_bytes\x18\x03 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x19\n\x11output_url_prefix\x18\x05 \x01(\t"\xa3\x02\n\x16ImportEntitiesMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12;\n\x0eprogress_bytes\x18\x03 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x11\n\tinput_url\x18\x05 \x01(\t"4\n\x0c\x45ntityFilter\x12\r\n\x05kinds\x18\x01 \x03(\t\x12\x15\n\rnamespace_ids\x18\x02 \x03(\t"7\n\x0fGetIndexRequest\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x10\n\x08index_id\x18\x03 \x01(\t"_\n\x12ListIndexesRequest\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x0e\n\x06\x66ilter\x18\x03 \x01(\t\x12\x11\n\tpage_size\x18\x04 \x01(\x05\x12\x12\n\npage_token\x18\x05 \x01(\t"a\n\x13ListIndexesResponse\x12\x31\n\x07indexes\x18\x01 \x03(\x0b\x32 .google.datastore.admin.v1.Index\x12\x17\n\x0fnext_page_token\x18\x02 \x01(\t"\xa5\x01\n\x16IndexOperationMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12\x10\n\x08index_id\x18\x03 \x01(\t*}\n\rOperationType\x12\x1e\n\x1aOPERATION_TYPE_UNSPECIFIED\x10\x00\x12\x13\n\x0f\x45XPORT_ENTITIES\x10\x01\x12\x13\n\x0fIMPORT_ENTITIES\x10\x02\x12\x10\n\x0c\x43REATE_INDEX\x10\x03\x12\x10\n\x0c\x44\x45LETE_INDEX\x10\x04\x32\x9c\x07\n\x0e\x44\x61tastoreAdmin\x12\xf6\x01\n\x0e\x45xportEntities\x12\x30.google.datastore.admin.v1.ExportEntitiesRequest\x1a\x1d.google.longrunning.Operation"\x92\x01\x82\xd3\xe4\x93\x02%" /v1/projects/{project_id}:export:\x01*\xda\x41\x31project_id,labels,entity_filter,output_url_prefix\xca\x41\x30\n\x16\x45xportEntitiesResponse\x12\x16\x45xportEntitiesMetadata\x12\xed\x01\n\x0eImportEntities\x12\x30.google.datastore.admin.v1.ImportEntitiesRequest\x1a\x1d.google.longrunning.Operation"\x89\x01\x82\xd3\xe4\x93\x02%" /v1/projects/{project_id}:import:\x01*\xda\x41)project_id,labels,input_url,entity_filter\xca\x41/\n\x15google.protobuf.Empty\x12\x16ImportEntitiesMetadata\x12\x8e\x01\n\x08GetIndex\x12*.google.datastore.admin.v1.GetIndexRequest\x1a .google.datastore.admin.v1.Index"4\x82\xd3\xe4\x93\x02.\x12,/v1/projects/{project_id}/indexes/{index_id}\x12\x97\x01\n\x0bListIndexes\x12-.google.datastore.admin.v1.ListIndexesRequest\x1a..google.datastore.admin.v1.ListIndexesResponse")\x82\xd3\xe4\x93\x02#\x12!/v1/projects/{project_id}/indexes\x1av\xca\x41\x18\x64\x61tastore.googleapis.com\xd2\x41Xhttps://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/datastoreB\xbe\x01\n\x1d\x63om.google.datastore.admin.v1B\x13\x44\x61tastoreAdminProtoP\x01Z>google.golang.org/genproto/googleapis/datastore/admin/v1;admin\xaa\x02\x1fGoogle.Cloud.Datastore.Admin.V1\xea\x02#Google::Cloud::Datastore::Admin::V1b\x06proto3',
-    dependencies=[
-        google_dot_api_dot_annotations__pb2.DESCRIPTOR,
-        google_dot_api_dot_client__pb2.DESCRIPTOR,
-        google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,
-        google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2.DESCRIPTOR,
-        google_dot_longrunning_dot_operations__pb2.DESCRIPTOR,
-        google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,
-    ],
-)
+  name='google/cloud/datastore_admin_v1/proto/datastore_admin.proto',
+  package='google.datastore.admin.v1',
+  syntax='proto3',
+  serialized_options=b'\n\035com.google.datastore.admin.v1B\023DatastoreAdminProtoP\001Z>google.golang.org/genproto/googleapis/datastore/admin/v1;admin\252\002\037Google.Cloud.Datastore.Admin.V1\352\002#Google::Cloud::Datastore::Admin::V1',
+  create_key=_descriptor._internal_create_key,
+  serialized_pb=b'\n;google/cloud/datastore_admin_v1/proto/datastore_admin.proto\x12\x19google.datastore.admin.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x31google/cloud/datastore_admin_v1/proto/index.proto\x1a#google/longrunning/operations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xf4\x03\n\x0e\x43ommonMetadata\x12.\n\nstart_time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12@\n\x0eoperation_type\x18\x03 \x01(\x0e\x32(.google.datastore.admin.v1.OperationType\x12\x45\n\x06labels\x18\x04 \x03(\x0b\x32\x35.google.datastore.admin.v1.CommonMetadata.LabelsEntry\x12>\n\x05state\x18\x05 \x01(\x0e\x32/.google.datastore.admin.v1.CommonMetadata.State\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8b\x01\n\x05State\x12\x15\n\x11STATE_UNSPECIFIED\x10\x00\x12\x10\n\x0cINITIALIZING\x10\x01\x12\x0e\n\nPROCESSING\x10\x02\x12\x0e\n\nCANCELLING\x10\x03\x12\x0e\n\nFINALIZING\x10\x04\x12\x0e\n\nSUCCESSFUL\x10\x05\x12\n\n\x06\x46\x41ILED\x10\x06\x12\r\n\tCANCELLED\x10\x07\":\n\x08Progress\x12\x16\n\x0ework_completed\x18\x01 \x01(\x03\x12\x16\n\x0ework_estimated\x18\x02 \x01(\x03\"\x8d\x02\n\x15\x45xportEntitiesRequest\x12\x17\n\nproject_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12L\n\x06labels\x18\x02 \x03(\x0b\x32<.google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry\x12>\n\rentity_filter\x18\x03 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x1e\n\x11output_url_prefix\x18\x04 \x01(\tB\x03\xe0\x41\x02\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x85\x02\n\x15ImportEntitiesRequest\x12\x17\n\nproject_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12L\n\x06labels\x18\x02 \x03(\x0b\x32<.google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry\x12\x16\n\tinput_url\x18\x03 \x01(\tB\x03\xe0\x41\x02\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\",\n\x16\x45xportEntitiesResponse\x12\x12\n\noutput_url\x18\x01 \x01(\t\"\xab\x02\n\x16\x45xportEntitiesMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12;\n\x0eprogress_bytes\x18\x03 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x19\n\x11output_url_prefix\x18\x05 \x01(\t\"\xa3\x02\n\x16ImportEntitiesMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12;\n\x0eprogress_bytes\x18\x03 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12>\n\rentity_filter\x18\x04 \x01(\x0b\x32\'.google.datastore.admin.v1.EntityFilter\x12\x11\n\tinput_url\x18\x05 \x01(\t\"4\n\x0c\x45ntityFilter\x12\r\n\x05kinds\x18\x01 \x03(\t\x12\x15\n\rnamespace_ids\x18\x02 \x03(\t\"7\n\x0fGetIndexRequest\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x10\n\x08index_id\x18\x03 \x01(\t\"_\n\x12ListIndexesRequest\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x0e\n\x06\x66ilter\x18\x03 \x01(\t\x12\x11\n\tpage_size\x18\x04 \x01(\x05\x12\x12\n\npage_token\x18\x05 \x01(\t\"a\n\x13ListIndexesResponse\x12\x31\n\x07indexes\x18\x01 \x03(\x0b\x32 .google.datastore.admin.v1.Index\x12\x17\n\x0fnext_page_token\x18\x02 \x01(\t\"\xa5\x01\n\x16IndexOperationMetadata\x12\x39\n\x06\x63ommon\x18\x01 \x01(\x0b\x32).google.datastore.admin.v1.CommonMetadata\x12>\n\x11progress_entities\x18\x02 \x01(\x0b\x32#.google.datastore.admin.v1.Progress\x12\x10\n\x08index_id\x18\x03 \x01(\t*}\n\rOperationType\x12\x1e\n\x1aOPERATION_TYPE_UNSPECIFIED\x10\x00\x12\x13\n\x0f\x45XPORT_ENTITIES\x10\x01\x12\x13\n\x0fIMPORT_ENTITIES\x10\x02\x12\x10\n\x0c\x43REATE_INDEX\x10\x03\x12\x10\n\x0c\x44\x45LETE_INDEX\x10\x04\x32\x9c\x07\n\x0e\x44\x61tastoreAdmin\x12\xf6\x01\n\x0e\x45xportEntities\x12\x30.google.datastore.admin.v1.ExportEntitiesRequest\x1a\x1d.google.longrunning.Operation\"\x92\x01\x82\xd3\xe4\x93\x02%\" /v1/projects/{project_id}:export:\x01*\xda\x41\x31project_id,labels,entity_filter,output_url_prefix\xca\x41\x30\n\x16\x45xportEntitiesResponse\x12\x16\x45xportEntitiesMetadata\x12\xed\x01\n\x0eImportEntities\x12\x30.google.datastore.admin.v1.ImportEntitiesRequest\x1a\x1d.google.longrunning.Operation\"\x89\x01\x82\xd3\xe4\x93\x02%\" /v1/projects/{project_id}:import:\x01*\xda\x41)project_id,labels,input_url,entity_filter\xca\x41/\n\x15google.protobuf.Empty\x12\x16ImportEntitiesMetadata\x12\x8e\x01\n\x08GetIndex\x12*.google.datastore.admin.v1.GetIndexRequest\x1a .google.datastore.admin.v1.Index\"4\x82\xd3\xe4\x93\x02.\x12,/v1/projects/{project_id}/indexes/{index_id}\x12\x97\x01\n\x0bListIndexes\x12-.google.datastore.admin.v1.ListIndexesRequest\x1a..google.datastore.admin.v1.ListIndexesResponse\")\x82\xd3\xe4\x93\x02#\x12!/v1/projects/{project_id}/indexes\x1av\xca\x41\x18\x64\x61tastore.googleapis.com\xd2\x41Xhttps://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/datastoreB\xbe\x01\n\x1d\x63om.google.datastore.admin.v1B\x13\x44\x61tastoreAdminProtoP\x01Z>google.golang.org/genproto/googleapis/datastore/admin/v1;admin\xaa\x02\x1fGoogle.Cloud.Datastore.Admin.V1\xea\x02#Google::Cloud::Datastore::Admin::V1b\x06proto3'
+  ,
+  dependencies=[google_dot_api_dot_annotations__pb2.DESCRIPTOR,google_dot_api_dot_client__pb2.DESCRIPTOR,google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2.DESCRIPTOR,google_dot_longrunning_dot_operations__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
 _OPERATIONTYPE = _descriptor.EnumDescriptor(
-    name="OperationType",
-    full_name="google.datastore.admin.v1.OperationType",
-    filename=None,
-    file=DESCRIPTOR,
-    create_key=_descriptor._internal_create_key,
-    values=[
-        _descriptor.EnumValueDescriptor(
-            name="OPERATION_TYPE_UNSPECIFIED",
-            index=0,
-            number=0,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="EXPORT_ENTITIES",
-            index=1,
-            number=1,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="IMPORT_ENTITIES",
-            index=2,
-            number=2,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="CREATE_INDEX",
-            index=3,
-            number=3,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="DELETE_INDEX",
-            index=4,
-            number=4,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    containing_type=None,
-    serialized_options=None,
-    serialized_start=2515,
-    serialized_end=2640,
+  name='OperationType',
+  full_name='google.datastore.admin.v1.OperationType',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='OPERATION_TYPE_UNSPECIFIED', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='EXPORT_ENTITIES', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='IMPORT_ENTITIES', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='CREATE_INDEX', index=3, number=3,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='DELETE_INDEX', index=4, number=4,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=2515,
+  serialized_end=2640,
 )
 _sym_db.RegisterEnumDescriptor(_OPERATIONTYPE)
 
@@ -106,1333 +79,799 @@ DELETE_INDEX = 4
 
 
 _COMMONMETADATA_STATE = _descriptor.EnumDescriptor(
-    name="State",
-    full_name="google.datastore.admin.v1.CommonMetadata.State",
-    filename=None,
-    file=DESCRIPTOR,
-    create_key=_descriptor._internal_create_key,
-    values=[
-        _descriptor.EnumValueDescriptor(
-            name="STATE_UNSPECIFIED",
-            index=0,
-            number=0,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="INITIALIZING",
-            index=1,
-            number=1,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="PROCESSING",
-            index=2,
-            number=2,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="CANCELLING",
-            index=3,
-            number=3,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="FINALIZING",
-            index=4,
-            number=4,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="SUCCESSFUL",
-            index=5,
-            number=5,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="FAILED",
-            index=6,
-            number=6,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.EnumValueDescriptor(
-            name="CANCELLED",
-            index=7,
-            number=7,
-            serialized_options=None,
-            type=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    containing_type=None,
-    serialized_options=None,
-    serialized_start=661,
-    serialized_end=800,
+  name='State',
+  full_name='google.datastore.admin.v1.CommonMetadata.State',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='STATE_UNSPECIFIED', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='INITIALIZING', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PROCESSING', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='CANCELLING', index=3, number=3,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='FINALIZING', index=4, number=4,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='SUCCESSFUL', index=5, number=5,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='FAILED', index=6, number=6,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='CANCELLED', index=7, number=7,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=661,
+  serialized_end=800,
 )
 _sym_db.RegisterEnumDescriptor(_COMMONMETADATA_STATE)
 
 
 _COMMONMETADATA_LABELSENTRY = _descriptor.Descriptor(
-    name="LabelsEntry",
-    full_name="google.datastore.admin.v1.CommonMetadata.LabelsEntry",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="key",
-            full_name="google.datastore.admin.v1.CommonMetadata.LabelsEntry.key",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="value",
-            full_name="google.datastore.admin.v1.CommonMetadata.LabelsEntry.value",
-            index=1,
-            number=2,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=b"8\001",
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=613,
-    serialized_end=658,
+  name='LabelsEntry',
+  full_name='google.datastore.admin.v1.CommonMetadata.LabelsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='google.datastore.admin.v1.CommonMetadata.LabelsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='google.datastore.admin.v1.CommonMetadata.LabelsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=613,
+  serialized_end=658,
 )
 
 _COMMONMETADATA = _descriptor.Descriptor(
-    name="CommonMetadata",
-    full_name="google.datastore.admin.v1.CommonMetadata",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="start_time",
-            full_name="google.datastore.admin.v1.CommonMetadata.start_time",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="end_time",
-            full_name="google.datastore.admin.v1.CommonMetadata.end_time",
-            index=1,
-            number=2,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="operation_type",
-            full_name="google.datastore.admin.v1.CommonMetadata.operation_type",
-            index=2,
-            number=3,
-            type=14,
-            cpp_type=8,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="labels",
-            full_name="google.datastore.admin.v1.CommonMetadata.labels",
-            index=3,
-            number=4,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="state",
-            full_name="google.datastore.admin.v1.CommonMetadata.state",
-            index=4,
-            number=5,
-            type=14,
-            cpp_type=8,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[_COMMONMETADATA_LABELSENTRY,],
-    enum_types=[_COMMONMETADATA_STATE,],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=300,
-    serialized_end=800,
+  name='CommonMetadata',
+  full_name='google.datastore.admin.v1.CommonMetadata',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='start_time', full_name='google.datastore.admin.v1.CommonMetadata.start_time', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='end_time', full_name='google.datastore.admin.v1.CommonMetadata.end_time', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='operation_type', full_name='google.datastore.admin.v1.CommonMetadata.operation_type', index=2,
+      number=3, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='labels', full_name='google.datastore.admin.v1.CommonMetadata.labels', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='state', full_name='google.datastore.admin.v1.CommonMetadata.state', index=4,
+      number=5, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_COMMONMETADATA_LABELSENTRY, ],
+  enum_types=[
+    _COMMONMETADATA_STATE,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=300,
+  serialized_end=800,
 )
 
 
 _PROGRESS = _descriptor.Descriptor(
-    name="Progress",
-    full_name="google.datastore.admin.v1.Progress",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="work_completed",
-            full_name="google.datastore.admin.v1.Progress.work_completed",
-            index=0,
-            number=1,
-            type=3,
-            cpp_type=2,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="work_estimated",
-            full_name="google.datastore.admin.v1.Progress.work_estimated",
-            index=1,
-            number=2,
-            type=3,
-            cpp_type=2,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=802,
-    serialized_end=860,
+  name='Progress',
+  full_name='google.datastore.admin.v1.Progress',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='work_completed', full_name='google.datastore.admin.v1.Progress.work_completed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='work_estimated', full_name='google.datastore.admin.v1.Progress.work_estimated', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=802,
+  serialized_end=860,
 )
 
 
 _EXPORTENTITIESREQUEST_LABELSENTRY = _descriptor.Descriptor(
-    name="LabelsEntry",
-    full_name="google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="key",
-            full_name="google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry.key",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="value",
-            full_name="google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry.value",
-            index=1,
-            number=2,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=b"8\001",
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=613,
-    serialized_end=658,
+  name='LabelsEntry',
+  full_name='google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=613,
+  serialized_end=658,
 )
 
 _EXPORTENTITIESREQUEST = _descriptor.Descriptor(
-    name="ExportEntitiesRequest",
-    full_name="google.datastore.admin.v1.ExportEntitiesRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="project_id",
-            full_name="google.datastore.admin.v1.ExportEntitiesRequest.project_id",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=b"\340A\002",
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="labels",
-            full_name="google.datastore.admin.v1.ExportEntitiesRequest.labels",
-            index=1,
-            number=2,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="entity_filter",
-            full_name="google.datastore.admin.v1.ExportEntitiesRequest.entity_filter",
-            index=2,
-            number=3,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="output_url_prefix",
-            full_name="google.datastore.admin.v1.ExportEntitiesRequest.output_url_prefix",
-            index=3,
-            number=4,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=b"\340A\002",
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[_EXPORTENTITIESREQUEST_LABELSENTRY,],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=863,
-    serialized_end=1132,
+  name='ExportEntitiesRequest',
+  full_name='google.datastore.admin.v1.ExportEntitiesRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='project_id', full_name='google.datastore.admin.v1.ExportEntitiesRequest.project_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\340A\002', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='labels', full_name='google.datastore.admin.v1.ExportEntitiesRequest.labels', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='entity_filter', full_name='google.datastore.admin.v1.ExportEntitiesRequest.entity_filter', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='output_url_prefix', full_name='google.datastore.admin.v1.ExportEntitiesRequest.output_url_prefix', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\340A\002', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_EXPORTENTITIESREQUEST_LABELSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=863,
+  serialized_end=1132,
 )
 
 
 _IMPORTENTITIESREQUEST_LABELSENTRY = _descriptor.Descriptor(
-    name="LabelsEntry",
-    full_name="google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="key",
-            full_name="google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry.key",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="value",
-            full_name="google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry.value",
-            index=1,
-            number=2,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=b"8\001",
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=613,
-    serialized_end=658,
+  name='LabelsEntry',
+  full_name='google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=613,
+  serialized_end=658,
 )
 
 _IMPORTENTITIESREQUEST = _descriptor.Descriptor(
-    name="ImportEntitiesRequest",
-    full_name="google.datastore.admin.v1.ImportEntitiesRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="project_id",
-            full_name="google.datastore.admin.v1.ImportEntitiesRequest.project_id",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=b"\340A\002",
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="labels",
-            full_name="google.datastore.admin.v1.ImportEntitiesRequest.labels",
-            index=1,
-            number=2,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="input_url",
-            full_name="google.datastore.admin.v1.ImportEntitiesRequest.input_url",
-            index=2,
-            number=3,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=b"\340A\002",
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="entity_filter",
-            full_name="google.datastore.admin.v1.ImportEntitiesRequest.entity_filter",
-            index=3,
-            number=4,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[_IMPORTENTITIESREQUEST_LABELSENTRY,],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=1135,
-    serialized_end=1396,
+  name='ImportEntitiesRequest',
+  full_name='google.datastore.admin.v1.ImportEntitiesRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='project_id', full_name='google.datastore.admin.v1.ImportEntitiesRequest.project_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\340A\002', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='labels', full_name='google.datastore.admin.v1.ImportEntitiesRequest.labels', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='input_url', full_name='google.datastore.admin.v1.ImportEntitiesRequest.input_url', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\340A\002', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='entity_filter', full_name='google.datastore.admin.v1.ImportEntitiesRequest.entity_filter', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_IMPORTENTITIESREQUEST_LABELSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1135,
+  serialized_end=1396,
 )
 
 
 _EXPORTENTITIESRESPONSE = _descriptor.Descriptor(
-    name="ExportEntitiesResponse",
-    full_name="google.datastore.admin.v1.ExportEntitiesResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="output_url",
-            full_name="google.datastore.admin.v1.ExportEntitiesResponse.output_url",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=1398,
-    serialized_end=1442,
+  name='ExportEntitiesResponse',
+  full_name='google.datastore.admin.v1.ExportEntitiesResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='output_url', full_name='google.datastore.admin.v1.ExportEntitiesResponse.output_url', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1398,
+  serialized_end=1442,
 )
 
 
 _EXPORTENTITIESMETADATA = _descriptor.Descriptor(
-    name="ExportEntitiesMetadata",
-    full_name="google.datastore.admin.v1.ExportEntitiesMetadata",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="common",
-            full_name="google.datastore.admin.v1.ExportEntitiesMetadata.common",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="progress_entities",
-            full_name="google.datastore.admin.v1.ExportEntitiesMetadata.progress_entities",
-            index=1,
-            number=2,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="progress_bytes",
-            full_name="google.datastore.admin.v1.ExportEntitiesMetadata.progress_bytes",
-            index=2,
-            number=3,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="entity_filter",
-            full_name="google.datastore.admin.v1.ExportEntitiesMetadata.entity_filter",
-            index=3,
-            number=4,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="output_url_prefix",
-            full_name="google.datastore.admin.v1.ExportEntitiesMetadata.output_url_prefix",
-            index=4,
-            number=5,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=1445,
-    serialized_end=1744,
+  name='ExportEntitiesMetadata',
+  full_name='google.datastore.admin.v1.ExportEntitiesMetadata',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='common', full_name='google.datastore.admin.v1.ExportEntitiesMetadata.common', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='progress_entities', full_name='google.datastore.admin.v1.ExportEntitiesMetadata.progress_entities', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='progress_bytes', full_name='google.datastore.admin.v1.ExportEntitiesMetadata.progress_bytes', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='entity_filter', full_name='google.datastore.admin.v1.ExportEntitiesMetadata.entity_filter', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='output_url_prefix', full_name='google.datastore.admin.v1.ExportEntitiesMetadata.output_url_prefix', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1445,
+  serialized_end=1744,
 )
 
 
 _IMPORTENTITIESMETADATA = _descriptor.Descriptor(
-    name="ImportEntitiesMetadata",
-    full_name="google.datastore.admin.v1.ImportEntitiesMetadata",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="common",
-            full_name="google.datastore.admin.v1.ImportEntitiesMetadata.common",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="progress_entities",
-            full_name="google.datastore.admin.v1.ImportEntitiesMetadata.progress_entities",
-            index=1,
-            number=2,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="progress_bytes",
-            full_name="google.datastore.admin.v1.ImportEntitiesMetadata.progress_bytes",
-            index=2,
-            number=3,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="entity_filter",
-            full_name="google.datastore.admin.v1.ImportEntitiesMetadata.entity_filter",
-            index=3,
-            number=4,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="input_url",
-            full_name="google.datastore.admin.v1.ImportEntitiesMetadata.input_url",
-            index=4,
-            number=5,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=1747,
-    serialized_end=2038,
+  name='ImportEntitiesMetadata',
+  full_name='google.datastore.admin.v1.ImportEntitiesMetadata',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='common', full_name='google.datastore.admin.v1.ImportEntitiesMetadata.common', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='progress_entities', full_name='google.datastore.admin.v1.ImportEntitiesMetadata.progress_entities', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='progress_bytes', full_name='google.datastore.admin.v1.ImportEntitiesMetadata.progress_bytes', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='entity_filter', full_name='google.datastore.admin.v1.ImportEntitiesMetadata.entity_filter', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='input_url', full_name='google.datastore.admin.v1.ImportEntitiesMetadata.input_url', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1747,
+  serialized_end=2038,
 )
 
 
 _ENTITYFILTER = _descriptor.Descriptor(
-    name="EntityFilter",
-    full_name="google.datastore.admin.v1.EntityFilter",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="kinds",
-            full_name="google.datastore.admin.v1.EntityFilter.kinds",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="namespace_ids",
-            full_name="google.datastore.admin.v1.EntityFilter.namespace_ids",
-            index=1,
-            number=2,
-            type=9,
-            cpp_type=9,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=2040,
-    serialized_end=2092,
+  name='EntityFilter',
+  full_name='google.datastore.admin.v1.EntityFilter',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='kinds', full_name='google.datastore.admin.v1.EntityFilter.kinds', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='namespace_ids', full_name='google.datastore.admin.v1.EntityFilter.namespace_ids', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2040,
+  serialized_end=2092,
 )
 
 
 _GETINDEXREQUEST = _descriptor.Descriptor(
-    name="GetIndexRequest",
-    full_name="google.datastore.admin.v1.GetIndexRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="project_id",
-            full_name="google.datastore.admin.v1.GetIndexRequest.project_id",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="index_id",
-            full_name="google.datastore.admin.v1.GetIndexRequest.index_id",
-            index=1,
-            number=3,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=2094,
-    serialized_end=2149,
+  name='GetIndexRequest',
+  full_name='google.datastore.admin.v1.GetIndexRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='project_id', full_name='google.datastore.admin.v1.GetIndexRequest.project_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='index_id', full_name='google.datastore.admin.v1.GetIndexRequest.index_id', index=1,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2094,
+  serialized_end=2149,
 )
 
 
 _LISTINDEXESREQUEST = _descriptor.Descriptor(
-    name="ListIndexesRequest",
-    full_name="google.datastore.admin.v1.ListIndexesRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="project_id",
-            full_name="google.datastore.admin.v1.ListIndexesRequest.project_id",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="filter",
-            full_name="google.datastore.admin.v1.ListIndexesRequest.filter",
-            index=1,
-            number=3,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="page_size",
-            full_name="google.datastore.admin.v1.ListIndexesRequest.page_size",
-            index=2,
-            number=4,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="page_token",
-            full_name="google.datastore.admin.v1.ListIndexesRequest.page_token",
-            index=3,
-            number=5,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=2151,
-    serialized_end=2246,
+  name='ListIndexesRequest',
+  full_name='google.datastore.admin.v1.ListIndexesRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='project_id', full_name='google.datastore.admin.v1.ListIndexesRequest.project_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='filter', full_name='google.datastore.admin.v1.ListIndexesRequest.filter', index=1,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='page_size', full_name='google.datastore.admin.v1.ListIndexesRequest.page_size', index=2,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='page_token', full_name='google.datastore.admin.v1.ListIndexesRequest.page_token', index=3,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2151,
+  serialized_end=2246,
 )
 
 
 _LISTINDEXESRESPONSE = _descriptor.Descriptor(
-    name="ListIndexesResponse",
-    full_name="google.datastore.admin.v1.ListIndexesResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="indexes",
-            full_name="google.datastore.admin.v1.ListIndexesResponse.indexes",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="next_page_token",
-            full_name="google.datastore.admin.v1.ListIndexesResponse.next_page_token",
-            index=1,
-            number=2,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=2248,
-    serialized_end=2345,
+  name='ListIndexesResponse',
+  full_name='google.datastore.admin.v1.ListIndexesResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='indexes', full_name='google.datastore.admin.v1.ListIndexesResponse.indexes', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='next_page_token', full_name='google.datastore.admin.v1.ListIndexesResponse.next_page_token', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2248,
+  serialized_end=2345,
 )
 
 
 _INDEXOPERATIONMETADATA = _descriptor.Descriptor(
-    name="IndexOperationMetadata",
-    full_name="google.datastore.admin.v1.IndexOperationMetadata",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="common",
-            full_name="google.datastore.admin.v1.IndexOperationMetadata.common",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="progress_entities",
-            full_name="google.datastore.admin.v1.IndexOperationMetadata.progress_entities",
-            index=1,
-            number=2,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="index_id",
-            full_name="google.datastore.admin.v1.IndexOperationMetadata.index_id",
-            index=2,
-            number=3,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=2348,
-    serialized_end=2513,
+  name='IndexOperationMetadata',
+  full_name='google.datastore.admin.v1.IndexOperationMetadata',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='common', full_name='google.datastore.admin.v1.IndexOperationMetadata.common', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='progress_entities', full_name='google.datastore.admin.v1.IndexOperationMetadata.progress_entities', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='index_id', full_name='google.datastore.admin.v1.IndexOperationMetadata.index_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2348,
+  serialized_end=2513,
 )
 
 _COMMONMETADATA_LABELSENTRY.containing_type = _COMMONMETADATA
-_COMMONMETADATA.fields_by_name[
-    "start_time"
-].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_COMMONMETADATA.fields_by_name[
-    "end_time"
-].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_COMMONMETADATA.fields_by_name["operation_type"].enum_type = _OPERATIONTYPE
-_COMMONMETADATA.fields_by_name["labels"].message_type = _COMMONMETADATA_LABELSENTRY
-_COMMONMETADATA.fields_by_name["state"].enum_type = _COMMONMETADATA_STATE
+_COMMONMETADATA.fields_by_name['start_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_COMMONMETADATA.fields_by_name['end_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_COMMONMETADATA.fields_by_name['operation_type'].enum_type = _OPERATIONTYPE
+_COMMONMETADATA.fields_by_name['labels'].message_type = _COMMONMETADATA_LABELSENTRY
+_COMMONMETADATA.fields_by_name['state'].enum_type = _COMMONMETADATA_STATE
 _COMMONMETADATA_STATE.containing_type = _COMMONMETADATA
 _EXPORTENTITIESREQUEST_LABELSENTRY.containing_type = _EXPORTENTITIESREQUEST
-_EXPORTENTITIESREQUEST.fields_by_name[
-    "labels"
-].message_type = _EXPORTENTITIESREQUEST_LABELSENTRY
-_EXPORTENTITIESREQUEST.fields_by_name["entity_filter"].message_type = _ENTITYFILTER
+_EXPORTENTITIESREQUEST.fields_by_name['labels'].message_type = _EXPORTENTITIESREQUEST_LABELSENTRY
+_EXPORTENTITIESREQUEST.fields_by_name['entity_filter'].message_type = _ENTITYFILTER
 _IMPORTENTITIESREQUEST_LABELSENTRY.containing_type = _IMPORTENTITIESREQUEST
-_IMPORTENTITIESREQUEST.fields_by_name[
-    "labels"
-].message_type = _IMPORTENTITIESREQUEST_LABELSENTRY
-_IMPORTENTITIESREQUEST.fields_by_name["entity_filter"].message_type = _ENTITYFILTER
-_EXPORTENTITIESMETADATA.fields_by_name["common"].message_type = _COMMONMETADATA
-_EXPORTENTITIESMETADATA.fields_by_name["progress_entities"].message_type = _PROGRESS
-_EXPORTENTITIESMETADATA.fields_by_name["progress_bytes"].message_type = _PROGRESS
-_EXPORTENTITIESMETADATA.fields_by_name["entity_filter"].message_type = _ENTITYFILTER
-_IMPORTENTITIESMETADATA.fields_by_name["common"].message_type = _COMMONMETADATA
-_IMPORTENTITIESMETADATA.fields_by_name["progress_entities"].message_type = _PROGRESS
-_IMPORTENTITIESMETADATA.fields_by_name["progress_bytes"].message_type = _PROGRESS
-_IMPORTENTITIESMETADATA.fields_by_name["entity_filter"].message_type = _ENTITYFILTER
-_LISTINDEXESRESPONSE.fields_by_name[
-    "indexes"
-].message_type = (
-    google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2._INDEX
-)
-_INDEXOPERATIONMETADATA.fields_by_name["common"].message_type = _COMMONMETADATA
-_INDEXOPERATIONMETADATA.fields_by_name["progress_entities"].message_type = _PROGRESS
-DESCRIPTOR.message_types_by_name["CommonMetadata"] = _COMMONMETADATA
-DESCRIPTOR.message_types_by_name["Progress"] = _PROGRESS
-DESCRIPTOR.message_types_by_name["ExportEntitiesRequest"] = _EXPORTENTITIESREQUEST
-DESCRIPTOR.message_types_by_name["ImportEntitiesRequest"] = _IMPORTENTITIESREQUEST
-DESCRIPTOR.message_types_by_name["ExportEntitiesResponse"] = _EXPORTENTITIESRESPONSE
-DESCRIPTOR.message_types_by_name["ExportEntitiesMetadata"] = _EXPORTENTITIESMETADATA
-DESCRIPTOR.message_types_by_name["ImportEntitiesMetadata"] = _IMPORTENTITIESMETADATA
-DESCRIPTOR.message_types_by_name["EntityFilter"] = _ENTITYFILTER
-DESCRIPTOR.message_types_by_name["GetIndexRequest"] = _GETINDEXREQUEST
-DESCRIPTOR.message_types_by_name["ListIndexesRequest"] = _LISTINDEXESREQUEST
-DESCRIPTOR.message_types_by_name["ListIndexesResponse"] = _LISTINDEXESRESPONSE
-DESCRIPTOR.message_types_by_name["IndexOperationMetadata"] = _INDEXOPERATIONMETADATA
-DESCRIPTOR.enum_types_by_name["OperationType"] = _OPERATIONTYPE
+_IMPORTENTITIESREQUEST.fields_by_name['labels'].message_type = _IMPORTENTITIESREQUEST_LABELSENTRY
+_IMPORTENTITIESREQUEST.fields_by_name['entity_filter'].message_type = _ENTITYFILTER
+_EXPORTENTITIESMETADATA.fields_by_name['common'].message_type = _COMMONMETADATA
+_EXPORTENTITIESMETADATA.fields_by_name['progress_entities'].message_type = _PROGRESS
+_EXPORTENTITIESMETADATA.fields_by_name['progress_bytes'].message_type = _PROGRESS
+_EXPORTENTITIESMETADATA.fields_by_name['entity_filter'].message_type = _ENTITYFILTER
+_IMPORTENTITIESMETADATA.fields_by_name['common'].message_type = _COMMONMETADATA
+_IMPORTENTITIESMETADATA.fields_by_name['progress_entities'].message_type = _PROGRESS
+_IMPORTENTITIESMETADATA.fields_by_name['progress_bytes'].message_type = _PROGRESS
+_IMPORTENTITIESMETADATA.fields_by_name['entity_filter'].message_type = _ENTITYFILTER
+_LISTINDEXESRESPONSE.fields_by_name['indexes'].message_type = google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2._INDEX
+_INDEXOPERATIONMETADATA.fields_by_name['common'].message_type = _COMMONMETADATA
+_INDEXOPERATIONMETADATA.fields_by_name['progress_entities'].message_type = _PROGRESS
+DESCRIPTOR.message_types_by_name['CommonMetadata'] = _COMMONMETADATA
+DESCRIPTOR.message_types_by_name['Progress'] = _PROGRESS
+DESCRIPTOR.message_types_by_name['ExportEntitiesRequest'] = _EXPORTENTITIESREQUEST
+DESCRIPTOR.message_types_by_name['ImportEntitiesRequest'] = _IMPORTENTITIESREQUEST
+DESCRIPTOR.message_types_by_name['ExportEntitiesResponse'] = _EXPORTENTITIESRESPONSE
+DESCRIPTOR.message_types_by_name['ExportEntitiesMetadata'] = _EXPORTENTITIESMETADATA
+DESCRIPTOR.message_types_by_name['ImportEntitiesMetadata'] = _IMPORTENTITIESMETADATA
+DESCRIPTOR.message_types_by_name['EntityFilter'] = _ENTITYFILTER
+DESCRIPTOR.message_types_by_name['GetIndexRequest'] = _GETINDEXREQUEST
+DESCRIPTOR.message_types_by_name['ListIndexesRequest'] = _LISTINDEXESREQUEST
+DESCRIPTOR.message_types_by_name['ListIndexesResponse'] = _LISTINDEXESRESPONSE
+DESCRIPTOR.message_types_by_name['IndexOperationMetadata'] = _INDEXOPERATIONMETADATA
+DESCRIPTOR.enum_types_by_name['OperationType'] = _OPERATIONTYPE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-CommonMetadata = _reflection.GeneratedProtocolMessageType(
-    "CommonMetadata",
-    (_message.Message,),
-    {
-        "LabelsEntry": _reflection.GeneratedProtocolMessageType(
-            "LabelsEntry",
-            (_message.Message,),
-            {
-                "DESCRIPTOR": _COMMONMETADATA_LABELSENTRY,
-                "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2"
-                # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.CommonMetadata.LabelsEntry)
-            },
-        ),
-        "DESCRIPTOR": _COMMONMETADATA,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """Metadata common to all Datastore Admin operations.
+CommonMetadata = _reflection.GeneratedProtocolMessageType('CommonMetadata', (_message.Message,), {
+
+  'LabelsEntry' : _reflection.GeneratedProtocolMessageType('LabelsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _COMMONMETADATA_LABELSENTRY,
+    '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+    # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.CommonMetadata.LabelsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _COMMONMETADATA,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """Metadata common to all Datastore Admin operations.
   
   Attributes:
       start_time:
@@ -1449,19 +888,16 @@ CommonMetadata = _reflection.GeneratedProtocolMessageType(
       state:
           The current state of the Operation.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.CommonMetadata)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.CommonMetadata)
+  })
 _sym_db.RegisterMessage(CommonMetadata)
 _sym_db.RegisterMessage(CommonMetadata.LabelsEntry)
 
-Progress = _reflection.GeneratedProtocolMessageType(
-    "Progress",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _PROGRESS,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """Measures the progress of a particular metric.
+Progress = _reflection.GeneratedProtocolMessageType('Progress', (_message.Message,), {
+  'DESCRIPTOR' : _PROGRESS,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """Measures the progress of a particular metric.
   
   Attributes:
       work_completed:
@@ -1471,27 +907,22 @@ Progress = _reflection.GeneratedProtocolMessageType(
           An estimate of how much work needs to be performed. May be
           zero if the work estimate is unavailable.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.Progress)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.Progress)
+  })
 _sym_db.RegisterMessage(Progress)
 
-ExportEntitiesRequest = _reflection.GeneratedProtocolMessageType(
-    "ExportEntitiesRequest",
-    (_message.Message,),
-    {
-        "LabelsEntry": _reflection.GeneratedProtocolMessageType(
-            "LabelsEntry",
-            (_message.Message,),
-            {
-                "DESCRIPTOR": _EXPORTENTITIESREQUEST_LABELSENTRY,
-                "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2"
-                # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry)
-            },
-        ),
-        "DESCRIPTOR": _EXPORTENTITIESREQUEST,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The request for [google.datastore.admin.v1.DatastoreAdmin.ExportEntiti
+ExportEntitiesRequest = _reflection.GeneratedProtocolMessageType('ExportEntitiesRequest', (_message.Message,), {
+
+  'LabelsEntry' : _reflection.GeneratedProtocolMessageType('LabelsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _EXPORTENTITIESREQUEST_LABELSENTRY,
+    '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+    # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ExportEntitiesRequest.LabelsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _EXPORTENTITIESREQUEST,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """The request for [google.datastore.admin.v1.DatastoreAdmin.ExportEntiti
   es][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
   
   Attributes:
@@ -1522,28 +953,23 @@ ExportEntitiesRequest = _reflection.GeneratedProtocolMessageType(
           the same Cloud Storage bucket can be used in multiple
           ExportEntities operations without conflict.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ExportEntitiesRequest)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ExportEntitiesRequest)
+  })
 _sym_db.RegisterMessage(ExportEntitiesRequest)
 _sym_db.RegisterMessage(ExportEntitiesRequest.LabelsEntry)
 
-ImportEntitiesRequest = _reflection.GeneratedProtocolMessageType(
-    "ImportEntitiesRequest",
-    (_message.Message,),
-    {
-        "LabelsEntry": _reflection.GeneratedProtocolMessageType(
-            "LabelsEntry",
-            (_message.Message,),
-            {
-                "DESCRIPTOR": _IMPORTENTITIESREQUEST_LABELSENTRY,
-                "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2"
-                # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry)
-            },
-        ),
-        "DESCRIPTOR": _IMPORTENTITIESREQUEST,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The request for [google.datastore.admin.v1.DatastoreAdmin.ImportEntiti
+ImportEntitiesRequest = _reflection.GeneratedProtocolMessageType('ImportEntitiesRequest', (_message.Message,), {
+
+  'LabelsEntry' : _reflection.GeneratedProtocolMessageType('LabelsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _IMPORTENTITIESREQUEST_LABELSENTRY,
+    '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+    # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ImportEntitiesRequest.LabelsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _IMPORTENTITIESREQUEST,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """The request for [google.datastore.admin.v1.DatastoreAdmin.ImportEntiti
   es][google.datastore.admin.v1.DatastoreAdmin.ImportEntities].
   
   Attributes:
@@ -1573,19 +999,16 @@ ImportEntitiesRequest = _reflection.GeneratedProtocolMessageType(
           error will be returned. If no filter is specified then all
           entities from the export are imported.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ImportEntitiesRequest)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ImportEntitiesRequest)
+  })
 _sym_db.RegisterMessage(ImportEntitiesRequest)
 _sym_db.RegisterMessage(ImportEntitiesRequest.LabelsEntry)
 
-ExportEntitiesResponse = _reflection.GeneratedProtocolMessageType(
-    "ExportEntitiesResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EXPORTENTITIESRESPONSE,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The response for [google.datastore.admin.v1.DatastoreAdmin.ExportEntit
+ExportEntitiesResponse = _reflection.GeneratedProtocolMessageType('ExportEntitiesResponse', (_message.Message,), {
+  'DESCRIPTOR' : _EXPORTENTITIESRESPONSE,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """The response for [google.datastore.admin.v1.DatastoreAdmin.ExportEntit
   ies][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
   
   Attributes:
@@ -1597,18 +1020,15 @@ ExportEntitiesResponse = _reflection.GeneratedProtocolMessageType(
           put_url]. Only present if the operation completed
           successfully.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ExportEntitiesResponse)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ExportEntitiesResponse)
+  })
 _sym_db.RegisterMessage(ExportEntitiesResponse)
 
-ExportEntitiesMetadata = _reflection.GeneratedProtocolMessageType(
-    "ExportEntitiesMetadata",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EXPORTENTITIESMETADATA,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """Metadata for ExportEntities operations.
+ExportEntitiesMetadata = _reflection.GeneratedProtocolMessageType('ExportEntitiesMetadata', (_message.Message,), {
+  'DESCRIPTOR' : _EXPORTENTITIESMETADATA,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """Metadata for ExportEntities operations.
   
   Attributes:
       common:
@@ -1628,18 +1048,15 @@ ExportEntitiesMetadata = _reflection.GeneratedProtocolMessageType(
           iesResponse.output_url][google.datastore.admin.v1.ExportEntiti
           esResponse.output_url].
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ExportEntitiesMetadata)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ExportEntitiesMetadata)
+  })
 _sym_db.RegisterMessage(ExportEntitiesMetadata)
 
-ImportEntitiesMetadata = _reflection.GeneratedProtocolMessageType(
-    "ImportEntitiesMetadata",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _IMPORTENTITIESMETADATA,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """Metadata for ImportEntities operations.
+ImportEntitiesMetadata = _reflection.GeneratedProtocolMessageType('ImportEntitiesMetadata', (_message.Message,), {
+  'DESCRIPTOR' : _IMPORTENTITIESMETADATA,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """Metadata for ImportEntities operations.
   
   Attributes:
       common:
@@ -1656,18 +1073,15 @@ ImportEntitiesMetadata = _reflection.GeneratedProtocolMessageType(
           ponse.output_url][google.datastore.admin.v1.ExportEntitiesResp
           onse.output_url] field.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ImportEntitiesMetadata)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ImportEntitiesMetadata)
+  })
 _sym_db.RegisterMessage(ImportEntitiesMetadata)
 
-EntityFilter = _reflection.GeneratedProtocolMessageType(
-    "EntityFilter",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _ENTITYFILTER,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """Identifies a subset of entities in a project. This is specified as
+EntityFilter = _reflection.GeneratedProtocolMessageType('EntityFilter', (_message.Message,), {
+  'DESCRIPTOR' : _ENTITYFILTER,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """Identifies a subset of entities in a project. This is specified as
   combinations of kinds and namespaces (either or both of which may be
   all, as described in the following examples). Example usage:  Entire
   project: kinds=[], namespace_ids=[]  Kinds Foo and Bar in all
@@ -1688,18 +1102,15 @@ EntityFilter = _reflection.GeneratedProtocolMessageType(
           want to include them. Each namespace in this list must be
           unique.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.EntityFilter)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.EntityFilter)
+  })
 _sym_db.RegisterMessage(EntityFilter)
 
-GetIndexRequest = _reflection.GeneratedProtocolMessageType(
-    "GetIndexRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _GETINDEXREQUEST,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The request for [google.datastore.admin.v1.DatastoreAdmin.GetIndex][go
+GetIndexRequest = _reflection.GeneratedProtocolMessageType('GetIndexRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETINDEXREQUEST,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """The request for [google.datastore.admin.v1.DatastoreAdmin.GetIndex][go
   ogle.datastore.admin.v1.DatastoreAdmin.GetIndex].
   
   Attributes:
@@ -1708,18 +1119,15 @@ GetIndexRequest = _reflection.GeneratedProtocolMessageType(
       index_id:
           The resource ID of the index to get.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.GetIndexRequest)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.GetIndexRequest)
+  })
 _sym_db.RegisterMessage(GetIndexRequest)
 
-ListIndexesRequest = _reflection.GeneratedProtocolMessageType(
-    "ListIndexesRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _LISTINDEXESREQUEST,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The request for [google.datastore.admin.v1.DatastoreAdmin.ListIndexes]
+ListIndexesRequest = _reflection.GeneratedProtocolMessageType('ListIndexesRequest', (_message.Message,), {
+  'DESCRIPTOR' : _LISTINDEXESREQUEST,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """The request for [google.datastore.admin.v1.DatastoreAdmin.ListIndexes]
   [google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
   
   Attributes:
@@ -1732,18 +1140,15 @@ ListIndexesRequest = _reflection.GeneratedProtocolMessageType(
           The next_page_token value returned from a previous List
           request, if any.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ListIndexesRequest)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ListIndexesRequest)
+  })
 _sym_db.RegisterMessage(ListIndexesRequest)
 
-ListIndexesResponse = _reflection.GeneratedProtocolMessageType(
-    "ListIndexesResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _LISTINDEXESRESPONSE,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """The response for [google.datastore.admin.v1.DatastoreAdmin.ListIndexes
+ListIndexesResponse = _reflection.GeneratedProtocolMessageType('ListIndexesResponse', (_message.Message,), {
+  'DESCRIPTOR' : _LISTINDEXESRESPONSE,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """The response for [google.datastore.admin.v1.DatastoreAdmin.ListIndexes
   ][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
   
   Attributes:
@@ -1752,18 +1157,15 @@ ListIndexesResponse = _reflection.GeneratedProtocolMessageType(
       next_page_token:
           The standard List next-page token.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ListIndexesResponse)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.ListIndexesResponse)
+  })
 _sym_db.RegisterMessage(ListIndexesResponse)
 
-IndexOperationMetadata = _reflection.GeneratedProtocolMessageType(
-    "IndexOperationMetadata",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _INDEXOPERATIONMETADATA,
-        "__module__": "google.cloud.datastore_admin_v1.proto.datastore_admin_pb2",
-        "__doc__": """Metadata for Index operations.
+IndexOperationMetadata = _reflection.GeneratedProtocolMessageType('IndexOperationMetadata', (_message.Message,), {
+  'DESCRIPTOR' : _INDEXOPERATIONMETADATA,
+  '__module__' : 'google.cloud.datastore_admin_v1.proto.datastore_admin_pb2'
+  ,
+  '__doc__': """Metadata for Index operations.
   
   Attributes:
       common:
@@ -1773,75 +1175,73 @@ IndexOperationMetadata = _reflection.GeneratedProtocolMessageType(
       index_id:
           The index resource ID that this operation is acting on.
   """,
-        # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.IndexOperationMetadata)
-    },
-)
+  # @@protoc_insertion_point(class_scope:google.datastore.admin.v1.IndexOperationMetadata)
+  })
 _sym_db.RegisterMessage(IndexOperationMetadata)
 
 
 DESCRIPTOR._options = None
 _COMMONMETADATA_LABELSENTRY._options = None
 _EXPORTENTITIESREQUEST_LABELSENTRY._options = None
-_EXPORTENTITIESREQUEST.fields_by_name["project_id"]._options = None
-_EXPORTENTITIESREQUEST.fields_by_name["output_url_prefix"]._options = None
+_EXPORTENTITIESREQUEST.fields_by_name['project_id']._options = None
+_EXPORTENTITIESREQUEST.fields_by_name['output_url_prefix']._options = None
 _IMPORTENTITIESREQUEST_LABELSENTRY._options = None
-_IMPORTENTITIESREQUEST.fields_by_name["project_id"]._options = None
-_IMPORTENTITIESREQUEST.fields_by_name["input_url"]._options = None
+_IMPORTENTITIESREQUEST.fields_by_name['project_id']._options = None
+_IMPORTENTITIESREQUEST.fields_by_name['input_url']._options = None
 
 _DATASTOREADMIN = _descriptor.ServiceDescriptor(
-    name="DatastoreAdmin",
-    full_name="google.datastore.admin.v1.DatastoreAdmin",
-    file=DESCRIPTOR,
+  name='DatastoreAdmin',
+  full_name='google.datastore.admin.v1.DatastoreAdmin',
+  file=DESCRIPTOR,
+  index=0,
+  serialized_options=b'\312A\030datastore.googleapis.com\322AXhttps://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/datastore',
+  create_key=_descriptor._internal_create_key,
+  serialized_start=2643,
+  serialized_end=3567,
+  methods=[
+  _descriptor.MethodDescriptor(
+    name='ExportEntities',
+    full_name='google.datastore.admin.v1.DatastoreAdmin.ExportEntities',
     index=0,
-    serialized_options=b"\312A\030datastore.googleapis.com\322AXhttps://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/datastore",
+    containing_service=None,
+    input_type=_EXPORTENTITIESREQUEST,
+    output_type=google_dot_longrunning_dot_operations__pb2._OPERATION,
+    serialized_options=b'\202\323\344\223\002%\" /v1/projects/{project_id}:export:\001*\332A1project_id,labels,entity_filter,output_url_prefix\312A0\n\026ExportEntitiesResponse\022\026ExportEntitiesMetadata',
     create_key=_descriptor._internal_create_key,
-    serialized_start=2643,
-    serialized_end=3567,
-    methods=[
-        _descriptor.MethodDescriptor(
-            name="ExportEntities",
-            full_name="google.datastore.admin.v1.DatastoreAdmin.ExportEntities",
-            index=0,
-            containing_service=None,
-            input_type=_EXPORTENTITIESREQUEST,
-            output_type=google_dot_longrunning_dot_operations__pb2._OPERATION,
-            serialized_options=b'\202\323\344\223\002%" /v1/projects/{project_id}:export:\001*\332A1project_id,labels,entity_filter,output_url_prefix\312A0\n\026ExportEntitiesResponse\022\026ExportEntitiesMetadata',
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.MethodDescriptor(
-            name="ImportEntities",
-            full_name="google.datastore.admin.v1.DatastoreAdmin.ImportEntities",
-            index=1,
-            containing_service=None,
-            input_type=_IMPORTENTITIESREQUEST,
-            output_type=google_dot_longrunning_dot_operations__pb2._OPERATION,
-            serialized_options=b'\202\323\344\223\002%" /v1/projects/{project_id}:import:\001*\332A)project_id,labels,input_url,entity_filter\312A/\n\025google.protobuf.Empty\022\026ImportEntitiesMetadata',
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.MethodDescriptor(
-            name="GetIndex",
-            full_name="google.datastore.admin.v1.DatastoreAdmin.GetIndex",
-            index=2,
-            containing_service=None,
-            input_type=_GETINDEXREQUEST,
-            output_type=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2._INDEX,
-            serialized_options=b"\202\323\344\223\002.\022,/v1/projects/{project_id}/indexes/{index_id}",
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.MethodDescriptor(
-            name="ListIndexes",
-            full_name="google.datastore.admin.v1.DatastoreAdmin.ListIndexes",
-            index=3,
-            containing_service=None,
-            input_type=_LISTINDEXESREQUEST,
-            output_type=_LISTINDEXESRESPONSE,
-            serialized_options=b"\202\323\344\223\002#\022!/v1/projects/{project_id}/indexes",
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-)
+  ),
+  _descriptor.MethodDescriptor(
+    name='ImportEntities',
+    full_name='google.datastore.admin.v1.DatastoreAdmin.ImportEntities',
+    index=1,
+    containing_service=None,
+    input_type=_IMPORTENTITIESREQUEST,
+    output_type=google_dot_longrunning_dot_operations__pb2._OPERATION,
+    serialized_options=b'\202\323\344\223\002%\" /v1/projects/{project_id}:import:\001*\332A)project_id,labels,input_url,entity_filter\312A/\n\025google.protobuf.Empty\022\026ImportEntitiesMetadata',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='GetIndex',
+    full_name='google.datastore.admin.v1.DatastoreAdmin.GetIndex',
+    index=2,
+    containing_service=None,
+    input_type=_GETINDEXREQUEST,
+    output_type=google_dot_cloud_dot_datastore__admin__v1_dot_proto_dot_index__pb2._INDEX,
+    serialized_options=b'\202\323\344\223\002.\022,/v1/projects/{project_id}/indexes/{index_id}',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='ListIndexes',
+    full_name='google.datastore.admin.v1.DatastoreAdmin.ListIndexes',
+    index=3,
+    containing_service=None,
+    input_type=_LISTINDEXESREQUEST,
+    output_type=_LISTINDEXESRESPONSE,
+    serialized_options=b'\202\323\344\223\002#\022!/v1/projects/{project_id}/indexes',
+    create_key=_descriptor._internal_create_key,
+  ),
+])
 _sym_db.RegisterServiceDescriptor(_DATASTOREADMIN)
 
-DESCRIPTOR.services_by_name["DatastoreAdmin"] = _DATASTOREADMIN
+DESCRIPTOR.services_by_name['DatastoreAdmin'] = _DATASTOREADMIN
 
 # @@protoc_insertion_point(module_scope)
