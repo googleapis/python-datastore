@@ -716,20 +716,30 @@ class TestClient(unittest.TestCase):
         ds_api.lookup.assert_not_called()
 
     def test_put(self):
-        _called_with = []
-
-        def _put_multi(*args, **kw):
-            _called_with.append((args, kw))
 
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
-        client.put_multi = _put_multi
-        entity = object()
+        put_multi = client.put_multi = mock.Mock()
+        entity = mock.Mock()
 
         client.put(entity)
 
-        self.assertEqual(_called_with[0][0], ())
-        self.assertEqual(_called_with[0][1]["entities"], [entity])
+        put_multi.assert_called_once_with(entities=[entity], retry=None, timeout=None)
+
+    def test_put_w_retry_w_timeout(self):
+
+        creds = _make_credentials()
+        client = self._make_one(credentials=creds)
+        put_multi = client.put_multi = mock.Mock()
+        entity = mock.Mock()
+        retry = mock.Mock()
+        timeout = 100000
+
+        client.put(entity, retry=retry, timeout=timeout)
+
+        put_multi.assert_called_once_with(
+            entities=[entity], retry=retry, timeout=timeout
+        )
 
     def test_put_multi_no_entities(self):
         creds = _make_credentials()
@@ -744,13 +754,15 @@ class TestClient(unittest.TestCase):
         client = self._make_one(credentials=creds)
         self.assertRaises(ValueError, client.put_multi, Entity())
 
-    def test_put_multi_no_batch_w_partial_key(self):
+    def test_put_multi_no_batch_w_partial_key_w_retry_w_timeout(self):
         from google.cloud.datastore_v1.proto import datastore_pb2
         from google.cloud.datastore.helpers import _property_tuples
 
         entity = _Entity(foo=u"bar")
         key = entity.key = _Key(self.PROJECT)
         key._id = None
+        retry = mock.Mock()
+        timeout = 100000
 
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
@@ -758,12 +770,13 @@ class TestClient(unittest.TestCase):
         ds_api = _make_datastore_api(key_pb)
         client._datastore_api_internal = ds_api
 
-        result = client.put_multi([entity])
+        result = client.put_multi([entity], retry=retry, timeout=timeout)
         self.assertIsNone(result)
 
         self.assertEqual(ds_api.commit.call_count, 1)
         _, positional, keyword = ds_api.commit.mock_calls[0]
-        self.assertEqual(keyword, {"transaction": None})
+        expected_kw = {"transaction": None, "retry": retry, "timeout": timeout}
+        self.assertEqual(keyword, expected_kw)
 
         self.assertEqual(len(positional), 3)
         self.assertEqual(positional[0], self.PROJECT)

@@ -514,7 +514,7 @@ class Client(ClientWithProject):
 
         return [helpers.entity_from_protobuf(entity_pb) for entity_pb in entity_pbs]
 
-    def put(self, entity):
+    def put(self, entity, retry=None, timeout=None):
         """Save an entity in the Cloud Datastore.
 
         .. note::
@@ -525,14 +525,40 @@ class Client(ClientWithProject):
 
         :type entity: :class:`google.cloud.datastore.entity.Entity`
         :param entity: The entity to be saved to the datastore.
-        """
-        self.put_multi(entities=[entity])
 
-    def put_multi(self, entities):
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+            Only meaningful outside of another batch / transaction.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.  Only meaningful outside of another
+            batch / transaction.
+        """
+        self.put_multi(entities=[entity], retry=retry, timeout=timeout)
+
+    def put_multi(self, entities, retry=None, timeout=None):
         """Save entities in the Cloud Datastore.
 
         :type entities: list of :class:`google.cloud.datastore.entity.Entity`
         :param entities: The entities to be saved to the datastore.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+            Only meaningful outside of another batch / transaction.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.  Only meaningful outside of another
+            batch / transaction.
 
         :raises: :class:`ValueError` if ``entities`` is a single entity.
         """
@@ -553,7 +579,7 @@ class Client(ClientWithProject):
             current.put(entity)
 
         if not in_batch:
-            current.commit()
+            current.commit(retry=retry, timeout=timeout)
 
     def delete(self, key):
         """Delete the key in the Cloud Datastore.
