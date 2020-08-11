@@ -268,7 +268,7 @@ class Transaction(Batch):
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
 
-    def commit(self):
+    def commit(self, retry=None, timeout=None):
         """Commits the transaction.
 
         This is called automatically upon exiting a with statement,
@@ -278,9 +278,22 @@ class Transaction(Batch):
         This method has necessary side-effects:
 
         - Sets the current transaction's ID to None.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.
         """
+        kwargs = _make_retry_timeout_kwargs(retry, timeout)
+
         try:
-            super(Transaction, self).commit()
+            super(Transaction, self).commit(**kwargs)
         finally:
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
