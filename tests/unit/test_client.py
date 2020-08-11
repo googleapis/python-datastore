@@ -920,6 +920,36 @@ class TestClient(unittest.TestCase):
         # Check the IDs returned.
         self.assertEqual([key._id for key in result], list(range(num_ids)))
 
+        expected_keys = [incomplete_key.to_protobuf()] * num_ids
+        alloc_ids.assert_called_once_with(self.PROJECT, expected_keys)
+
+    def test_allocate_ids_w_partial_key_w_retry_w_timeout(self):
+        num_ids = 2
+
+        incomplete_key = _Key(self.PROJECT)
+        incomplete_key._id = None
+        retry = mock.Mock()
+        timeout = 100000
+
+        creds = _make_credentials()
+        client = self._make_one(credentials=creds, _use_grpc=False)
+        allocated = mock.Mock(keys=[_KeyPB(i) for i in range(num_ids)], spec=["keys"])
+        alloc_ids = mock.Mock(return_value=allocated, spec=[])
+        ds_api = mock.Mock(allocate_ids=alloc_ids, spec=["allocate_ids"])
+        client._datastore_api_internal = ds_api
+
+        result = client.allocate_ids(
+            incomplete_key, num_ids, retry=retry, timeout=timeout
+        )
+
+        # Check the IDs returned.
+        self.assertEqual([key._id for key in result], list(range(num_ids)))
+
+        expected_keys = [incomplete_key.to_protobuf()] * num_ids
+        alloc_ids.assert_called_once_with(
+            self.PROJECT, expected_keys, retry=retry, timeout=timeout
+        )
+
     def test_allocate_ids_w_completed_key(self):
         creds = _make_credentials()
         client = self._make_one(credentials=creds)

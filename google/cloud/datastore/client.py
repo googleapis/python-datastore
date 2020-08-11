@@ -644,7 +644,7 @@ class Client(ClientWithProject):
         if not in_batch:
             current.commit(retry=retry, timeout=timeout)
 
-    def allocate_ids(self, incomplete_key, num_ids):
+    def allocate_ids(self, incomplete_key, num_ids, retry=None, timeout=None):
         """Allocate a list of IDs from a partial key.
 
         :type incomplete_key: :class:`google.cloud.datastore.key.Key`
@@ -652,6 +652,17 @@ class Client(ClientWithProject):
 
         :type num_ids: int
         :param num_ids: The number of IDs to allocate.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.
 
         :rtype: list of :class:`google.cloud.datastore.key.Key`
         :returns: The (complete) keys allocated with ``incomplete_key`` as
@@ -665,8 +676,16 @@ class Client(ClientWithProject):
         incomplete_key_pb = incomplete_key.to_protobuf()
         incomplete_key_pbs = [incomplete_key_pb] * num_ids
 
+        kwargs = {}
+
+        if retry is not None:
+            kwargs["retry"] = retry
+
+        if timeout is not None:
+            kwargs["timeout"] = timeout
+
         response_pb = self._datastore_api.allocate_ids(
-            incomplete_key.project, incomplete_key_pbs
+            incomplete_key.project, incomplete_key_pbs, **kwargs
         )
         allocated_ids = [
             allocated_key_pb.path[-1].id for allocated_key_pb in response_pb.keys
