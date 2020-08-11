@@ -356,25 +356,24 @@ class TestClient(unittest.TestCase):
         self.assertEqual(list(client._batch_stack), [])
 
     def test_get_miss(self):
-        _called_with = []
-
-        def _get_multi(*args, **kw):
-            _called_with.append((args, kw))
-            return []
 
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
-        client.get_multi = _get_multi
+        get_multi = client.get_multi = mock.Mock(return_value=[])
 
         key = object()
 
         self.assertIsNone(client.get(key))
 
-        self.assertEqual(_called_with[0][0], ())
-        self.assertEqual(_called_with[0][1]["keys"], [key])
-        self.assertIsNone(_called_with[0][1]["missing"])
-        self.assertIsNone(_called_with[0][1]["deferred"])
-        self.assertIsNone(_called_with[0][1]["transaction"])
+        get_multi.assert_called_once_with(
+            keys=[key],
+            missing=None,
+            deferred=None,
+            transaction=None,
+            eventual=False,
+            retry=None,
+            timeout=None,
+        )
 
     def test_get_hit(self):
         TXN_ID = "123"
@@ -554,13 +553,15 @@ class TestClient(unittest.TestCase):
             self.PROJECT, [key1_pb, key2_pb], read_options=read_options
         )
 
-    def test_get_multi_hit(self):
+    def test_get_multi_hit_w_retry_w_timeout(self):
         from google.cloud.datastore_v1.proto import datastore_pb2
         from google.cloud.datastore.key import Key
 
         kind = "Kind"
         id_ = 1234
         path = [{"kind": kind, "id": id_}]
+        retry = mock.Mock()
+        timeout = 100000
 
         # Make a found entity pb to be returned from mock backend.
         entity_pb = _make_entity_pb(self.PROJECT, kind, id_, "foo", "Foo")
@@ -573,7 +574,7 @@ class TestClient(unittest.TestCase):
         client._datastore_api_internal = ds_api
 
         key = Key(kind, id_, project=self.PROJECT)
-        (result,) = client.get_multi([key])
+        (result,) = client.get_multi([key], retry=retry, timeout=timeout)
         new_key = result.key
 
         # Check the returned value is as expected.
@@ -585,7 +586,11 @@ class TestClient(unittest.TestCase):
 
         read_options = datastore_pb2.ReadOptions()
         ds_api.lookup.assert_called_once_with(
-            self.PROJECT, [key.to_protobuf()], read_options=read_options
+            self.PROJECT,
+            [key.to_protobuf()],
+            read_options=read_options,
+            retry=retry,
+            timeout=timeout,
         )
 
     def test_get_multi_hit_w_transaction(self):

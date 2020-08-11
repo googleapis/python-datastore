@@ -97,6 +97,8 @@ def _extended_lookup(
     deferred=None,
     eventual=False,
     transaction_id=None,
+    retry=None,
+    timeout=None,
 ):
     """Repeat lookup until all keys found (unless stop requested).
 
@@ -133,6 +135,17 @@ def _extended_lookup(
                            the given transaction.  Incompatible with
                            ``eventual==True``.
 
+    :type retry: :class:`google.api_core.retry.Retry`
+    :param retry:
+        A retry object used to retry requests. If ``None`` is specified,
+        requests will be retried using a default configuration.
+
+    :type timeout: float
+    :param timeout:
+        Time, in seconds, to wait for the request to complete.
+        Note that if ``retry`` is specified, the timeout applies
+        to each individual attempt.
+
     :rtype: list of :class:`.entity_pb2.Entity`
     :returns: The requested entities.
     :raises: :class:`ValueError` if missing / deferred are not null or
@@ -144,6 +157,14 @@ def _extended_lookup(
     if deferred is not None and deferred != []:
         raise ValueError("deferred must be None or an empty list")
 
+    kwargs = {}
+
+    if retry is not None:
+        kwargs["retry"] = retry
+
+    if timeout is not None:
+        kwargs["timeout"] = timeout
+
     results = []
 
     loop_num = 0
@@ -151,7 +172,7 @@ def _extended_lookup(
     while loop_num < _MAX_LOOPS:  # loop against possible deferred.
         loop_num += 1
         lookup_response = datastore_api.lookup(
-            project, key_pbs, read_options=read_options
+            project, key_pbs, read_options=read_options, **kwargs
         )
 
         # Accumulate the new results.
@@ -338,7 +359,16 @@ class Client(ClientWithProject):
         if isinstance(transaction, Transaction):
             return transaction
 
-    def get(self, key, missing=None, deferred=None, transaction=None, eventual=False):
+    def get(
+        self,
+        key,
+        missing=None,
+        deferred=None,
+        transaction=None,
+        eventual=False,
+        retry=None,
+        timeout=None,
+    ):
         """Retrieve an entity from a single key (if it exists).
 
         .. note::
@@ -369,6 +399,17 @@ class Client(ClientWithProject):
                          Setting True will use eventual consistency, but cannot
                          be used inside a transaction or will raise ValueError.
 
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.
+
         :rtype: :class:`google.cloud.datastore.entity.Entity` or ``NoneType``
         :returns: The requested entity if it exists.
 
@@ -380,12 +421,21 @@ class Client(ClientWithProject):
             deferred=deferred,
             transaction=transaction,
             eventual=eventual,
+            retry=retry,
+            timeout=timeout,
         )
         if entities:
             return entities[0]
 
     def get_multi(
-        self, keys, missing=None, deferred=None, transaction=None, eventual=False
+        self,
+        keys,
+        missing=None,
+        deferred=None,
+        transaction=None,
+        eventual=False,
+        retry=None,
+        timeout=None,
     ):
         """Retrieve entities, along with their attributes.
 
@@ -412,6 +462,17 @@ class Client(ClientWithProject):
                          Setting True will use eventual consistency, but cannot
                          be used inside a transaction or will raise ValueError.
 
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.
+
         :rtype: list of :class:`google.cloud.datastore.entity.Entity`
         :returns: The requested entities.
         :raises: :class:`ValueError` if one or more of ``keys`` has a project
@@ -437,6 +498,8 @@ class Client(ClientWithProject):
             missing=missing,
             deferred=deferred,
             transaction_id=transaction and transaction.id,
+            retry=retry,
+            timeout=timeout,
         )
 
         if missing is not None:
