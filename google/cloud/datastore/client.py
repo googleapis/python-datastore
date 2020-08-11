@@ -581,7 +581,7 @@ class Client(ClientWithProject):
         if not in_batch:
             current.commit(retry=retry, timeout=timeout)
 
-    def delete(self, key):
+    def delete(self, key, retry=None, timeout=None):
         """Delete the key in the Cloud Datastore.
 
         .. note::
@@ -592,14 +592,40 @@ class Client(ClientWithProject):
 
         :type key: :class:`google.cloud.datastore.key.Key`
         :param key: The key to be deleted from the datastore.
-        """
-        self.delete_multi(keys=[key])
 
-    def delete_multi(self, keys):
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+            Only meaningful outside of another batch / transaction.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.  Only meaningful outside of another
+            batch / transaction.
+        """
+        self.delete_multi(keys=[key], retry=retry, timeout=timeout)
+
+    def delete_multi(self, keys, retry=None, timeout=None):
         """Delete keys from the Cloud Datastore.
 
         :type keys: list of :class:`google.cloud.datastore.key.Key`
         :param keys: The keys to be deleted from the Datastore.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+            Only meaningful outside of another batch / transaction.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.  Only meaningful outside of another
+            batch / transaction.
         """
         if not keys:
             return
@@ -616,7 +642,7 @@ class Client(ClientWithProject):
             current.delete(key)
 
         if not in_batch:
-            current.commit()
+            current.commit(retry=retry, timeout=timeout)
 
     def allocate_ids(self, incomplete_key, num_ids):
         """Allocate a list of IDs from a partial key.

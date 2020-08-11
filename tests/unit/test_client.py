@@ -814,20 +814,26 @@ class TestClient(unittest.TestCase):
         self.assertEqual(value_pb.string_value, u"bar")
 
     def test_delete(self):
-        _called_with = []
-
-        def _delete_multi(*args, **kw):
-            _called_with.append((args, kw))
-
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
-        client.delete_multi = _delete_multi
-        key = object()
+        delete_multi = client.delete_multi = mock.Mock()
+        key = mock.Mock()
 
         client.delete(key)
 
-        self.assertEqual(_called_with[0][0], ())
-        self.assertEqual(_called_with[0][1]["keys"], [key])
+        delete_multi.assert_called_once_with(keys=[key], retry=None, timeout=None)
+
+    def test_delete_w_retry_w_timeout(self):
+        creds = _make_credentials()
+        client = self._make_one(credentials=creds)
+        delete_multi = client.delete_multi = mock.Mock()
+        key = mock.Mock()
+        retry = mock.Mock()
+        timeout = 100000
+
+        client.delete(key, retry=retry, timeout=timeout)
+
+        delete_multi.assert_called_once_with(keys=[key], retry=retry, timeout=timeout)
 
     def test_delete_multi_no_keys(self):
         creds = _make_credentials()
@@ -838,22 +844,25 @@ class TestClient(unittest.TestCase):
         self.assertIsNone(result)
         client._datastore_api_internal.commit.assert_not_called()
 
-    def test_delete_multi_no_batch(self):
+    def test_delete_multi_no_batch_w_retry_w_timeout(self):
         from google.cloud.datastore_v1.proto import datastore_pb2
 
         key = _Key(self.PROJECT)
+        retry = mock.Mock()
+        timeout = 100000
 
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
         ds_api = _make_datastore_api()
         client._datastore_api_internal = ds_api
 
-        result = client.delete_multi([key])
+        result = client.delete_multi([key], retry=retry, timeout=timeout)
         self.assertIsNone(result)
 
         self.assertEqual(ds_api.commit.call_count, 1)
         _, positional, keyword = ds_api.commit.mock_calls[0]
-        self.assertEqual(keyword, {"transaction": None})
+        expected_kw = {"transaction": None, "retry": retry, "timeout": timeout}
+        self.assertEqual(keyword, expected_kw)
 
         self.assertEqual(len(positional), 3)
         self.assertEqual(positional[0], self.PROJECT)
