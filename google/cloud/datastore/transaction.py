@@ -240,16 +240,29 @@ class Transaction(Batch):
             self._status = self._ABORTED
             raise
 
-    def rollback(self):
+    def rollback(self, retry=None, timeout=None):
         """Rolls back the current transaction.
 
         This method has necessary side-effects:
 
         - Sets the current transaction's ID to None.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.
         """
+        kwargs = _make_retry_timeout_kwargs(retry, timeout)
+
         try:
             # No need to use the response it contains nothing.
-            self._client._datastore_api.rollback(self.project, self._id)
+            self._client._datastore_api.rollback(self.project, self._id, **kwargs)
         finally:
             super(Transaction, self).rollback()
             # Clear our own ID in case this gets accidentally reused.

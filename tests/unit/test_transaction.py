@@ -148,10 +148,29 @@ class TestTransaction(unittest.TestCase):
         client = _Client(project, datastore_api=ds_api)
         xact = self._make_one(client)
         xact.begin()
+
         xact.rollback()
-        client._datastore_api.rollback.assert_called_once_with(project, id_)
+
         self.assertIsNone(xact.id)
-        ds_api.begin_transaction.assert_called_once_with(project)
+        ds_api.rollback.assert_called_once_with(project, id_)
+
+    def test_rollback_w_retry_w_timeout(self):
+        project = "PROJECT"
+        id_ = 239
+        retry = mock.Mock()
+        timeout = 100000
+
+        ds_api = _make_datastore_api(xact_id=id_)
+        client = _Client(project, datastore_api=ds_api)
+        xact = self._make_one(client)
+        xact.begin()
+
+        xact.rollback(retry=retry, timeout=timeout)
+
+        self.assertIsNone(xact.id)
+        ds_api.rollback.assert_called_once_with(
+            project, id_, retry=retry, timeout=timeout
+        )
 
     def test_commit_no_partial_keys(self):
         from google.cloud.datastore_v1.proto import datastore_pb2
