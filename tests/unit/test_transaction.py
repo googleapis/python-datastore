@@ -94,6 +94,23 @@ class TestTransaction(unittest.TestCase):
         self.assertEqual(xact.id, id_)
         ds_api.begin_transaction.assert_called_once_with(project)
 
+    def test_begin_w_retry_w_timeout(self):
+        project = "PROJECT"
+        id_ = 889
+        retry = mock.Mock()
+        timeout = 100000
+
+        ds_api = _make_datastore_api(xact_id=id_)
+        client = _Client(project, datastore_api=ds_api)
+        xact = self._make_one(client)
+
+        xact.begin(retry=retry, timeout=timeout)
+
+        self.assertEqual(xact.id, id_)
+        ds_api.begin_transaction.assert_called_once_with(
+            project, retry=retry, timeout=timeout
+        )
+
     def test_begin_tombstoned(self):
         project = "PROJECT"
         id_ = 1094
