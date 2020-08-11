@@ -970,6 +970,26 @@ class TestClient(unittest.TestCase):
         expected_keys = [complete_key.to_protobuf()] * num_ids
         reserve_ids.assert_called_once_with(self.PROJECT, expected_keys)
 
+    def test_reserve_ids_w_completed_key_w_retry_w_timeout(self):
+        num_ids = 2
+        retry = mock.Mock()
+        timeout = 100000
+
+        creds = _make_credentials()
+        client = self._make_one(credentials=creds, _use_grpc=False)
+        complete_key = _Key(self.PROJECT)
+        self.assertTrue(not complete_key.is_partial)
+        reserve_ids = mock.Mock()
+        ds_api = mock.Mock(reserve_ids=reserve_ids, spec=["reserve_ids"])
+        client._datastore_api_internal = ds_api
+
+        client.reserve_ids(complete_key, num_ids, retry=retry, timeout=timeout)
+
+        expected_keys = [complete_key.to_protobuf()] * num_ids
+        reserve_ids.assert_called_once_with(
+            self.PROJECT, expected_keys, retry=retry, timeout=timeout
+        )
+
     def test_reserve_ids_w_partial_key(self):
         num_ids = 2
         incomplete_key = _Key(self.PROJECT)

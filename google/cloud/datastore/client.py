@@ -89,6 +89,19 @@ def _determine_default_project(project=None):
     return project
 
 
+def _make_retry_timeout_kwargs(retry, timeout):
+    """Helper: make optional retry / timeout kwargs dict."""
+    kwargs = {}
+
+    if retry is not None:
+        kwargs["retry"] = retry
+
+    if timeout is not None:
+        kwargs["timeout"] = timeout
+
+    return kwargs
+
+
 def _extended_lookup(
     datastore_api,
     project,
@@ -157,13 +170,7 @@ def _extended_lookup(
     if deferred is not None and deferred != []:
         raise ValueError("deferred must be None or an empty list")
 
-    kwargs = {}
-
-    if retry is not None:
-        kwargs["retry"] = retry
-
-    if timeout is not None:
-        kwargs["timeout"] = timeout
+    kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
     results = []
 
@@ -676,13 +683,7 @@ class Client(ClientWithProject):
         incomplete_key_pb = incomplete_key.to_protobuf()
         incomplete_key_pbs = [incomplete_key_pb] * num_ids
 
-        kwargs = {}
-
-        if retry is not None:
-            kwargs["retry"] = retry
-
-        if timeout is not None:
-            kwargs["timeout"] = timeout
+        kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         response_pb = self._datastore_api.allocate_ids(
             incomplete_key.project, incomplete_key_pbs, **kwargs
@@ -800,7 +801,7 @@ class Client(ClientWithProject):
             kwargs["namespace"] = self.namespace
         return Query(self, **kwargs)
 
-    def reserve_ids(self, complete_key, num_ids):
+    def reserve_ids(self, complete_key, num_ids, retry=None, timeout=None):
         """Reserve a list of IDs from a complete key.
 
         :type complete_key: :class:`google.cloud.datastore.key.Key`
@@ -808,6 +809,17 @@ class Client(ClientWithProject):
 
         :type num_ids: int
         :param num_ids: The number of IDs to reserve.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry:
+            A retry object used to retry requests. If ``None`` is specified,
+            requests will be retried using a default configuration.
+
+        :type timeout: float
+        :param timeout:
+            Time, in seconds, to wait for the request to complete.
+            Note that if ``retry`` is specified, the timeout applies
+            to each individual attempt.
 
         :rtype: class:`NoneType`
         :returns: None
@@ -820,9 +832,13 @@ class Client(ClientWithProject):
         if not isinstance(num_ids, int):
             raise ValueError(("num_ids is not a valid integer.", num_ids))
 
+        kwargs = _make_retry_timeout_kwargs(retry, timeout)
+
         complete_key_pb = complete_key.to_protobuf()
         complete_key_pbs = [complete_key_pb] * num_ids
 
-        self._datastore_api.reserve_ids(complete_key.project, complete_key_pbs)
+        self._datastore_api.reserve_ids(
+            complete_key.project, complete_key_pbs, **kwargs
+        )
 
         return None
