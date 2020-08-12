@@ -4,6 +4,18 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+### [1.14.1](https://www.github.com/googleapis/python-datastore/compare/v1.14.0...v1.14.1) (2020-08-12)
+
+
+### Bug Fixes
+
+* smooth over system test bumps ([#66](https://www.github.com/googleapis/python-datastore/issues/66)) ([8bb17ea](https://www.github.com/googleapis/python-datastore/commit/8bb17ea30ed94c0a298a54cc75c031b67d0a576a))
+
+
+### Documentation
+
+* add docs for admin client ([#63](https://www.github.com/googleapis/python-datastore/issues/63)) ([43ff64a](https://www.github.com/googleapis/python-datastore/commit/43ff64a5889aeac321fbead967ec527ede414fa2)), closes [#49](https://www.github.com/googleapis/python-datastore/issues/49)
+
 ## [1.14.0](https://www.github.com/googleapis/python-datastore/compare/v1.13.2...v1.14.0) (2020-08-05)
 
 
