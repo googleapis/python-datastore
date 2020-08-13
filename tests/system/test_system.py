@@ -25,7 +25,6 @@ from google.cloud.datastore.helpers import GeoPoint
 from google.cloud.environment_vars import GCD_DATASET
 from google.cloud.exceptions import Conflict
 
-from test_utils.system import EmulatorCreds
 from test_utils.system import unique_resource_id
 
 from tests.system.utils import clear_datastore
@@ -44,12 +43,19 @@ class Config(object):
 
 
 def clone_client(client):
-    return datastore.Client(
-        project=client.project,
-        namespace=client.namespace,
-        credentials=client._credentials,
-        _http=client._http,
-    )
+    emulator_dataset = os.getenv(GCD_DATASET)
+
+    if emulator_dataset is None:
+        return datastore.Client(
+            project=client.project,
+            namespace=client.namespace,
+            credentials=client._credentials,
+            _http=client._http,
+        )
+    else:
+        return datastore.Client(
+            project=client.project, namespace=client.namespace, _http=client._http,
+        )
 
 
 def setUpModule():
@@ -59,13 +65,9 @@ def setUpModule():
     if emulator_dataset is None:
         Config.CLIENT = datastore.Client(namespace=test_namespace)
     else:
-        credentials = EmulatorCreds()
         http = requests.Session()  # Un-authorized.
         Config.CLIENT = datastore.Client(
-            project=emulator_dataset,
-            namespace=test_namespace,
-            credentials=credentials,
-            _http=http,
+            project=emulator_dataset, namespace=test_namespace, _http=http,
         )
 
 
