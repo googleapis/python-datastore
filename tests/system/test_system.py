@@ -22,7 +22,7 @@ import six
 from google.cloud._helpers import UTC
 from google.cloud import datastore
 from google.cloud.datastore.helpers import GeoPoint
-from google.cloud.environment_vars import GCD_DATASET
+from google.cloud.datastore.client import DATASTORE_DATASET
 from google.cloud.exceptions import Conflict
 
 from test_utils.system import unique_resource_id
@@ -43,7 +43,7 @@ class Config(object):
 
 
 def clone_client(client):
-    emulator_dataset = os.getenv(GCD_DATASET)
+    emulator_dataset = os.getenv(DATASTORE_DATASET)
 
     if emulator_dataset is None:
         return datastore.Client(
@@ -59,7 +59,7 @@ def clone_client(client):
 
 
 def setUpModule():
-    emulator_dataset = os.getenv(GCD_DATASET)
+    emulator_dataset = os.getenv(DATASTORE_DATASET)
     # Isolated namespace so concurrent test runs don't collide.
     test_namespace = "ns" + unique_resource_id()
     if emulator_dataset is None:
@@ -242,7 +242,7 @@ class TestDatastoreQuery(TestDatastore):
         cls.CLIENT.namespace = None
 
         # In the emulator, re-populating the datastore is cheap.
-        if os.getenv(GCD_DATASET) is not None:
+        if os.getenv(DATASTORE_DATASET) is not None:
             # Populate the datastore with the cloned client.
             populate_datastore.add_characters(client=cls.CLIENT)
 
@@ -253,7 +253,7 @@ class TestDatastoreQuery(TestDatastore):
     @classmethod
     def tearDownClass(cls):
         # In the emulator, destroy the query entities.
-        if os.getenv(GCD_DATASET) is not None:
+        if os.getenv(DATASTORE_DATASET) is not None:
             # Use the client for this test instead of the global.
             clear_datastore.remove_all_entities(client=cls.CLIENT)
 
@@ -486,7 +486,7 @@ class TestDatastoreQueryOffsets(TestDatastore):
     @classmethod
     def tearDownClass(cls):
         # In the emulator, destroy the query entities.
-        if os.getenv(GCD_DATASET) is not None:
+        if os.getenv(DATASTORE_DATASET) is not None:
             # Use the client for this test instead of the global.
             clear_datastore.remove_all_entities(client=cls.CLIENT)
 
