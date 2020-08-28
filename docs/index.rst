@@ -4,7 +4,7 @@
 
    Because the Datastore client uses the :mod:`grpcio` library by default
    and uses third-party :mod:`requests` library if the GRPC is disabled,
-   both are safe to share instances across threads.  In multiprocessing
+   clients are safe to share instances across threads.  In multiprocessing
    scenarios, the best practice is to create client instances *after*
    :class:`multiprocessing.Pool` or :class:`multiprocessing.Process` invokes
    :func:`os.fork`.
