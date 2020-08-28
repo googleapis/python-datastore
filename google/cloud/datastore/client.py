@@ -14,6 +14,7 @@
 """Convenience wrapper for invoking APIs/factories w/ a project."""
 
 import os
+import warnings
 
 import google.api_core.client_options
 from google.auth.credentials import AnonymousCredentials
@@ -882,6 +883,11 @@ class Client(ClientWithProject):
         Please use either :meth:`reserve_ids_multi` (recommended) or
         :meth:`reserve_ids_sequential`.
         """
+        message = (
+            "Client.reserve_ids is deprecated. Please use "
+            "Client.reserve_ids_multi or Client.reserve_ids_sequential",
+        )
+        warnings.warn(message, DeprecationWarning)
         return self.reserve_ids_sequential(
             complete_key, num_ids, retry=retry, timeout=timeout
         )
