@@ -103,10 +103,12 @@ s.replace(
     "docs/conf.py",
     """\
     "sphinx.ext.coverage",
+    "sphinx.ext.napoleon",
 """,
     """\
     "sphinx.ext.coverage",
     "sphinx.ext.doctest",
+    "sphinx.ext.napoleon",
 """,
 )
 
