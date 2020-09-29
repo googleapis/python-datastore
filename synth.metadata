@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "git@github.com:crwilcox/python-datastore.git",
-        "sha": "0f8669aa7f5b9893616da0b42be1560b50d3230a"
+        "sha": "baa708b63775a2fb14e95aea41ca2a31260782e7"
       }
     },
     {

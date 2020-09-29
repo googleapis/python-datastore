@@ -35,12 +35,16 @@ from google.api_core import operation_async
 from google.api_core import operations_v1
 from google.auth import credentials
 from google.auth.exceptions import MutualTLSChannelError
-from google.cloud.admin_v1.services.datastore_admin import DatastoreAdminAsyncClient
-from google.cloud.admin_v1.services.datastore_admin import DatastoreAdminClient
-from google.cloud.admin_v1.services.datastore_admin import pagers
-from google.cloud.admin_v1.services.datastore_admin import transports
-from google.cloud.admin_v1.types import datastore_admin
-from google.cloud.admin_v1.types import index
+from google.cloud.datastore_admin_v1.services.datastore_admin import (
+    DatastoreAdminAsyncClient,
+)
+from google.cloud.datastore_admin_v1.services.datastore_admin import (
+    DatastoreAdminClient,
+)
+from google.cloud.datastore_admin_v1.services.datastore_admin import pagers
+from google.cloud.datastore_admin_v1.services.datastore_admin import transports
+from google.cloud.datastore_admin_v1.types import datastore_admin
+from google.cloud.datastore_admin_v1.types import index
 from google.longrunning import operations_pb2
 from google.oauth2 import service_account
 
@@ -425,7 +429,7 @@ def test_datastore_admin_client_client_options_credentials_file(
 
 def test_datastore_admin_client_client_options_from_dict():
     with mock.patch(
-        "google.cloud.admin_v1.services.datastore_admin.transports.DatastoreAdminGrpcTransport.__init__"
+        "google.cloud.datastore_admin_v1.services.datastore_admin.transports.DatastoreAdminGrpcTransport.__init__"
     ) as grpc_transport:
         grpc_transport.return_value = None
         client = DatastoreAdminClient(
@@ -1150,7 +1154,7 @@ def test_datastore_admin_base_transport_error():
 def test_datastore_admin_base_transport():
     # Instantiate the base transport.
     with mock.patch(
-        "google.cloud.admin_v1.services.datastore_admin.transports.DatastoreAdminTransport.__init__"
+        "google.cloud.datastore_admin_v1.services.datastore_admin.transports.DatastoreAdminTransport.__init__"
     ) as Transport:
         Transport.return_value = None
         transport = transports.DatastoreAdminTransport(
@@ -1180,7 +1184,7 @@ def test_datastore_admin_base_transport_with_credentials_file():
     with mock.patch.object(
         auth, "load_credentials_from_file"
     ) as load_creds, mock.patch(
-        "google.cloud.admin_v1.services.datastore_admin.transports.DatastoreAdminTransport._prep_wrapped_messages"
+        "google.cloud.datastore_admin_v1.services.datastore_admin.transports.DatastoreAdminTransport._prep_wrapped_messages"
     ) as Transport:
         Transport.return_value = None
         load_creds.return_value = (credentials.AnonymousCredentials(), None)
@@ -1200,7 +1204,7 @@ def test_datastore_admin_base_transport_with_credentials_file():
 def test_datastore_admin_base_transport_with_adc():
     # Test the default credentials are used if credentials and credentials_file are None.
     with mock.patch.object(auth, "default") as adc, mock.patch(
-        "google.cloud.admin_v1.services.datastore_admin.transports.DatastoreAdminTransport._prep_wrapped_messages"
+        "google.cloud.datastore_admin_v1.services.datastore_admin.transports.DatastoreAdminTransport._prep_wrapped_messages"
     ) as Transport:
         Transport.return_value = None
         adc.return_value = (credentials.AnonymousCredentials(), None)

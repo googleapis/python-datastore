@@ -32,7 +32,7 @@ dependencies = [
     "google-api-core[grpc] >= 1.22.2, < 2.0.0dev",
     "google-cloud-core >= 1.4.0, < 2.0dev",
     "proto-plus >= 1.4.0",
-    "libcst >= 0.2.5"
+    "libcst >= 0.2.5",
 ]
 extras = {}
 
@@ -48,7 +48,9 @@ with io.open(readme_filename, encoding="utf-8") as readme_file:
 # Only include packages under the 'google' namespace. Do not include tests,
 # benchmarks, etc.
 packages = [
-    package for package in setuptools.PEP420PackageFinder.find() if package.startswith("google")
+    package
+    for package in setuptools.PEP420PackageFinder.find()
+    if package.startswith("google")
 ]
 
 # Determine which namespaces are needed.
@@ -86,8 +88,8 @@ setuptools.setup(
     extras_require=extras,
     python_requires=">=3.6",
     scripts=[
-        'scripts/fixup_datastore_v1_keywords.py',
-        'scripts/fixup_admin_v1_keywords.py',
+        "scripts/fixup_datastore_v1_keywords.py",
+        "scripts/fixup_admin_v1_keywords.py",
     ],
     include_package_data=True,
     zip_safe=False,

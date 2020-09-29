@@ -53,7 +53,7 @@ s.move(
     "google/cloud/datastore_admin_v1_new_gen"
 )
 
-s.move(library / "google/cloud/datastore_admin_v1/proto")
+#s.move(library / "google/cloud/datastore_admin_v1/proto")
 
 
 s.move(
