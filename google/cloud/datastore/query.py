@@ -576,8 +576,7 @@ class Iterator(page_iterator.Iterator):
             kwargs["timeout"] = self._timeout
 
         response_pb = self.client._datastore_api.run_query(
-            self._query.project, partition_id, read_options, query=query_pb, **kwargs
-        )
+            request = {'project_id': self._query.project, 'partition_id': partition_id, 'read_options': read_options, 'query': kwargs, 'gql_query': query_pb})
 
         while (
             response_pb.batch.more_results == _NOT_FINISHED
@@ -590,12 +589,7 @@ class Iterator(page_iterator.Iterator):
             query_pb.start_cursor = response_pb.batch.skipped_cursor
             query_pb.offset -= response_pb.batch.skipped_results
             response_pb = self.client._datastore_api.run_query(
-                self._query.project,
-                partition_id,
-                read_options,
-                query=query_pb,
-                **kwargs
-            )
+                request = {'project_id': self._query.project, 'partition_id': partition_id, 'read_options': read_options, 'query': kwargs, 'gql_query': query_pb})
 
         entity_pbs = self._process_query_results(response_pb)
         return page_iterator.Page(self, entity_pbs, self.item_to_value)

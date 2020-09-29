@@ -255,8 +255,7 @@ class Batch(object):
             kwargs["timeout"] = timeout
 
         commit_response_pb = self._client._datastore_api.commit(
-            self.project, mode, self._mutations, transaction=self._id, **kwargs
-        )
+            request = {'project_id': self.project, 'mode': mode, 'transaction': self._mutations, 'mutations': kwargs})
         _, updated_keys = _parse_commit_response(commit_response_pb)
         # If the back-end returns without error, we are guaranteed that
         # ``commit`` will return keys that match (length and
@@ -318,9 +317,9 @@ class Batch(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
             if exc_type is None:
-                self.commit()
+                self.commit(request = {})
             else:
-                self.rollback()
+                self.rollback(request = {})
         finally:
             self._client._pop_batch()
 

@@ -233,8 +233,7 @@ class Transaction(Batch):
 
         try:
             response_pb = self._client._datastore_api.begin_transaction(
-                self.project, **kwargs
-            )
+                request = {'project_id': self.project, 'transaction_options': kwargs})
             self._id = response_pb.transaction
         except:  # noqa: E722 do not use bare except, specify exception instead
             self._status = self._ABORTED
@@ -262,9 +261,9 @@ class Transaction(Batch):
 
         try:
             # No need to use the response it contains nothing.
-            self._client._datastore_api.rollback(self.project, self._id, **kwargs)
+            self._client._datastore_api.rollback(request = {'project_id': self.project, 'transaction': self._id}, retry = kwargs)
         finally:
-            super(Transaction, self).rollback()
+            super(Transaction, self).rollback(request = {})
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
 
@@ -293,7 +292,7 @@ class Transaction(Batch):
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         try:
-            super(Transaction, self).commit(**kwargs)
+            super(Transaction, self).commit(request = {'project_id': kwargs})
         finally:
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
