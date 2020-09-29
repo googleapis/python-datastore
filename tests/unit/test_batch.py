@@ -42,7 +42,7 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._partial_key_entities, [])
 
     def test_current(self):
-        from google.cloud.datastore_v1.proto import datastore_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
         client = _Client(project)
@@ -213,7 +213,7 @@ class TestBatch(unittest.TestCase):
         self.assertRaises(ValueError, batch.rollback)
 
     def test_commit(self):
-        from google.cloud.datastore_v1.proto import datastore_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
         client = _Client(project)
@@ -230,7 +230,7 @@ class TestBatch(unittest.TestCase):
         commit_method.assert_called_with(project, mode, [], transaction=None)
 
     def test_commit_w_timeout(self):
-        from google.cloud.datastore_v1.proto import datastore_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
         client = _Client(project)
@@ -250,7 +250,7 @@ class TestBatch(unittest.TestCase):
         )
 
     def test_commit_w_retry(self):
-        from google.cloud.datastore_v1.proto import datastore_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
         client = _Client(project)
@@ -278,7 +278,7 @@ class TestBatch(unittest.TestCase):
         self.assertRaises(ValueError, batch.commit)
 
     def test_commit_w_partial_key_entities(self):
-        from google.cloud.datastore_v1.proto import datastore_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
         new_id = 1234
@@ -302,7 +302,7 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(entity.key._id, new_id)
 
     def test_as_context_mgr_wo_error(self):
-        from google.cloud.datastore_v1.proto import datastore_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
         properties = {"foo": "bar"}
@@ -327,7 +327,7 @@ class TestBatch(unittest.TestCase):
         )
 
     def test_as_context_mgr_nested(self):
-        from google.cloud.datastore_v1.proto import datastore_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
         properties = {"foo": "bar"}
@@ -415,8 +415,8 @@ class Test__parse_commit_response(unittest.TestCase):
         return _parse_commit_response(commit_response_pb)
 
     def test_it(self):
-        from google.cloud.datastore_v1.proto import datastore_pb2
-        from google.cloud.datastore_v1.proto import entity_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+        from google.cloud.datastore_v1.types import entity as entity_pb2
 
         index_updates = 1337
         keys = [
@@ -452,7 +452,7 @@ class _Key(object):
         return self._id is None
 
     def to_protobuf(self):
-        from google.cloud.datastore_v1.proto import entity_pb2
+        from google.cloud.datastore_v1.types import entity as entity_pb2
 
         key = self._key = entity_pb2.Key()
         # Don't assign it, because it will just get ripped out
@@ -510,8 +510,8 @@ def _mutated_pb(test_case, mutation_pb_list, mutation_type):
 
 
 def _make_mutation(id_):
-    from google.cloud.datastore_v1.proto import datastore_pb2
-    from google.cloud.datastore_v1.proto import entity_pb2
+    from google.cloud.datastore_v1.types import datastore as datastore_pb2
+    from google.cloud.datastore_v1.types import entity as entity_pb2
 
     key = entity_pb2.Key()
     key.partition_id.project_id = "PROJECT"
@@ -522,7 +522,7 @@ def _make_mutation(id_):
 
 
 def _make_commit_response(*new_key_ids):
-    from google.cloud.datastore_v1.proto import datastore_pb2
+    from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
     mutation_results = [_make_mutation(key_id) for key_id in new_key_ids]
     return datastore_pb2.CommitResponse(mutation_results=mutation_results)

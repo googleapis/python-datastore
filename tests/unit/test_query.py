@@ -429,7 +429,7 @@ class TestIterator(unittest.TestCase):
         self.assertEqual(iterator._timeout, timeout)
 
     def test__build_protobuf_empty(self):
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
         from google.cloud.datastore.query import Query
 
         client = _Client(None)
@@ -444,7 +444,7 @@ class TestIterator(unittest.TestCase):
         # this test and the following (all_values_except_start_and_end_cursor)
         # test mutually exclusive states; the offset is ignored
         # if a start_cursor is supplied
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
         from google.cloud.datastore.query import Query
 
         client = _Client(None)
@@ -470,7 +470,7 @@ class TestIterator(unittest.TestCase):
         # this test and the previous (all_values_except_start_offset)
         # test mutually exclusive states; the offset is ignored
         # if a start_cursor is supplied
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
         from google.cloud.datastore.query import Query
 
         client = _Client(None)
@@ -487,7 +487,7 @@ class TestIterator(unittest.TestCase):
         self.assertEqual(pb, expected_pb)
 
     def test__process_query_results(self):
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
 
         iterator = self._make_one(None, None, end_cursor="abcd")
         self.assertIsNotNone(iterator._end_cursor)
@@ -508,7 +508,7 @@ class TestIterator(unittest.TestCase):
         self.assertTrue(iterator._more_results)
 
     def test__process_query_results_done(self):
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
 
         iterator = self._make_one(None, None, end_cursor="abcd")
         self.assertIsNotNone(iterator._end_cursor)
@@ -536,9 +536,9 @@ class TestIterator(unittest.TestCase):
 
     def _next_page_helper(self, txn_id=None, retry=None, timeout=None):
         from google.api_core import page_iterator
-        from google.cloud.datastore_v1.proto import datastore_pb2
-        from google.cloud.datastore_v1.proto import entity_pb2
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+        from google.cloud.datastore_v1.types import entity as entity_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
         from google.cloud.datastore.query import Query
 
         more_enum = query_pb2.QueryResultBatch.NOT_FINISHED
@@ -627,7 +627,7 @@ class Test__pb_from_query(unittest.TestCase):
         return _pb_from_query(query)
 
     def test_empty(self):
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
 
         pb = self._call_fut(_Query())
         self.assertEqual(list(pb.projection), [])
@@ -655,7 +655,7 @@ class Test__pb_from_query(unittest.TestCase):
 
     def test_ancestor(self):
         from google.cloud.datastore.key import Key
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
 
         ancestor = Key("Ancestor", 123, project="PROJECT")
         pb = self._call_fut(_Query(ancestor=ancestor))
@@ -668,7 +668,7 @@ class Test__pb_from_query(unittest.TestCase):
         self.assertEqual(pfilter.value.key_value, ancestor_pb)
 
     def test_filter(self):
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
 
         query = _Query(filters=[("name", "=", u"John")])
         query.OPERATORS = {"=": query_pb2.PropertyFilter.EQUAL}
@@ -682,7 +682,7 @@ class Test__pb_from_query(unittest.TestCase):
 
     def test_filter_key(self):
         from google.cloud.datastore.key import Key
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
 
         key = Key("Kind", 123, project="PROJECT")
         query = _Query(filters=[("__key__", "=", key)])
@@ -697,7 +697,7 @@ class Test__pb_from_query(unittest.TestCase):
         self.assertEqual(pfilter.value.key_value, key_pb)
 
     def test_order(self):
-        from google.cloud.datastore_v1.proto import query_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
 
         pb = self._call_fut(_Query(order=["a", "-b", "c"]))
         self.assertEqual([item.property.name for item in pb.order], ["a", "b", "c"])
@@ -752,7 +752,7 @@ class _Client(object):
 
 
 def _make_entity(kind, id_, project):
-    from google.cloud.datastore_v1.proto import entity_pb2
+    from google.cloud.datastore_v1.types import entity as entity_pb2
 
     key = entity_pb2.Key()
     key.partition_id.project_id = project
@@ -765,8 +765,8 @@ def _make_entity(kind, id_, project):
 def _make_query_response(
     entity_pbs, cursor_as_bytes, more_results_enum, skipped_results
 ):
-    from google.cloud.datastore_v1.proto import datastore_pb2
-    from google.cloud.datastore_v1.proto import query_pb2
+    from google.cloud.datastore_v1.types import datastore as datastore_pb2
+    from google.cloud.datastore_v1.types import query as query_pb2
 
     return datastore_pb2.RunQueryResponse(
         batch=query_pb2.QueryResultBatch(
