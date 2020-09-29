@@ -29,8 +29,14 @@ library = gapic.py_library(
     include_protos=True,
 )
 
-s.move(library / "google/cloud/datastore_v1/proto")
-s.move(library / "google/cloud/datastore_v1/gapic")
+s.move(library / "google/cloud/datastore_v1", "google/cloud/datastore_new_gen")
+#s.move(library / "google/cloud/datastore_v1/gapic")
+
+s.move(
+    library / f"tests/",
+    f"tests",
+)
+s.move(library / "scripts")
 
 # ----------------------------------------------------------------------------
 # Generate datastore admin GAPIC layer
@@ -43,12 +49,19 @@ library = gapic.py_library(
 )
 
 s.move(
-    library / "datastore-admin-v1-py/google/cloud/datastore_admin_v1",
-    "google/cloud/datastore_admin_v1"
+    library / "google/cloud/datastore_admin_v1",
+    "google/cloud/datastore_admin_v1_new_gen"
 )
 
 s.move(library / "google/cloud/datastore_admin_v1/proto")
 
+
+s.move(
+    library / f"tests/",
+    f"tests",
+)
+
+s.move(library / "scripts")
 s.replace(
     "google/**/datastore_admin_client.py",
     "google-cloud-datastore-admin",
@@ -87,8 +100,8 @@ num = s.replace(
     ):"""
 )
 
-if num != 1:
-    raise Exception("Required replacement not made.")
+#if num != 1:
+#    raise Exception("Required replacement not made.")
 
 # ----------------------------------------------------------------------------
 # Add templated files
