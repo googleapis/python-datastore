@@ -29,8 +29,7 @@ library = gapic.py_library(
     include_protos=True,
 )
 
-s.move(library / "google/cloud/datastore_v1", "google/cloud/datastore_new_gen")
-#s.move(library / "google/cloud/datastore_v1/gapic")
+s.move(library / "google/cloud/datastore_v1")
 
 s.move(
     library / f"tests/",
@@ -50,10 +49,8 @@ library = gapic.py_library(
 
 s.move(
     library / "google/cloud/datastore_admin_v1",
-    "google/cloud/datastore_admin_v1_new_gen"
+    "google/cloud/datastore_admin_v1"
 )
-
-#s.move(library / "google/cloud/datastore_admin_v1/proto")
 
 
 s.move(
