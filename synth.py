@@ -104,7 +104,7 @@ num = s.replace(
 # Add templated files
 # ----------------------------------------------------------------------------
 templated_files = common.py_library(unit_cov_level=97, cov_level=99)
-s.move(templated_files, excludes=["docs/multiprocessing.rst"])
+s.move(templated_files, excludes=["docs/multiprocessing.rst", ".coveragerc"])
 
 s.replace("noxfile.py", """["']sphinx['"]""", '''"sphinx<3.0.0"''')
 
