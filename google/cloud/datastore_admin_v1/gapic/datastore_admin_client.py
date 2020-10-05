@@ -42,6 +42,8 @@ from google.cloud.datastore_admin_v1.proto import index_pb2
 from google.longrunning import operations_pb2
 from google.protobuf import empty_pb2
 
+# To avoid importing datastore into admin (which would result in a
+# circular dependency), We exec to get the version via a dict.
 version = {}
 with open("../../datastore/version.py") as fp:
     exec(fp.read(), version)
