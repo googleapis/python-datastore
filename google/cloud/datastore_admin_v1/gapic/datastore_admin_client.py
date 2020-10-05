@@ -17,7 +17,6 @@
 """Accesses the google.datastore.admin.v1 DatastoreAdmin API."""
 
 import functools
-import pkg_resources
 import warnings
 
 from google.oauth2 import service_account
@@ -43,10 +42,10 @@ from google.cloud.datastore_admin_v1.proto import index_pb2
 from google.longrunning import operations_pb2
 from google.protobuf import empty_pb2
 
-
-_GAPIC_LIBRARY_VERSION = pkg_resources.get_distribution(
-    "google-cloud-datastore",
-).version
+version = {}
+with open("../../datastore/version.py") as fp:
+    exec(fp.read(), version)
+_GAPIC_LIBRARY_VERSION = version["__version__"]
 
 
 class DatastoreAdminClient(object):
