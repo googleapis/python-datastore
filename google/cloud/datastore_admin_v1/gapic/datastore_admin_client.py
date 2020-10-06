@@ -17,6 +17,7 @@
 """Accesses the google.datastore.admin.v1 DatastoreAdmin API."""
 
 import functools
+import os
 import warnings
 
 from google.oauth2 import service_account
@@ -44,9 +45,12 @@ from google.protobuf import empty_pb2
 
 # To avoid importing datastore into admin (which would result in a
 # circular dependency), We exec to get the version via a dict.
+dir_path = os.path.abspath(os.path.dirname(__file__))
+
 version = {}
-with open("../../datastore/version.py") as fp:
+with open(os.path.join(dir_path,"../../datastore/version.py")) as fp:
     exec(fp.read(), version)
+
 _GAPIC_LIBRARY_VERSION = version["__version__"]
 
 
