@@ -217,15 +217,15 @@ Supported Python Versions
 
 We support:
 
--  `Python 3.5`_
 -  `Python 3.6`_
 -  `Python 3.7`_
 -  `Python 3.8`_
+-  `Python 3.9`_
 
-.. _Python 3.5: https://docs.python.org/3.5/
 .. _Python 3.6: https://docs.python.org/3.6/
 .. _Python 3.7: https://docs.python.org/3.7/
 .. _Python 3.8: https://docs.python.org/3.8/
+.. _Python 3.9: https://docs.python.org/3.9/
 
 
 Supported versions can be found in our ``noxfile.py`` `config`_.
