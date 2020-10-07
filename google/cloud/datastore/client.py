@@ -885,7 +885,7 @@ class Client(ClientWithProject):
         """
         message = (
             "Client.reserve_ids is deprecated. Please use "
-            "Client.reserve_ids_multi or Client.reserve_ids_sequential",
+            "Client.reserve_ids_multi or Client.reserve_ids_sequential"
         )
         warnings.warn(message, DeprecationWarning)
         return self.reserve_ids_sequential(
