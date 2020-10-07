@@ -233,7 +233,7 @@ class Transaction(Batch):
 
         try:
             response_pb = self._client._datastore_api.begin_transaction(
-                request={"project_id": self.project, "transaction_options": kwargs}
+                self.project, **kwargs
             )
             self._id = response_pb.transaction
         except:  # noqa: E722 do not use bare except, specify exception instead
@@ -262,12 +262,9 @@ class Transaction(Batch):
 
         try:
             # No need to use the response it contains nothing.
-            self._client._datastore_api.rollback(
-                request={"project_id": self.project, "transaction": self._id},
-                retry=kwargs,
-            )
+            self._client._datastore_api.rollback(self.project, self._id, **kwargs)
         finally:
-            super(Transaction, self).rollback(request={})
+            super(Transaction, self).rollback()
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
 
@@ -296,7 +293,7 @@ class Transaction(Batch):
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         try:
-            super(Transaction, self).commit(request={"project_id": kwargs})
+            super(Transaction, self).commit(**kwargs)
         finally:
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
@@ -314,7 +311,7 @@ class Transaction(Batch):
         :raises: :class:`RuntimeError` if the transaction
                  is marked ReadOnly
         """
-        if self._options.HasField("read_only"):
+        if self._options._pb.HasField("read_only"):
             raise RuntimeError("Transaction is read only")
         else:
             super(Transaction, self).put(entity)

@@ -18,7 +18,8 @@ import base64
 import copy
 import six
 
-from google.cloud.datastore_v1.types import entity as entity_pb2
+from google.cloud.datastore_v1.types import entity as _entity_pb2
+
 from google.cloud._helpers import _to_bytes
 from google.cloud.datastore import _app_engine_key_pb2
 
@@ -288,7 +289,7 @@ class Key(object):
             key.partition_id.namespace_id = self.namespace
 
         for item in self.path:
-            element = key.path.add()
+            element = key._pb.path.add()
             if "kind" in item:
                 element.kind = item["kind"]
             if "id" in item:

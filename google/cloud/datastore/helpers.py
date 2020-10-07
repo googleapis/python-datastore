@@ -86,7 +86,7 @@ def _new_value_pb(entity_pb, name):
     :rtype: :class:`.entity_pb2.Value`
     :returns: The new ``Value`` protobuf that was added to the entity.
     """
-    return entity_pb.properties.get_or_create(name)
+    return entity_pb.properties._pb.get_or_create(name)
 
 
 def _property_tuples(entity_pb):
@@ -211,7 +211,7 @@ def entity_to_protobuf(entity):
     entity_pb = entity_pb2.Entity()
     if entity.key is not None:
         key_pb = entity.key.to_protobuf()
-        entity_pb.key.CopyFrom(key_pb)
+        entity_pb._pb.key.CopyFrom(key_pb._pb)
 
     for name, value in entity.items():
         value_is_list = isinstance(value, list)
@@ -256,7 +256,7 @@ def get_read_options(eventual, transaction_id):
     if transaction_id is None:
         if eventual:
             return datastore_pb2.ReadOptions(
-                read_consistency=datastore_pb2.ReadOptions.EVENTUAL
+                read_consistency=datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
             )
         else:
             return datastore_pb2.ReadOptions()
@@ -386,7 +386,7 @@ def _get_value_from_value_pb(value_pb):
     :raises: :class:`ValueError <exceptions.ValueError>` if no value type
              has been set.
     """
-    value_type = value_pb.WhichOneof("value_type")
+    value_type = value_pb._pb.WhichOneof("value_type")
 
     if value_type == "timestamp_value":
         result = _pb_timestamp_to_datetime(value_pb.timestamp_value)
@@ -458,7 +458,7 @@ def _set_protobuf_value(value_pb, val):
         value_pb.entity_value.CopyFrom(entity_pb)
     elif attr == "array_value":
         if len(val) == 0:
-            array_value = entity_pb2.ArrayValue(values=[])
+            array_value = entity_pb2.ArrayValue(values=[])._pb
             value_pb.array_value.CopyFrom(array_value)
         else:
             l_pb = value_pb.array_value.values

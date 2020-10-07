@@ -928,9 +928,7 @@ class TestClient(unittest.TestCase):
         ds_api = mock.Mock(allocate_ids=alloc_ids, spec=["allocate_ids"])
         client._datastore_api_internal = ds_api
 
-        result = client.allocate_ids(
-            request={"project_id": incomplete_key, "keys": num_ids}
-        )
+        result = client.allocate_ids(incomplete_key, num_ids)
 
         # Check the IDs returned.
         self.assertEqual([key.id for key in result], list(range(num_ids)))
@@ -953,9 +951,7 @@ class TestClient(unittest.TestCase):
         client._datastore_api_internal = ds_api
 
         result = client.allocate_ids(
-            request={"project_id": incomplete_key, "keys": num_ids},
-            retry=retry,
-            timeout=timeout,
+            incomplete_key, num_ids, retry=retry, timeout=timeout
         )
 
         # Check the IDs returned.
@@ -1071,7 +1067,7 @@ class TestClient(unittest.TestCase):
         client._datastore_api_internal = ds_api
         self.assertTrue(not complete_key.is_partial)
 
-        client.reserve_ids(request={"project_id": complete_key, "keys": num_ids})
+        client.reserve_ids(complete_key, num_ids)
 
         reserved_keys = (
             _Key(_Key.kind, id)
@@ -1093,11 +1089,7 @@ class TestClient(unittest.TestCase):
         ds_api = mock.Mock(reserve_ids=reserve_ids, spec=["reserve_ids"])
         client._datastore_api_internal = ds_api
 
-        client.reserve_ids(
-            request={"project_id": complete_key, "keys": num_ids},
-            retry=retry,
-            timeout=timeout,
-        )
+        client.reserve_ids(complete_key, num_ids, retry=retry, timeout=timeout)
 
         reserved_keys = (
             _Key(_Key.kind, id)
@@ -1118,7 +1110,7 @@ class TestClient(unittest.TestCase):
         client._datastore_api_internal = ds_api
         self.assertTrue(not complete_key.is_partial)
 
-        client.reserve_ids(request={"project_id": complete_key, "keys": num_ids})
+        client.reserve_ids(complete_key, num_ids)
 
         reserved_keys = (
             _Key("PARENT", "SINGLETON", _Key.kind, id)
@@ -1133,7 +1125,7 @@ class TestClient(unittest.TestCase):
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
         with self.assertRaises(ValueError):
-            client.reserve_ids(request={"project_id": incomplete_key, "keys": num_ids})
+            client.reserve_ids(incomplete_key, num_ids)
 
     def test_reserve_ids_w_wrong_num_ids(self):
         num_ids = "2"
@@ -1141,7 +1133,7 @@ class TestClient(unittest.TestCase):
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
         with self.assertRaises(ValueError):
-            client.reserve_ids(request={"project_id": complete_key, "keys": num_ids})
+            client.reserve_ids(complete_key, num_ids)
 
     def test_reserve_ids_w_non_numeric_key_name(self):
         num_ids = 2
@@ -1149,7 +1141,7 @@ class TestClient(unittest.TestCase):
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
         with self.assertRaises(ValueError):
-            client.reserve_ids(request={"project_id": complete_key, "keys": num_ids})
+            client.reserve_ids(complete_key, num_ids)
 
     def test_reserve_ids_multi(self):
         creds = _make_credentials()

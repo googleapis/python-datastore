@@ -506,7 +506,7 @@ class Iterator(page_iterator.Iterator):
             pb.end_cursor = base64.urlsafe_b64decode(end_cursor)
 
         if self.max_results is not None:
-            pb.limit.value = self.max_results - self.num_results
+            pb._pb.limit.value = self.max_results - self.num_results
 
         if start_cursor is None and self._offset is not None:
             # NOTE: We don't need to add an offset to the request protobuf
@@ -580,9 +580,11 @@ class Iterator(page_iterator.Iterator):
                 "project_id": self._query.project,
                 "partition_id": partition_id,
                 "read_options": read_options,
-                "query": kwargs,
-                "gql_query": query_pb,
-            }
+                "query": query_pb,
+                
+                #"gql_query": query_pb,
+            },
+            **kwargs
         )
 
         while (
@@ -618,48 +620,48 @@ def _pb_from_query(query):
     :rtype: :class:`.query_pb2.Query`
     :returns: A protobuf that can be sent to the protobuf API.  N.b. that
               it does not contain "in-flight" fields for ongoing query
-              executions (cursors, offset, limit).
+              executions (cursors, offset, limit).qg
     """
     pb = query_pb2.Query()
 
     for projection_name in query.projection:
-        pb.projection.add().property.name = projection_name
+        pb.projection._pb.add().property.name = projection_name
 
     if query.kind:
-        pb.kind.add().name = query.kind
+        pb.kind._pb.add().name = query.kind
 
     composite_filter = pb.filter.composite_filter
-    composite_filter.op = query_pb2.CompositeFilter.AND
+    composite_filter.op = query_pb2.CompositeFilter.Operator.AND
 
     if query.ancestor:
         ancestor_pb = query.ancestor.to_protobuf()
 
         # Filter on __key__ HAS_ANCESTOR == ancestor.
-        ancestor_filter = composite_filter.filters.add().property_filter
+        ancestor_filter = composite_filter.filters._pb.add().property_filter
         ancestor_filter.property.name = "__key__"
-        ancestor_filter.op = query_pb2.PropertyFilter.HAS_ANCESTOR
-        ancestor_filter.value.key_value.CopyFrom(ancestor_pb)
+        ancestor_filter.op = query_pb2.PropertyFilter.Operator.HAS_ANCESTOR
+        ancestor_filter.value.key_value.CopyFrom(ancestor_pb._pb)
 
     for property_name, operator, value in query.filters:
         pb_op_enum = query.OPERATORS.get(operator)
 
         # Add the specific filter
-        property_filter = composite_filter.filters.add().property_filter
+        property_filter = composite_filter.filters._pb.add().property_filter
         property_filter.property.name = property_name
         property_filter.op = pb_op_enum
 
         # Set the value to filter on based on the type.
         if property_name == "__key__":
             key_pb = value.to_protobuf()
-            property_filter.value.key_value.CopyFrom(key_pb)
+            property_filter.value.key_value.CopyFrom(key_pb._pb)
         else:
             helpers._set_protobuf_value(property_filter.value, value)
 
     if not composite_filter.filters:
-        pb.ClearField("filter")
+        pb._pb.ClearField("filter")
 
     for prop in query.order:
-        property_order = pb.order.add()
+        property_order = pb.order._pb.add()
 
         if prop.startswith("-"):
             property_order.property.name = prop[1:]
@@ -669,7 +671,7 @@ def _pb_from_query(query):
             property_order.direction = property_order.ASCENDING
 
     for distinct_on_name in query.distinct_on:
-        pb.distinct_on.add().name = distinct_on_name
+        pb.distinct_on._pb.add().name = distinct_on_name
 
     return pb
 

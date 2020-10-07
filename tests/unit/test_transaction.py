@@ -77,7 +77,7 @@ class TestTransaction(unittest.TestCase):
         ds_api.rollback.assert_not_called()
         commit_method = ds_api.commit
         self.assertEqual(commit_method.call_count, 2)
-        mode = datastore_pb2.CommitRequest.TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.TRANSACTIONAL
         commit_method.assert_called_with(project, mode, [], transaction=id_)
 
         begin_txn = ds_api.begin_transaction
@@ -121,7 +121,7 @@ class TestTransaction(unittest.TestCase):
         self.assertEqual(xact.id, id_)
         ds_api.begin_transaction.assert_called_once_with(project)
 
-        xact.rollback(request={})
+        xact.rollback()
         client._datastore_api.rollback.assert_called_once_with(project, id_)
         self.assertIsNone(xact.id)
 
@@ -149,7 +149,7 @@ class TestTransaction(unittest.TestCase):
         xact = self._make_one(client)
         xact.begin()
 
-        xact.rollback(request={})
+        xact.rollback()
 
         self.assertIsNone(xact.id)
         ds_api.rollback.assert_called_once_with(project, id_)
@@ -165,7 +165,7 @@ class TestTransaction(unittest.TestCase):
         xact = self._make_one(client)
         xact.begin()
 
-        xact.rollback(request={}, retry=retry, timeout=timeout)
+        xact.rollback(retry=retry, timeout=timeout)
 
         self.assertIsNone(xact.id)
         ds_api.rollback.assert_called_once_with(
@@ -177,13 +177,13 @@ class TestTransaction(unittest.TestCase):
 
         project = "PROJECT"
         id_ = 1002930
-        mode = datastore_pb2.CommitRequest.TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.TRANSACTIONAL
 
         ds_api = _make_datastore_api(xact_id=id_)
         client = _Client(project, datastore_api=ds_api)
         xact = self._make_one(client)
         xact.begin()
-        xact.commit(request={})
+        xact.commit()
 
         ds_api.commit.assert_called_once_with(project, mode, [], transaction=id_)
         self.assertIsNone(xact.id)
@@ -194,7 +194,7 @@ class TestTransaction(unittest.TestCase):
         project = "PROJECT"
         kind = "KIND"
         id1 = 123
-        mode = datastore_pb2.CommitRequest.TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.TRANSACTIONAL
         key = _make_key(kind, id1, project)
         id2 = 234
         retry = mock.Mock()
@@ -207,7 +207,7 @@ class TestTransaction(unittest.TestCase):
         entity = _Entity()
 
         xact.put(entity)
-        xact.commit(request={}, retry=retry, timeout=timeout)
+        xact.commit(retry=retry, timeout=timeout)
 
         ds_api.commit.assert_called_once_with(
             project,
@@ -232,7 +232,7 @@ class TestTransaction(unittest.TestCase):
             self.assertEqual(xact.id, id_)
             ds_api.begin_transaction.assert_called_once_with(project)
 
-        mode = datastore_pb2.CommitRequest.TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.TRANSACTIONAL
         client._datastore_api.commit.assert_called_once_with(
             project, mode, [], transaction=id_
         )
@@ -290,7 +290,7 @@ def _make_key(kind, id_, project):
 
     key = entity_pb2.Key()
     key.partition_id.project_id = project
-    elem = key.path.add()
+    elem = key._pb.path.add()
     elem.kind = kind
     elem.id = id_
     return key

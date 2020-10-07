@@ -63,7 +63,7 @@ class TestBatch(unittest.TestCase):
 
         commit_method = client._datastore_api.commit
         self.assertEqual(commit_method.call_count, 2)
-        mode = datastore_pb2.CommitRequest.NON_TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(project, mode, [], transaction=None)
 
     def test_put_entity_wo_key(self):
@@ -201,7 +201,7 @@ class TestBatch(unittest.TestCase):
         batch = self._make_one(client)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.rollback(request={})
+        batch.rollback()
         self.assertEqual(batch._status, batch._ABORTED)
 
     def test_rollback_wrong_status(self):
@@ -222,11 +222,11 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._INITIAL)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.commit(request={})
+        batch.commit()
         self.assertEqual(batch._status, batch._FINISHED)
 
         commit_method = client._datastore_api.commit
-        mode = datastore_pb2.CommitRequest.NON_TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(project, mode, [], transaction=None)
 
     def test_commit_w_timeout(self):
@@ -240,11 +240,11 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._INITIAL)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.commit(request={}, timeout=timeout)
+        batch.commit(timeout=timeout)
         self.assertEqual(batch._status, batch._FINISHED)
 
         commit_method = client._datastore_api.commit
-        mode = datastore_pb2.CommitRequest.NON_TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(
             project, mode, [], transaction=None, timeout=timeout
         )
@@ -260,11 +260,11 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._INITIAL)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.commit(request={}, retry=retry)
+        batch.commit(retry=retry)
         self.assertEqual(batch._status, batch._FINISHED)
 
         commit_method = client._datastore_api.commit
-        mode = datastore_pb2.CommitRequest.NON_TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(
             project, mode, [], transaction=None, retry=retry
         )
@@ -293,10 +293,10 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._INITIAL)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.commit(request={})
+        batch.commit()
         self.assertEqual(batch._status, batch._FINISHED)
 
-        mode = datastore_pb2.CommitRequest.NON_TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         ds_api.commit.assert_called_once_with(project, mode, [], transaction=None)
         self.assertFalse(entity.key.is_partial)
         self.assertEqual(entity.key._id, new_id)
@@ -321,7 +321,7 @@ class TestBatch(unittest.TestCase):
         mutated_entity = _mutated_pb(self, batch.mutations, "upsert")
         self.assertEqual(mutated_entity.key, key._key)
         commit_method = client._datastore_api.commit
-        mode = datastore_pb2.CommitRequest.NON_TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(
             project, mode, batch.mutations, transaction=None
         )
@@ -358,7 +358,7 @@ class TestBatch(unittest.TestCase):
 
         commit_method = client._datastore_api.commit
         self.assertEqual(commit_method.call_count, 2)
-        mode = datastore_pb2.CommitRequest.NON_TRANSACTIONAL
+        mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(
             project, mode, batch1.mutations, transaction=None
         )
@@ -458,7 +458,7 @@ class _Key(object):
         # Don't assign it, because it will just get ripped out
         # key.partition_id.project_id = self.project
 
-        element = key.path.add()
+        element = key._pb.path.add()
         element.kind = self._kind
         if self._id is not None:
             element.id = self._id
@@ -504,7 +504,7 @@ def _mutated_pb(test_case, mutation_pb_list, mutation_type):
     # We grab the only mutation.
     mutated_pb = mutation_pb_list[0]
     # Then check if it is the correct type.
-    test_case.assertEqual(mutated_pb.WhichOneof("operation"), mutation_type)
+    test_case.assertEqual(mutated_pb._pb.WhichOneof("operation"), mutation_type)
 
     return getattr(mutated_pb, mutation_type)
 
@@ -515,7 +515,7 @@ def _make_mutation(id_):
 
     key = entity_pb2.Key()
     key.partition_id.project_id = "PROJECT"
-    elem = key.path.add()
+    elem = key._pb.path.add()
     elem.kind = "Kind"
     elem.id = id_
     return datastore_pb2.MutationResult(key=key)

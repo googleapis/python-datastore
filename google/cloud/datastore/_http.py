@@ -176,7 +176,7 @@ class HTTPDatastoreAPI(object):
             "lookup",
             self.client._base_url,
             self.client._client_info,
-            request_pb,
+            request_pb._pb,
             _datastore_pb2.LookupResponse,
         )
 
@@ -222,7 +222,7 @@ class HTTPDatastoreAPI(object):
             "runQuery",
             self.client._base_url,
             self.client._client_info,
-            request_pb,
+            request_pb._pb,
             _datastore_pb2.RunQueryResponse,
         )
 
@@ -246,7 +246,7 @@ class HTTPDatastoreAPI(object):
             "beginTransaction",
             self.client._base_url,
             self.client._client_info,
-            request_pb,
+            request_pb._pb,
             _datastore_pb2.BeginTransactionResponse,
         )
 
@@ -285,7 +285,7 @@ class HTTPDatastoreAPI(object):
             "commit",
             self.client._base_url,
             self.client._client_info,
-            request_pb,
+            request_pb._pb,
             _datastore_pb2.CommitResponse,
         )
 
@@ -312,7 +312,7 @@ class HTTPDatastoreAPI(object):
             "rollback",
             self.client._base_url,
             self.client._client_info,
-            request_pb,
+            request_pb._pb,
             _datastore_pb2.RollbackResponse,
         )
 
@@ -336,6 +336,6 @@ class HTTPDatastoreAPI(object):
             "allocateIds",
             self.client._base_url,
             self.client._client_info,
-            request_pb,
+            request_pb._pb,
             _datastore_pb2.AllocateIdsResponse,
         )

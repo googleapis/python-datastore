@@ -102,7 +102,7 @@ class Test__rpc(unittest.TestCase):
         response_pb = datastore_pb2.BeginTransactionResponse(transaction=b"7830rmc")
         patch = mock.patch(
             "google.cloud.datastore._http._request",
-            return_value=response_pb.SerializeToString(),
+            return_value=response_pb._pb.SerializeToString(),
         )
         with patch as mock_request:
             result = self._call_fut(
@@ -111,16 +111,16 @@ class Test__rpc(unittest.TestCase):
                 method,
                 base_url,
                 client_info,
-                request_pb,
-                datastore_pb2.BeginTransactionResponse,
+                request_pb._pb,
+                datastore_pb2.BeginTransactionResponse._meta._pb,
             )
-            self.assertEqual(result, response_pb)
+            self.assertEqual(result, response_pb._pb)
 
             mock_request.assert_called_once_with(
                 http,
                 project,
                 method,
-                request_pb.SerializeToString(),
+                request_pb._pb.SerializeToString(),
                 base_url,
                 client_info,
             )
@@ -169,13 +169,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(
-            request={
-                "project_id": project,
-                "keys": [key_pb],
-                "read_options": read_options,
-            }
-        )
+        ds_api.lookup(project, [key_pb], read_options=read_options)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -195,7 +189,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         key_pb = _make_key_pb(project)
         rsp_pb = datastore_pb2.LookupResponse()
         read_options = datastore_pb2.ReadOptions(
-            read_consistency=datastore_pb2.ReadOptions.EVENTUAL
+            read_consistency=datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
         )
 
         # Create mock HTTP and client with response.
@@ -212,13 +206,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(
-            request={
-                "project_id": project,
-                "keys": [key_pb],
-                "read_options": read_options,
-            }
-        )
+        response = ds_api.lookup(project, [key_pb], read_options=read_options)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -254,13 +242,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(
-            request={
-                "project_id": project,
-                "keys": [key_pb],
-                "read_options": read_options,
-            }
-        )
+        response = ds_api.lookup(project, [key_pb], read_options=read_options)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -299,13 +281,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(
-            request={
-                "project_id": project,
-                "keys": [key_pb],
-                "read_options": read_options,
-            }
-        )
+        response = ds_api.lookup(project, [key_pb], read_options=read_options)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -344,13 +320,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(
-            request={
-                "project_id": project,
-                "keys": [key_pb1, key_pb2],
-                "read_options": read_options,
-            }
-        )
+        response = ds_api.lookup(project, [key_pb1, key_pb2], read_options=read_options)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -390,13 +360,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(
-            request={
-                "project_id": project,
-                "keys": [key_pb1, key_pb2],
-                "read_options": read_options,
-            }
-        )
+        response = ds_api.lookup(project, [key_pb1, key_pb2], read_options=read_options)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -435,13 +399,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(
-            request={
-                "project_id": project,
-                "keys": [key_pb1, key_pb2],
-                "read_options": read_options,
-            }
-        )
+        response = ds_api.lookup(project, [key_pb1, key_pb2], read_options=read_options)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -465,13 +423,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         query_pb = self._make_query_pb(kind)
         partition_id = entity_pb2.PartitionId(project_id=project)
         read_options = datastore_pb2.ReadOptions(
-            read_consistency=datastore_pb2.ReadOptions.EVENTUAL
+            read_consistency=datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
         )
         rsp_pb = datastore_pb2.RunQueryResponse(
             batch=query_pb2.QueryResultBatch(
-                entity_result_type=query_pb2.EntityResult.FULL,
+                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
                 end_cursor=cursor,
-                more_results=query_pb2.QueryResultBatch.NO_MORE_RESULTS,
+                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
             )
         )
 
@@ -489,14 +447,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.run_query(
-            request={
-                "project_id": project,
-                "partition_id": partition_id,
-                "read_options": read_options,
-                "query": query_pb,
-            }
-        )
+        response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -521,9 +472,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         read_options = datastore_pb2.ReadOptions(transaction=transaction)
         rsp_pb = datastore_pb2.RunQueryResponse(
             batch=query_pb2.QueryResultBatch(
-                entity_result_type=query_pb2.EntityResult.FULL,
+                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
                 end_cursor=cursor,
-                more_results=query_pb2.QueryResultBatch.NO_MORE_RESULTS,
+                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
             )
         )
 
@@ -541,14 +492,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.run_query(
-            request={
-                "project_id": project,
-                "partition_id": partition_id,
-                "read_options": read_options,
-                "query": query_pb,
-            }
-        )
+        response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -572,9 +516,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         read_options = datastore_pb2.ReadOptions()
         rsp_pb = datastore_pb2.RunQueryResponse(
             batch=query_pb2.QueryResultBatch(
-                entity_result_type=query_pb2.EntityResult.FULL,
+                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
                 end_cursor=cursor,
-                more_results=query_pb2.QueryResultBatch.NO_MORE_RESULTS,
+                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
             )
         )
 
@@ -592,14 +536,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.run_query(
-            request={
-                "project_id": project,
-                "partition_id": partition_id,
-                "read_options": read_options,
-                "query": query_pb,
-            }
-        )
+        response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -625,9 +562,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         read_options = datastore_pb2.ReadOptions()
         rsp_pb = datastore_pb2.RunQueryResponse(
             batch=query_pb2.QueryResultBatch(
-                entity_result_type=query_pb2.EntityResult.FULL,
+                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
                 entity_results=[query_pb2.EntityResult(entity=entity_pb2.Entity())],
-                more_results=query_pb2.QueryResultBatch.NO_MORE_RESULTS,
+                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
             )
         )
 
@@ -645,14 +582,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.run_query(
-            request={
-                "project_id": project,
-                "partition_id": partition_id,
-                "read_options": read_options,
-                "query": query_pb,
-            }
-        )
+        response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -684,7 +614,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.begin_transaction(request={"project_id": project})
+        response = ds_api.begin_transaction(project)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -725,10 +655,8 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         # Make request.
         rq_class = datastore_pb2.CommitRequest
         ds_api = self._make_one(client)
-        mode = rq_class.NON_TRANSACTIONAL
-        result = ds_api.commit(
-            request={"project_id": project, "mode": mode, "transaction": [mutation]}
-        )
+        mode = rq_class.Mode.NON_TRANSACTIONAL
+        result = ds_api.commit(project, mode, [mutation])
 
         # Check the result and verify the callers.
         self.assertEqual(result, rsp_pb)
@@ -737,7 +665,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         request = _verify_protobuf_call(http, uri, rq_class())
         self.assertEqual(request.transaction, b"")
         self.assertEqual(list(request.mutations), [mutation])
-        self.assertEqual(request.mode, rq_class.NON_TRANSACTIONAL)
+        self.assertEqual(request.mode, rq_class.Mode.NON_TRANSACTIONAL)
 
     def test_commit_w_transaction(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
@@ -768,15 +696,8 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         # Make request.
         rq_class = datastore_pb2.CommitRequest
         ds_api = self._make_one(client)
-        mode = rq_class.TRANSACTIONAL
-        result = ds_api.commit(
-            request={
-                "project_id": project,
-                "mode": mode,
-                "transaction": [mutation],
-                "mutations": b"xact",
-            }
-        )
+        mode = rq_class.Mode.TRANSACTIONAL
+        result = ds_api.commit(project, mode, [mutation], transaction=b"xact")
 
         # Check the result and verify the callers.
         self.assertEqual(result, rsp_pb)
@@ -785,7 +706,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         request = _verify_protobuf_call(http, uri, rq_class())
         self.assertEqual(request.transaction, b"xact")
         self.assertEqual(list(request.mutations), [mutation])
-        self.assertEqual(request.mode, rq_class.TRANSACTIONAL)
+        self.assertEqual(request.mode, rq_class.Mode.TRANSACTIONAL)
 
     def test_rollback_ok(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
@@ -808,9 +729,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.rollback(
-            request={"project_id": project, "transaction": transaction}
-        )
+        response = ds_api.rollback(project, transaction)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -839,7 +758,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.allocate_ids(request={"project_id": project, "keys": []})
+        response = ds_api.allocate_ids(project, [])
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)

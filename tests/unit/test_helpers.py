@@ -222,7 +222,7 @@ class Test_entity_to_protobuf(unittest.TestCase):
             name1, val1 = pair1
             name2, val2 = pair2
             self.assertEqual(name1, name2)
-            if val1.HasField("entity_value"):  # Message field (Entity)
+            if val1._pb.HasField("entity_value"):  # Message field (Entity)
                 self.assertEqual(val1.meaning, val2.meaning)
                 self._compare_entity_proto(val1.entity_value, val2.entity_value)
             else:
@@ -508,7 +508,7 @@ class Test__get_read_options(unittest.TestCase):
 
         read_options = self._call_fut(True, None)
         expected = datastore_pb2.ReadOptions(
-            read_consistency=datastore_pb2.ReadOptions.EVENTUAL
+            read_consistency=datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
         )
         self.assertEqual(read_options, expected)
 
@@ -689,7 +689,7 @@ class Test__get_value_from_value_pb(unittest.TestCase):
 
         pb = entity_pb2.Value()
         expected = Key("KIND", 1234, project="PROJECT").to_protobuf()
-        pb.key_value.CopyFrom(expected)
+        pb.key_value._pb.CopyFrom(expected._pb)
         found = self._call_fut(pb)
         self.assertEqual(found.to_protobuf(), expected)
 
@@ -937,8 +937,8 @@ class Test__get_meaning(unittest.TestCase):
         from google.cloud.datastore_v1.types import entity as entity_pb2
 
         value_pb = entity_pb2.Value()
-        value_pb.array_value.values.add()
-        value_pb.array_value.values.pop()
+        value_pb._pb.array_value.values.add()
+        value_pb._pb.array_value.values.pop()
 
         result = self._call_fut(value_pb, is_list=True)
         self.assertEqual(None, result)
@@ -948,8 +948,8 @@ class Test__get_meaning(unittest.TestCase):
 
         value_pb = entity_pb2.Value()
         meaning = 9
-        sub_value_pb1 = value_pb.array_value.values.add()
-        sub_value_pb2 = value_pb.array_value.values.add()
+        sub_value_pb1 = value_pb._pb.array_value.values.add()
+        sub_value_pb2 = value_pb._pb.array_value.values.add()
 
         sub_value_pb1.meaning = sub_value_pb2.meaning = meaning
         sub_value_pb1.string_value = u"hi"
@@ -964,8 +964,8 @@ class Test__get_meaning(unittest.TestCase):
         value_pb = entity_pb2.Value()
         meaning1 = 9
         meaning2 = 10
-        sub_value_pb1 = value_pb.array_value.values.add()
-        sub_value_pb2 = value_pb.array_value.values.add()
+        sub_value_pb1 = value_pb._pb.array_value.values.add()
+        sub_value_pb2 = value_pb._pb.array_value.values.add()
 
         sub_value_pb1.meaning = meaning1
         sub_value_pb2.meaning = meaning2
@@ -980,8 +980,8 @@ class Test__get_meaning(unittest.TestCase):
 
         value_pb = entity_pb2.Value()
         meaning1 = 9
-        sub_value_pb1 = value_pb.array_value.values.add()
-        sub_value_pb2 = value_pb.array_value.values.add()
+        sub_value_pb1 = value_pb._pb.array_value.values.add()
+        sub_value_pb2 = value_pb._pb.array_value.values.add()
 
         sub_value_pb1.meaning = meaning1
         sub_value_pb1.string_value = u"hi"

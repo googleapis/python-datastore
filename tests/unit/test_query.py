@@ -463,7 +463,7 @@ class TestIterator(unittest.TestCase):
 
         pb = iterator._build_protobuf()
         expected_pb = query_pb2.Query(start_cursor=start_bytes, end_cursor=end_bytes)
-        expected_pb.limit.value = limit - iterator.num_results
+        expected_pb._pb.limit.value = limit - iterator.num_results
         self.assertEqual(pb, expected_pb)
 
     def test__build_protobuf_all_values_except_start_and_end_cursor(self):
@@ -483,7 +483,7 @@ class TestIterator(unittest.TestCase):
 
         pb = iterator._build_protobuf()
         expected_pb = query_pb2.Query(offset=offset - iterator._skipped_results)
-        expected_pb.limit.value = limit - iterator.num_results
+        expected_pb._pb.limit.value = limit - iterator.num_results
         self.assertEqual(pb, expected_pb)
 
     def test__process_query_results(self):
@@ -496,7 +496,7 @@ class TestIterator(unittest.TestCase):
         cursor_as_bytes = b"\x9ai\xe7"
         cursor = b"mmnn"
         skipped_results = 4
-        more_results_enum = query_pb2.QueryResultBatch.NOT_FINISHED
+        more_results_enum = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
         response_pb = _make_query_response(
             entity_pbs, cursor_as_bytes, more_results_enum, skipped_results
         )
@@ -516,7 +516,7 @@ class TestIterator(unittest.TestCase):
         entity_pbs = [_make_entity("World", 1234, "PROJECT")]
         cursor_as_bytes = b"\x9ai\xe7"
         skipped_results = 44
-        more_results_enum = query_pb2.QueryResultBatch.NO_MORE_RESULTS
+        more_results_enum = query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS
         response_pb = _make_query_response(
             entity_pbs, cursor_as_bytes, more_results_enum, skipped_results
         )
@@ -541,7 +541,7 @@ class TestIterator(unittest.TestCase):
         from google.cloud.datastore_v1.types import query as query_pb2
         from google.cloud.datastore.query import Query
 
-        more_enum = query_pb2.QueryResultBatch.NOT_FINISHED
+        more_enum = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
         result = _make_query_response([], b"", more_enum, 0)
         project = "prujekt"
         ds_api = _make_datastore_api(result)
@@ -574,7 +574,12 @@ class TestIterator(unittest.TestCase):
             read_options = datastore_pb2.ReadOptions(transaction=txn_id)
         empty_query = query_pb2.Query()
         ds_api.run_query.assert_called_once_with(
-            project, partition_id, read_options, query=empty_query, **kwargs
+            request={
+                'project_id': project,
+                'partition_id': partition_id,
+                'read_options': read_options,
+                'query': empty_query
+            }, **kwargs
         )
 
     def test__next_page(self):
@@ -636,11 +641,11 @@ class Test__pb_from_query(unittest.TestCase):
         self.assertEqual(list(pb.distinct_on), [])
         self.assertEqual(pb.filter.property_filter.property.name, "")
         cfilter = pb.filter.composite_filter
-        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.OPERATOR_UNSPECIFIED)
+        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.Operator.OPERATOR_UNSPECIFIED)
         self.assertEqual(list(cfilter.filters), [])
         self.assertEqual(pb.start_cursor, b"")
         self.assertEqual(pb.end_cursor, b"")
-        self.assertEqual(pb.limit.value, 0)
+        self.assertEqual(pb._pb.limit.value, 0)
         self.assertEqual(pb.offset, 0)
 
     def test_projection(self):
@@ -660,7 +665,7 @@ class Test__pb_from_query(unittest.TestCase):
         ancestor = Key("Ancestor", 123, project="PROJECT")
         pb = self._call_fut(_Query(ancestor=ancestor))
         cfilter = pb.filter.composite_filter
-        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.AND)
+        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.Operator.AND)
         self.assertEqual(len(cfilter.filters), 1)
         pfilter = cfilter.filters[0].property_filter
         self.assertEqual(pfilter.property.name, "__key__")
@@ -671,10 +676,10 @@ class Test__pb_from_query(unittest.TestCase):
         from google.cloud.datastore_v1.types import query as query_pb2
 
         query = _Query(filters=[("name", "=", u"John")])
-        query.OPERATORS = {"=": query_pb2.PropertyFilter.EQUAL}
+        query.OPERATORS = {"=": query_pb2.PropertyFilter.Operator.EQUAL}
         pb = self._call_fut(query)
         cfilter = pb.filter.composite_filter
-        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.AND)
+        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.Operator.AND)
         self.assertEqual(len(cfilter.filters), 1)
         pfilter = cfilter.filters[0].property_filter
         self.assertEqual(pfilter.property.name, "name")
@@ -686,10 +691,10 @@ class Test__pb_from_query(unittest.TestCase):
 
         key = Key("Kind", 123, project="PROJECT")
         query = _Query(filters=[("__key__", "=", key)])
-        query.OPERATORS = {"=": query_pb2.PropertyFilter.EQUAL}
+        query.OPERATORS = {"=": query_pb2.PropertyFilter.Operator.EQUAL}
         pb = self._call_fut(query)
         cfilter = pb.filter.composite_filter
-        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.AND)
+        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.Operator.AND)
         self.assertEqual(len(cfilter.filters), 1)
         pfilter = cfilter.filters[0].property_filter
         self.assertEqual(pfilter.property.name, "__key__")
@@ -704,9 +709,9 @@ class Test__pb_from_query(unittest.TestCase):
         self.assertEqual(
             [item.direction for item in pb.order],
             [
-                query_pb2.PropertyOrder.ASCENDING,
-                query_pb2.PropertyOrder.DESCENDING,
-                query_pb2.PropertyOrder.ASCENDING,
+                query_pb2.PropertyOrder.Direction.ASCENDING,
+                query_pb2.PropertyOrder.Direction.DESCENDING,
+                query_pb2.PropertyOrder.Direction.ASCENDING,
             ],
         )
 
@@ -756,7 +761,7 @@ def _make_entity(kind, id_, project):
 
     key = entity_pb2.Key()
     key.partition_id.project_id = project
-    elem = key.path.add()
+    elem = key.path._pb.add()
     elem.kind = kind
     elem.id = id_
     return entity_pb2.Entity(key=key)
