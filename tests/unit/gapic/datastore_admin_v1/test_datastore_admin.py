@@ -462,7 +462,7 @@ def test_export_entities(
         # Designate an appropriate return value for the call.
         call.return_value = operations_pb2.Operation(name="operations/spam")
 
-        response = client.export_entities(request={"project_id": request})
+        response = client.export_entities(request)
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -497,7 +497,7 @@ async def test_export_entities_async(transport: str = "grpc_asyncio"):
             operations_pb2.Operation(name="operations/spam")
         )
 
-        response = await client.export_entities(request={"project_id": request})
+        response = await client.export_entities(request)
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -520,12 +520,10 @@ def test_export_entities_flattened():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         client.export_entities(
-            request={
-                "project_id": "project_id_value",
-                "output_url_prefix": {"key_value": "value_value"},
-                "labels": datastore_admin.EntityFilter(kinds=["kinds_value"]),
-                "entity_filter": "output_url_prefix_value",
-            }
+            project_id="project_id_value",
+            labels={"key_value": "value_value"},
+            entity_filter=datastore_admin.EntityFilter(kinds=["kinds_value"]),
+            output_url_prefix="output_url_prefix_value",
         )
 
         # Establish that the underlying call was made with the expected
@@ -551,12 +549,11 @@ def test_export_entities_flattened_error():
     # fields is an error.
     with pytest.raises(ValueError):
         client.export_entities(
-            request={
-                "project_id": datastore_admin.ExportEntitiesRequest(),
-                "output_url_prefix": "project_id_value",
-                "labels": {"key_value": "value_value"},
-                "entity_filter": datastore_admin.EntityFilter(kinds=["kinds_value"]),
-            }
+            datastore_admin.ExportEntitiesRequest(),
+            project_id="project_id_value",
+            labels={"key_value": "value_value"},
+            entity_filter=datastore_admin.EntityFilter(kinds=["kinds_value"]),
+            output_url_prefix="output_url_prefix_value",
         )
 
 
@@ -577,12 +574,10 @@ async def test_export_entities_flattened_async():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         response = await client.export_entities(
-            request={
-                "project_id": "project_id_value",
-                "output_url_prefix": {"key_value": "value_value"},
-                "labels": datastore_admin.EntityFilter(kinds=["kinds_value"]),
-                "entity_filter": "output_url_prefix_value",
-            }
+            project_id="project_id_value",
+            labels={"key_value": "value_value"},
+            entity_filter=datastore_admin.EntityFilter(kinds=["kinds_value"]),
+            output_url_prefix="output_url_prefix_value",
         )
 
         # Establish that the underlying call was made with the expected
@@ -609,12 +604,11 @@ async def test_export_entities_flattened_error_async():
     # fields is an error.
     with pytest.raises(ValueError):
         await client.export_entities(
-            request={
-                "project_id": datastore_admin.ExportEntitiesRequest(),
-                "output_url_prefix": "project_id_value",
-                "labels": {"key_value": "value_value"},
-                "entity_filter": datastore_admin.EntityFilter(kinds=["kinds_value"]),
-            }
+            datastore_admin.ExportEntitiesRequest(),
+            project_id="project_id_value",
+            labels={"key_value": "value_value"},
+            entity_filter=datastore_admin.EntityFilter(kinds=["kinds_value"]),
+            output_url_prefix="output_url_prefix_value",
         )
 
 
@@ -634,7 +628,7 @@ def test_import_entities(
         # Designate an appropriate return value for the call.
         call.return_value = operations_pb2.Operation(name="operations/spam")
 
-        response = client.import_entities(request={"project_id": request})
+        response = client.import_entities(request)
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -669,7 +663,7 @@ async def test_import_entities_async(transport: str = "grpc_asyncio"):
             operations_pb2.Operation(name="operations/spam")
         )
 
-        response = await client.import_entities(request={"project_id": request})
+        response = await client.import_entities(request)
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -692,12 +686,10 @@ def test_import_entities_flattened():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         client.import_entities(
-            request={
-                "project_id": "project_id_value",
-                "input_url": {"key_value": "value_value"},
-                "labels": "input_url_value",
-                "entity_filter": datastore_admin.EntityFilter(kinds=["kinds_value"]),
-            }
+            project_id="project_id_value",
+            labels={"key_value": "value_value"},
+            input_url="input_url_value",
+            entity_filter=datastore_admin.EntityFilter(kinds=["kinds_value"]),
         )
 
         # Establish that the underlying call was made with the expected
@@ -723,12 +715,11 @@ def test_import_entities_flattened_error():
     # fields is an error.
     with pytest.raises(ValueError):
         client.import_entities(
-            request={
-                "project_id": datastore_admin.ImportEntitiesRequest(),
-                "input_url": "project_id_value",
-                "labels": {"key_value": "value_value"},
-                "entity_filter": "input_url_value",
-            }
+            datastore_admin.ImportEntitiesRequest(),
+            project_id="project_id_value",
+            labels={"key_value": "value_value"},
+            input_url="input_url_value",
+            entity_filter=datastore_admin.EntityFilter(kinds=["kinds_value"]),
         )
 
 
@@ -749,12 +740,10 @@ async def test_import_entities_flattened_async():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         response = await client.import_entities(
-            request={
-                "project_id": "project_id_value",
-                "input_url": {"key_value": "value_value"},
-                "labels": "input_url_value",
-                "entity_filter": datastore_admin.EntityFilter(kinds=["kinds_value"]),
-            }
+            project_id="project_id_value",
+            labels={"key_value": "value_value"},
+            input_url="input_url_value",
+            entity_filter=datastore_admin.EntityFilter(kinds=["kinds_value"]),
         )
 
         # Establish that the underlying call was made with the expected
@@ -781,12 +770,11 @@ async def test_import_entities_flattened_error_async():
     # fields is an error.
     with pytest.raises(ValueError):
         await client.import_entities(
-            request={
-                "project_id": datastore_admin.ImportEntitiesRequest(),
-                "input_url": "project_id_value",
-                "labels": {"key_value": "value_value"},
-                "entity_filter": "input_url_value",
-            }
+            datastore_admin.ImportEntitiesRequest(),
+            project_id="project_id_value",
+            labels={"key_value": "value_value"},
+            input_url="input_url_value",
+            entity_filter=datastore_admin.EntityFilter(kinds=["kinds_value"]),
         )
 
 
@@ -812,7 +800,7 @@ def test_get_index(
             state=index.Index.State.CREATING,
         )
 
-        response = client.get_index(request={"project_id": request})
+        response = client.get_index(request)
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -863,7 +851,7 @@ async def test_get_index_async(transport: str = "grpc_asyncio"):
             )
         )
 
-        response = await client.get_index(request={"project_id": request})
+        response = await client.get_index(request)
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -903,7 +891,7 @@ def test_list_indexes(
             next_page_token="next_page_token_value",
         )
 
-        response = client.list_indexes(request={"project_id": request})
+        response = client.list_indexes(request)
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -942,7 +930,7 @@ async def test_list_indexes_async(transport: str = "grpc_asyncio"):
             )
         )
 
-        response = await client.list_indexes(request={"project_id": request})
+        response = await client.list_indexes(request)
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
