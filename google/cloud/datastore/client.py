@@ -185,7 +185,8 @@ def _extended_lookup(
     while loop_num < _MAX_LOOPS:  # loop against possible deferred.
         loop_num += 1
         lookup_response = datastore_api.lookup(
-            request = {'project_id': project, 'keys': key_pbs, 'read_options': kwargs})
+            request={"project_id": project, "keys": key_pbs, "read_options": kwargs}
+        )
 
         # Accumulate the new results.
         results.extend(result.entity for result in lookup_response.found)
@@ -601,7 +602,7 @@ class Client(ClientWithProject):
             current.put(entity)
 
         if not in_batch:
-            current.commit(request = {}, retry=retry, timeout=timeout)
+            current.commit(request={}, retry=retry, timeout=timeout)
 
     def delete(self, key, retry=None, timeout=None):
         """Delete the key in the Cloud Datastore.
@@ -664,7 +665,7 @@ class Client(ClientWithProject):
             current.delete(key)
 
         if not in_batch:
-            current.commit(request = {}, retry=retry, timeout=timeout)
+            current.commit(request={}, retry=retry, timeout=timeout)
 
     def allocate_ids(self, incomplete_key, num_ids, retry=None, timeout=None):
         """Allocate a list of IDs from a partial key.
@@ -701,7 +702,9 @@ class Client(ClientWithProject):
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         response_pb = self._datastore_api.allocate_ids(
-            request = {'project_id': incomplete_key.project, 'keys': incomplete_key_pbs}, retry = kwargs)
+            request={"project_id": incomplete_key.project, "keys": incomplete_key_pbs},
+            retry=kwargs,
+        )
         allocated_ids = [
             allocated_key_pb.path[-1].id for allocated_key_pb in response_pb.keys
         ]
@@ -869,7 +872,13 @@ class Client(ClientWithProject):
             key_pbs.append(key.to_protobuf())
 
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
-        self._datastore_api.reserve_ids(request = {'project_id': complete_key.project, 'keys': key_pbs, 'database_id': kwargs})
+        self._datastore_api.reserve_ids(
+            request={
+                "project_id": complete_key.project,
+                "keys": key_pbs,
+                "database_id": kwargs,
+            }
+        )
 
         return None
 
@@ -919,6 +928,12 @@ class Client(ClientWithProject):
 
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
         key_pbs = [key.to_protobuf() for key in complete_keys]
-        self._datastore_api.reserve_ids(request = {'project_id': complete_keys[0].project, 'keys': key_pbs, 'database_id': kwargs})
+        self._datastore_api.reserve_ids(
+            request={
+                "project_id": complete_keys[0].project,
+                "keys": key_pbs,
+                "database_id": kwargs,
+            }
+        )
 
         return None

@@ -201,7 +201,7 @@ class TestBatch(unittest.TestCase):
         batch = self._make_one(client)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.rollback(request = {})
+        batch.rollback(request={})
         self.assertEqual(batch._status, batch._ABORTED)
 
     def test_rollback_wrong_status(self):
@@ -222,7 +222,7 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._INITIAL)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.commit(request = {})
+        batch.commit(request={})
         self.assertEqual(batch._status, batch._FINISHED)
 
         commit_method = client._datastore_api.commit
@@ -240,7 +240,7 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._INITIAL)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.commit(request = {}, timeout=timeout)
+        batch.commit(request={}, timeout=timeout)
         self.assertEqual(batch._status, batch._FINISHED)
 
         commit_method = client._datastore_api.commit
@@ -260,7 +260,7 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._INITIAL)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.commit(request = {}, retry=retry)
+        batch.commit(request={}, retry=retry)
         self.assertEqual(batch._status, batch._FINISHED)
 
         commit_method = client._datastore_api.commit
@@ -293,7 +293,7 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._INITIAL)
         batch.begin()
         self.assertEqual(batch._status, batch._IN_PROGRESS)
-        batch.commit(request = {})
+        batch.commit(request={})
         self.assertEqual(batch._status, batch._FINISHED)
 
         mode = datastore_pb2.CommitRequest.NON_TRANSACTIONAL

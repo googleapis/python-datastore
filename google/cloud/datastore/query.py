@@ -25,13 +25,13 @@ from google.cloud.datastore import helpers
 from google.cloud.datastore.key import Key
 
 
-_NOT_FINISHED = query_pb2.QueryResultBatch.NOT_FINISHED
-_NO_MORE_RESULTS = query_pb2.QueryResultBatch.NO_MORE_RESULTS
+_NOT_FINISHED = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
+_NO_MORE_RESULTS = query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS
 
 _FINISHED = (
     _NO_MORE_RESULTS,
-    query_pb2.QueryResultBatch.MORE_RESULTS_AFTER_LIMIT,
-    query_pb2.QueryResultBatch.MORE_RESULTS_AFTER_CURSOR,
+    query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_LIMIT,
+    query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_CURSOR,
 )
 
 
@@ -81,11 +81,11 @@ class Query(object):
     """
 
     OPERATORS = {
-        "<=": query_pb2.PropertyFilter.LESS_THAN_OR_EQUAL,
-        ">=": query_pb2.PropertyFilter.GREATER_THAN_OR_EQUAL,
-        "<": query_pb2.PropertyFilter.LESS_THAN,
-        ">": query_pb2.PropertyFilter.GREATER_THAN,
-        "=": query_pb2.PropertyFilter.EQUAL,
+        "<=": query_pb2.PropertyFilter.Operator.LESS_THAN_OR_EQUAL,
+        ">=": query_pb2.PropertyFilter.Operator.GREATER_THAN_OR_EQUAL,
+        "<": query_pb2.PropertyFilter.Operator.LESS_THAN,
+        ">": query_pb2.PropertyFilter.Operator.GREATER_THAN,
+        "=": query_pb2.PropertyFilter.Operator.EQUAL,
     }
     """Mapping of operator strings and their protobuf equivalents."""
 
@@ -576,7 +576,14 @@ class Iterator(page_iterator.Iterator):
             kwargs["timeout"] = self._timeout
 
         response_pb = self.client._datastore_api.run_query(
-            request = {'project_id': self._query.project, 'partition_id': partition_id, 'read_options': read_options, 'query': kwargs, 'gql_query': query_pb})
+            request={
+                "project_id": self._query.project,
+                "partition_id": partition_id,
+                "read_options": read_options,
+                "query": kwargs,
+                "gql_query": query_pb,
+            }
+        )
 
         while (
             response_pb.batch.more_results == _NOT_FINISHED
@@ -589,7 +596,14 @@ class Iterator(page_iterator.Iterator):
             query_pb.start_cursor = response_pb.batch.skipped_cursor
             query_pb.offset -= response_pb.batch.skipped_results
             response_pb = self.client._datastore_api.run_query(
-                request = {'project_id': self._query.project, 'partition_id': partition_id, 'read_options': read_options, 'query': kwargs, 'gql_query': query_pb})
+                request={
+                    "project_id": self._query.project,
+                    "partition_id": partition_id,
+                    "read_options": read_options,
+                    "query": kwargs,
+                    "gql_query": query_pb,
+                }
+            )
 
         entity_pbs = self._process_query_results(response_pb)
         return page_iterator.Page(self, entity_pbs, self.item_to_value)

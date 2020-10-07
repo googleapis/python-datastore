@@ -91,7 +91,9 @@ class TestDatastore(unittest.TestCase):
 class TestDatastoreAllocateIDs(TestDatastore):
     def test_allocate_ids(self):
         num_ids = 10
-        allocated_keys = Config.CLIENT.allocate_ids(request = {'project_id': Config.CLIENT.key("Kind"), 'keys': num_ids})
+        allocated_keys = Config.CLIENT.allocate_ids(
+            request={"project_id": Config.CLIENT.key("Kind"), "keys": num_ids}
+        )
         self.assertEqual(len(allocated_keys), num_ids)
 
         unique_ids = set()
@@ -113,7 +115,9 @@ class TestDatastoreReserveIDs(TestDatastore):
     def test_reserve_ids(self):
         with warnings.catch_warnings(record=True) as warned:
             num_ids = 10
-            Config.CLIENT.reserve_ids(request = {'project_id': Config.CLIENT.key("Kind", 1234), 'keys': num_ids})
+            Config.CLIENT.reserve_ids(
+                request={"project_id": Config.CLIENT.key("Kind", 1234), "keys": num_ids}
+            )
 
         warned = [
             warning
@@ -594,7 +598,7 @@ class TestDatastoreTransaction(TestDatastore):
 
         xact.put(from_account)
         xact.put(to_account)
-        xact.commit(request = {})
+        xact.commit(request={})
 
         after1 = Config.CLIENT.get(key1)
         after2 = Config.CLIENT.get(key2)

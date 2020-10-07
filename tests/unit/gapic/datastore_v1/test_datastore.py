@@ -441,7 +441,7 @@ def test_lookup(transport: str = "grpc", request_type=datastore.LookupRequest):
         # Designate an appropriate return value for the call.
         call.return_value = datastore.LookupResponse()
 
-        response = client.lookup(request = {'project_id': request})
+        response = client.lookup(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -474,7 +474,7 @@ async def test_lookup_async(transport: str = "grpc_asyncio"):
             datastore.LookupResponse()
         )
 
-        response = await client.lookup(request = {'project_id': request})
+        response = await client.lookup(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -497,13 +497,18 @@ def test_lookup_flattened():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         client.lookup(
-            request = {'project_id': "project_id_value", 'keys': datastore.ReadOptions(
-                read_consistency=datastore.ReadOptions.ReadConsistency.STRONG
-            ), 'read_options': [
-                entity.Key(
-                    partition_id=entity.PartitionId(project_id="project_id_value")
-                )
-            ]})
+            request={
+                "project_id": "project_id_value",
+                "keys": datastore.ReadOptions(
+                    read_consistency=datastore.ReadOptions.ReadConsistency.STRONG
+                ),
+                "read_options": [
+                    entity.Key(
+                        partition_id=entity.PartitionId(project_id="project_id_value")
+                    )
+                ],
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -528,9 +533,14 @@ def test_lookup_flattened_error():
     # fields is an error.
     with pytest.raises(ValueError):
         client.lookup(
-            request = {'project_id': datastore.LookupRequest(), 'keys': "project_id_value", 'read_options': datastore.ReadOptions(
-                read_consistency=datastore.ReadOptions.ReadConsistency.STRONG
-            )})
+            request={
+                "project_id": datastore.LookupRequest(),
+                "keys": "project_id_value",
+                "read_options": datastore.ReadOptions(
+                    read_consistency=datastore.ReadOptions.ReadConsistency.STRONG
+                ),
+            }
+        )
 
 
 @pytest.mark.asyncio
@@ -548,13 +558,18 @@ async def test_lookup_flattened_async():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         response = await client.lookup(
-            request = {'project_id': "project_id_value", 'keys': datastore.ReadOptions(
-                read_consistency=datastore.ReadOptions.ReadConsistency.STRONG
-            ), 'read_options': [
-                entity.Key(
-                    partition_id=entity.PartitionId(project_id="project_id_value")
-                )
-            ]})
+            request={
+                "project_id": "project_id_value",
+                "keys": datastore.ReadOptions(
+                    read_consistency=datastore.ReadOptions.ReadConsistency.STRONG
+                ),
+                "read_options": [
+                    entity.Key(
+                        partition_id=entity.PartitionId(project_id="project_id_value")
+                    )
+                ],
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -580,9 +595,14 @@ async def test_lookup_flattened_error_async():
     # fields is an error.
     with pytest.raises(ValueError):
         await client.lookup(
-            request = {'project_id': datastore.LookupRequest(), 'keys': "project_id_value", 'read_options': datastore.ReadOptions(
-                read_consistency=datastore.ReadOptions.ReadConsistency.STRONG
-            )})
+            request={
+                "project_id": datastore.LookupRequest(),
+                "keys": "project_id_value",
+                "read_options": datastore.ReadOptions(
+                    read_consistency=datastore.ReadOptions.ReadConsistency.STRONG
+                ),
+            }
+        )
 
 
 def test_run_query(transport: str = "grpc", request_type=datastore.RunQueryRequest):
@@ -599,7 +619,7 @@ def test_run_query(transport: str = "grpc", request_type=datastore.RunQueryReque
         # Designate an appropriate return value for the call.
         call.return_value = datastore.RunQueryResponse()
 
-        response = client.run_query(request = {'project_id': request})
+        response = client.run_query(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -634,7 +654,7 @@ async def test_run_query_async(transport: str = "grpc_asyncio"):
             datastore.RunQueryResponse()
         )
 
-        response = await client.run_query(request = {'project_id': request})
+        response = await client.run_query(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -666,7 +686,7 @@ def test_begin_transaction(
             transaction=b"transaction_blob",
         )
 
-        response = client.begin_transaction(request = {'project_id': request})
+        response = client.begin_transaction(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -703,7 +723,7 @@ async def test_begin_transaction_async(transport: str = "grpc_asyncio"):
             datastore.BeginTransactionResponse(transaction=b"transaction_blob",)
         )
 
-        response = await client.begin_transaction(request = {'project_id': request})
+        response = await client.begin_transaction(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -729,7 +749,7 @@ def test_begin_transaction_flattened():
 
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
-        client.begin_transaction(request = {'project_id': "project_id_value"})
+        client.begin_transaction(request={"project_id": "project_id_value"})
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -746,7 +766,11 @@ def test_begin_transaction_flattened_error():
     # fields is an error.
     with pytest.raises(ValueError):
         client.begin_transaction(
-            request = {'project_id': datastore.BeginTransactionRequest(), 'transaction_options': "project_id_value"})
+            request={
+                "project_id": datastore.BeginTransactionRequest(),
+                "transaction_options": "project_id_value",
+            }
+        )
 
 
 @pytest.mark.asyncio
@@ -765,7 +789,9 @@ async def test_begin_transaction_flattened_async():
         )
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
-        response = await client.begin_transaction(request = {'project_id': "project_id_value"})
+        response = await client.begin_transaction(
+            request={"project_id": "project_id_value"}
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -783,7 +809,11 @@ async def test_begin_transaction_flattened_error_async():
     # fields is an error.
     with pytest.raises(ValueError):
         await client.begin_transaction(
-            request = {'project_id': datastore.BeginTransactionRequest(), 'transaction_options': "project_id_value"})
+            request={
+                "project_id": datastore.BeginTransactionRequest(),
+                "transaction_options": "project_id_value",
+            }
+        )
 
 
 def test_commit(transport: str = "grpc", request_type=datastore.CommitRequest):
@@ -800,7 +830,7 @@ def test_commit(transport: str = "grpc", request_type=datastore.CommitRequest):
         # Designate an appropriate return value for the call.
         call.return_value = datastore.CommitResponse(index_updates=1389,)
 
-        response = client.commit(request = {'project_id': request})
+        response = client.commit(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -835,7 +865,7 @@ async def test_commit_async(transport: str = "grpc_asyncio"):
             datastore.CommitResponse(index_updates=1389,)
         )
 
-        response = await client.commit(request = {'project_id': request})
+        response = await client.commit(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -860,17 +890,23 @@ def test_commit_flattened():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         client.commit(
-            request = {'project_id': "project_id_value", 'mode': datastore.CommitRequest.Mode.TRANSACTIONAL, 'transaction': b"transaction_blob", 'mutations': [
-                datastore.Mutation(
-                    insert=entity.Entity(
-                        key=entity.Key(
-                            partition_id=entity.PartitionId(
-                                project_id="project_id_value"
+            request={
+                "project_id": "project_id_value",
+                "mode": datastore.CommitRequest.Mode.TRANSACTIONAL,
+                "transaction": b"transaction_blob",
+                "mutations": [
+                    datastore.Mutation(
+                        insert=entity.Entity(
+                            key=entity.Key(
+                                partition_id=entity.PartitionId(
+                                    project_id="project_id_value"
+                                )
                             )
                         )
                     )
-                )
-            ]})
+                ],
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -901,7 +937,13 @@ def test_commit_flattened_error():
     # fields is an error.
     with pytest.raises(ValueError):
         client.commit(
-            request = {'project_id': datastore.CommitRequest(), 'mode': "project_id_value", 'transaction': datastore.CommitRequest.Mode.TRANSACTIONAL, 'mutations': b"transaction_blob"})
+            request={
+                "project_id": datastore.CommitRequest(),
+                "mode": "project_id_value",
+                "transaction": datastore.CommitRequest.Mode.TRANSACTIONAL,
+                "mutations": b"transaction_blob",
+            }
+        )
 
 
 @pytest.mark.asyncio
@@ -919,17 +961,23 @@ async def test_commit_flattened_async():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         response = await client.commit(
-            request = {'project_id': "project_id_value", 'mode': datastore.CommitRequest.Mode.TRANSACTIONAL, 'transaction': b"transaction_blob", 'mutations': [
-                datastore.Mutation(
-                    insert=entity.Entity(
-                        key=entity.Key(
-                            partition_id=entity.PartitionId(
-                                project_id="project_id_value"
+            request={
+                "project_id": "project_id_value",
+                "mode": datastore.CommitRequest.Mode.TRANSACTIONAL,
+                "transaction": b"transaction_blob",
+                "mutations": [
+                    datastore.Mutation(
+                        insert=entity.Entity(
+                            key=entity.Key(
+                                partition_id=entity.PartitionId(
+                                    project_id="project_id_value"
+                                )
                             )
                         )
                     )
-                )
-            ]})
+                ],
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -961,7 +1009,13 @@ async def test_commit_flattened_error_async():
     # fields is an error.
     with pytest.raises(ValueError):
         await client.commit(
-            request = {'project_id': datastore.CommitRequest(), 'mode': "project_id_value", 'transaction': datastore.CommitRequest.Mode.TRANSACTIONAL, 'mutations': b"transaction_blob"})
+            request={
+                "project_id": datastore.CommitRequest(),
+                "mode": "project_id_value",
+                "transaction": datastore.CommitRequest.Mode.TRANSACTIONAL,
+                "mutations": b"transaction_blob",
+            }
+        )
 
 
 def test_rollback(transport: str = "grpc", request_type=datastore.RollbackRequest):
@@ -978,7 +1032,7 @@ def test_rollback(transport: str = "grpc", request_type=datastore.RollbackReques
         # Designate an appropriate return value for the call.
         call.return_value = datastore.RollbackResponse()
 
-        response = client.rollback(request = {'project_id': request})
+        response = client.rollback(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -1013,7 +1067,7 @@ async def test_rollback_async(transport: str = "grpc_asyncio"):
             datastore.RollbackResponse()
         )
 
-        response = await client.rollback(request = {'project_id': request})
+        response = await client.rollback(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -1036,7 +1090,11 @@ def test_rollback_flattened():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         client.rollback(
-            request = {'project_id': "project_id_value", 'transaction': b"transaction_blob"})
+            request={
+                "project_id": "project_id_value",
+                "transaction": b"transaction_blob",
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -1055,7 +1113,11 @@ def test_rollback_flattened_error():
     # fields is an error.
     with pytest.raises(ValueError):
         client.rollback(
-            request = {'project_id': datastore.RollbackRequest(), 'transaction': "project_id_value"})
+            request={
+                "project_id": datastore.RollbackRequest(),
+                "transaction": "project_id_value",
+            }
+        )
 
 
 @pytest.mark.asyncio
@@ -1075,7 +1137,11 @@ async def test_rollback_flattened_async():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         response = await client.rollback(
-            request = {'project_id': "project_id_value", 'transaction': b"transaction_blob"})
+            request={
+                "project_id": "project_id_value",
+                "transaction": b"transaction_blob",
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -1095,7 +1161,11 @@ async def test_rollback_flattened_error_async():
     # fields is an error.
     with pytest.raises(ValueError):
         await client.rollback(
-            request = {'project_id': datastore.RollbackRequest(), 'transaction': "project_id_value"})
+            request={
+                "project_id": datastore.RollbackRequest(),
+                "transaction": "project_id_value",
+            }
+        )
 
 
 def test_allocate_ids(
@@ -1114,7 +1184,7 @@ def test_allocate_ids(
         # Designate an appropriate return value for the call.
         call.return_value = datastore.AllocateIdsResponse()
 
-        response = client.allocate_ids(request = {'project_id': request})
+        response = client.allocate_ids(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -1149,7 +1219,7 @@ async def test_allocate_ids_async(transport: str = "grpc_asyncio"):
             datastore.AllocateIdsResponse()
         )
 
-        response = await client.allocate_ids(request = {'project_id': request})
+        response = await client.allocate_ids(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -1172,11 +1242,15 @@ def test_allocate_ids_flattened():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         client.allocate_ids(
-            request = {'project_id': "project_id_value", 'keys': [
-                entity.Key(
-                    partition_id=entity.PartitionId(project_id="project_id_value")
-                )
-            ]})
+            request={
+                "project_id": "project_id_value",
+                "keys": [
+                    entity.Key(
+                        partition_id=entity.PartitionId(project_id="project_id_value")
+                    )
+                ],
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -1197,7 +1271,11 @@ def test_allocate_ids_flattened_error():
     # fields is an error.
     with pytest.raises(ValueError):
         client.allocate_ids(
-            request = {'project_id': datastore.AllocateIdsRequest(), 'keys': "project_id_value"})
+            request={
+                "project_id": datastore.AllocateIdsRequest(),
+                "keys": "project_id_value",
+            }
+        )
 
 
 @pytest.mark.asyncio
@@ -1217,11 +1295,15 @@ async def test_allocate_ids_flattened_async():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         response = await client.allocate_ids(
-            request = {'project_id': "project_id_value", 'keys': [
-                entity.Key(
-                    partition_id=entity.PartitionId(project_id="project_id_value")
-                )
-            ]})
+            request={
+                "project_id": "project_id_value",
+                "keys": [
+                    entity.Key(
+                        partition_id=entity.PartitionId(project_id="project_id_value")
+                    )
+                ],
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -1243,7 +1325,11 @@ async def test_allocate_ids_flattened_error_async():
     # fields is an error.
     with pytest.raises(ValueError):
         await client.allocate_ids(
-            request = {'project_id': datastore.AllocateIdsRequest(), 'keys': "project_id_value"})
+            request={
+                "project_id": datastore.AllocateIdsRequest(),
+                "keys": "project_id_value",
+            }
+        )
 
 
 def test_reserve_ids(transport: str = "grpc", request_type=datastore.ReserveIdsRequest):
@@ -1260,7 +1346,7 @@ def test_reserve_ids(transport: str = "grpc", request_type=datastore.ReserveIdsR
         # Designate an appropriate return value for the call.
         call.return_value = datastore.ReserveIdsResponse()
 
-        response = client.reserve_ids(request = {'project_id': request})
+        response = client.reserve_ids(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls) == 1
@@ -1295,7 +1381,7 @@ async def test_reserve_ids_async(transport: str = "grpc_asyncio"):
             datastore.ReserveIdsResponse()
         )
 
-        response = await client.reserve_ids(request = {'project_id': request})
+        response = await client.reserve_ids(request={"project_id": request})
 
         # Establish that the underlying gRPC stub method was called.
         assert len(call.mock_calls)
@@ -1318,11 +1404,15 @@ def test_reserve_ids_flattened():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         client.reserve_ids(
-            request = {'project_id': "project_id_value", 'keys': [
-                entity.Key(
-                    partition_id=entity.PartitionId(project_id="project_id_value")
-                )
-            ]})
+            request={
+                "project_id": "project_id_value",
+                "keys": [
+                    entity.Key(
+                        partition_id=entity.PartitionId(project_id="project_id_value")
+                    )
+                ],
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -1343,11 +1433,16 @@ def test_reserve_ids_flattened_error():
     # fields is an error.
     with pytest.raises(ValueError):
         client.reserve_ids(
-            request = {'project_id': datastore.ReserveIdsRequest(), 'keys': "project_id_value", 'database_id': [
-                entity.Key(
-                    partition_id=entity.PartitionId(project_id="project_id_value")
-                )
-            ]})
+            request={
+                "project_id": datastore.ReserveIdsRequest(),
+                "keys": "project_id_value",
+                "database_id": [
+                    entity.Key(
+                        partition_id=entity.PartitionId(project_id="project_id_value")
+                    )
+                ],
+            }
+        )
 
 
 @pytest.mark.asyncio
@@ -1367,11 +1462,15 @@ async def test_reserve_ids_flattened_async():
         # Call the method with a truthy value for each flattened field,
         # using the keyword arguments to the method.
         response = await client.reserve_ids(
-            request = {'project_id': "project_id_value", 'keys': [
-                entity.Key(
-                    partition_id=entity.PartitionId(project_id="project_id_value")
-                )
-            ]})
+            request={
+                "project_id": "project_id_value",
+                "keys": [
+                    entity.Key(
+                        partition_id=entity.PartitionId(project_id="project_id_value")
+                    )
+                ],
+            }
+        )
 
         # Establish that the underlying call was made with the expected
         # request object values.
@@ -1393,11 +1492,16 @@ async def test_reserve_ids_flattened_error_async():
     # fields is an error.
     with pytest.raises(ValueError):
         await client.reserve_ids(
-            request = {'project_id': datastore.ReserveIdsRequest(), 'keys': "project_id_value", 'database_id': [
-                entity.Key(
-                    partition_id=entity.PartitionId(project_id="project_id_value")
-                )
-            ]})
+            request={
+                "project_id": datastore.ReserveIdsRequest(),
+                "keys": "project_id_value",
+                "database_id": [
+                    entity.Key(
+                        partition_id=entity.PartitionId(project_id="project_id_value")
+                    )
+                ],
+            }
+        )
 
 
 def test_credentials_transport_error():

@@ -121,7 +121,7 @@ class TestTransaction(unittest.TestCase):
         self.assertEqual(xact.id, id_)
         ds_api.begin_transaction.assert_called_once_with(project)
 
-        xact.rollback(request = {})
+        xact.rollback(request={})
         client._datastore_api.rollback.assert_called_once_with(project, id_)
         self.assertIsNone(xact.id)
 
@@ -149,7 +149,7 @@ class TestTransaction(unittest.TestCase):
         xact = self._make_one(client)
         xact.begin()
 
-        xact.rollback(request = {})
+        xact.rollback(request={})
 
         self.assertIsNone(xact.id)
         ds_api.rollback.assert_called_once_with(project, id_)
@@ -165,7 +165,7 @@ class TestTransaction(unittest.TestCase):
         xact = self._make_one(client)
         xact.begin()
 
-        xact.rollback(request = {}, retry=retry, timeout=timeout)
+        xact.rollback(request={}, retry=retry, timeout=timeout)
 
         self.assertIsNone(xact.id)
         ds_api.rollback.assert_called_once_with(
@@ -183,7 +183,7 @@ class TestTransaction(unittest.TestCase):
         client = _Client(project, datastore_api=ds_api)
         xact = self._make_one(client)
         xact.begin()
-        xact.commit(request = {})
+        xact.commit(request={})
 
         ds_api.commit.assert_called_once_with(project, mode, [], transaction=id_)
         self.assertIsNone(xact.id)
@@ -207,7 +207,7 @@ class TestTransaction(unittest.TestCase):
         entity = _Entity()
 
         xact.put(entity)
-        xact.commit(request = {}, retry=retry, timeout=timeout)
+        xact.commit(request={}, retry=retry, timeout=timeout)
 
         ds_api.commit.assert_called_once_with(
             project,

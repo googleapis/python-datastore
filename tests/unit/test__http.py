@@ -92,7 +92,6 @@ class Test__rpc(unittest.TestCase):
     def test_it(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
-
         http = object()
         project = "projectOK"
         method = "beginTransaction"
@@ -151,7 +150,6 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
     def test_lookup_single_key_empty_response(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
-
         project = "PROJECT"
         key_pb = _make_key_pb(project)
         rsp_pb = datastore_pb2.LookupResponse()
@@ -171,7 +169,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(request = {'project_id': project, 'keys': [key_pb], 'read_options': read_options})
+        response = ds_api.lookup(
+            request={
+                "project_id": project,
+                "keys": [key_pb],
+                "read_options": read_options,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -186,7 +190,6 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
     def test_lookup_single_key_empty_response_w_eventual(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
-
 
         project = "PROJECT"
         key_pb = _make_key_pb(project)
@@ -209,7 +212,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(request = {'project_id': project, 'keys': [key_pb], 'read_options': read_options})
+        response = ds_api.lookup(
+            request={
+                "project_id": project,
+                "keys": [key_pb],
+                "read_options": read_options,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -245,7 +254,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(request = {'project_id': project, 'keys': [key_pb], 'read_options': read_options})
+        response = ds_api.lookup(
+            request={
+                "project_id": project,
+                "keys": [key_pb],
+                "read_options": read_options,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -284,7 +299,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(request = {'project_id': project, 'keys': [key_pb], 'read_options': read_options})
+        response = ds_api.lookup(
+            request={
+                "project_id": project,
+                "keys": [key_pb],
+                "read_options": read_options,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -323,7 +344,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(request = {'project_id': project, 'keys': [key_pb1, key_pb2], 'read_options': read_options})
+        response = ds_api.lookup(
+            request={
+                "project_id": project,
+                "keys": [key_pb1, key_pb2],
+                "read_options": read_options,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -363,7 +390,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(request = {'project_id': project, 'keys': [key_pb1, key_pb2], 'read_options': read_options})
+        response = ds_api.lookup(
+            request={
+                "project_id": project,
+                "keys": [key_pb1, key_pb2],
+                "read_options": read_options,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -402,7 +435,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(request = {'project_id': project, 'keys': [key_pb1, key_pb2], 'read_options': read_options})
+        response = ds_api.lookup(
+            request={
+                "project_id": project,
+                "keys": [key_pb1, key_pb2],
+                "read_options": read_options,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -450,7 +489,14 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.run_query(request = {'project_id': project, 'partition_id': partition_id, 'read_options': read_options, 'query': query_pb})
+        response = ds_api.run_query(
+            request={
+                "project_id": project,
+                "partition_id": partition_id,
+                "read_options": read_options,
+                "query": query_pb,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -495,7 +541,14 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.run_query(request = {'project_id': project, 'partition_id': partition_id, 'read_options': read_options, 'query': query_pb})
+        response = ds_api.run_query(
+            request={
+                "project_id": project,
+                "partition_id": partition_id,
+                "read_options": read_options,
+                "query": query_pb,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -539,7 +592,14 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.run_query(request = {'project_id': project, 'partition_id': partition_id, 'read_options': read_options, 'query': query_pb})
+        response = ds_api.run_query(
+            request={
+                "project_id": project,
+                "partition_id": partition_id,
+                "read_options": read_options,
+                "query": query_pb,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -585,7 +645,14 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.run_query(request = {'project_id': project, 'partition_id': partition_id, 'read_options': read_options, 'query': query_pb})
+        response = ds_api.run_query(
+            request={
+                "project_id": project,
+                "partition_id": partition_id,
+                "read_options": read_options,
+                "query": query_pb,
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -617,7 +684,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.begin_transaction(request = {'project_id': project})
+        response = ds_api.begin_transaction(request={"project_id": project})
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -659,7 +726,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         rq_class = datastore_pb2.CommitRequest
         ds_api = self._make_one(client)
         mode = rq_class.NON_TRANSACTIONAL
-        result = ds_api.commit(request = {'project_id': project, 'mode': mode, 'transaction': [mutation]})
+        result = ds_api.commit(
+            request={"project_id": project, "mode": mode, "transaction": [mutation]}
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(result, rsp_pb)
@@ -700,7 +769,14 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         rq_class = datastore_pb2.CommitRequest
         ds_api = self._make_one(client)
         mode = rq_class.TRANSACTIONAL
-        result = ds_api.commit(request = {'project_id': project, 'mode': mode, 'transaction': [mutation], 'mutations': b"xact"})
+        result = ds_api.commit(
+            request={
+                "project_id": project,
+                "mode": mode,
+                "transaction": [mutation],
+                "mutations": b"xact",
+            }
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(result, rsp_pb)
@@ -732,7 +808,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.rollback(request = {'project_id': project, 'transaction': transaction})
+        response = ds_api.rollback(
+            request={"project_id": project, "transaction": transaction}
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -761,7 +839,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.allocate_ids(request = {'project_id': project, 'keys': []})
+        response = ds_api.allocate_ids(request={"project_id": project, "keys": []})
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb)
@@ -798,7 +876,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.allocate_ids(request = {'project_id': project, 'keys': before_key_pbs})
+        response = ds_api.allocate_ids(
+            request={"project_id": project, "keys": before_key_pbs}
+        )
 
         # Check the result and verify the callers.
         self.assertEqual(list(response.keys), after_key_pbs)
