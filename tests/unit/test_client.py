@@ -1058,6 +1058,8 @@ class TestClient(unittest.TestCase):
             client.reserve_ids_sequential(complete_key, num_ids)
 
     def test_reserve_ids_w_completed_key(self):
+        import warnings
+
         num_ids = 2
         creds = _make_credentials()
         client = self._make_one(credentials=creds, _use_grpc=False)
@@ -1067,7 +1069,8 @@ class TestClient(unittest.TestCase):
         client._datastore_api_internal = ds_api
         self.assertTrue(not complete_key.is_partial)
 
-        client.reserve_ids(complete_key, num_ids)
+        with warnings.catch_warnings(record=True) as warned:
+            client.reserve_ids(complete_key, num_ids)
 
         reserved_keys = (
             _Key(_Key.kind, id)
@@ -1076,7 +1079,12 @@ class TestClient(unittest.TestCase):
         expected_keys = [key.to_protobuf() for key in reserved_keys]
         reserve_ids.assert_called_once_with(self.PROJECT, expected_keys)
 
+        self.assertEqual(len(warned), 1)
+        self.assertIn("Client.reserve_ids is deprecated.", str(warned[0].message))
+
     def test_reserve_ids_w_completed_key_w_retry_w_timeout(self):
+        import warnings
+
         num_ids = 2
         retry = mock.Mock()
         timeout = 100000
@@ -1089,7 +1097,8 @@ class TestClient(unittest.TestCase):
         ds_api = mock.Mock(reserve_ids=reserve_ids, spec=["reserve_ids"])
         client._datastore_api_internal = ds_api
 
-        client.reserve_ids(complete_key, num_ids, retry=retry, timeout=timeout)
+        with warnings.catch_warnings(record=True) as warned:
+            client.reserve_ids(complete_key, num_ids, retry=retry, timeout=timeout)
 
         reserved_keys = (
             _Key(_Key.kind, id)
@@ -1100,7 +1109,12 @@ class TestClient(unittest.TestCase):
             self.PROJECT, expected_keys, retry=retry, timeout=timeout
         )
 
+        self.assertEqual(len(warned), 1)
+        self.assertIn("Client.reserve_ids is deprecated.", str(warned[0].message))
+
     def test_reserve_ids_w_completed_key_w_ancestor(self):
+        import warnings
+
         num_ids = 2
         creds = _make_credentials()
         client = self._make_one(credentials=creds, _use_grpc=False)
@@ -1110,7 +1124,8 @@ class TestClient(unittest.TestCase):
         client._datastore_api_internal = ds_api
         self.assertTrue(not complete_key.is_partial)
 
-        client.reserve_ids(complete_key, num_ids)
+        with warnings.catch_warnings(record=True) as warned:
+            client.reserve_ids(complete_key, num_ids)
 
         reserved_keys = (
             _Key("PARENT", "SINGLETON", _Key.kind, id)
@@ -1119,29 +1134,50 @@ class TestClient(unittest.TestCase):
         expected_keys = [key.to_protobuf() for key in reserved_keys]
         reserve_ids.assert_called_once_with(self.PROJECT, expected_keys)
 
+        self.assertEqual(len(warned), 1)
+        self.assertIn("Client.reserve_ids is deprecated.", str(warned[0].message))
+
     def test_reserve_ids_w_partial_key(self):
+        import warnings
+
         num_ids = 2
         incomplete_key = _Key(_Key.kind, None)
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
         with self.assertRaises(ValueError):
-            client.reserve_ids(incomplete_key, num_ids)
+            with warnings.catch_warnings(record=True) as warned:
+                client.reserve_ids(incomplete_key, num_ids)
+
+        self.assertEqual(len(warned), 1)
+        self.assertIn("Client.reserve_ids is deprecated.", str(warned[0].message))
 
     def test_reserve_ids_w_wrong_num_ids(self):
+        import warnings
+
         num_ids = "2"
         complete_key = _Key()
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
         with self.assertRaises(ValueError):
-            client.reserve_ids(complete_key, num_ids)
+            with warnings.catch_warnings(record=True) as warned:
+                client.reserve_ids(complete_key, num_ids)
+
+        self.assertEqual(len(warned), 1)
+        self.assertIn("Client.reserve_ids is deprecated.", str(warned[0].message))
 
     def test_reserve_ids_w_non_numeric_key_name(self):
+        import warnings
+
         num_ids = 2
         complete_key = _Key(_Key.kind, "batman")
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
         with self.assertRaises(ValueError):
-            client.reserve_ids(complete_key, num_ids)
+            with warnings.catch_warnings(record=True) as warned:
+                client.reserve_ids(complete_key, num_ids)
+
+        self.assertEqual(len(warned), 1)
+        self.assertIn("Client.reserve_ids is deprecated.", str(warned[0].message))
 
     def test_reserve_ids_multi(self):
         creds = _make_credentials()
