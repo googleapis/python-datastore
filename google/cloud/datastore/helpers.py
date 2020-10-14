@@ -89,8 +89,8 @@ def _new_value_pb(entity_pb, name):
     properties = entity_pb.properties
     try:
         properties = properties._pb
-    except Exception as e:
-        # TODO(microgenerator): shouldn't need this. the issue is that 
+    except AttributeError:
+        # TODO(microgenerator): shouldn't need this. the issue is that
         # we have wrapped and non-wrapped protos coming here.
         pass
     return properties.get_or_create(name)
@@ -426,7 +426,8 @@ def _get_value_from_value_pb(value_pb):
 
     elif value_type == "geo_point_value":
         result = GeoPoint(
-            value_pb._pb.geo_point_value.latitude, value_pb._pb.geo_point_value.longitude
+            value_pb._pb.geo_point_value.latitude,
+            value_pb._pb.geo_point_value.longitude,
         )
 
     elif value_type == "null_value":
@@ -462,7 +463,7 @@ def _set_protobuf_value(value_pb, val):
         value_pb.timestamp_value.CopyFrom(val)
     elif attr == "entity_value":
         entity_pb = entity_to_protobuf(val)
-        #value_pb._pb.entity_value.CopyFrom(entity_pb._pb)
+        # value_pb._pb.entity_value.CopyFrom(entity_pb._pb)
         value_pb.entity_value.CopyFrom(entity_pb._pb)
     elif attr == "array_value":
         if len(val) == 0:

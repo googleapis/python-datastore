@@ -794,7 +794,9 @@ class TestClient(unittest.TestCase):
 
         self.assertEqual(len(positional), 3)
         self.assertEqual(positional[0], self.PROJECT)
-        self.assertEqual(positional[1], datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL)
+        self.assertEqual(
+            positional[1], datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
+        )
 
         mutations = positional[2]
         mutated_entity = _mutated_pb(self, mutations, "insert")
@@ -880,7 +882,9 @@ class TestClient(unittest.TestCase):
 
         self.assertEqual(len(positional), 3)
         self.assertEqual(positional[0], self.PROJECT)
-        self.assertEqual(positional[1], datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL)
+        self.assertEqual(
+            positional[1], datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
+        )
 
         mutations = positional[2]
         mutated_key = _mutated_pb(self, mutations, "delete")

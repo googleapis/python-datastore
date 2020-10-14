@@ -581,8 +581,7 @@ class Iterator(page_iterator.Iterator):
                 "partition_id": partition_id,
                 "read_options": read_options,
                 "query": query_pb,
-                
-                #"gql_query": query_pb,
+                # "gql_query": query_pb,
             },
             **kwargs
         )
@@ -620,7 +619,7 @@ def _pb_from_query(query):
     :rtype: :class:`.query_pb2.Query`
     :returns: A protobuf that can be sent to the protobuf API.  N.b. that
               it does not contain "in-flight" fields for ongoing query
-              executions (cursors, offset, limit).qg
+              executions (cursors, offset, limit).
     """
     pb = query_pb2.Query()
 

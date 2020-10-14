@@ -575,11 +575,12 @@ class TestIterator(unittest.TestCase):
         empty_query = query_pb2.Query()
         ds_api.run_query.assert_called_once_with(
             request={
-                'project_id': project,
-                'partition_id': partition_id,
-                'read_options': read_options,
-                'query': empty_query
-            }, **kwargs
+                "project_id": project,
+                "partition_id": partition_id,
+                "read_options": read_options,
+                "query": empty_query,
+            },
+            **kwargs
         )
 
     def test__next_page(self):
@@ -641,7 +642,9 @@ class Test__pb_from_query(unittest.TestCase):
         self.assertEqual(list(pb.distinct_on), [])
         self.assertEqual(pb.filter.property_filter.property.name, "")
         cfilter = pb.filter.composite_filter
-        self.assertEqual(cfilter.op, query_pb2.CompositeFilter.Operator.OPERATOR_UNSPECIFIED)
+        self.assertEqual(
+            cfilter.op, query_pb2.CompositeFilter.Operator.OPERATOR_UNSPECIFIED
+        )
         self.assertEqual(list(cfilter.filters), [])
         self.assertEqual(pb.start_cursor, b"")
         self.assertEqual(pb.end_cursor, b"")
