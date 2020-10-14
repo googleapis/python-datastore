@@ -428,7 +428,7 @@ class Test__parse_commit_response(unittest.TestCase):
             index_updates=index_updates,
         )
         result = self._call_fut(response)
-        self.assertEqual(result, (index_updates, keys))
+        self.assertEqual(result, (index_updates, [i._pb for i in keys]))
 
 
 class _Entity(dict):

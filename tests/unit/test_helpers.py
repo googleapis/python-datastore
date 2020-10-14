@@ -28,9 +28,9 @@ class Test__new_value_pb(unittest.TestCase):
         name = "foo"
         result = self._call_fut(entity_pb, name)
 
-        self.assertIsInstance(result, entity_pb2.Value)
-        self.assertEqual(len(entity_pb.properties), 1)
-        self.assertEqual(entity_pb.properties[name], result)
+        self.assertIsInstance(result, type(entity_pb2.Value()._pb))
+        self.assertEqual(len(entity_pb._pb.properties), 1)
+        self.assertEqual(entity_pb._pb.properties[name], result)
 
 
 class Test__property_tuples(unittest.TestCase):
@@ -70,7 +70,7 @@ class Test_entity_from_protobuf(unittest.TestCase):
         _ID = 1234
         entity_pb = entity_pb2.Entity()
         entity_pb.key.partition_id.project_id = _PROJECT
-        entity_pb.key.path.add(kind=_KIND, id=_ID)
+        entity_pb._pb.key.path.add(kind=_KIND, id=_ID)
 
         value_pb = _new_value_pb(entity_pb, "foo")
         value_pb.string_value = "Foo"
@@ -116,7 +116,7 @@ class Test_entity_from_protobuf(unittest.TestCase):
         _ID = 1234
         entity_pb = entity_pb2.Entity()
         entity_pb.key.partition_id.project_id = _PROJECT
-        entity_pb.key.path.add(kind=_KIND, id=_ID)
+        entity_pb._pb.key.path.add(kind=_KIND, id=_ID)
 
         array_val_pb = _new_value_pb(entity_pb, "baz")
         array_pb = array_val_pb.array_value.values
@@ -171,11 +171,11 @@ class Test_entity_from_protobuf(unittest.TestCase):
 
         entity_pb = entity_pb2.Entity()
         entity_pb.key.partition_id.project_id = PROJECT
-        element = entity_pb.key.path.add()
+        element = entity_pb._pb.key.path.add()
         element.kind = KIND
 
         outside_val_pb = _new_value_pb(entity_pb, OUTSIDE_NAME)
-        outside_val_pb.entity_value.CopyFrom(entity_inside)
+        outside_val_pb.entity_value.CopyFrom(entity_inside._pb)
 
         entity = self._call_fut(entity_pb)
         self.assertEqual(entity.key.project, PROJECT)
@@ -198,7 +198,7 @@ class Test_entity_from_protobuf(unittest.TestCase):
 
         entity_pb = entity_pb2.Entity(properties={"baz": array_val_pb})
         entity_pb.key.partition_id.project_id = _PROJECT
-        entity_pb.key.path.add(kind=_KIND, id=_ID)
+        entity_pb.key._pb.path.add(kind=_KIND, id=_ID)
 
         entity = self._call_fut(entity_pb)
         entity_dict = dict(entity)
@@ -249,7 +249,7 @@ class Test_entity_to_protobuf(unittest.TestCase):
 
         expected_pb = entity_pb2.Entity()
         expected_pb.key.partition_id.project_id = project
-        path_elt = expected_pb.key.path.add()
+        path_elt = expected_pb._pb.key.path.add()
         path_elt.kind = kind
         path_elt.name = name
 
@@ -284,8 +284,8 @@ class Test_entity_to_protobuf(unittest.TestCase):
         entity_pb = self._call_fut(entity)
 
         expected_pb = entity_pb2.Entity()
-        prop = expected_pb.properties.get_or_create("foo")
-        prop.array_value.CopyFrom(entity_pb2.ArrayValue(values=[]))
+        prop = expected_pb._pb.properties.get_or_create("foo")
+        prop.array_value.CopyFrom(entity_pb2.ArrayValue(values=[])._pb)
 
         self._compare_entity_proto(entity_pb, expected_pb)
 
@@ -297,10 +297,10 @@ class Test_entity_to_protobuf(unittest.TestCase):
         original_pb = entity_pb2.Entity()
         # Add a key.
         original_pb.key.partition_id.project_id = project = "PROJECT"
-        elem1 = original_pb.key.path.add()
+        elem1 = original_pb._pb.key.path.add()
         elem1.kind = "Family"
         elem1.id = 1234
-        elem2 = original_pb.key.path.add()
+        elem2 = original_pb._pb.key.path.add()
         elem2.kind = "King"
         elem2.name = "Spades"
 
@@ -320,7 +320,7 @@ class Test_entity_to_protobuf(unittest.TestCase):
         sub_val_pb2 = _new_value_pb(sub_pb, "y")
         sub_val_pb2.double_value = 2.718281828
         val_pb3.meaning = 9
-        val_pb3.entity_value.CopyFrom(sub_pb)
+        val_pb3.entity_value.CopyFrom(sub_pb._pb)
 
         # Add a list property.
         val_pb4 = _new_value_pb(original_pb, "list-quux")
@@ -453,7 +453,7 @@ class Test_key_from_protobuf(unittest.TestCase):
         if namespace is not None:
             pb.partition_id.namespace_id = namespace
         for elem in path:
-            added = pb.path.add()
+            added = pb._pb.path.add()
             added.kind = elem["kind"]
             if "id" in elem:
                 added.id = elem["id"]
@@ -679,8 +679,8 @@ class Test__get_value_from_value_pb(unittest.TestCase):
         micros = 4375
         utc = datetime.datetime(2014, 9, 16, 10, 19, 32, micros, UTC)
         pb = entity_pb2.Value()
-        pb.timestamp_value.seconds = calendar.timegm(utc.timetuple())
-        pb.timestamp_value.nanos = 1000 * micros
+        pb._pb.timestamp_value.seconds = calendar.timegm(utc.timetuple())
+        pb._pb.timestamp_value.nanos = 1000 * micros
         self.assertEqual(self._call_fut(pb), utc)
 
     def test_key(self):
@@ -720,7 +720,7 @@ class Test__get_value_from_value_pb(unittest.TestCase):
 
         pb = entity_pb2.Value()
         entity_pb = pb.entity_value
-        entity_pb.key.path.add(kind="KIND")
+        entity_pb._pb.key.path.add(kind="KIND")
         entity_pb.key.partition_id.project_id = "PROJECT"
 
         value_pb = _new_value_pb(entity_pb, "foo")
@@ -734,9 +734,9 @@ class Test__get_value_from_value_pb(unittest.TestCase):
 
         pb = entity_pb2.Value()
         array_pb = pb.array_value.values
-        item_pb = array_pb.add()
+        item_pb = array_pb._pb.add()
         item_pb.string_value = "Foo"
-        item_pb = array_pb.add()
+        item_pb = array_pb._pb.add()
         item_pb.string_value = "Bar"
         items = self._call_fut(pb)
         self.assertEqual(items, ["Foo", "Bar"])
@@ -780,7 +780,7 @@ class Test_set_protobuf_value(unittest.TestCase):
     def _makePB(self):
         from google.cloud.datastore_v1.types import entity as entity_pb2
 
-        return entity_pb2.Value()
+        return entity_pb2.Value()._pb
 
     def test_datetime(self):
         import calendar
@@ -802,7 +802,7 @@ class Test_set_protobuf_value(unittest.TestCase):
         key = Key("KIND", 1234, project="PROJECT")
         self._call_fut(pb, key)
         value = pb.key_value
-        self.assertEqual(value, key.to_protobuf())
+        self.assertEqual(value, key.to_protobuf()._pb)
 
     def test_none(self):
         pb = self._makePB()
@@ -881,7 +881,7 @@ class Test_set_protobuf_value(unittest.TestCase):
         entity[name] = value
         self._call_fut(pb, entity)
         entity_pb = pb.entity_value
-        self.assertEqual(entity_pb.key, key.to_protobuf())
+        self.assertEqual(entity_pb.key, key.to_protobuf()._pb)
 
         prop_dict = dict(_property_tuples(entity_pb))
         self.assertEqual(len(prop_dict), 1)

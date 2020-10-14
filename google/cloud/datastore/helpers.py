@@ -86,7 +86,14 @@ def _new_value_pb(entity_pb, name):
     :rtype: :class:`.entity_pb2.Value`
     :returns: The new ``Value`` protobuf that was added to the entity.
     """
-    return entity_pb.properties._pb.get_or_create(name)
+    properties = entity_pb.properties
+    try:
+        properties = properties._pb
+    except Exception as e:
+        # TODO(microgenerator): shouldn't need this. the issue is that 
+        # we have wrapped and non-wrapped protos coming here.
+        pass
+    return properties.get_or_create(name)
 
 
 def _property_tuples(entity_pb):
@@ -115,7 +122,7 @@ def entity_from_protobuf(pb):
     :returns: The entity derived from the protobuf.
     """
     key = None
-    if pb.HasField("key"):  # Message field (Key)
+    if pb._pb.HasField("key"):  # Message field (Key)
         key = key_from_protobuf(pb.key)
 
     entity_props = {}
@@ -389,25 +396,25 @@ def _get_value_from_value_pb(value_pb):
     value_type = value_pb._pb.WhichOneof("value_type")
 
     if value_type == "timestamp_value":
-        result = _pb_timestamp_to_datetime(value_pb.timestamp_value)
+        result = _pb_timestamp_to_datetime(value_pb._pb.timestamp_value)
 
     elif value_type == "key_value":
-        result = key_from_protobuf(value_pb.key_value)
+        result = key_from_protobuf(value_pb._pb.key_value)
 
     elif value_type == "boolean_value":
-        result = value_pb.boolean_value
+        result = value_pb._pb.boolean_value
 
     elif value_type == "double_value":
-        result = value_pb.double_value
+        result = value_pb._pb.double_value
 
     elif value_type == "integer_value":
-        result = value_pb.integer_value
+        result = value_pb._pb.integer_value
 
     elif value_type == "string_value":
-        result = value_pb.string_value
+        result = value_pb._pb.string_value
 
     elif value_type == "blob_value":
-        result = value_pb.blob_value
+        result = value_pb._pb.blob_value
 
     elif value_type == "entity_value":
         result = entity_from_protobuf(value_pb.entity_value)
@@ -419,7 +426,7 @@ def _get_value_from_value_pb(value_pb):
 
     elif value_type == "geo_point_value":
         result = GeoPoint(
-            value_pb.geo_point_value.latitude, value_pb.geo_point_value.longitude
+            value_pb._pb.geo_point_value.latitude, value_pb._pb.geo_point_value.longitude
         )
 
     elif value_type == "null_value":
@@ -450,12 +457,13 @@ def _set_protobuf_value(value_pb, val):
     """
     attr, val = _pb_attr_value(val)
     if attr == "key_value":
-        value_pb.key_value.CopyFrom(val)
+        value_pb.key_value.CopyFrom(val._pb)
     elif attr == "timestamp_value":
         value_pb.timestamp_value.CopyFrom(val)
     elif attr == "entity_value":
         entity_pb = entity_to_protobuf(val)
-        value_pb.entity_value.CopyFrom(entity_pb)
+        #value_pb._pb.entity_value.CopyFrom(entity_pb._pb)
+        value_pb.entity_value.CopyFrom(entity_pb._pb)
     elif attr == "array_value":
         if len(val) == 0:
             array_value = entity_pb2.ArrayValue(values=[])._pb

@@ -29,7 +29,7 @@ def _make_entity_pb(project, kind, integer_id, name=None, str_val=None):
 
     entity_pb = entity_pb2.Entity()
     entity_pb.key.partition_id.project_id = project
-    path_element = entity_pb.key.path.add()
+    path_element = entity_pb._pb.key.path.add()
     path_element.kind = kind
     path_element.id = integer_id
     if name is not None and str_val is not None:
@@ -448,7 +448,7 @@ class TestClient(unittest.TestCase):
         # Make a missing entity pb to be returned from mock backend.
         missed = entity_pb2.Entity()
         missed.key.partition_id.project_id = self.PROJECT
-        path_element = missed.key.path.add()
+        path_element = missed._pb.key.path.add()
         path_element.kind = KIND
         path_element.id = ID
 
@@ -527,9 +527,9 @@ class TestClient(unittest.TestCase):
         key2_pb = key2.to_protobuf()
 
         entity1_pb = entity_pb2.Entity()
-        entity1_pb.key.CopyFrom(key1_pb)
+        entity1_pb._pb.key.CopyFrom(key1_pb._pb)
         entity2_pb = entity_pb2.Entity()
-        entity2_pb.key.CopyFrom(key2_pb)
+        entity2_pb._pb.key.CopyFrom(key2_pb._pb)
 
         creds = _make_credentials()
         client = self._make_one(credentials=creds)
@@ -794,7 +794,7 @@ class TestClient(unittest.TestCase):
 
         self.assertEqual(len(positional), 3)
         self.assertEqual(positional[0], self.PROJECT)
-        self.assertEqual(positional[1], datastore_pb2.CommitRequest.NON_TRANSACTIONAL)
+        self.assertEqual(positional[1], datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL)
 
         mutations = positional[2]
         mutated_entity = _mutated_pb(self, mutations, "insert")
@@ -880,7 +880,7 @@ class TestClient(unittest.TestCase):
 
         self.assertEqual(len(positional), 3)
         self.assertEqual(positional[0], self.PROJECT)
-        self.assertEqual(positional[1], datastore_pb2.CommitRequest.NON_TRANSACTIONAL)
+        self.assertEqual(positional[1], datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL)
 
         mutations = positional[2]
         mutated_key = _mutated_pb(self, mutations, "delete")
@@ -1252,9 +1252,9 @@ class TestClient(unittest.TestCase):
         self.assertEqual(
             xact._options, TransactionOptions(read_only=TransactionOptions.ReadOnly())
         )
-        self.assertFalse(xact._options.HasField("read_write"))
-        self.assertTrue(xact._options.HasField("read_only"))
-        self.assertEqual(xact._options.read_only, TransactionOptions.ReadOnly())
+        self.assertFalse(xact._options._pb.HasField("read_write"))
+        self.assertTrue(xact._options._pb.HasField("read_only"))
+        self.assertEqual(xact._options._pb.read_only, TransactionOptions.ReadOnly()._pb)
 
     def test_query_w_client(self):
         KIND = "KIND"
@@ -1432,7 +1432,7 @@ class _Key(object):
 
         path = self._flat_path
         while path:
-            element = key.path.add()
+            element = key._pb.path.add()
             kind, id_or_name = path[:2]
             element.kind = kind
             if isinstance(id_or_name, int):
@@ -1476,7 +1476,7 @@ def _mutated_pb(test_case, mutation_pb_list, mutation_type):
     # We grab the only mutation.
     mutated_pb = mutation_pb_list[0]
     # Then check if it is the correct type.
-    test_case.assertEqual(mutated_pb.WhichOneof("operation"), mutation_type)
+    test_case.assertEqual(mutated_pb._pb.WhichOneof("operation"), mutation_type)
 
     return getattr(mutated_pb, mutation_type)
 
@@ -1485,7 +1485,7 @@ def _make_key(id_):
     from google.cloud.datastore_v1.types import entity as entity_pb2
 
     key = entity_pb2.Key()
-    elem = key.path.add()
+    elem = key._pb.path.add()
     elem.id = id_
     return key
 
