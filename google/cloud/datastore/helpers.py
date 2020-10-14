@@ -122,7 +122,7 @@ def entity_from_protobuf(pb):
     :returns: The entity derived from the protobuf.
     """
     key = None
-    if pb._pb.HasField("key"):  # Message field (Key)
+    if pb.HasField("key"):  # Message field (Key)
         key = key_from_protobuf(pb.key)
 
     entity_props = {}
@@ -393,28 +393,32 @@ def _get_value_from_value_pb(value_pb):
     :raises: :class:`ValueError <exceptions.ValueError>` if no value type
              has been set.
     """
-    value_type = value_pb._pb.WhichOneof("value_type")
+    if getattr(value_pb, '_pb', False):
+        # TODO(microgenerator): fix inconsistent calling.
+        value_pb = value_pb._pb
+
+    value_type = value_pb.WhichOneof("value_type")
 
     if value_type == "timestamp_value":
-        result = _pb_timestamp_to_datetime(value_pb._pb.timestamp_value)
+        result = _pb_timestamp_to_datetime(value_pb.timestamp_value)
 
     elif value_type == "key_value":
-        result = key_from_protobuf(value_pb._pb.key_value)
+        result = key_from_protobuf(value_pb.key_value)
 
     elif value_type == "boolean_value":
-        result = value_pb._pb.boolean_value
+        result = value_pb.boolean_value
 
     elif value_type == "double_value":
-        result = value_pb._pb.double_value
+        result = value_pb.double_value
 
     elif value_type == "integer_value":
-        result = value_pb._pb.integer_value
+        result = value_pb.integer_value
 
     elif value_type == "string_value":
-        result = value_pb._pb.string_value
+        result = value_pb.string_value
 
     elif value_type == "blob_value":
-        result = value_pb._pb.blob_value
+        result = value_pb.blob_value
 
     elif value_type == "entity_value":
         result = entity_from_protobuf(value_pb.entity_value)
@@ -426,8 +430,8 @@ def _get_value_from_value_pb(value_pb):
 
     elif value_type == "geo_point_value":
         result = GeoPoint(
-            value_pb._pb.geo_point_value.latitude,
-            value_pb._pb.geo_point_value.longitude,
+            value_pb.geo_point_value.latitude,
+            value_pb.geo_point_value.longitude,
         )
 
     elif value_type == "null_value":

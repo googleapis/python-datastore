@@ -575,14 +575,21 @@ class Iterator(page_iterator.Iterator):
         if self._timeout is not None:
             kwargs["timeout"] = self._timeout
 
+        # response_pb = self.client._datastore_api.run_query(
+        #     request={
+        #         "project_id": self._query.project,
+        #         "partition_id": partition_id,
+        #         "read_options": read_options,
+        #         "query": query_pb,
+        #         # "gql_query": query_pb,
+        #     },
+        #     **kwargs
+        # )
         response_pb = self.client._datastore_api.run_query(
-            request={
-                "project_id": self._query.project,
-                "partition_id": partition_id,
-                "read_options": read_options,
-                "query": query_pb,
-                # "gql_query": query_pb,
-            },
+            self._query.project,
+            partition_id,
+            read_options,
+            query=query_pb,
             **kwargs
         )
 
@@ -596,16 +603,22 @@ class Iterator(page_iterator.Iterator):
             # more than 1000 skipped results in a query.
             query_pb.start_cursor = response_pb.batch.skipped_cursor
             query_pb.offset -= response_pb.batch.skipped_results
+            # response_pb = self.client._datastore_api.run_query(
+            #     request={
+            #         "project_id": self._query.project,
+            #         "partition_id": partition_id,
+            #         "read_options": read_options,
+            #         "query": kwargs,
+            #         "gql_query": query_pb,
+            #     }
+            # )
             response_pb = self.client._datastore_api.run_query(
-                request={
-                    "project_id": self._query.project,
-                    "partition_id": partition_id,
-                    "read_options": read_options,
-                    "query": kwargs,
-                    "gql_query": query_pb,
-                }
+                self._query.project,
+                partition_id,
+                read_options,
+                query=query_pb,
+                **kwargs,
             )
-
         entity_pbs = self._process_query_results(response_pb)
         return page_iterator.Page(self, entity_pbs, self.item_to_value)
 
