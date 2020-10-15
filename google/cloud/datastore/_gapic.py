@@ -39,10 +39,7 @@ def make_datastore_api(client):
     else:
         channel = insecure_channel(host)
 
-    # from .base import DatastoreTransport
-
     transport = grpc.DatastoreGrpcTransport(channel=channel)
-
     return datastore_client.DatastoreClient(
         transport=transport, client_info=client._client_info
     )

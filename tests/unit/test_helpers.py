@@ -592,10 +592,8 @@ class Test__pb_attr_value(unittest.TestCase):
         import six
 
         name, value = self._call_fut("str")
-        if six.PY2:
-            self.assertEqual(name, "blob_value")
-        else:  # pragma: NO COVER Python 3
-            self.assertEqual(name, "string_value")
+        
+        self.assertEqual(name, "string_value")
         self.assertEqual(value, "str")
 
     def test_bytes(self):
@@ -839,10 +837,8 @@ class Test_set_protobuf_value(unittest.TestCase):
 
         pb = self._makePB()
         self._call_fut(pb, "str")
-        if six.PY2:
-            value = pb.blob_value
-        else:  # pragma: NO COVER Python 3
-            value = pb.string_value
+
+        value = pb.string_value
         self.assertEqual(value, "str")
 
     def test_bytes(self):

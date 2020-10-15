@@ -39,7 +39,6 @@ Section %02d
 """
 
 
-@unittest.skipIf(six.PY2, "Doctests run against Python 3 only.")
 class TestDoctest(unittest.TestCase):
     def _submodules(self):
         pkg_iter = pkgutil.iter_modules(datastore.__path__)
