@@ -89,9 +89,7 @@ class TestTransaction(unittest.TestCase):
 
         begin_txn = ds_api.begin_transaction
         self.assertEqual(begin_txn.call_count, 2)
-        begin_txn.assert_called_with(
-            request={"project_id": project,}
-        )
+        begin_txn.assert_called_with(request={"project_id": project})
 
     def test_begin(self):
         project = "PROJECT"

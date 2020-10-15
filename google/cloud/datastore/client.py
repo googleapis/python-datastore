@@ -707,7 +707,7 @@ class Client(ClientWithProject):
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         response_pb = self._datastore_api.allocate_ids(
-            request={"project_id": incomplete_key.project, "keys": incomplete_key_pbs,},
+            request={"project_id": incomplete_key.project, "keys": incomplete_key_pbs},
             **kwargs,
         )
         allocated_ids = [
