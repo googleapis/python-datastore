@@ -13,7 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
 from collections import OrderedDict
 from distutils import util
@@ -93,7 +92,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
     project. This is specified as a combination of kinds and
     namespaces (either or both of which may be all).
 
-    -----------------------------------------------------------------------------
     ## Services
 
     # Export/Import
