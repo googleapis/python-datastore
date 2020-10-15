@@ -92,7 +92,7 @@ class Test_entity_from_protobuf(unittest.TestCase):
         indexed_array_val_pb = array_pb2.add()
         indexed_array_val_pb.integer_value = 12
 
-        entity = self._call_fut(entity_pb)
+        entity = self._call_fut(entity_pb._pb)
         self.assertEqual(entity.kind, _KIND)
         self.assertEqual(entity.exclude_from_indexes, frozenset(["bar", "baz"]))
         entity_props = dict(entity)
@@ -129,13 +129,13 @@ class Test_entity_from_protobuf(unittest.TestCase):
         unindexed_value_pb2.integer_value = 11
 
         with self.assertRaises(ValueError):
-            self._call_fut(entity_pb)
+            self._call_fut(entity_pb._pb)
 
     def test_entity_no_key(self):
         from google.cloud.datastore_v1.types import entity as entity_pb2
 
         entity_pb = entity_pb2.Entity()
-        entity = self._call_fut(entity_pb)
+        entity = self._call_fut(entity_pb._pb)
 
         self.assertIsNone(entity.key)
         self.assertEqual(dict(entity), {})
@@ -150,7 +150,7 @@ class Test_entity_from_protobuf(unittest.TestCase):
         value_pb.meaning = meaning = 9
         value_pb.string_value = val = u"something"
 
-        entity = self._call_fut(entity_pb)
+        entity = self._call_fut(entity_pb._pb)
         self.assertIsNone(entity.key)
         self.assertEqual(dict(entity), {name: val})
         self.assertEqual(entity._meanings, {name: (meaning, val)})
@@ -177,7 +177,7 @@ class Test_entity_from_protobuf(unittest.TestCase):
         outside_val_pb = _new_value_pb(entity_pb, OUTSIDE_NAME)
         outside_val_pb.entity_value.CopyFrom(entity_inside._pb)
 
-        entity = self._call_fut(entity_pb)
+        entity = self._call_fut(entity_pb._pb)
         self.assertEqual(entity.key.project, PROJECT)
         self.assertEqual(entity.key.flat_path, (KIND,))
         self.assertEqual(len(entity), 1)
@@ -200,7 +200,7 @@ class Test_entity_from_protobuf(unittest.TestCase):
         entity_pb.key.partition_id.project_id = _PROJECT
         entity_pb.key._pb.path.add(kind=_KIND, id=_ID)
 
-        entity = self._call_fut(entity_pb)
+        entity = self._call_fut(entity_pb._pb)
         entity_dict = dict(entity)
         self.assertEqual(entity_dict["baz"], [])
 
@@ -334,7 +334,7 @@ class Test_entity_to_protobuf(unittest.TestCase):
         array_val2.blob_value = b"\xe2\x98\x85"
 
         # Convert to the user-space Entity.
-        entity = entity_from_protobuf(original_pb)
+        entity = entity_from_protobuf(original_pb._pb)
         # Convert the user-space Entity back to a protobuf.
         new_pb = self._call_fut(entity)
 

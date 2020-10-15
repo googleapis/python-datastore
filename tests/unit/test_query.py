@@ -617,13 +617,14 @@ class Test__item_to_entity(unittest.TestCase):
         return _item_to_entity(iterator, entity_pb)
 
     def test_it(self):
-        entity_pb = mock.sentinel.entity_pb
+        entity_pb = mock.Mock()
+        entity_pb._pb = mock.sentinel.entity_pb
         patch = mock.patch("google.cloud.datastore.helpers.entity_from_protobuf")
         with patch as entity_from_protobuf:
             result = self._call_fut(None, entity_pb)
             self.assertIs(result, entity_from_protobuf.return_value)
 
-        entity_from_protobuf.assert_called_once_with(entity_pb)
+        entity_from_protobuf.assert_called_once_with(entity_pb._pb)
 
 
 class Test__pb_from_query(unittest.TestCase):

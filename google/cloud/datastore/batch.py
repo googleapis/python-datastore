@@ -260,10 +260,11 @@ class Batch(object):
                 "mode": mode,
                 "transaction": self._id,
                 "mutations": self._mutations,
-                **kwargs,
             },
-        )._pb
-        _, updated_keys = _parse_commit_response(commit_response_pb)
+            **kwargs,
+        )
+
+        _, updated_keys = _parse_commit_response(commit_response_pb._pb)
         # If the back-end returns without error, we are guaranteed that
         # ``commit`` will return keys that match (length and
         # order) directly ``_partial_key_entities``.

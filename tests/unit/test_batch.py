@@ -64,7 +64,14 @@ class TestBatch(unittest.TestCase):
         commit_method = client._datastore_api.commit
         self.assertEqual(commit_method.call_count, 2)
         mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
-        commit_method.assert_called_with(project, mode, [], transaction=None)
+        commit_method.assert_called_with(
+            request={
+                "project_id": project,
+                "mode": mode,
+                "mutations": [],
+                "transaction": None,
+            }
+        )
 
     def test_put_entity_wo_key(self):
         project = "PROJECT"
@@ -227,7 +234,14 @@ class TestBatch(unittest.TestCase):
 
         commit_method = client._datastore_api.commit
         mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
-        commit_method.assert_called_with(project, mode, [], transaction=None)
+        commit_method.assert_called_with(
+            request={
+                "project_id": project,
+                "mode": mode,
+                "mutations": [],
+                "transaction": None,
+            }
+        )
 
     def test_commit_w_timeout(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
@@ -246,7 +260,13 @@ class TestBatch(unittest.TestCase):
         commit_method = client._datastore_api.commit
         mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(
-            project, mode, [], transaction=None, timeout=timeout
+            request={
+                "project_id": project,
+                "mode": mode,
+                "mutations": [],
+                "transaction": None,
+            },
+            timeout=timeout,
         )
 
     def test_commit_w_retry(self):
@@ -266,7 +286,13 @@ class TestBatch(unittest.TestCase):
         commit_method = client._datastore_api.commit
         mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(
-            project, mode, [], transaction=None, retry=retry
+            request={
+                "project_id": project,
+                "mode": mode,
+                "mutations": [],
+                "transaction": None,
+            },
+            retry=retry,
         )
 
     def test_commit_wrong_status(self):
@@ -297,7 +323,14 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(batch._status, batch._FINISHED)
 
         mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
-        ds_api.commit.assert_called_once_with(project, mode, [], transaction=None)
+        ds_api.commit.assert_called_once_with(
+            request={
+                "project_id": project,
+                "mode": mode,
+                "mutations": [],
+                "transaction": None,
+            }
+        )
         self.assertFalse(entity.key.is_partial)
         self.assertEqual(entity.key._id, new_id)
 
@@ -323,7 +356,12 @@ class TestBatch(unittest.TestCase):
         commit_method = client._datastore_api.commit
         mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(
-            project, mode, batch.mutations, transaction=None
+            request={
+                "project_id": project,
+                "mode": mode,
+                "mutations": batch.mutations,
+                "transaction": None,
+            }
         )
 
     def test_as_context_mgr_nested(self):
@@ -360,10 +398,20 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(commit_method.call_count, 2)
         mode = datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL
         commit_method.assert_called_with(
-            project, mode, batch1.mutations, transaction=None
+            request={
+                "project_id": project,
+                "mode": mode,
+                "mutations": batch1.mutations,
+                "transaction": None,
+            }
         )
         commit_method.assert_called_with(
-            project, mode, batch2.mutations, transaction=None
+            request={
+                "project_id": project,
+                "mode": mode,
+                "mutations": batch2.mutations,
+                "transaction": None,
+            }
         )
 
     def test_as_context_mgr_w_error(self):
@@ -427,7 +475,7 @@ class Test__parse_commit_response(unittest.TestCase):
             mutation_results=[datastore_pb2.MutationResult(key=key) for key in keys],
             index_updates=index_updates,
         )
-        result = self._call_fut(response)
+        result = self._call_fut(response._pb)
         self.assertEqual(result, (index_updates, [i._pb for i in keys]))
 
 
@@ -525,7 +573,7 @@ def _make_commit_response(*new_key_ids):
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
     mutation_results = [_make_mutation(key_id) for key_id in new_key_ids]
-    return datastore_pb2.CommitResponse(mutation_results=mutation_results)._pb
+    return datastore_pb2.CommitResponse(mutation_results=mutation_results)
 
 
 def _make_datastore_api(*new_key_ids):

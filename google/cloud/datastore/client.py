@@ -189,8 +189,8 @@ def _extended_lookup(
                 "project_id": project,
                 "keys": key_pbs,
                 "read_options": read_options,
-                **kwargs,
             },
+            **kwargs,
         )
 
         # Accumulate the new results.
@@ -707,11 +707,8 @@ class Client(ClientWithProject):
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         response_pb = self._datastore_api.allocate_ids(
-            request={
-                "project_id": incomplete_key.project,
-                "keys": incomplete_key_pbs,
-                **kwargs,
-            },
+            request={"project_id": incomplete_key.project, "keys": incomplete_key_pbs,},
+            **kwargs,
         )
         allocated_ids = [
             allocated_key_pb.path[-1].id for allocated_key_pb in response_pb.keys
@@ -881,7 +878,7 @@ class Client(ClientWithProject):
 
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
         self._datastore_api.reserve_ids(
-            request={"project_id": complete_key.project, "keys": key_pbs, **kwargs}
+            request={"project_id": complete_key.project, "keys": key_pbs}, **kwargs
         )
         return None
 
