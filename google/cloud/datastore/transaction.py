@@ -262,7 +262,9 @@ class Transaction(Batch):
 
         try:
             # No need to use the response it contains nothing.
-            self._client._datastore_api.rollback(self.project, self._id, **kwargs)
+            self._client._datastore_api.rollback(
+                request={"project_id": self.project, "transaction": self._id}, **kwargs
+            )
         finally:
             super(Transaction, self).rollback()
             # Clear our own ID in case this gets accidentally reused.
