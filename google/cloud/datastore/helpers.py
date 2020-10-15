@@ -393,7 +393,7 @@ def _get_value_from_value_pb(value_pb):
     :raises: :class:`ValueError <exceptions.ValueError>` if no value type
              has been set.
     """
-    if getattr(value_pb, '_pb', False):
+    if getattr(value_pb, "_pb", False):
         # TODO(microgenerator): fix inconsistent calling.
         value_pb = value_pb._pb
 
@@ -430,8 +430,7 @@ def _get_value_from_value_pb(value_pb):
 
     elif value_type == "geo_point_value":
         result = GeoPoint(
-            value_pb.geo_point_value.latitude,
-            value_pb.geo_point_value.longitude,
+            value_pb.geo_point_value.latitude, value_pb.geo_point_value.longitude,
         )
 
     elif value_type == "null_value":

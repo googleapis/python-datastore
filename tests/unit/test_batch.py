@@ -525,7 +525,7 @@ def _make_commit_response(*new_key_ids):
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
     mutation_results = [_make_mutation(key_id) for key_id in new_key_ids]
-    return datastore_pb2.CommitResponse(mutation_results=mutation_results)
+    return datastore_pb2.CommitResponse(mutation_results=mutation_results)._pb
 
 
 def _make_datastore_api(*new_key_ids):

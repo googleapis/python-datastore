@@ -233,7 +233,7 @@ class Transaction(Batch):
 
         try:
             response_pb = self._client._datastore_api.begin_transaction(
-                self.project, **kwargs
+                project_id=self.project, **kwargs
             )
             self._id = response_pb.transaction
         except:  # noqa: E722 do not use bare except, specify exception instead

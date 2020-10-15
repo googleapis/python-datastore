@@ -579,8 +579,8 @@ class TestIterator(unittest.TestCase):
                 "partition_id": partition_id,
                 "read_options": read_options,
                 "query": empty_query,
+                **kwargs,
             },
-            **kwargs
         )
 
     def test__next_page(self):

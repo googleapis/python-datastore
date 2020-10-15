@@ -255,8 +255,14 @@ class Batch(object):
             kwargs["timeout"] = timeout
 
         commit_response_pb = self._client._datastore_api.commit(
-            self.project, mode, self._mutations, transaction=self._id, **kwargs
-        )
+            request={
+                "project_id": self.project,
+                "mode": mode,
+                "transaction": self._id,
+                "mutations": self._mutations,
+                **kwargs,
+            },
+        )._pb
         _, updated_keys = _parse_commit_response(commit_response_pb)
         # If the back-end returns without error, we are guaranteed that
         # ``commit`` will return keys that match (length and
@@ -355,8 +361,6 @@ def _parse_commit_response(commit_response_pb):
     mut_results = commit_response_pb.mutation_results
     index_updates = commit_response_pb.index_updates
     completed_keys = [
-        mut_result.key
-        for mut_result in mut_results
-        if mut_result.HasField("key")
+        mut_result.key for mut_result in mut_results if mut_result.HasField("key")
     ]  # Message field (Key)
     return index_updates, completed_keys

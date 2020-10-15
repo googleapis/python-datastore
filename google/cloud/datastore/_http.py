@@ -110,7 +110,7 @@ def _rpc(http, project, method, base_url, client_info, request_pb, response_pb_c
     """
     req_data = request_pb.SerializeToString()
     response = _request(http, project, method, req_data, base_url, client_info)
-    return response_pb_cls._meta._pb.FromString(response)
+    return response_pb_cls.deserialize(response)
 
 
 def build_api_url(project, method, base_url):
