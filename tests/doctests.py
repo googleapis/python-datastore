@@ -17,8 +17,6 @@ import pkgutil
 import tempfile
 import unittest
 
-import six
-
 from google.cloud import datastore
 
 

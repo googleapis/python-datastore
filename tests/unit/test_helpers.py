@@ -589,10 +589,8 @@ class Test__pb_attr_value(unittest.TestCase):
         self.assertEqual(value, must_be_long)
 
     def test_native_str(self):
-        import six
-
         name, value = self._call_fut("str")
-        
+
         self.assertEqual(name, "string_value")
         self.assertEqual(value, "str")
 
@@ -833,8 +831,6 @@ class Test_set_protobuf_value(unittest.TestCase):
         self.assertEqual(value, must_be_long)
 
     def test_native_str(self):
-        import six
-
         pb = self._makePB()
         self._call_fut(pb, "str")
 

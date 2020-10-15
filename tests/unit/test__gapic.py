@@ -55,8 +55,8 @@ class Test_make_datastore_api(unittest.TestCase):
 
         make_chan.assert_called_once_with(
             mock.sentinel.credentials,
-            "gcloud-python/1.4.3",
-            "datastore.googleapis.com:443",
+            DEFAULT_USER_AGENT,
+            base_url,
         )
 
         mock_klass.assert_called_once_with(
