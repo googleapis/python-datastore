@@ -167,7 +167,9 @@ class TestTransaction(unittest.TestCase):
         xact.rollback()
 
         self.assertIsNone(xact.id)
-        ds_api.rollback.assert_called_once_with(project, id_)
+        ds_api.rollback.assert_called_once_with(
+            request={"project_id": project, "transaction": id_}
+        )
 
     def test_rollback_w_retry_w_timeout(self):
         project = "PROJECT"
@@ -184,7 +186,9 @@ class TestTransaction(unittest.TestCase):
 
         self.assertIsNone(xact.id)
         ds_api.rollback.assert_called_once_with(
-            project, id_, retry=retry, timeout=timeout
+            request={"project_id": project, "transaction": id_},
+            retry=retry,
+            timeout=timeout,
         )
 
     def test_commit_no_partial_keys(self):

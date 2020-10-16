@@ -152,7 +152,7 @@ class TestQuery(unittest.TestCase):
     def test_ancestor_setter_w_key(self):
         from google.cloud.datastore.key import Key
 
-        _NAME = u"NAME"
+        _NAME = "NAME"
         key = Key("KIND", 123, project=self._PROJECT)
         query = self._make_one(self._make_client())
         query.add_filter("name", "=", _NAME)
@@ -173,38 +173,38 @@ class TestQuery(unittest.TestCase):
 
     def test_add_filter_w_known_operator(self):
         query = self._make_one(self._make_client())
-        query.add_filter("firstname", "=", u"John")
-        self.assertEqual(query.filters, [("firstname", "=", u"John")])
+        query.add_filter("firstname", "=", "John")
+        self.assertEqual(query.filters, [("firstname", "=", "John")])
 
     def test_add_filter_w_all_operators(self):
         query = self._make_one(self._make_client())
-        query.add_filter("leq_prop", "<=", u"val1")
-        query.add_filter("geq_prop", ">=", u"val2")
-        query.add_filter("lt_prop", "<", u"val3")
-        query.add_filter("gt_prop", ">", u"val4")
-        query.add_filter("eq_prop", "=", u"val5")
+        query.add_filter("leq_prop", "<=", "val1")
+        query.add_filter("geq_prop", ">=", "val2")
+        query.add_filter("lt_prop", "<", "val3")
+        query.add_filter("gt_prop", ">", "val4")
+        query.add_filter("eq_prop", "=", "val5")
         self.assertEqual(len(query.filters), 5)
-        self.assertEqual(query.filters[0], ("leq_prop", "<=", u"val1"))
-        self.assertEqual(query.filters[1], ("geq_prop", ">=", u"val2"))
-        self.assertEqual(query.filters[2], ("lt_prop", "<", u"val3"))
-        self.assertEqual(query.filters[3], ("gt_prop", ">", u"val4"))
-        self.assertEqual(query.filters[4], ("eq_prop", "=", u"val5"))
+        self.assertEqual(query.filters[0], ("leq_prop", "<=", "val1"))
+        self.assertEqual(query.filters[1], ("geq_prop", ">=", "val2"))
+        self.assertEqual(query.filters[2], ("lt_prop", "<", "val3"))
+        self.assertEqual(query.filters[3], ("gt_prop", ">", "val4"))
+        self.assertEqual(query.filters[4], ("eq_prop", "=", "val5"))
 
     def test_add_filter_w_known_operator_and_entity(self):
         from google.cloud.datastore.entity import Entity
 
         query = self._make_one(self._make_client())
         other = Entity()
-        other["firstname"] = u"John"
-        other["lastname"] = u"Smith"
+        other["firstname"] = "John"
+        other["lastname"] = "Smith"
         query.add_filter("other", "=", other)
         self.assertEqual(query.filters, [("other", "=", other)])
 
     def test_add_filter_w_whitespace_property_name(self):
         query = self._make_one(self._make_client())
         PROPERTY_NAME = "  property with lots of space "
-        query.add_filter(PROPERTY_NAME, "=", u"John")
-        self.assertEqual(query.filters, [(PROPERTY_NAME, "=", u"John")])
+        query.add_filter(PROPERTY_NAME, "=", "John")
+        self.assertEqual(query.filters, [(PROPERTY_NAME, "=", "John")])
 
     def test_add_filter___key__valid_key(self):
         from google.cloud.datastore.key import Key
@@ -218,9 +218,9 @@ class TestQuery(unittest.TestCase):
         from google.cloud.datastore.query import Query
 
         query = self._make_one(self._make_client())
-        query_obj = query.add_filter("firstname", "=", u"John")
+        query_obj = query.add_filter("firstname", "=", "John")
         self.assertIsInstance(query_obj, Query)
-        self.assertEqual(query_obj.filters, [("firstname", "=", u"John")])
+        self.assertEqual(query_obj.filters, [("firstname", "=", "John")])
 
     def test_filter___key__not_equal_operator(self):
         from google.cloud.datastore.key import Key
@@ -579,8 +579,8 @@ class TestIterator(unittest.TestCase):
                 "partition_id": partition_id,
                 "read_options": read_options,
                 "query": empty_query,
-                **kwargs,
             },
+            **kwargs,
         )
 
     def test__next_page(self):
@@ -679,7 +679,7 @@ class Test__pb_from_query(unittest.TestCase):
     def test_filter(self):
         from google.cloud.datastore_v1.types import query as query_pb2
 
-        query = _Query(filters=[("name", "=", u"John")])
+        query = _Query(filters=[("name", "=", "John")])
         query.OPERATORS = {"=": query_pb2.PropertyFilter.Operator.EQUAL}
         pb = self._call_fut(query)
         cfilter = pb.filter.composite_filter
@@ -687,7 +687,7 @@ class Test__pb_from_query(unittest.TestCase):
         self.assertEqual(len(cfilter.filters), 1)
         pfilter = cfilter.filters[0].property_filter
         self.assertEqual(pfilter.property.name, "name")
-        self.assertEqual(pfilter.value.string_value, u"John")
+        self.assertEqual(pfilter.value.string_value, "John")
 
     def test_filter_key(self):
         from google.cloud.datastore.key import Key
