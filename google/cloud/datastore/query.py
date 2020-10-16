@@ -581,8 +581,8 @@ class Iterator(page_iterator.Iterator):
                 "partition_id": partition_id,
                 "read_options": read_options,
                 "query": query_pb,
-                **kwargs,
-            }
+            },
+            **kwargs,
         )
 
         while (
@@ -601,8 +601,8 @@ class Iterator(page_iterator.Iterator):
                     "partition_id": partition_id,
                     "read_options": read_options,
                     "query": query_pb,
-                    **kwargs,
-                }
+                },
+                **kwargs,
             )
         entity_pbs = self._process_query_results(response_pb)
         return page_iterator.Page(self, entity_pbs, self.item_to_value)

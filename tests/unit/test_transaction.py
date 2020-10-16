@@ -133,7 +133,9 @@ class TestTransaction(unittest.TestCase):
         )
 
         xact.rollback()
-        client._datastore_api.rollback.assert_called_once_with(project, id_)
+        client._datastore_api.rollback.assert_called_once_with(
+            request={"project_id": project, "transaction": id_}
+        )
         self.assertIsNone(xact.id)
 
         self.assertRaises(ValueError, xact.begin)
@@ -288,7 +290,9 @@ class TestTransaction(unittest.TestCase):
                 raise Foo()
         except Foo:
             self.assertIsNone(xact.id)
-            client._datastore_api.rollback.assert_called_once_with(project, id_)
+            client._datastore_api.rollback.assert_called_once_with(
+                request={"project_id": project, "transaction": id_}
+            )
 
         client._datastore_api.commit.assert_not_called()
         self.assertIsNone(xact.id)

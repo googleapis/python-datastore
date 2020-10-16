@@ -929,7 +929,7 @@ class Client(ClientWithProject):
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
         key_pbs = [key.to_protobuf() for key in complete_keys]
         self._datastore_api.reserve_ids(
-            request={"project_id": complete_keys[0].project, "keys": key_pbs, **kwargs}
+            request={"project_id": complete_keys[0].project, "keys": key_pbs}, **kwargs
         )
 
         return None
