@@ -624,7 +624,7 @@ class Test__item_to_entity(unittest.TestCase):
             result = self._call_fut(None, entity_pb)
             self.assertIs(result, entity_from_protobuf.return_value)
 
-        entity_from_protobuf.assert_called_once_with(entity_pb._pb)
+        entity_from_protobuf.assert_called_once_with(entity_pb)
 
 
 class Test__pb_from_query(unittest.TestCase):

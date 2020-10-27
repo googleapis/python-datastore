@@ -121,6 +121,10 @@ def entity_from_protobuf(pb):
     :rtype: :class:`google.cloud.datastore.entity.Entity`
     :returns: The entity derived from the protobuf.
     """
+    if getattr(pb, "_pb", False):
+        # TODO(microgenerator): ensure we unwrap proto-plus types
+        pb = pb._pb
+
     key = None
     if pb.HasField("key"):  # Message field (Key)
         key = key_from_protobuf(pb.key)
@@ -394,7 +398,7 @@ def _get_value_from_value_pb(value_pb):
              has been set.
     """
     if getattr(value_pb, "_pb", False):
-        # TODO(microgenerator): fix inconsistent calling.
+        # TODO(microgenerator): ensure we unwrap proto-plus types
         value_pb = value_pb._pb
 
     value_type = value_pb.WhichOneof("value_type")

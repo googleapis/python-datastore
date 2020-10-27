@@ -506,7 +506,7 @@ class Iterator(page_iterator.Iterator):
             pb.end_cursor = base64.urlsafe_b64decode(end_cursor)
 
         if self.max_results is not None:
-            pb._pb.limit.value = self.max_results - self.num_results
+            pb.limit = self.max_results - self.num_results
 
         if start_cursor is None and self._offset is not None:
             # NOTE: We don't need to add an offset to the request protobuf
@@ -687,7 +687,7 @@ def _item_to_entity(iterator, entity_pb):
     :rtype: :class:`~google.cloud.datastore.entity.Entity`
     :returns: The next entity in the page.
     """
-    return helpers.entity_from_protobuf(entity_pb._pb)
+    return helpers.entity_from_protobuf(entity_pb)
 
 
 # pylint: enable=unused-argument

@@ -334,7 +334,7 @@ class Test_entity_to_protobuf(unittest.TestCase):
         array_val2.blob_value = b"\xe2\x98\x85"
 
         # Convert to the user-space Entity.
-        entity = entity_from_protobuf(original_pb._pb)
+        entity = entity_from_protobuf(original_pb)
         # Convert the user-space Entity back to a protobuf.
         new_pb = self._call_fut(entity)
 

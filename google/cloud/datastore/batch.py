@@ -264,7 +264,7 @@ class Batch(object):
             **kwargs,
         )
 
-        _, updated_keys = _parse_commit_response(commit_response_pb._pb)
+        _, updated_keys = _parse_commit_response(commit_response_pb)
         # If the back-end returns without error, we are guaranteed that
         # ``commit`` will return keys that match (length and
         # order) directly ``_partial_key_entities``.
@@ -348,7 +348,7 @@ def _assign_entity_to_pb(entity_pb, entity):
     entity_pb._pb.CopyFrom(bare_entity_pb._pb)
 
 
-def _parse_commit_response(commit_response_pb):
+def _parse_commit_response(commit_response):
     """Extract response data from a commit response.
 
     :type commit_response_pb: :class:`.datastore_pb2.CommitResponse`
@@ -359,6 +359,7 @@ def _parse_commit_response(commit_response_pb):
               :class:`.entity_pb2.Key` for each incomplete key
               that was completed in the commit.
     """
+    commit_response_pb = commit_response._pb
     mut_results = commit_response_pb.mutation_results
     index_updates = commit_response_pb.index_updates
     completed_keys = [

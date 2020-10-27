@@ -475,7 +475,7 @@ class Test__parse_commit_response(unittest.TestCase):
             mutation_results=[datastore_pb2.MutationResult(key=key) for key in keys],
             index_updates=index_updates,
         )
-        result = self._call_fut(response._pb)
+        result = self._call_fut(response)
         self.assertEqual(result, (index_updates, [i._pb for i in keys]))
 
 

@@ -289,14 +289,14 @@ class Key(object):
             key.partition_id.namespace_id = self.namespace
 
         for item in self.path:
-            element = key._pb.path.add()
+            element = key.PathElement()
             if "kind" in item:
                 element.kind = item["kind"]
             if "id" in item:
                 element.id = item["id"]
             if "name" in item:
                 element.name = item["name"]
-
+            key.path.append(element)
         return key
 
     def to_legacy_urlsafe(self, location_prefix=None):
