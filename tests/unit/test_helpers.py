@@ -150,7 +150,7 @@ class Test_entity_from_protobuf(unittest.TestCase):
         value_pb.meaning = meaning = 9
         value_pb.string_value = val = u"something"
 
-        entity = self._call_fut(entity_pb._pb)
+        entity = self._call_fut(entity_pb)
         self.assertIsNone(entity.key)
         self.assertEqual(dict(entity), {name: val})
         self.assertEqual(entity._meanings, {name: (meaning, val)})

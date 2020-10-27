@@ -121,19 +121,24 @@ def entity_from_protobuf(pb):
     :rtype: :class:`google.cloud.datastore.entity.Entity`
     :returns: The entity derived from the protobuf.
     """
-    if getattr(pb, "_pb", False):
-        # TODO(microgenerator): ensure we unwrap proto-plus types
+
+    if not getattr(pb, "_pb", False):
+        # Coerce raw pb type into proto-plus pythonic type.
+        proto_pb = entity_pb2.Entity(pb)
+        pb = pb
+    else:
+        proto_pb = pb
         pb = pb._pb
 
     key = None
-    if pb.HasField("key"):  # Message field (Key)
-        key = key_from_protobuf(pb.key)
+    if proto_pb._pb.HasField("key"):  # Message field (Key)
+        key = key_from_protobuf(proto_pb.key)
 
     entity_props = {}
     entity_meanings = {}
     exclude_from_indexes = []
 
-    for prop_name, value_pb in _property_tuples(pb):
+    for prop_name, value_pb in _property_tuples(proto_pb):
         value = _get_value_from_value_pb(value_pb)
         entity_props[prop_name] = value
 
@@ -379,7 +384,7 @@ def _pb_attr_value(val):
     return name + "_value", value
 
 
-def _get_value_from_value_pb(value_pb):
+def _get_value_from_value_pb(value):
     """Given a protobuf for a Value, get the correct value.
 
     The Cloud Datastore Protobuf API returns a Property Protobuf which
@@ -397,44 +402,44 @@ def _get_value_from_value_pb(value_pb):
     :raises: :class:`ValueError <exceptions.ValueError>` if no value type
              has been set.
     """
-    if getattr(value_pb, "_pb", False):
-        # TODO(microgenerator): ensure we unwrap proto-plus types
-        value_pb = value_pb._pb
+    if not getattr(value, "_pb", False):
+        # Coerce raw pb type into proto-plus pythonic type.
+        value = entity_pb2.Value(value)
 
-    value_type = value_pb.WhichOneof("value_type")
+    value_type = value._pb.WhichOneof("value_type")
 
     if value_type == "timestamp_value":
-        result = _pb_timestamp_to_datetime(value_pb.timestamp_value)
+        result = value.timestamp_value
 
     elif value_type == "key_value":
-        result = key_from_protobuf(value_pb.key_value)
+        result = key_from_protobuf(value.key_value)
 
     elif value_type == "boolean_value":
-        result = value_pb.boolean_value
+        result = value.boolean_value
 
     elif value_type == "double_value":
-        result = value_pb.double_value
+        result = value.double_value
 
     elif value_type == "integer_value":
-        result = value_pb.integer_value
+        result = value.integer_value
 
     elif value_type == "string_value":
-        result = value_pb.string_value
+        result = value.string_value
 
     elif value_type == "blob_value":
-        result = value_pb.blob_value
+        result = value.blob_value
 
     elif value_type == "entity_value":
-        result = entity_from_protobuf(value_pb.entity_value)
+        result = entity_from_protobuf(value.entity_value)
 
     elif value_type == "array_value":
         result = [
-            _get_value_from_value_pb(value) for value in value_pb.array_value.values
+            _get_value_from_value_pb(value) for value in value._pb.array_value.values
         ]
 
     elif value_type == "geo_point_value":
         result = GeoPoint(
-            value_pb.geo_point_value.latitude, value_pb.geo_point_value.longitude,
+            value.geo_point_value.latitude, value.geo_point_value.longitude,
         )
 
     elif value_type == "null_value":
