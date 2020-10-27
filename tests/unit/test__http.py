@@ -111,7 +111,7 @@ class Test__rpc(unittest.TestCase):
                 method,
                 base_url,
                 client_info,
-                request_pb._pb,
+                request_pb,
                 datastore_pb2.BeginTransactionResponse,
             )
             self.assertEqual(result, response_pb._pb)
