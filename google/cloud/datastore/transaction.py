@@ -313,7 +313,7 @@ class Transaction(Batch):
         :raises: :class:`RuntimeError` if the transaction
                  is marked ReadOnly
         """
-        if self._options._pb.HasField("read_only"):
+        if "read_only" in self._options:
             raise RuntimeError("Transaction is read only")
         else:
             super(Transaction, self).put(entity)

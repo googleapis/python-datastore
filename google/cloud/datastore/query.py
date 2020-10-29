@@ -622,10 +622,14 @@ def _pb_from_query(query):
     pb = query_pb2.Query()
 
     for projection_name in query.projection:
-        pb.projection._pb.add().property.name = projection_name
+        projection = query_pb2.Projection()
+        projection.property.name = projection_name
+        pb.projection.append(projection)
 
     if query.kind:
-        pb.kind._pb.add().name = query.kind
+        kind = query_pb2.KindExpression()
+        kind.name = query.kind
+        pb.kind.append(kind)
 
     composite_filter = pb.filter.composite_filter
     composite_filter.op = query_pb2.CompositeFilter.Operator.AND

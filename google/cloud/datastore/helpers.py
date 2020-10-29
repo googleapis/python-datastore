@@ -131,7 +131,7 @@ def entity_from_protobuf(pb):
         pb = pb._pb
 
     key = None
-    if proto_pb._pb.HasField("key"):  # Message field (Key)
+    if "key" in proto_pb: # Message field (Key)
         key = key_from_protobuf(proto_pb.key)
 
     entity_props = {}
@@ -475,7 +475,6 @@ def _set_protobuf_value(value_pb, val):
         value_pb.timestamp_value.CopyFrom(val)
     elif attr == "entity_value":
         entity_pb = entity_to_protobuf(val)
-        # value_pb._pb.entity_value.CopyFrom(entity_pb._pb)
         value_pb.entity_value.CopyFrom(entity_pb._pb)
     elif attr == "array_value":
         if len(val) == 0:
