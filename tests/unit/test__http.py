@@ -765,9 +765,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(list(response.keys), [])
 
         uri = _build_expected_url(client._base_url, project, "allocateIds")
-        request = _verify_protobuf_call(
-            http, uri, datastore_pb2.AllocateIdsRequest()
-        )
+        request = _verify_protobuf_call(http, uri, datastore_pb2.AllocateIdsRequest())
         self.assertEqual(list(request.keys), [])
 
     def test_allocate_ids_non_empty(self):
@@ -804,9 +802,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "allocateIds")
-        request = _verify_protobuf_call(
-            http, uri, datastore_pb2.AllocateIdsRequest()
-        )
+        request = _verify_protobuf_call(http, uri, datastore_pb2.AllocateIdsRequest())
         self.assertEqual(len(request.keys), len(before_key_pbs))
         for key_before, key_after in zip(before_key_pbs, request.keys):
             self.assertEqual(key_before, key_after)

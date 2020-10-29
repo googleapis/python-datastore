@@ -25,7 +25,6 @@ from google.type import latlng_pb2
 import six
 
 from google.cloud._helpers import _datetime_to_pb_timestamp
-from google.cloud._helpers import _pb_timestamp_to_datetime
 from google.cloud.datastore_v1.types import datastore as datastore_pb2
 from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore.entity import Entity
@@ -131,7 +130,7 @@ def entity_from_protobuf(pb):
         pb = pb._pb
 
     key = None
-    if "key" in proto_pb: # Message field (Key)
+    if "key" in proto_pb:  # Message field (Key)
         key = key_from_protobuf(proto_pb.key)
 
     entity_props = {}
