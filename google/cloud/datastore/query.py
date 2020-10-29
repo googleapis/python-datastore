@@ -658,17 +658,21 @@ def _pb_from_query(query):
         pb._pb.ClearField("filter")
 
     for prop in query.order:
-        property_order = pb.order._pb.add()
+        property_order = query_pb2.PropertyOrder()
 
         if prop.startswith("-"):
             property_order.property.name = prop[1:]
-            property_order.direction = property_order.DESCENDING
+            property_order.direction = property_order.Direction.DESCENDING
         else:
             property_order.property.name = prop
-            property_order.direction = property_order.ASCENDING
+            property_order.direction = property_order.Direction.ASCENDING
+
+        pb.order.append(property_order)
 
     for distinct_on_name in query.distinct_on:
-        pb.distinct_on._pb.add().name = distinct_on_name
+        ref = query_pb2.PropertyReference()
+        ref.name = distinct_on_name
+        pb.distinct_on.append(ref)
 
     return pb
 

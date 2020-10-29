@@ -178,7 +178,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(len(response.missing), 0)
         self.assertEqual(len(response.deferred), 0)
 
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
@@ -215,7 +215,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(len(response.missing), 0)
         self.assertEqual(len(response.deferred), 0)
 
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
@@ -251,7 +251,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(len(response.missing), 0)
         self.assertEqual(len(response.deferred), 0)
 
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
@@ -293,7 +293,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(found.key.path[0].kind, "Kind")
         self.assertEqual(found.key.path[0].id, 1234)
 
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
@@ -329,7 +329,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(len(response.missing), 0)
         self.assertEqual(len(response.deferred), 0)
 
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb1._pb, key_pb2._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
@@ -370,7 +370,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         missing_keys = [result.entity.key for result in response.missing]
         self.assertEqual(missing_keys, [key_pb1._pb, key_pb2._pb])
 
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb1._pb, key_pb2._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
@@ -408,7 +408,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(len(response.missing), 0)
         self.assertEqual(list(response.deferred), [key_pb1._pb, key_pb2._pb])
 
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb1._pb, key_pb2._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
@@ -453,7 +453,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "runQuery")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
         self.assertEqual(request.partition_id, partition_id._pb)
         self.assertEqual(request.query, query_pb._pb)
         self.assertEqual(request.read_options, read_options._pb)
@@ -498,7 +498,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "runQuery")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
         self.assertEqual(request.partition_id, partition_id._pb)
         self.assertEqual(request.query, query_pb._pb)
         self.assertEqual(request.read_options, read_options._pb)
@@ -542,7 +542,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "runQuery")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
         self.assertEqual(request.partition_id, partition_id._pb)
         self.assertEqual(request.query, query_pb._pb)
         self.assertEqual(request.read_options, read_options._pb)
@@ -588,7 +588,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "runQuery")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
         self.assertEqual(request.partition_id, partition_id._pb)
         self.assertEqual(request.query, query_pb._pb)
 
@@ -621,7 +621,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         uri = _build_expected_url(client._base_url, project, "beginTransaction")
         request = _verify_protobuf_call(
-            http, uri, datastore_pb2.BeginTransactionRequest()._pb
+            http, uri, datastore_pb2.BeginTransactionRequest()
         )
         # The RPC-over-HTTP request does not set the project in the request.
         self.assertEqual(request.project_id, u"")
@@ -662,7 +662,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(result, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "commit")
-        request = _verify_protobuf_call(http, uri, rq_class()._pb)
+        request = _verify_protobuf_call(http, uri, rq_class())
         self.assertEqual(request.transaction, b"")
         self.assertEqual(list(request.mutations), [mutation])
         self.assertEqual(request.mode, rq_class.Mode.NON_TRANSACTIONAL)
@@ -703,7 +703,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(result, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "commit")
-        request = _verify_protobuf_call(http, uri, rq_class()._pb)
+        request = _verify_protobuf_call(http, uri, rq_class())
         self.assertEqual(request.transaction, b"xact")
         self.assertEqual(list(request.mutations), [mutation])
         self.assertEqual(request.mode, rq_class.Mode.TRANSACTIONAL)
@@ -735,7 +735,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "rollback")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RollbackRequest()._pb)
+        request = _verify_protobuf_call(http, uri, datastore_pb2.RollbackRequest())
         self.assertEqual(request.transaction, transaction)
 
     def test_allocate_ids_empty(self):
@@ -766,7 +766,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         uri = _build_expected_url(client._base_url, project, "allocateIds")
         request = _verify_protobuf_call(
-            http, uri, datastore_pb2.AllocateIdsRequest()._pb
+            http, uri, datastore_pb2.AllocateIdsRequest()
         )
         self.assertEqual(list(request.keys), [])
 
@@ -805,7 +805,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         uri = _build_expected_url(client._base_url, project, "allocateIds")
         request = _verify_protobuf_call(
-            http, uri, datastore_pb2.AllocateIdsRequest()._pb
+            http, uri, datastore_pb2.AllocateIdsRequest()
         )
         self.assertEqual(len(request.keys), len(before_key_pbs))
         for key_before, key_after in zip(before_key_pbs, request.keys):
@@ -867,5 +867,5 @@ def _verify_protobuf_call(http, expected_url, pb):
     )
 
     data = http.request.mock_calls[0][2]["data"]
-    pb.ParseFromString(data)
+    pb._pb.ParseFromString(data)
     return pb
