@@ -67,8 +67,8 @@ s.replace(
 
 # Remove spurious markup
 s.replace(
-    "google/**/datastore_admin_client.py",
-    "-----------------------------------------------------------------------------",
+    "google/**/datastore_admin/client.py",
+    "\s+---------------------------------(-)+",
     ""
 )
 
