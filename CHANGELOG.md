@@ -18,7 +18,7 @@
 
 ### Documentation
 
-* adds UPGRADING.md, not to readme, to help inform users about migration to v2 ([#113](https://www.github.com/googleapis/python-datastore/issues/113)) ([0d496c6](https://www.github.com/googleapis/python-datastore/commit/0d496c639170d2d5e30a3b69c790b3abfb2ad170))
+* adds UPGRADING.md, note to readme, to help inform users about migration to v2 ([#113](https://www.github.com/googleapis/python-datastore/issues/113)) ([0d496c6](https://www.github.com/googleapis/python-datastore/commit/0d496c639170d2d5e30a3b69c790b3abfb2ad170))
 
 ## [2.0.0-dev1](https://www.github.com/googleapis/python-datastore/compare/v1.15.3...v2.0.0-dev1) (2020-10-30)
 
