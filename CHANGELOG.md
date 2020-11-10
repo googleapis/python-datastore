@@ -9,6 +9,7 @@
 
 ### ⚠ BREAKING CHANGES
 
+* remove support for Python 2.7
 * Leverage new generator, proto-plus, for google-cloud-datastore (#104)
 
 ### Features
