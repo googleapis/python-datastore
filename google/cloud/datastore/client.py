@@ -671,6 +671,16 @@ class Client(ClientWithProject):
             current.begin()
 
         for key in keys:
+            if type(key) is Entity:
+                # While the interface is technically to take an iterable of keys
+                # if an entity is provided the key can be extracted.
+                message = (
+                    "A list of :class:`google.cloud.datastore.key.Key` is expected. "
+                    + "Extracting Key from "
+                    + ":class:`google.cloud.datastore.entity.Entity`."
+                )
+                warnings.warn(message, UserWarning)
+                key = key.key
             current.delete(key)
 
         if not in_batch:
