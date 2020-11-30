@@ -671,7 +671,7 @@ class Client(ClientWithProject):
             current.begin()
 
         for key in keys:
-            if type(key) is Entity:
+            if isinstance(key, Entity):
                 # While the interface is technically to take an iterable of keys
                 # if an entity is provided the key can be extracted.
                 message = (
