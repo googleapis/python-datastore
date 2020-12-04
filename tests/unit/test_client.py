@@ -181,7 +181,9 @@ class TestClient(unittest.TestCase):
         self.assertIsNone(client.current_batch)
         self.assertIsNone(client.current_transaction)
 
-        default.assert_called_once_with(scopes=klass.SCOPE,)
+        default.assert_called_once_with(
+            scopes=klass.SCOPE,
+        )
         _determine_default_project.assert_called_once_with(None)
 
     def test_constructor_w_explicit_inputs(self):
@@ -955,6 +957,24 @@ class TestClient(unittest.TestCase):
 
         with _NoCommitTransaction(client) as CURR_XACT:
             result = client.delete_multi([key])
+
+        self.assertIsNone(result)
+        mutated_key = _mutated_pb(self, CURR_XACT.mutations, "delete")
+        self.assertEqual(mutated_key, key._key)
+        client._datastore_api_internal.commit.assert_not_called()
+
+    def test_delete_multi_w_existing_transaction_entity(self):
+        from google.cloud.datastore.entity import Entity
+
+        creds = _make_credentials()
+        client = self._make_one(credentials=creds)
+        client._datastore_api_internal = _make_datastore_api()
+
+        key = _Key()
+        entity = Entity(key=key)
+
+        with _NoCommitTransaction(client) as CURR_XACT:
+            result = client.delete_multi([entity])
 
         self.assertIsNone(result)
         mutated_key = _mutated_pb(self, CURR_XACT.mutations, "delete")
