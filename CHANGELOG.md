@@ -11,10 +11,7 @@
 
 * support autoconversion of Entity to Key for purposes of delete & delete_multi ([#123](https://www.github.com/googleapis/python-datastore/issues/123)) ([bf1dde6](https://www.github.com/googleapis/python-datastore/commit/bf1dde60b2f42e939c7dfa4a5228c3f41d565ece))
 
-### [2.0.1](https://www.github.com/googleapis/python-datastore/compare/v2.0.1...v2.0.1) (2020-12-02)
-
-
-### Features
+### Fix
 
 * remove six dependency ([#120](https://www.github.com/googleapis/python-datastore/issues/120)) ([b1715e5](https://www.github.com/googleapis/python-datastore/commit/b1715e500f870fd5292bb84232b0039c2ac6be85))
 
