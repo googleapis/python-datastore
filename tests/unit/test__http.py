@@ -592,6 +592,132 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(request.partition_id, partition_id._pb)
         self.assertEqual(request.query, query_pb._pb)
 
+    def test_run_query_w_request_as_dict(self):
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+        from google.cloud.datastore_v1.types import entity as entity_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
+
+        project = "PROJECT"
+        kind = "Kind"
+        query_pb = self._make_query_pb(kind)
+        partition_id = entity_pb2.PartitionId(project_id=project)
+        read_options = datastore_pb2.ReadOptions()
+        rsp_pb = datastore_pb2.RunQueryResponse(
+            batch=query_pb2.QueryResultBatch(
+                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
+                entity_results=[query_pb2.EntityResult(entity=entity_pb2.Entity())],
+                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
+            )
+        )
+
+        # Create mock HTTP and client with response.
+        http = _make_requests_session(
+            [_make_response(content=rsp_pb._pb.SerializeToString())]
+        )
+        client_info = _make_client_info()
+        client = mock.Mock(
+            _http=http,
+            _base_url="test.invalid",
+            _client_info=client_info,
+            spec=["_http", "_base_url", "_client_info"],
+        )
+
+        request = {
+            "project_id": project,
+            "partition_id": partition_id,
+            "read_options": read_options,
+            "query": query_pb,
+        }
+        # Make request.
+        ds_api = self._make_one(client)
+        response = ds_api.run_query(request=request)
+
+        # Check the result and verify the callers.
+        self.assertEqual(response, rsp_pb._pb)
+
+        uri = _build_expected_url(client._base_url, project, "runQuery")
+        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
+        self.assertEqual(request.partition_id, partition_id._pb)
+        self.assertEqual(request.query, query_pb._pb)
+
+    def test_run_query_w_request_as_object(self):
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+        from google.cloud.datastore_v1.types import entity as entity_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
+
+        project = "PROJECT"
+        kind = "Kind"
+        query_pb = self._make_query_pb(kind)
+        partition_id = entity_pb2.PartitionId(project_id=project)
+        read_options = datastore_pb2.ReadOptions()
+        rsp_pb = datastore_pb2.RunQueryResponse(
+            batch=query_pb2.QueryResultBatch(
+                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
+                entity_results=[query_pb2.EntityResult(entity=entity_pb2.Entity())],
+                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
+            )
+        )
+
+        # Create mock HTTP and client with response.
+        http = _make_requests_session(
+            [_make_response(content=rsp_pb._pb.SerializeToString())]
+        )
+        client_info = _make_client_info()
+        client = mock.Mock(
+            _http=http,
+            _base_url="test.invalid",
+            _client_info=client_info,
+            spec=["_http", "_base_url", "_client_info"],
+        )
+        request = {
+            "project_id": project,
+            "partition_id": partition_id,
+            "read_options": read_options,
+            "query": query_pb,
+        }
+
+        request = datastore_pb2.RunQueryRequest(**request)
+        # Make request.
+        ds_api = self._make_one(client)
+        response = ds_api.run_query(request=request)
+
+        # Check the result and verify the callers.
+        self.assertEqual(response, rsp_pb._pb)
+
+        uri = _build_expected_url(client._base_url, project, "runQuery")
+        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
+        self.assertEqual(request.partition_id, partition_id._pb)
+        self.assertEqual(request.query, query_pb._pb)
+
+    def test_run_query_w_request_raise_value_error(self):
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+        from google.cloud.datastore_v1.types import entity as entity_pb2
+        from google.cloud.datastore_v1.types import query as query_pb2
+
+        rsp_pb = datastore_pb2.RunQueryResponse(
+            batch=query_pb2.QueryResultBatch(
+                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
+                entity_results=[query_pb2.EntityResult(entity=entity_pb2.Entity())],
+                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
+            )
+        )
+
+        # Create mock HTTP and client with response.
+        http = _make_requests_session(
+            [_make_response(content=rsp_pb._pb.SerializeToString())]
+        )
+        client_info = _make_client_info()
+        client = mock.Mock(
+            _http=http,
+            _base_url="test.invalid",
+            _client_info=client_info,
+            spec=["_http", "_base_url", "_client_info"],
+        )
+        # Make request.
+        ds_api = self._make_one(client)
+        with self.assertRaises(ValueError):
+            ds_api.run_query()
+
     def test_begin_transaction(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 

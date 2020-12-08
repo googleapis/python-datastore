@@ -181,17 +181,25 @@ class HTTPDatastoreAPI(object):
         )
 
     def run_query(
-        self, project_id, partition_id, read_options=None, query=None, gql_query=None
+        self,
+        project_id=None,
+        partition_id=None,
+        read_options=None,
+        query=None,
+        gql_query=None,
+        request=None,
     ):
         """Perform a ``runQuery`` request.
 
         :type project_id: str
-        :param project_id: The project to connect to. This is
+        :param project_id: (Optional) The project to connect to. This is
                            usually your project name in the cloud console.
+                           Optional only if ``request`` parameter passed.
 
         :type partition_id: :class:`.entity_pb2.PartitionId`
-        :param partition_id: Partition ID corresponding to an optional
-                             namespace and project ID.
+        :param partition_id: (Optional) Partition ID corresponding to an optional
+                             namespace and project ID. Optional only if ``request``
+                             parameter passed.
 
         :type read_options: :class:`.datastore_pb2.ReadOptions`
         :param read_options: (Optional) The options for this query. Contains
@@ -206,16 +214,35 @@ class HTTPDatastoreAPI(object):
         :param gql_query: (Optional) The GQL query to run. At most one of
                           ``query`` and ``gql_query`` can be specified.
 
+        :type request: :class:`.datastore_pb2.RunQueryRequest` or dict
+        :param request: (Optional) The request object. The request for
+                        [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
+
         :rtype: :class:`.datastore_pb2.RunQueryResponse`
         :returns: The returned protobuf response object.
+
+        :raises: :class:`ValueError` if ``project_id``, ``partition_id`` or ``request`` not passed.
         """
-        request_pb = _datastore_pb2.RunQueryRequest(
-            project_id=project_id,
-            partition_id=partition_id,
-            read_options=read_options,
-            query=query,
-            gql_query=gql_query,
-        )
+
+        if (project_id is None or partition_id is None) and request is None:
+            raise ValueError(
+                "Either pass project_id and partition_id parameters or pass request parameter."
+            )
+
+        if request:
+            if not isinstance(request, _datastore_pb2.RunQueryRequest):
+                request_pb = _datastore_pb2.RunQueryRequest(**request)
+            else:
+                request_pb = request
+            project_id = request_pb.project_id
+        else:
+            request_pb = _datastore_pb2.RunQueryRequest(
+                project_id=project_id,
+                partition_id=partition_id,
+                read_options=read_options,
+                query=query,
+                gql_query=gql_query,
+            )
         return _rpc(
             self.client._http,
             project_id,
