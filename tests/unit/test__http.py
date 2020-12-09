@@ -523,7 +523,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         )
         ds_api = self._make_one(client)
 
-        response = ds_api.allocate_ids(project, before_key_pbs)
+        request={"project_id": project, "keys": before_key_pbs}
+
+        response = ds_api.allocate_ids(request)
 
         self.assertEqual(response, rsp_pb._pb)
         self.assertEqual(list(response.keys), [i._pb for i in after_key_pbs])

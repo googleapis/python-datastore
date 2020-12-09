@@ -316,20 +316,23 @@ class HTTPDatastoreAPI(object):
             _datastore_pb2.RollbackResponse,
         )
 
-    def allocate_ids(self, project_id, keys):
+    def allocate_ids(self, request):
         """Perform an ``allocateIds`` request.
 
-        :type project_id: str
-        :param project_id: The project to connect to. This is
-                           usually your project name in the cloud console.
-
-        :type keys: List[.entity_pb2.Key]
-        :param keys: The keys for which the backend should allocate IDs.
+        :type request: :class:`_datastore_pb2.AllocateIdsRequest` or dict
+        :param request:
+            Parameter bundle for API request.
 
         :rtype: :class:`.datastore_pb2.AllocateIdsResponse`
         :returns: The returned protobuf response object.
         """
-        request_pb = _datastore_pb2.AllocateIdsRequest(keys=keys)
+        if not isinstance(request, _datastore_pb2.AllocateIdsRequest):
+            request_pb = _datastore_pb2.AllocateIdsRequest(**request)
+        else:
+            request_pb = request
+
+        project_id = request_pb.project_id
+
         return _rpc(
             self.client._http,
             project_id,
