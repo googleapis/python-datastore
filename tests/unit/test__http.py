@@ -20,6 +20,82 @@ from http import client
 import requests
 
 
+class Test__make_retry_timeout_kwargs(unittest.TestCase):
+    @staticmethod
+    def _call_fut(retry, timeout):
+        from google.cloud.datastore._http import _make_retry_timeout_kwargs
+
+        return _make_retry_timeout_kwargs(retry, timeout)
+
+    def test_empty(self):
+        expected = {}
+        self.assertEqual(self._call_fut(None, None), expected)
+
+    def test_w_retry(self):
+        retry = object()
+        expected = {"retry": retry}
+        self.assertEqual(self._call_fut(retry, None), expected)
+
+    def test_w_timeout(self):
+        timeout = 5.0
+        expected = {"timeout": timeout}
+        self.assertEqual(self._call_fut(None, timeout), expected)
+
+    def test_w_retry_w_timeout(self):
+        retry = object()
+        timeout = 5.0
+        expected = {"retry": retry, "timeout": timeout}
+        self.assertEqual(self._call_fut(retry, timeout), expected)
+
+
+class Foo:
+    def __init__(self, bar=None, baz=None):
+        self.bar = bar
+        self.baz = baz
+
+
+class Test__make_request_pb(unittest.TestCase):
+    @staticmethod
+    def _call_fut(request, request_pb_type):
+        from google.cloud.datastore._http import _make_request_pb
+
+        return _make_request_pb(request, request_pb_type)
+
+    def test_w_empty_dict(self):
+        request = {}
+
+        foo = self._call_fut(request, Foo)
+
+        self.assertIsInstance(foo, Foo)
+        self.assertIsNone(foo.bar)
+        self.assertIsNone(foo.baz)
+
+    def test_w_partial_dict(self):
+        request = {"bar": "Bar"}
+
+        foo = self._call_fut(request, Foo)
+
+        self.assertIsInstance(foo, Foo)
+        self.assertEqual(foo.bar, "Bar")
+        self.assertIsNone(foo.baz)
+
+    def test_w_complete_dict(self):
+        request = {"bar": "Bar", "baz": "Baz"}
+
+        foo = self._call_fut(request, Foo)
+
+        self.assertIsInstance(foo, Foo)
+        self.assertEqual(foo.bar, "Bar")
+        self.assertEqual(foo.baz, "Baz")
+
+    def test_w_instance(self):
+        passed = Foo()
+
+        foo = self._call_fut(passed, Foo)
+
+        self.assertIs(foo, passed)
+
+
 class Test__request(unittest.TestCase):
     @staticmethod
     def _call_fut(*args, **kwargs):
@@ -27,7 +103,7 @@ class Test__request(unittest.TestCase):
 
         return _request(*args, **kwargs)
 
-    def test_success(self):
+    def _helper(self, retry=None, timeout=None):
         from google.cloud import _http as connection_module
 
         project = "PROJECT"
@@ -40,8 +116,11 @@ class Test__request(unittest.TestCase):
 
         http = _make_requests_session([_make_response(content=response_data)])
 
-        # Call actual function under test.
-        response = self._call_fut(http, project, method, data, base_url, client_info)
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
+
+        response = self._call_fut(
+            http, project, method, data, base_url, client_info, **kwargs
+        )
         self.assertEqual(response, response_data)
 
         # Check that the mocks were called as expected.
@@ -51,9 +130,29 @@ class Test__request(unittest.TestCase):
             "User-Agent": user_agent,
             connection_module.CLIENT_INFO_HEADER: user_agent,
         }
+
+        if retry is not None:
+            retry.assert_called_once_with(http.request)
+
+        kwargs.pop("retry", None)
         http.request.assert_called_once_with(
-            method="POST", url=expected_url, headers=expected_headers, data=data
+            method="POST",
+            url=expected_url,
+            headers=expected_headers,
+            data=data,
+            **kwargs
         )
+
+    def test_ok(self):
+        self._helper()
+
+    def test_w_retry(self):
+        retry = mock.MagicMock()
+        self._helper(retry=retry)
+
+    def test_w_timeout(self):
+        timeout = 5.0
+        self._helper(timeout=timeout)
 
     def test_failure(self):
         from google.cloud.exceptions import BadRequest
@@ -89,7 +188,7 @@ class Test__rpc(unittest.TestCase):
 
         return _rpc(*args, **kwargs)
 
-    def test_it(self):
+    def _helper(self, retry=None, timeout=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         http = object()
@@ -100,6 +199,9 @@ class Test__rpc(unittest.TestCase):
         request_pb = datastore_pb2.BeginTransactionRequest(project_id=project)
 
         response_pb = datastore_pb2.BeginTransactionResponse(transaction=b"7830rmc")
+
+        kwargs = _make_retry_timeout_kwargs(retry, timeout)
+
         patch = mock.patch(
             "google.cloud.datastore._http._request",
             return_value=response_pb._pb.SerializeToString(),
@@ -113,17 +215,31 @@ class Test__rpc(unittest.TestCase):
                 client_info,
                 request_pb,
                 datastore_pb2.BeginTransactionResponse,
+                **kwargs
             )
-            self.assertEqual(result, response_pb._pb)
 
-            mock_request.assert_called_once_with(
-                http,
-                project,
-                method,
-                request_pb._pb.SerializeToString(),
-                base_url,
-                client_info,
-            )
+        self.assertEqual(result, response_pb._pb)
+
+        mock_request.assert_called_once_with(
+            http,
+            project,
+            method,
+            request_pb._pb.SerializeToString(),
+            base_url,
+            client_info,
+            **kwargs
+        )
+
+    def test_defaults(self):
+        self._helper()
+
+    def test_w_retry(self):
+        retry = mock.MagicMock()
+        self._helper(retry=retry)
+
+    def test_w_timeout(self):
+        timeout = 5.0
+        self._helper(timeout=timeout)
 
 
 class TestHTTPDatastoreAPI(unittest.TestCase):
@@ -152,6 +268,8 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         read_consistency=None,
         transaction=None,
         empty=True,
+        retry=None,
+        timeout=None,
     ):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
         from google.cloud.datastore_v1.types import entity as entity_pb2
@@ -190,8 +308,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             "keys": [key_pb],
             "read_options": read_options,
         }
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
-        response = ds_api.lookup(request=request)
+        response = ds_api.lookup(request=request, **kwargs)
 
         self.assertEqual(response, rsp_pb._pb)
 
@@ -204,7 +323,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(len(response.deferred), 0)
 
         uri = _build_expected_url(client._base_url, project, "lookup")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
+        request = _verify_protobuf_call(
+            http, uri, datastore_pb2.LookupRequest(), retry=retry, timeout=timeout,
+        )
+
+        if retry is not None:
+            retry.assert_called_once_with(http.request)
+
         self.assertEqual(list(request.keys), [key_pb._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
@@ -224,7 +349,22 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
     def test_lookup_single_key_hit(self):
         self._lookup_single_helper(empty=False)
 
-    def _lookup_multiple_helper(self, found=0, missing=0, deferred=0):
+    def test_lookup_single_key_hit_w_retry(self):
+        retry = mock.MagicMock()
+        self._lookup_single_helper(empty=False, retry=retry)
+
+    def test_lookup_single_key_hit_w_timeout(self):
+        timeout = 5.0
+        self._lookup_single_helper(empty=False, timeout=timeout)
+
+    def _lookup_multiple_helper(
+        self,
+        found=0,
+        missing=0,
+        deferred=0,
+        retry=None,
+        timeout=None,
+    ):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
         from google.cloud.datastore_v1.types import entity as entity_pb2
 
@@ -274,8 +414,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             "keys": keys,
             "read_options": read_options,
         }
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
-        response = ds_api.lookup(request=request)
+        response = ds_api.lookup(request=request, **kwargs)
 
         self.assertEqual(response, rsp_pb._pb)
 
@@ -288,12 +429,22 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(list(response.deferred), deferred_keys)
 
         uri = _build_expected_url(client._base_url, project, "lookup")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
+        request = _verify_protobuf_call(
+            http, uri, datastore_pb2.LookupRequest(), retry=retry, timeout=timeout,
+        )
         self.assertEqual(list(request.keys), [key_pb1._pb, key_pb2._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
     def test_lookup_multiple_keys_w_empty_response(self):
         self._lookup_multiple_helper()
+
+    def test_lookup_multiple_keys_w_retry(self):
+        retry = mock.MagicMock()
+        self._lookup_multiple_helper(retry=retry)
+
+    def test_lookup_multiple_keys_w_timeout(self):
+        timeout = 5.0
+        self._lookup_multiple_helper(timeout=timeout)
 
     def test_lookup_multiple_keys_w_found(self):
         self._lookup_multiple_helper(found=2)
@@ -310,6 +461,8 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         transaction=None,
         namespace=None,
         found=0,
+        retry=None,
+        timeout=None,
     ):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
         from google.cloud.datastore_v1.types import entity as entity_pb2
@@ -363,19 +516,30 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             "read_options": read_options,
             "query": query_pb,
         }
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
-        response = ds_api.run_query(request=request)
+        response = ds_api.run_query(request=request, **kwargs)
 
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "runQuery")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
+        request = _verify_protobuf_call(
+            http, uri, datastore_pb2.RunQueryRequest(), retry=retry, timeout=timeout,
+        )
         self.assertEqual(request.partition_id, partition_id._pb)
         self.assertEqual(request.query, query_pb._pb)
         self.assertEqual(request.read_options, read_options._pb)
 
     def test_run_query_simple(self):
         self._run_query_helper()
+
+    def test_run_query_w_retry(self):
+        retry = mock.MagicMock()
+        self._run_query_helper(retry=retry)
+
+    def test_run_query_w_timeout(self):
+        timeout = 5.0
+        self._run_query_helper(timeout=timeout)
 
     def test_run_query_w_read_consistency(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
@@ -391,7 +555,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         namespace = "NS"
         self._run_query_helper(namespace=namespace, found=1)
 
-    def _begin_transaction_helper(self, options=None):
+    def _begin_transaction_helper(self, options=None, retry=None, timeout=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
@@ -418,14 +582,20 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         if options is not None:
             request["transaction_options"] = options
 
-        response = ds_api.begin_transaction(request=request)
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
+
+        response = ds_api.begin_transaction(request=request, **kwargs)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "beginTransaction")
         request = _verify_protobuf_call(
-            http, uri, datastore_pb2.BeginTransactionRequest()
+            http,
+            uri,
+            datastore_pb2.BeginTransactionRequest(),
+            retry=retry,
+            timeout=timeout,
         )
 
     def test_begin_transaction_wo_options(self):
@@ -438,7 +608,15 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         options = TransactionOptions(read_only=read_only)
         self._begin_transaction_helper(options=options)
 
-    def _commit_helper(self, transaction=None):
+    def test_begin_transaction_w_retry(self):
+        retry = mock.MagicMock()
+        self._begin_transaction_helper(retry=retry)
+
+    def test_begin_transaction_w_timeout(self):
+        timeout = 5.0
+        self._begin_transaction_helper(timeout=timeout)
+
+    def _commit_helper(self, transaction=None, retry=None, timeout=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
         from google.cloud.datastore.helpers import _new_value_pb
 
@@ -474,12 +652,16 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         else:
             mode = request["mode"] = rq_class.Mode.NON_TRANSACTIONAL
 
-        result = ds_api.commit(request=request)
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
+
+        result = ds_api.commit(request=request, **kwargs)
 
         self.assertEqual(result, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "commit")
-        request = _verify_protobuf_call(http, uri, rq_class())
+        request = _verify_protobuf_call(
+            http, uri, rq_class(), retry=retry, timeout=timeout,
+        )
         self.assertEqual(list(request.mutations), [mutation])
         self.assertEqual(request.mode, mode)
 
@@ -496,7 +678,15 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         self._commit_helper(transaction=transaction)
 
-    def test_rollback_ok(self):
+    def test_commit_w_retry(self):
+        retry = mock.MagicMock()
+        self._commit_helper(retry=retry)
+
+    def test_commit_w_timeout(self):
+        timeout = 5.0
+        self._commit_helper(timeout=timeout)
+
+    def _rollback_helper(self, retry=None, timeout=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
@@ -518,17 +708,35 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         # Make request.
         ds_api = self._make_one(client)
         request={"project_id": project, "transaction": transaction}
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
-        response = ds_api.rollback(request=request)
+        response = ds_api.rollback(request=request, **kwargs)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "rollback")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RollbackRequest())
+        request = _verify_protobuf_call(
+            http,
+            uri,
+            datastore_pb2.RollbackRequest(),
+            retry=retry,
+            timeout=timeout,
+        )
         self.assertEqual(request.transaction, transaction)
 
-    def _allocate_ids_helper(self, count=0):
+    def test_rollback_ok(self):
+        self._rollback_helper()
+
+    def test_rollback_w_retry(self):
+        retry = mock.MagicMock()
+        self._rollback_helper(retry=retry)
+
+    def test_rollback_w_timeout(self):
+        timeout = 5.0
+        self._rollback_helper(timeout=timeout)
+
+    def _allocate_ids_helper(self, count=0, retry=None, timeout=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
@@ -556,14 +764,21 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         ds_api = self._make_one(client)
 
         request={"project_id": project, "keys": before_key_pbs}
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
-        response = ds_api.allocate_ids(request=request)
+        response = ds_api.allocate_ids(request=request, **kwargs)
 
         self.assertEqual(response, rsp_pb._pb)
         self.assertEqual(list(response.keys), [i._pb for i in after_key_pbs])
 
         uri = _build_expected_url(client._base_url, project, "allocateIds")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.AllocateIdsRequest())
+        request = _verify_protobuf_call(
+            http,
+            uri,
+            datastore_pb2.AllocateIdsRequest(),
+            retry=retry,
+            timeout=timeout,
+        )
         self.assertEqual(len(request.keys), len(before_key_pbs))
         for key_before, key_after in zip(before_key_pbs, request.keys):
             self.assertEqual(key_before, key_after)
@@ -574,7 +789,15 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
     def test_allocate_ids_non_empty(self):
         self._allocate_ids_helper(count=2)
 
-    def _reserve_ids_helper(self, count=0):
+    def test_allocate_ids_w_retry(self):
+        retry = mock.MagicMock()
+        self._allocate_ids_helper(retry=retry)
+
+    def test_allocate_ids_w_timeout(self):
+        timeout = 5.0
+        self._allocate_ids_helper(timeout=timeout)
+
+    def _reserve_ids_helper(self, count=0, retry=None, timeout=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
@@ -598,13 +821,20 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         ds_api = self._make_one(client)
 
         request={"project_id": project, "keys": before_key_pbs}
+        kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
-        response = ds_api.reserve_ids(request=request)
+        response = ds_api.reserve_ids(request=request, **kwargs)
 
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "reserveIds")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.AllocateIdsRequest())
+        request = _verify_protobuf_call(
+            http,
+            uri,
+            datastore_pb2.AllocateIdsRequest(),
+            retry=retry,
+            timeout=timeout,
+        )
         self.assertEqual(len(request.keys), len(before_key_pbs))
         for key_before, key_after in zip(before_key_pbs, request.keys):
             self.assertEqual(key_before, key_after)
@@ -614,6 +844,14 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
     def test_reserve_ids_non_empty(self):
         self._reserve_ids_helper(count=2)
+
+    def test_reserve_ids_w_retry(self):
+        retry = mock.MagicMock()
+        self._reserve_ids_helper(retry=retry)
+
+    def test_reserve_ids_w_timeout(self):
+        timeout = 5.0
+        self._reserve_ids_helper(timeout=timeout)
 
 
 def _make_response(status=client.OK, content=b"", headers={}):
@@ -657,7 +895,7 @@ def _make_client_info(user_agent=_USER_AGENT):
     return client_info
 
 
-def _verify_protobuf_call(http, expected_url, pb):
+def _verify_protobuf_call(http, expected_url, pb, retry=None, timeout=None):
     from google.cloud import _http as connection_module
 
     expected_headers = {
@@ -666,10 +904,35 @@ def _verify_protobuf_call(http, expected_url, pb):
         connection_module.CLIENT_INFO_HEADER: _USER_AGENT,
     }
 
-    http.request.assert_called_once_with(
-        method="POST", url=expected_url, headers=expected_headers, data=mock.ANY
-    )
+    if retry is not None:
+        retry.assert_called_once_with(http.request)
+
+    if timeout is not None:
+        http.request.assert_called_once_with(
+            method="POST",
+            url=expected_url,
+            headers=expected_headers,
+            data=mock.ANY,
+            timeout=timeout,
+        )
+    else:
+        http.request.assert_called_once_with(
+            method="POST", url=expected_url, headers=expected_headers, data=mock.ANY
+        )
 
     data = http.request.mock_calls[0][2]["data"]
     pb._pb.ParseFromString(data)
     return pb
+
+def _make_retry_timeout_kwargs(retry, timeout, http=None):
+    kwargs = {}
+
+    if retry is not None:
+        kwargs["retry"] = retry
+        if http is not None:
+            retry.return_value = http.request
+
+    if timeout is not None:
+        kwargs["timeout"] = timeout
+
+    return kwargs
