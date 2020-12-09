@@ -347,8 +347,14 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             spec=["_http", "_base_url", "_client_info"],
         )
         ds_api = self._make_one(client)
+        request = {
+            "project_id": project,
+            "partition_id": partition_id,
+            "read_options": read_options,
+            "query": query_pb,
+        }
 
-        response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
+        response = ds_api.run_query(request=request)
 
         self.assertEqual(response, rsp_pb._pb)
 

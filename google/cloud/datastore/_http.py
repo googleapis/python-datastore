@@ -180,42 +180,23 @@ class HTTPDatastoreAPI(object):
             _datastore_pb2.LookupResponse,
         )
 
-    def run_query(
-        self, project_id, partition_id, read_options=None, query=None, gql_query=None
-    ):
+    def run_query(self, request):
         """Perform a ``runQuery`` request.
 
-        :type project_id: str
-        :param project_id: The project to connect to. This is
-                           usually your project name in the cloud console.
-
-        :type partition_id: :class:`.entity_pb2.PartitionId`
-        :param partition_id: Partition ID corresponding to an optional
-                             namespace and project ID.
-
-        :type read_options: :class:`.datastore_pb2.ReadOptions`
-        :param read_options: (Optional) The options for this query. Contains
-                             either the transaction for the read or
-                             ``STRONG`` or ``EVENTUAL`` read consistency.
-
-        :type query: :class:`.query_pb2.Query`
-        :param query: (Optional) The query protobuf to run. At most one of
-                      ``query`` and ``gql_query`` can be specified.
-
-        :type gql_query: :class:`.query_pb2.GqlQuery`
-        :param gql_query: (Optional) The GQL query to run. At most one of
-                          ``query`` and ``gql_query`` can be specified.
+        :type request: :class:`_datastore_pb2.BeginTransactionRequest` or dict
+        :param request:
+            Parameter bundle for API request.
 
         :rtype: :class:`.datastore_pb2.RunQueryResponse`
         :returns: The returned protobuf response object.
         """
-        request_pb = _datastore_pb2.RunQueryRequest(
-            project_id=project_id,
-            partition_id=partition_id,
-            read_options=read_options,
-            query=query,
-            gql_query=gql_query,
-        )
+        if not isinstance(request, _datastore_pb2.RunQueryRequest):
+            request_pb = _datastore_pb2.RunQueryRequest(**request)
+        else:
+            request_pb = request
+
+        project_id = request_pb.project_id
+
         return _rpc(
             self.client._http,
             project_id,
