@@ -437,14 +437,15 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         rq_class = datastore_pb2.CommitRequest
         ds_api = self._make_one(client)
 
-        kwargs = {}
-        if transaction is not None:
-            kwargs["transaction"] = transaction
-            mode = rq_class.Mode.TRANSACTIONAL
-        else:
-            mode = rq_class.Mode.NON_TRANSACTIONAL
+        request = {"project_id": project, "mutations": [mutation]}
 
-        result = ds_api.commit(project, mode, [mutation], **kwargs)
+        if transaction is not None:
+            request["transaction"] = transaction
+            mode = request["mode"] = rq_class.Mode.TRANSACTIONAL
+        else:
+            mode = request["mode"] = rq_class.Mode.NON_TRANSACTIONAL
+
+        result = ds_api.commit(request=request)
 
         self.assertEqual(result, rsp_pb._pb)
 

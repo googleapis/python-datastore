@@ -250,35 +250,23 @@ class HTTPDatastoreAPI(object):
             _datastore_pb2.BeginTransactionResponse,
         )
 
-    def commit(self, project_id, mode, mutations, transaction=None):
+    def commit(self, request):
         """Perform a ``commit`` request.
 
-        :type project_id: str
-        :param project_id: The project to connect to. This is
-                           usually your project name in the cloud console.
-
-        :type mode: :class:`.gapic.datastore.v1.enums.CommitRequest.Mode`
-        :param mode: The type of commit to perform. Expected to be one of
-                     ``TRANSACTIONAL`` or ``NON_TRANSACTIONAL``.
-
-        :type mutations: list
-        :param mutations: List of :class:`.datastore_pb2.Mutation`, the
-                          mutations to perform.
-
-        :type transaction: bytes
-        :param transaction: (Optional) The transaction ID returned from
-                            :meth:`begin_transaction`.  Non-transactional
-                            commits must pass :data:`None`.
+        :type request: :class:`_datastore_pb2.CommitRequest` or dict
+        :param request:
+            Parameter bundle for API request.
 
         :rtype: :class:`.datastore_pb2.CommitResponse`
         :returns: The returned protobuf response object.
         """
-        request_pb = _datastore_pb2.CommitRequest(
-            project_id=project_id,
-            mode=mode,
-            transaction=transaction,
-            mutations=mutations,
-        )
+        if not isinstance(request, _datastore_pb2.CommitRequest):
+            request_pb = _datastore_pb2.CommitRequest(**request)
+        else:
+            request_pb = request
+
+        project_id = request_pb.project_id
+
         return _rpc(
             self.client._http,
             project_id,
