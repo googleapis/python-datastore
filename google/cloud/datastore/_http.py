@@ -226,20 +226,23 @@ class HTTPDatastoreAPI(object):
             _datastore_pb2.RunQueryResponse,
         )
 
-    def begin_transaction(self, project_id, transaction_options=None):
+    def begin_transaction(self, request):
         """Perform a ``beginTransaction`` request.
 
-        :type project_id: str
-        :param project_id: The project to connect to. This is
-                           usually your project name in the cloud console.
-
-        :type transaction_options: ~.datastore_v1.types.TransactionOptions
-        :param transaction_options: (Optional) Options for a new transaction.
+        :type request: :class:`_datastore_pb2.BeginTransactionRequest` or dict
+        :param request:
+            Parameter bundle for API request.
 
         :rtype: :class:`.datastore_pb2.BeginTransactionResponse`
         :returns: The returned protobuf response object.
         """
-        request_pb = _datastore_pb2.BeginTransactionRequest()
+        if not isinstance(request, _datastore_pb2.BeginTransactionRequest):
+            request_pb = _datastore_pb2.BeginTransactionRequest(**request)
+        else:
+            request_pb = request
+
+        project_id = request_pb.project_id
+
         return _rpc(
             self.client._http,
             project_id,

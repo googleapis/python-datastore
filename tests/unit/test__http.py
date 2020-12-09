@@ -375,7 +375,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         namespace = "NS"
         self._run_query_helper(namespace=namespace, found=1)
 
-    def test_begin_transaction(self):
+    def _begin_transaction_helper(self, options=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
@@ -397,7 +397,12 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.begin_transaction(project)
+        request = {"project_id": project}
+
+        if options is not None:
+            request["transaction_options"] = options
+
+        response = ds_api.begin_transaction(request=request)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb._pb)
@@ -406,8 +411,16 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         request = _verify_protobuf_call(
             http, uri, datastore_pb2.BeginTransactionRequest()
         )
-        # The RPC-over-HTTP request does not set the project in the request.
-        self.assertEqual(request.project_id, u"")
+
+    def test_begin_transaction_wo_options(self):
+        self._begin_transaction_helper()
+
+    def test_begin_transaction_w_options(self):
+        from google.cloud.datastore_v1.types import TransactionOptions
+
+        read_only = TransactionOptions.ReadOnly._meta.pb()
+        options = TransactionOptions(read_only=read_only)
+        self._begin_transaction_helper(options=options)
 
     def _commit_helper(self, transaction=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
