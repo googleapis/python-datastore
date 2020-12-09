@@ -542,6 +542,47 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
     def test_allocate_ids_non_empty(self):
         self._allocate_ids_helper(count=2)
 
+    def _reserve_ids_helper(self, count=0):
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+
+        project = "PROJECT"
+        before_key_pbs = []
+        rsp_pb = datastore_pb2.ReserveIdsResponse()
+
+        for i_count in range(count):
+            requested = _make_key_pb(project, id_=i_count)
+            before_key_pbs.append(requested)
+
+        http = _make_requests_session(
+            [_make_response(content=rsp_pb._pb.SerializeToString())]
+        )
+        client_info = _make_client_info()
+        client = mock.Mock(
+            _http=http,
+            _base_url="test.invalid",
+            _client_info=client_info,
+            spec=["_http", "_base_url", "_client_info"],
+        )
+        ds_api = self._make_one(client)
+
+        request={"project_id": project, "keys": before_key_pbs}
+
+        response = ds_api.reserve_ids(request)
+
+        self.assertEqual(response, rsp_pb._pb)
+
+        uri = _build_expected_url(client._base_url, project, "reserveIds")
+        request = _verify_protobuf_call(http, uri, datastore_pb2.AllocateIdsRequest())
+        self.assertEqual(len(request.keys), len(before_key_pbs))
+        for key_before, key_after in zip(before_key_pbs, request.keys):
+            self.assertEqual(key_before, key_after)
+
+    def test_reserve_ids_empty(self):
+        self._reserve_ids_helper()
+
+    def test_reserve_ids_non_empty(self):
+        self._reserve_ids_helper(count=2)
+
 
 def _make_response(status=client.OK, content=b"", headers={}):
     response = requests.Response()

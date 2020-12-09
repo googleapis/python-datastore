@@ -342,3 +342,30 @@ class HTTPDatastoreAPI(object):
             request_pb,
             _datastore_pb2.AllocateIdsResponse,
         )
+
+    def reserve_ids(self, request):
+        """Perform an ``reserveIds`` request.
+
+        :type request: :class:`_datastore_pb2.ReserveIdsRequest` or dict
+        :param request:
+            Parameter bundle for API request.
+
+        :rtype: :class:`.datastore_pb2.ReserveIdsResponse`
+        :returns: The returned protobuf response object.
+        """
+        if not isinstance(request, _datastore_pb2.ReserveIdsRequest):
+            request_pb = _datastore_pb2.ReserveIdsRequest(**request)
+        else:
+            request_pb = request
+
+        project_id = request_pb.project_id
+
+        return _rpc(
+            self.client._http,
+            project_id,
+            "reserveIds",
+            self.client._base_url,
+            self.client._client_info,
+            request_pb,
+            _datastore_pb2.ReserveIdsResponse,
+        )
