@@ -289,23 +289,23 @@ class HTTPDatastoreAPI(object):
             _datastore_pb2.CommitResponse,
         )
 
-    def rollback(self, project_id, transaction):
+    def rollback(self, request):
         """Perform a ``rollback`` request.
 
-        :type project_id: str
-        :param project_id: The project to connect to. This is
-                           usually your project name in the cloud console.
-
-        :type transaction: bytes
-        :param transaction: The transaction ID to rollback.
+        :type request: :class:`_datastore_pb2.RollbackRequest` or dict
+        :param request:
+            Parameter bundle for API request.
 
         :rtype: :class:`.datastore_pb2.RollbackResponse`
         :returns: The returned protobuf response object.
         """
-        request_pb = _datastore_pb2.RollbackRequest(
-            project_id=project_id, transaction=transaction
-        )
-        # Response is empty (i.e. no fields) but we return it anyway.
+        if not isinstance(request, _datastore_pb2.RollbackRequest):
+            request_pb = _datastore_pb2.RollbackRequest(**request)
+        else:
+            request_pb = request
+
+        project_id = request_pb.project_id
+
         return _rpc(
             self.client._http,
             project_id,

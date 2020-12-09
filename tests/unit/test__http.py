@@ -487,7 +487,9 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.rollback(project, transaction)
+        request={"project_id": project, "transaction": transaction}
+
+        response = ds_api.rollback(request=request)
 
         # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb._pb)
@@ -525,7 +527,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         request={"project_id": project, "keys": before_key_pbs}
 
-        response = ds_api.allocate_ids(request)
+        response = ds_api.allocate_ids(request=request)
 
         self.assertEqual(response, rsp_pb._pb)
         self.assertEqual(list(response.keys), [i._pb for i in after_key_pbs])
@@ -567,7 +569,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         request={"project_id": project, "keys": before_key_pbs}
 
-        response = ds_api.reserve_ids(request)
+        response = ds_api.reserve_ids(request=request)
 
         self.assertEqual(response, rsp_pb._pb)
 
