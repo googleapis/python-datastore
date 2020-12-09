@@ -53,14 +53,7 @@ def _make_request_pb(request, request_pb_type):
 
 
 def _request(
-    http,
-    project,
-    method,
-    data,
-    base_url,
-    client_info,
-    retry=None,
-    timeout=None,
+    http, project, method, data, base_url, client_info, retry=None, timeout=None,
 ):
     """Make a request over the Http transport to the Cloud Datastore API.
 
@@ -114,7 +107,6 @@ def _request(
         )
     else:
         response = requester(url=api_url, method="POST", headers=headers, data=data)
-
 
     if response.status_code != 200:
         error_status = status_pb2.Status.FromString(response.content)
@@ -174,13 +166,7 @@ def _rpc(
     req_data = request_pb._pb.SerializeToString()
     kwargs = _make_retry_timeout_kwargs(retry, timeout)
     response = _request(
-        http,
-        project,
-        method,
-        req_data,
-        base_url,
-        client_info,
-        **kwargs
+        http, project, method, req_data, base_url, client_info, **kwargs
     )
     return response_pb_cls.deserialize(response)
 

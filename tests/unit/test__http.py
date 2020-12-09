@@ -358,12 +358,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self._lookup_single_helper(empty=False, timeout=timeout)
 
     def _lookup_multiple_helper(
-        self,
-        found=0,
-        missing=0,
-        deferred=0,
-        retry=None,
-        timeout=None,
+        self, found=0, missing=0, deferred=0, retry=None, timeout=None,
     ):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
         from google.cloud.datastore_v1.types import entity as entity_pb2
@@ -420,9 +415,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         self.assertEqual(response, rsp_pb._pb)
 
-        self.assertEqual(
-            [found.entity.key for found in response.found], found_keys
-        )
+        self.assertEqual([found.entity.key for found in response.found], found_keys)
         self.assertEqual(
             [missing.entity.key for missing in response.missing], missing_keys
         )
@@ -707,7 +700,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         # Make request.
         ds_api = self._make_one(client)
-        request={"project_id": project, "transaction": transaction}
+        request = {"project_id": project, "transaction": transaction}
         kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
         response = ds_api.rollback(request=request, **kwargs)
@@ -717,11 +710,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         uri = _build_expected_url(client._base_url, project, "rollback")
         request = _verify_protobuf_call(
-            http,
-            uri,
-            datastore_pb2.RollbackRequest(),
-            retry=retry,
-            timeout=timeout,
+            http, uri, datastore_pb2.RollbackRequest(), retry=retry, timeout=timeout,
         )
         self.assertEqual(request.transaction, transaction)
 
@@ -763,7 +752,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         )
         ds_api = self._make_one(client)
 
-        request={"project_id": project, "keys": before_key_pbs}
+        request = {"project_id": project, "keys": before_key_pbs}
         kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
         response = ds_api.allocate_ids(request=request, **kwargs)
@@ -773,11 +762,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         uri = _build_expected_url(client._base_url, project, "allocateIds")
         request = _verify_protobuf_call(
-            http,
-            uri,
-            datastore_pb2.AllocateIdsRequest(),
-            retry=retry,
-            timeout=timeout,
+            http, uri, datastore_pb2.AllocateIdsRequest(), retry=retry, timeout=timeout,
         )
         self.assertEqual(len(request.keys), len(before_key_pbs))
         for key_before, key_after in zip(before_key_pbs, request.keys):
@@ -820,7 +805,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         )
         ds_api = self._make_one(client)
 
-        request={"project_id": project, "keys": before_key_pbs}
+        request = {"project_id": project, "keys": before_key_pbs}
         kwargs = _make_retry_timeout_kwargs(retry, timeout, http)
 
         response = ds_api.reserve_ids(request=request, **kwargs)
@@ -829,11 +814,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
 
         uri = _build_expected_url(client._base_url, project, "reserveIds")
         request = _verify_protobuf_call(
-            http,
-            uri,
-            datastore_pb2.AllocateIdsRequest(),
-            retry=retry,
-            timeout=timeout,
+            http, uri, datastore_pb2.AllocateIdsRequest(), retry=retry, timeout=timeout,
         )
         self.assertEqual(len(request.keys), len(before_key_pbs))
         for key_before, key_after in zip(before_key_pbs, request.keys):
@@ -923,6 +904,7 @@ def _verify_protobuf_call(http, expected_url, pb, retry=None, timeout=None):
     data = http.request.mock_calls[0][2]["data"]
     pb._pb.ParseFromString(data)
     return pb
+
 
 def _make_retry_timeout_kwargs(retry, timeout, http=None):
     kwargs = {}
