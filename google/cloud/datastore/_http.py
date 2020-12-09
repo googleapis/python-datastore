@@ -149,27 +149,23 @@ class HTTPDatastoreAPI(object):
     def __init__(self, client):
         self.client = client
 
-    def lookup(self, project_id, keys, read_options=None):
+    def lookup(self, request):
         """Perform a ``lookup`` request.
 
-        :type project_id: str
-        :param project_id: The project to connect to. This is
-                           usually your project name in the cloud console.
-
-        :type keys: List[.entity_pb2.Key]
-        :param keys: The keys to retrieve from the datastore.
-
-        :type read_options: :class:`.datastore_pb2.ReadOptions`
-        :param read_options: (Optional) The options for this lookup. Contains
-                             either the transaction for the read or
-                             ``STRONG`` or ``EVENTUAL`` read consistency.
+        :type request: :class:`_datastore_pb2.LookupRequest` or dict
+        :param request:
+            Parameter bundle for API request.
 
         :rtype: :class:`.datastore_pb2.LookupResponse`
         :returns: The returned protobuf response object.
         """
-        request_pb = _datastore_pb2.LookupRequest(
-            project_id=project_id, read_options=read_options, keys=keys
-        )
+        if not isinstance(request, _datastore_pb2.LookupRequest):
+            request_pb = _datastore_pb2.LookupRequest(**request)
+        else:
+            request_pb = request
+
+        project_id = request_pb.project_id
+
         return _rpc(
             self.client._http,
             project_id,

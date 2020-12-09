@@ -185,8 +185,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             spec=["_http", "_base_url", "_client_info"],
         )
         ds_api = self._make_one(client)
+        request = {
+            "project_id": project,
+            "keys": [key_pb],
+            "read_options": read_options,
+        }
 
-        response = ds_api.lookup(project, [key_pb], read_options=read_options)
+        response = ds_api.lookup(request=request)
 
         self.assertEqual(response, rsp_pb._pb)
 
@@ -264,8 +269,13 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             spec=["_http", "_base_url", "_client_info"],
         )
         ds_api = self._make_one(client)
+        request = {
+            "project_id": project,
+            "keys": keys,
+            "read_options": read_options,
+        }
 
-        response = ds_api.lookup(project, keys, read_options=read_options)
+        response = ds_api.lookup(request=request)
 
         self.assertEqual(response, rsp_pb._pb)
 
