@@ -147,127 +147,33 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         ds_api = self._make_one(client)
         self.assertIs(ds_api.client, client)
 
-    def test_lookup_single_key_empty_response(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-
-        project = "PROJECT"
-        key_pb = _make_key_pb(project)
-        rsp_pb = datastore_pb2.LookupResponse()
-        read_options = datastore_pb2.ReadOptions()
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
-        response = ds_api.lookup(project, [key_pb], read_options=read_options)
-
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-        uri = _build_expected_url(client._base_url, project, "lookup")
-        self.assertEqual(len(response.found), 0)
-        self.assertEqual(len(response.missing), 0)
-        self.assertEqual(len(response.deferred), 0)
-
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
-        self.assertEqual(list(request.keys), [key_pb._pb])
-        self.assertEqual(request.read_options, read_options._pb)
-
-    def test_lookup_single_key_empty_response_w_eventual(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-
-        project = "PROJECT"
-        key_pb = _make_key_pb(project)
-        rsp_pb = datastore_pb2.LookupResponse()
-        read_options = datastore_pb2.ReadOptions(
-            read_consistency=datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
-        )
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
-        response = ds_api.lookup(project, [key_pb], read_options=read_options)
-
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-        uri = _build_expected_url(client._base_url, project, "lookup")
-        self.assertEqual(len(response.found), 0)
-        self.assertEqual(len(response.missing), 0)
-        self.assertEqual(len(response.deferred), 0)
-
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
-        self.assertEqual(list(request.keys), [key_pb._pb])
-        self.assertEqual(request.read_options, read_options._pb)
-
-    def test_lookup_single_key_empty_response_w_transaction(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-
-        project = "PROJECT"
-        transaction = b"TRANSACTION"
-        key_pb = _make_key_pb(project)
-        rsp_pb = datastore_pb2.LookupResponse()
-        read_options = datastore_pb2.ReadOptions(transaction=transaction)
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
-        response = ds_api.lookup(project, [key_pb], read_options=read_options)
-
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-        uri = _build_expected_url(client._base_url, project, "lookup")
-        self.assertEqual(len(response.found), 0)
-        self.assertEqual(len(response.missing), 0)
-        self.assertEqual(len(response.deferred), 0)
-
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
-        self.assertEqual(list(request.keys), [key_pb._pb])
-        self.assertEqual(request.read_options, read_options._pb)
-
-    def test_lookup_single_key_nonempty_response(self):
+    def _lookup_single_helper(
+        self,
+        read_consistency=None,
+        transaction=None,
+        empty=True,
+    ):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
         from google.cloud.datastore_v1.types import entity as entity_pb2
 
         project = "PROJECT"
         key_pb = _make_key_pb(project)
-        rsp_pb = datastore_pb2.LookupResponse()
-        entity = entity_pb2.Entity()
-        entity.key._pb.CopyFrom(key_pb._pb)
-        rsp_pb._pb.found.add(entity=entity._pb)
-        read_options = datastore_pb2.ReadOptions()
 
-        # Create mock HTTP and client with response.
+        options_kw = {}
+        if read_consistency is not None:
+            options_kw["read_consistency"] = read_consistency
+        if transaction is not None:
+            options_kw["transaction"] = transaction
+
+        read_options = datastore_pb2.ReadOptions(**options_kw)
+
+        rsp_pb = datastore_pb2.LookupResponse()
+
+        if not empty:
+            entity = entity_pb2.Entity()
+            entity.key._pb.CopyFrom(key_pb._pb)
+            rsp_pb._pb.found.add(entity=entity._pb)
+
         http = _make_requests_session(
             [_make_response(content=rsp_pb._pb.SerializeToString())]
         )
@@ -278,35 +184,75 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             _client_info=client_info,
             spec=["_http", "_base_url", "_client_info"],
         )
-
-        # Make request.
         ds_api = self._make_one(client)
+
         response = ds_api.lookup(project, [key_pb], read_options=read_options)
 
-        # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb._pb)
-        uri = _build_expected_url(client._base_url, project, "lookup")
-        self.assertEqual(len(response.found), 1)
+
+        if empty:
+            self.assertEqual(len(response.found), 0)
+        else:
+            self.assertEqual(len(response.found), 1)
+
         self.assertEqual(len(response.missing), 0)
         self.assertEqual(len(response.deferred), 0)
-        found = response.found[0].entity
-        self.assertEqual(found.key.path[0].kind, "Kind")
-        self.assertEqual(found.key.path[0].id, 1234)
 
+        uri = _build_expected_url(client._base_url, project, "lookup")
         request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb._pb])
         self.assertEqual(request.read_options, read_options._pb)
 
-    def test_lookup_multiple_keys_empty_response(self):
+    def test_lookup_single_key_miss(self):
+        self._lookup_single_helper()
+
+    def test_lookup_single_key_miss_w_read_consistency(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
+
+        read_consistency = datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
+        self._lookup_single_helper(read_consistency=read_consistency)
+
+    def test_lookup_single_key_miss_w_transaction(self):
+        transaction = b"TRANSACTION"
+        self._lookup_single_helper(transaction=transaction)
+
+    def test_lookup_single_key_hit(self):
+        self._lookup_single_helper(empty=False)
+
+    def _lookup_multiple_helper(self, found=0, missing=0, deferred=0):
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+        from google.cloud.datastore_v1.types import entity as entity_pb2
 
         project = "PROJECT"
         key_pb1 = _make_key_pb(project)
         key_pb2 = _make_key_pb(project, id_=2345)
-        rsp_pb = datastore_pb2.LookupResponse()
+        keys = [key_pb1, key_pb2]
         read_options = datastore_pb2.ReadOptions()
 
-        # Create mock HTTP and client with response.
+        rsp_pb = datastore_pb2.LookupResponse()
+
+        found_keys = []
+        for i_found in range(found):
+            key = keys[i_found]
+            found_keys.append(key._pb)
+            entity = entity_pb2.Entity()
+            entity.key._pb.CopyFrom(key._pb)
+            rsp_pb._pb.found.add(entity=entity._pb)
+
+        missing_keys = []
+        for i_missing in range(missing):
+            key = keys[i_missing]
+            missing_keys.append(key._pb)
+            entity = entity_pb2.Entity()
+            entity.key._pb.CopyFrom(key._pb)
+            rsp_pb._pb.missing.add(entity=entity._pb)
+
+        deferred_keys = []
+        for i_deferred in range(deferred):
+            key = keys[i_deferred]
+            deferred_keys.append(key._pb)
+            rsp_pb._pb.deferred.append(key._pb)
+
         http = _make_requests_session(
             [_make_response(content=rsp_pb._pb.SerializeToString())]
         )
@@ -317,123 +263,79 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             _client_info=client_info,
             spec=["_http", "_base_url", "_client_info"],
         )
-
-        # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.lookup(project, [key_pb1, key_pb2], read_options=read_options)
 
-        # Check the result and verify the callers.
+        response = ds_api.lookup(project, keys, read_options=read_options)
+
         self.assertEqual(response, rsp_pb._pb)
-        uri = _build_expected_url(client._base_url, project, "lookup")
-        self.assertEqual(len(response.found), 0)
-        self.assertEqual(len(response.missing), 0)
-        self.assertEqual(len(response.deferred), 0)
 
+        self.assertEqual(
+            [found.entity.key for found in response.found], found_keys
+        )
+        self.assertEqual(
+            [missing.entity.key for missing in response.missing], missing_keys
+        )
+        self.assertEqual(list(response.deferred), deferred_keys)
+
+        uri = _build_expected_url(client._base_url, project, "lookup")
         request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
         self.assertEqual(list(request.keys), [key_pb1._pb, key_pb2._pb])
         self.assertEqual(request.read_options, read_options._pb)
+
+    def test_lookup_multiple_keys_w_empty_response(self):
+        self._lookup_multiple_helper()
+
+    def test_lookup_multiple_keys_w_found(self):
+        self._lookup_multiple_helper(found=2)
 
     def test_lookup_multiple_keys_w_missing(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-
-        project = "PROJECT"
-        key_pb1 = _make_key_pb(project)
-        key_pb2 = _make_key_pb(project, id_=2345)
-        rsp_pb = datastore_pb2.LookupResponse()
-        er_1 = rsp_pb._pb.missing.add()
-        er_1.entity.key.CopyFrom(key_pb1._pb)
-        er_2 = rsp_pb._pb.missing.add()
-        er_2.entity.key.CopyFrom(key_pb2._pb)
-        read_options = datastore_pb2.ReadOptions()
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
-        response = ds_api.lookup(project, [key_pb1, key_pb2], read_options=read_options)
-
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-        uri = _build_expected_url(client._base_url, project, "lookup")
-        self.assertEqual(len(response.found), 0)
-        self.assertEqual(len(response.deferred), 0)
-        missing_keys = [result.entity.key for result in response.missing]
-        self.assertEqual(missing_keys, [key_pb1._pb, key_pb2._pb])
-
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
-        self.assertEqual(list(request.keys), [key_pb1._pb, key_pb2._pb])
-        self.assertEqual(request.read_options, read_options._pb)
+        self._lookup_multiple_helper(missing=2)
 
     def test_lookup_multiple_keys_w_deferred(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+        self._lookup_multiple_helper(deferred=2)
 
-        project = "PROJECT"
-        key_pb1 = _make_key_pb(project)
-        key_pb2 = _make_key_pb(project, id_=2345)
-        rsp_pb = datastore_pb2.LookupResponse()
-        rsp_pb._pb.deferred.add().CopyFrom(key_pb1._pb)
-        rsp_pb._pb.deferred.add().CopyFrom(key_pb2._pb)
-        read_options = datastore_pb2.ReadOptions()
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
-        response = ds_api.lookup(project, [key_pb1, key_pb2], read_options=read_options)
-
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-        uri = _build_expected_url(client._base_url, project, "lookup")
-        self.assertEqual(len(response.found), 0)
-        self.assertEqual(len(response.missing), 0)
-        self.assertEqual(list(response.deferred), [key_pb1._pb, key_pb2._pb])
-
-        request = _verify_protobuf_call(http, uri, datastore_pb2.LookupRequest())
-        self.assertEqual(list(request.keys), [key_pb1._pb, key_pb2._pb])
-        self.assertEqual(request.read_options, read_options._pb)
-
-    def test_run_query_w_eventual_no_transaction(self):
+    def _run_query_helper(
+        self,
+        read_consistency=None,
+        transaction=None,
+        namespace=None,
+        found=0,
+    ):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
         from google.cloud.datastore_v1.types import entity as entity_pb2
         from google.cloud.datastore_v1.types import query as query_pb2
 
         project = "PROJECT"
         kind = "Nonesuch"
-        cursor = b"\x00"
         query_pb = self._make_query_pb(kind)
-        partition_id = entity_pb2.PartitionId(project_id=project)
-        read_options = datastore_pb2.ReadOptions(
-            read_consistency=datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
-        )
+
+        partition_kw = {"project_id": project}
+        if namespace is not None:
+            partition_kw["namespace_id"] = namespace
+
+        partition_id = entity_pb2.PartitionId(**partition_kw)
+
+        options_kw = {}
+        if read_consistency is not None:
+            options_kw["read_consistency"] = read_consistency
+        if transaction is not None:
+            options_kw["transaction"] = transaction
+        read_options = datastore_pb2.ReadOptions(**options_kw)
+
+        cursor = b"\x00"
+        batch_kw = {
+            "entity_result_type": query_pb2.EntityResult.ResultType.FULL,
+            "end_cursor": cursor,
+            "more_results": query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
+        }
+        if found:
+            batch_kw["entity_results"] = [
+                query_pb2.EntityResult(entity=entity_pb2.Entity())
+            ] * found
         rsp_pb = datastore_pb2.RunQueryResponse(
-            batch=query_pb2.QueryResultBatch(
-                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
-                end_cursor=cursor,
-                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
-            )
+            batch=query_pb2.QueryResultBatch(**batch_kw)
         )
 
-        # Create mock HTTP and client with response.
         http = _make_requests_session(
             [_make_response(content=rsp_pb._pb.SerializeToString())]
         )
@@ -444,12 +346,10 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             _client_info=client_info,
             spec=["_http", "_base_url", "_client_info"],
         )
-
-        # Make request.
         ds_api = self._make_one(client)
+
         response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
 
-        # Check the result and verify the callers.
         self.assertEqual(response, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "runQuery")
@@ -458,139 +358,22 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         self.assertEqual(request.query, query_pb._pb)
         self.assertEqual(request.read_options, read_options._pb)
 
-    def test_run_query_wo_eventual_w_transaction(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-        from google.cloud.datastore_v1.types import entity as entity_pb2
-        from google.cloud.datastore_v1.types import query as query_pb2
+    def test_run_query_simple(self):
+        self._run_query_helper()
 
-        project = "PROJECT"
-        kind = "Nonesuch"
-        cursor = b"\x00"
+    def test_run_query_w_read_consistency(self):
+        from google.cloud.datastore_v1.types import datastore as datastore_pb2
+
+        read_consistency = datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
+        self._run_query_helper(read_consistency=read_consistency)
+
+    def test_run_query_w_transaction(self):
         transaction = b"TRANSACTION"
-        query_pb = self._make_query_pb(kind)
-        partition_id = entity_pb2.PartitionId(project_id=project)
-        read_options = datastore_pb2.ReadOptions(transaction=transaction)
-        rsp_pb = datastore_pb2.RunQueryResponse(
-            batch=query_pb2.QueryResultBatch(
-                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
-                end_cursor=cursor,
-                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
-            )
-        )
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
-        response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
-
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-
-        uri = _build_expected_url(client._base_url, project, "runQuery")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
-        self.assertEqual(request.partition_id, partition_id._pb)
-        self.assertEqual(request.query, query_pb._pb)
-        self.assertEqual(request.read_options, read_options._pb)
-
-    def test_run_query_wo_namespace_empty_result(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-        from google.cloud.datastore_v1.types import entity as entity_pb2
-        from google.cloud.datastore_v1.types import query as query_pb2
-
-        project = "PROJECT"
-        kind = "Nonesuch"
-        cursor = b"\x00"
-        query_pb = self._make_query_pb(kind)
-        partition_id = entity_pb2.PartitionId(project_id=project)
-        read_options = datastore_pb2.ReadOptions()
-        rsp_pb = datastore_pb2.RunQueryResponse(
-            batch=query_pb2.QueryResultBatch(
-                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
-                end_cursor=cursor,
-                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
-            )
-        )
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
-        response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
-
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-
-        uri = _build_expected_url(client._base_url, project, "runQuery")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
-        self.assertEqual(request.partition_id, partition_id._pb)
-        self.assertEqual(request.query, query_pb._pb)
-        self.assertEqual(request.read_options, read_options._pb)
+        self._run_query_helper(transaction=transaction)
 
     def test_run_query_w_namespace_nonempty_result(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-        from google.cloud.datastore_v1.types import entity as entity_pb2
-        from google.cloud.datastore_v1.types import query as query_pb2
-
-        project = "PROJECT"
-        kind = "Kind"
         namespace = "NS"
-        query_pb = self._make_query_pb(kind)
-        partition_id = entity_pb2.PartitionId(
-            project_id=project, namespace_id=namespace
-        )
-        read_options = datastore_pb2.ReadOptions()
-        rsp_pb = datastore_pb2.RunQueryResponse(
-            batch=query_pb2.QueryResultBatch(
-                entity_result_type=query_pb2.EntityResult.ResultType.FULL,
-                entity_results=[query_pb2.EntityResult(entity=entity_pb2.Entity())],
-                more_results=query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS,
-            )
-        )
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
-        response = ds_api.run_query(project, partition_id, read_options, query=query_pb)
-
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-
-        uri = _build_expected_url(client._base_url, project, "runQuery")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.RunQueryRequest())
-        self.assertEqual(request.partition_id, partition_id._pb)
-        self.assertEqual(request.query, query_pb._pb)
+        self._run_query_helper(namespace=namespace, found=1)
 
     def test_begin_transaction(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
@@ -626,7 +409,7 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         # The RPC-over-HTTP request does not set the project in the request.
         self.assertEqual(request.project_id, u"")
 
-    def test_commit_wo_transaction(self):
+    def _commit_helper(self, transaction=None):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
         from google.cloud.datastore.helpers import _new_value_pb
 
@@ -640,7 +423,6 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         value_pb = _new_value_pb(insert, "foo")
         value_pb.string_value = u"Foo"
 
-        # Create mock HTTP and client with response.
         http = _make_requests_session(
             [_make_response(content=rsp_pb._pb.SerializeToString())]
         )
@@ -652,61 +434,37 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             spec=["_http", "_base_url", "_client_info"],
         )
 
-        # Make request.
         rq_class = datastore_pb2.CommitRequest
         ds_api = self._make_one(client)
-        mode = rq_class.Mode.NON_TRANSACTIONAL
-        result = ds_api.commit(project, mode, [mutation])
 
-        # Check the result and verify the callers.
+        kwargs = {}
+        if transaction is not None:
+            kwargs["transaction"] = transaction
+            mode = rq_class.Mode.TRANSACTIONAL
+        else:
+            mode = rq_class.Mode.NON_TRANSACTIONAL
+
+        result = ds_api.commit(project, mode, [mutation], **kwargs)
+
         self.assertEqual(result, rsp_pb._pb)
 
         uri = _build_expected_url(client._base_url, project, "commit")
         request = _verify_protobuf_call(http, uri, rq_class())
-        self.assertEqual(request.transaction, b"")
         self.assertEqual(list(request.mutations), [mutation])
-        self.assertEqual(request.mode, rq_class.Mode.NON_TRANSACTIONAL)
+        self.assertEqual(request.mode, mode)
+
+        if transaction is not None:
+            self.assertEqual(request.transaction, transaction)
+        else:
+            self.assertEqual(request.transaction, b"")
+
+    def test_commit_wo_transaction(self):
+        self._commit_helper()
 
     def test_commit_w_transaction(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-        from google.cloud.datastore.helpers import _new_value_pb
+        transaction = b"xact"
 
-        project = "PROJECT"
-        key_pb = _make_key_pb(project)
-        rsp_pb = datastore_pb2.CommitResponse()
-        req_pb = datastore_pb2.CommitRequest()
-        mutation = req_pb._pb.mutations.add()
-        insert = mutation.upsert
-        insert.key.CopyFrom(key_pb._pb)
-        value_pb = _new_value_pb(insert, "foo")
-        value_pb.string_value = u"Foo"
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        rq_class = datastore_pb2.CommitRequest
-        ds_api = self._make_one(client)
-        mode = rq_class.Mode.TRANSACTIONAL
-        result = ds_api.commit(project, mode, [mutation], transaction=b"xact")
-
-        # Check the result and verify the callers.
-        self.assertEqual(result, rsp_pb._pb)
-
-        uri = _build_expected_url(client._base_url, project, "commit")
-        request = _verify_protobuf_call(http, uri, rq_class())
-        self.assertEqual(request.transaction, b"xact")
-        self.assertEqual(list(request.mutations), [mutation])
-        self.assertEqual(request.mode, rq_class.Mode.TRANSACTIONAL)
+        self._commit_helper(transaction=transaction)
 
     def test_rollback_ok(self):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
@@ -738,13 +496,21 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
         request = _verify_protobuf_call(http, uri, datastore_pb2.RollbackRequest())
         self.assertEqual(request.transaction, transaction)
 
-    def test_allocate_ids_empty(self):
+    def _allocate_ids_helper(self, count=0):
         from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
         project = "PROJECT"
+        before_key_pbs = []
+        after_key_pbs = []
         rsp_pb = datastore_pb2.AllocateIdsResponse()
 
-        # Create mock HTTP and client with response.
+        for i_count in range(count):
+            requested = _make_key_pb(project, id_=None)
+            before_key_pbs.append(requested)
+            allocated = _make_key_pb(project, id_=i_count)
+            after_key_pbs.append(allocated)
+            rsp_pb._pb.keys.add().CopyFrom(allocated._pb)
+
         http = _make_requests_session(
             [_make_response(content=rsp_pb._pb.SerializeToString())]
         )
@@ -755,57 +521,24 @@ class TestHTTPDatastoreAPI(unittest.TestCase):
             _client_info=client_info,
             spec=["_http", "_base_url", "_client_info"],
         )
-
-        # Make request.
         ds_api = self._make_one(client)
-        response = ds_api.allocate_ids(project, [])
 
-        # Check the result and verify the callers.
-        self.assertEqual(response, rsp_pb._pb)
-        self.assertEqual(list(response.keys), [])
-
-        uri = _build_expected_url(client._base_url, project, "allocateIds")
-        request = _verify_protobuf_call(http, uri, datastore_pb2.AllocateIdsRequest())
-        self.assertEqual(list(request.keys), [])
-
-    def test_allocate_ids_non_empty(self):
-        from google.cloud.datastore_v1.types import datastore as datastore_pb2
-
-        project = "PROJECT"
-        before_key_pbs = [
-            _make_key_pb(project, id_=None),
-            _make_key_pb(project, id_=None),
-        ]
-        after_key_pbs = [_make_key_pb(project), _make_key_pb(project, id_=2345)]
-        rsp_pb = datastore_pb2.AllocateIdsResponse()
-        rsp_pb._pb.keys.add().CopyFrom(after_key_pbs[0]._pb)
-        rsp_pb._pb.keys.add().CopyFrom(after_key_pbs[1]._pb)
-
-        # Create mock HTTP and client with response.
-        http = _make_requests_session(
-            [_make_response(content=rsp_pb._pb.SerializeToString())]
-        )
-        client_info = _make_client_info()
-        client = mock.Mock(
-            _http=http,
-            _base_url="test.invalid",
-            _client_info=client_info,
-            spec=["_http", "_base_url", "_client_info"],
-        )
-
-        # Make request.
-        ds_api = self._make_one(client)
         response = ds_api.allocate_ids(project, before_key_pbs)
 
-        # Check the result and verify the callers.
-        self.assertEqual(list(response.keys), [i._pb for i in after_key_pbs])
         self.assertEqual(response, rsp_pb._pb)
+        self.assertEqual(list(response.keys), [i._pb for i in after_key_pbs])
 
         uri = _build_expected_url(client._base_url, project, "allocateIds")
         request = _verify_protobuf_call(http, uri, datastore_pb2.AllocateIdsRequest())
         self.assertEqual(len(request.keys), len(before_key_pbs))
         for key_before, key_after in zip(before_key_pbs, request.keys):
             self.assertEqual(key_before, key_after)
+
+    def test_allocate_ids_empty(self):
+        self._allocate_ids_helper()
+
+    def test_allocate_ids_non_empty(self):
+        self._allocate_ids_helper(count=2)
 
 
 def _make_response(status=client.OK, content=b"", headers={}):
