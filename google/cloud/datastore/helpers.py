@@ -20,7 +20,7 @@ The non-private functions are part of the API.
 import datetime
 import itertools
 
-from google.protobuf import message, struct_pb2
+from google.protobuf import struct_pb2
 from google.type import latlng_pb2
 
 from google.cloud._helpers import _datetime_to_pb_timestamp
@@ -125,10 +125,6 @@ def entity_from_protobuf(pb):
     :returns: The entity derived from the protobuf.
     """
     if not isinstance(pb, entity_pb2.Entity):
-        # Coerce a dictionary into a raw protobuf
-        if not isinstance(pb, message.Message):
-            pb = entity_pb2.Entity.pb(**pb)
-        # Wrap the constructed protobuf with proto-plus dressing
         proto_pb = entity_pb2.Entity.wrap(pb)
     else:
         proto_pb = pb
