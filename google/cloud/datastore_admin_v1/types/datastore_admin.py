@@ -55,19 +55,19 @@ class CommonMetadata(proto.Message):
     r"""Metadata common to all Datastore Admin operations.
 
     Attributes:
-        start_time (google.protobuf.timestamp_pb2.Timestamp):
+        start_time (~.timestamp.Timestamp):
             The time that work began on the operation.
-        end_time (google.protobuf.timestamp_pb2.Timestamp):
+        end_time (~.timestamp.Timestamp):
             The time the operation ended, either
             successfully or otherwise.
-        operation_type (google.cloud.datastore_admin_v1.types.OperationType):
+        operation_type (~.datastore_admin.OperationType):
             The type of the operation. Can be used as a
             filter in ListOperationsRequest.
-        labels (Sequence[google.cloud.datastore_admin_v1.types.CommonMetadata.LabelsEntry]):
+        labels (Sequence[~.datastore_admin.CommonMetadata.LabelsEntry]):
             The client-assigned labels which were
             provided when the operation was created. May
             also include additional labels.
-        state (google.cloud.datastore_admin_v1.types.CommonMetadata.State):
+        state (~.datastore_admin.CommonMetadata.State):
             The current state of the Operation.
     """
 
@@ -119,9 +119,9 @@ class ExportEntitiesRequest(proto.Message):
         project_id (str):
             Required. Project ID against which to make
             the request.
-        labels (Sequence[google.cloud.datastore_admin_v1.types.ExportEntitiesRequest.LabelsEntry]):
+        labels (Sequence[~.datastore_admin.ExportEntitiesRequest.LabelsEntry]):
             Client-assigned labels.
-        entity_filter (google.cloud.datastore_admin_v1.types.EntityFilter):
+        entity_filter (~.datastore_admin.EntityFilter):
             Description of what data from the project is
             included in the export.
         output_url_prefix (str):
@@ -166,7 +166,7 @@ class ImportEntitiesRequest(proto.Message):
         project_id (str):
             Required. Project ID against which to make
             the request.
-        labels (Sequence[google.cloud.datastore_admin_v1.types.ImportEntitiesRequest.LabelsEntry]):
+        labels (Sequence[~.datastore_admin.ImportEntitiesRequest.LabelsEntry]):
             Client-assigned labels.
         input_url (str):
             Required. The full resource URL of the external storage
@@ -184,7 +184,7 @@ class ImportEntitiesRequest(proto.Message):
 
             For more information, see
             [google.datastore.admin.v1.ExportEntitiesResponse.output_url][google.datastore.admin.v1.ExportEntitiesResponse.output_url].
-        entity_filter (google.cloud.datastore_admin_v1.types.EntityFilter):
+        entity_filter (~.datastore_admin.EntityFilter):
             Optionally specify which kinds/namespaces are to be
             imported. If provided, the list must be a subset of the
             EntityFilter used in creating the export, otherwise a
@@ -221,15 +221,15 @@ class ExportEntitiesMetadata(proto.Message):
     r"""Metadata for ExportEntities operations.
 
     Attributes:
-        common (google.cloud.datastore_admin_v1.types.CommonMetadata):
+        common (~.datastore_admin.CommonMetadata):
             Metadata common to all Datastore Admin
             operations.
-        progress_entities (google.cloud.datastore_admin_v1.types.Progress):
+        progress_entities (~.datastore_admin.Progress):
             An estimate of the number of entities
             processed.
-        progress_bytes (google.cloud.datastore_admin_v1.types.Progress):
+        progress_bytes (~.datastore_admin.Progress):
             An estimate of the number of bytes processed.
-        entity_filter (google.cloud.datastore_admin_v1.types.EntityFilter):
+        entity_filter (~.datastore_admin.EntityFilter):
             Description of which entities are being
             exported.
         output_url_prefix (str):
@@ -255,15 +255,15 @@ class ImportEntitiesMetadata(proto.Message):
     r"""Metadata for ImportEntities operations.
 
     Attributes:
-        common (google.cloud.datastore_admin_v1.types.CommonMetadata):
+        common (~.datastore_admin.CommonMetadata):
             Metadata common to all Datastore Admin
             operations.
-        progress_entities (google.cloud.datastore_admin_v1.types.Progress):
+        progress_entities (~.datastore_admin.Progress):
             An estimate of the number of entities
             processed.
-        progress_bytes (google.cloud.datastore_admin_v1.types.Progress):
+        progress_bytes (~.datastore_admin.Progress):
             An estimate of the number of bytes processed.
-        entity_filter (google.cloud.datastore_admin_v1.types.EntityFilter):
+        entity_filter (~.datastore_admin.EntityFilter):
             Description of which entities are being
             imported.
         input_url (str):
@@ -368,7 +368,7 @@ class ListIndexesResponse(proto.Message):
     [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
 
     Attributes:
-        indexes (Sequence[google.cloud.datastore_admin_v1.types.Index]):
+        indexes (Sequence[~.index.Index]):
             The indexes.
         next_page_token (str):
             The standard List next-page token.
@@ -387,10 +387,10 @@ class IndexOperationMetadata(proto.Message):
     r"""Metadata for Index operations.
 
     Attributes:
-        common (google.cloud.datastore_admin_v1.types.CommonMetadata):
+        common (~.datastore_admin.CommonMetadata):
             Metadata common to all Datastore Admin
             operations.
-        progress_entities (google.cloud.datastore_admin_v1.types.Progress):
+        progress_entities (~.datastore_admin.Progress):
             An estimate of the number of entities
             processed.
         index_id (str):

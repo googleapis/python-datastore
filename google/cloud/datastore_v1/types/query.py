@@ -45,7 +45,7 @@ class EntityResult(proto.Message):
     r"""The result of fetching an entity from Datastore.
 
     Attributes:
-        entity (google.cloud.datastore_v1.types.Entity):
+        entity (~.gd_entity.Entity):
             The resulting entity.
         version (int):
             The version of the entity, a strictly positive number that
@@ -89,19 +89,19 @@ class Query(proto.Message):
     r"""A query for entities.
 
     Attributes:
-        projection (Sequence[google.cloud.datastore_v1.types.Projection]):
+        projection (Sequence[~.query.Projection]):
             The projection to return. Defaults to
             returning all properties.
-        kind (Sequence[google.cloud.datastore_v1.types.KindExpression]):
+        kind (Sequence[~.query.KindExpression]):
             The kinds to query (if empty, returns
             entities of all kinds). Currently at most 1 kind
             may be specified.
-        filter (google.cloud.datastore_v1.types.Filter):
+        filter (~.query.Filter):
             The filter to apply.
-        order (Sequence[google.cloud.datastore_v1.types.PropertyOrder]):
+        order (Sequence[~.query.PropertyOrder]):
             The order to apply to the query results (if
             empty, order is unspecified).
-        distinct_on (Sequence[google.cloud.datastore_v1.types.PropertyReference]):
+        distinct_on (Sequence[~.query.PropertyReference]):
             The properties to make distinct. The query
             results will contain the first result for each
             distinct combination of values for the given
@@ -120,7 +120,7 @@ class Query(proto.Message):
             The number of results to skip. Applies before
             limit, but after all other constraints.
             Optional. Must be >= 0 if specified.
-        limit (google.protobuf.wrappers_pb2.Int32Value):
+        limit (~.wrappers.Int32Value):
             The maximum number of results to return.
             Applies after all other constraints. Optional.
             Unspecified is interpreted as no limit.
@@ -176,7 +176,7 @@ class Projection(proto.Message):
     r"""A representation of a property in a projection.
 
     Attributes:
-        property (google.cloud.datastore_v1.types.PropertyReference):
+        property (~.query.PropertyReference):
             The property to project.
     """
 
@@ -187,9 +187,9 @@ class PropertyOrder(proto.Message):
     r"""The desired order for a specific property.
 
     Attributes:
-        property (google.cloud.datastore_v1.types.PropertyReference):
+        property (~.query.PropertyReference):
             The property to order by.
-        direction (google.cloud.datastore_v1.types.PropertyOrder.Direction):
+        direction (~.query.PropertyOrder.Direction):
             The direction to order by. Defaults to ``ASCENDING``.
     """
 
@@ -208,9 +208,9 @@ class Filter(proto.Message):
     r"""A holder for any type of filter.
 
     Attributes:
-        composite_filter (google.cloud.datastore_v1.types.CompositeFilter):
+        composite_filter (~.query.CompositeFilter):
             A composite filter.
-        property_filter (google.cloud.datastore_v1.types.PropertyFilter):
+        property_filter (~.query.PropertyFilter):
             A filter on a property.
     """
 
@@ -228,9 +228,9 @@ class CompositeFilter(proto.Message):
     operator.
 
     Attributes:
-        op (google.cloud.datastore_v1.types.CompositeFilter.Operator):
+        op (~.query.CompositeFilter.Operator):
             The operator for combining multiple filters.
-        filters (Sequence[google.cloud.datastore_v1.types.Filter]):
+        filters (Sequence[~.query.Filter]):
             The list of filters to combine.
             Must contain at least one filter.
     """
@@ -249,11 +249,11 @@ class PropertyFilter(proto.Message):
     r"""A filter on a specific property.
 
     Attributes:
-        property (google.cloud.datastore_v1.types.PropertyReference):
+        property (~.query.PropertyReference):
             The property to filter by.
-        op (google.cloud.datastore_v1.types.PropertyFilter.Operator):
+        op (~.query.PropertyFilter.Operator):
             The operator to filter by.
-        value (google.cloud.datastore_v1.types.Value):
+        value (~.gd_entity.Value):
             The value to compare the property to.
     """
 
@@ -287,14 +287,14 @@ class GqlQuery(proto.Message):
             and instead must bind all values. For example,
             ``SELECT * FROM Kind WHERE a = 'string literal'`` is not
             allowed, while ``SELECT * FROM Kind WHERE a = @value`` is.
-        named_bindings (Sequence[google.cloud.datastore_v1.types.GqlQuery.NamedBindingsEntry]):
+        named_bindings (Sequence[~.query.GqlQuery.NamedBindingsEntry]):
             For each non-reserved named binding site in the query
             string, there must be a named parameter with that name, but
             not necessarily the inverse.
 
             Key must match regex ``[A-Za-z_$][A-Za-z_$0-9]*``, must not
             match regex ``__.*__``, and must not be ``""``.
-        positional_bindings (Sequence[google.cloud.datastore_v1.types.GqlQueryParameter]):
+        positional_bindings (Sequence[~.query.GqlQueryParameter]):
             Numbered binding site @1 references the first numbered
             parameter, effectively using 1-based indexing, rather than
             the usual 0.
@@ -321,7 +321,7 @@ class GqlQueryParameter(proto.Message):
     r"""A binding parameter for a GQL query.
 
     Attributes:
-        value (google.cloud.datastore_v1.types.Value):
+        value (~.gd_entity.Value):
             A value parameter.
         cursor (bytes):
             A query cursor. Query cursors are returned in
@@ -345,14 +345,14 @@ class QueryResultBatch(proto.Message):
         skipped_cursor (bytes):
             A cursor that points to the position after the last skipped
             result. Will be set when ``skipped_results`` != 0.
-        entity_result_type (google.cloud.datastore_v1.types.EntityResult.ResultType):
+        entity_result_type (~.query.EntityResult.ResultType):
             The result type for every entity in ``entity_results``.
-        entity_results (Sequence[google.cloud.datastore_v1.types.EntityResult]):
+        entity_results (Sequence[~.query.EntityResult]):
             The results for this batch.
         end_cursor (bytes):
             A cursor that points to the position after
             the last result in the batch.
-        more_results (google.cloud.datastore_v1.types.QueryResultBatch.MoreResultsType):
+        more_results (~.query.QueryResultBatch.MoreResultsType):
             The state of the query after the current
             batch.
         snapshot_version (int):

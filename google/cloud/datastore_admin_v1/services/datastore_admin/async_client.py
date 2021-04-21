@@ -135,7 +135,6 @@ class DatastoreAdminAsyncClient:
         DatastoreAdminClient.parse_common_location_path
     )
 
-    from_service_account_info = DatastoreAdminClient.from_service_account_info
     from_service_account_file = DatastoreAdminClient.from_service_account_file
     from_service_account_json = from_service_account_file
 
@@ -224,25 +223,23 @@ class DatastoreAdminAsyncClient:
         Google Cloud Storage.
 
         Args:
-            request (:class:`google.cloud.datastore_admin_v1.types.ExportEntitiesRequest`):
+            request (:class:`~.datastore_admin.ExportEntitiesRequest`):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.ExportEntities][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
             project_id (:class:`str`):
                 Required. Project ID against which to
                 make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            labels (:class:`Sequence[google.cloud.datastore_admin_v1.types.ExportEntitiesRequest.LabelsEntry]`):
+            labels (:class:`Sequence[~.datastore_admin.ExportEntitiesRequest.LabelsEntry]`):
                 Client-assigned labels.
                 This corresponds to the ``labels`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            entity_filter (:class:`google.cloud.datastore_admin_v1.types.EntityFilter`):
+            entity_filter (:class:`~.datastore_admin.EntityFilter`):
                 Description of what data from the
                 project is included in the export.
-
                 This corresponds to the ``entity_filter`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -271,7 +268,6 @@ class DatastoreAdminAsyncClient:
                 By nesting the data files deeper, the same Cloud Storage
                 bucket can be used in multiple ExportEntities operations
                 without conflict.
-
                 This corresponds to the ``output_url_prefix`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -283,11 +279,13 @@ class DatastoreAdminAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            google.api_core.operation_async.AsyncOperation:
+            ~.operation_async.AsyncOperation:
                 An object representing a long-running operation.
 
-                The result type for the operation will be :class:`google.cloud.datastore_admin_v1.types.ExportEntitiesResponse` The response for
-                   [google.datastore.admin.v1.DatastoreAdmin.ExportEntities][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
+                The result type for the operation will be
+                :class:``~.datastore_admin.ExportEntitiesResponse``: The
+                response for
+                [google.datastore.admin.v1.DatastoreAdmin.ExportEntities][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
 
         """
         # Create or coerce a protobuf request object.
@@ -360,17 +358,16 @@ class DatastoreAdminAsyncClient:
         imported to Cloud Datastore.
 
         Args:
-            request (:class:`google.cloud.datastore_admin_v1.types.ImportEntitiesRequest`):
+            request (:class:`~.datastore_admin.ImportEntitiesRequest`):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.ImportEntities][google.datastore.admin.v1.DatastoreAdmin.ImportEntities].
             project_id (:class:`str`):
                 Required. Project ID against which to
                 make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            labels (:class:`Sequence[google.cloud.datastore_admin_v1.types.ImportEntitiesRequest.LabelsEntry]`):
+            labels (:class:`Sequence[~.datastore_admin.ImportEntitiesRequest.LabelsEntry]`):
                 Client-assigned labels.
                 This corresponds to the ``labels`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -391,18 +388,16 @@ class DatastoreAdminAsyncClient:
 
                 For more information, see
                 [google.datastore.admin.v1.ExportEntitiesResponse.output_url][google.datastore.admin.v1.ExportEntitiesResponse.output_url].
-
                 This corresponds to the ``input_url`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            entity_filter (:class:`google.cloud.datastore_admin_v1.types.EntityFilter`):
+            entity_filter (:class:`~.datastore_admin.EntityFilter`):
                 Optionally specify which kinds/namespaces are to be
                 imported. If provided, the list must be a subset of the
                 EntityFilter used in creating the export, otherwise a
                 FAILED_PRECONDITION error will be returned. If no filter
                 is specified then all entities from the export are
                 imported.
-
                 This corresponds to the ``entity_filter`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -414,22 +409,24 @@ class DatastoreAdminAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            google.api_core.operation_async.AsyncOperation:
+            ~.operation_async.AsyncOperation:
                 An object representing a long-running operation.
 
-                The result type for the operation will be :class:`google.protobuf.empty_pb2.Empty` A generic empty message that you can re-use to avoid defining duplicated
-                   empty messages in your APIs. A typical example is to
-                   use it as the request or the response type of an API
-                   method. For instance:
+                The result type for the operation will be
+                :class:``~.empty.Empty``: A generic empty message that
+                you can re-use to avoid defining duplicated empty
+                messages in your APIs. A typical example is to use it as
+                the request or the response type of an API method. For
+                instance:
 
-                      service Foo {
-                         rpc Bar(google.protobuf.Empty) returns
-                         (google.protobuf.Empty);
+                ::
 
-                      }
+                    service Foo {
+                      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
+                    }
 
-                   The JSON representation for Empty is empty JSON
-                   object {}.
+                The JSON representation for ``Empty`` is empty JSON
+                object ``{}``.
 
         """
         # Create or coerce a protobuf request object.
@@ -490,7 +487,7 @@ class DatastoreAdminAsyncClient:
         r"""Gets an index.
 
         Args:
-            request (:class:`google.cloud.datastore_admin_v1.types.GetIndexRequest`):
+            request (:class:`~.datastore_admin.GetIndexRequest`):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.GetIndex][google.datastore.admin.v1.DatastoreAdmin.GetIndex].
 
@@ -501,7 +498,7 @@ class DatastoreAdminAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_admin_v1.types.Index:
+            ~.index.Index:
                 A minimal index definition.
         """
         # Create or coerce a protobuf request object.
@@ -544,7 +541,7 @@ class DatastoreAdminAsyncClient:
         results.
 
         Args:
-            request (:class:`google.cloud.datastore_admin_v1.types.ListIndexesRequest`):
+            request (:class:`~.datastore_admin.ListIndexesRequest`):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
 
@@ -555,9 +552,9 @@ class DatastoreAdminAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_admin_v1.services.datastore_admin.pagers.ListIndexesAsyncPager:
+            ~.pagers.ListIndexesAsyncPager:
                 The response for
-                   [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
+                [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.

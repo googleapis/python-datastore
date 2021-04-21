@@ -25,7 +25,7 @@ class ListIndexesPager:
     """A pager for iterating through ``list_indexes`` requests.
 
     This class thinly wraps an initial
-    :class:`google.cloud.datastore_admin_v1.types.ListIndexesResponse` object, and
+    :class:`~.datastore_admin.ListIndexesResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``indexes`` field.
 
@@ -34,7 +34,7 @@ class ListIndexesPager:
     through the ``indexes`` field on the
     corresponding responses.
 
-    All the usual :class:`google.cloud.datastore_admin_v1.types.ListIndexesResponse`
+    All the usual :class:`~.datastore_admin.ListIndexesResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -52,9 +52,9 @@ class ListIndexesPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.cloud.datastore_admin_v1.types.ListIndexesRequest):
+            request (:class:`~.datastore_admin.ListIndexesRequest`):
                 The initial request object.
-            response (google.cloud.datastore_admin_v1.types.ListIndexesResponse):
+            response (:class:`~.datastore_admin.ListIndexesResponse`):
                 The initial response object.
             metadata (Sequence[Tuple[str, str]]): Strings which should be
                 sent along with the request as metadata.
@@ -87,7 +87,7 @@ class ListIndexesAsyncPager:
     """A pager for iterating through ``list_indexes`` requests.
 
     This class thinly wraps an initial
-    :class:`google.cloud.datastore_admin_v1.types.ListIndexesResponse` object, and
+    :class:`~.datastore_admin.ListIndexesResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``indexes`` field.
 
@@ -96,7 +96,7 @@ class ListIndexesAsyncPager:
     through the ``indexes`` field on the
     corresponding responses.
 
-    All the usual :class:`google.cloud.datastore_admin_v1.types.ListIndexesResponse`
+    All the usual :class:`~.datastore_admin.ListIndexesResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -114,9 +114,9 @@ class ListIndexesAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.cloud.datastore_admin_v1.types.ListIndexesRequest):
+            request (:class:`~.datastore_admin.ListIndexesRequest`):
                 The initial request object.
-            response (google.cloud.datastore_admin_v1.types.ListIndexesResponse):
+            response (:class:`~.datastore_admin.ListIndexesResponse`):
                 The initial response object.
             metadata (Sequence[Tuple[str, str]]): Strings which should be
                 sent along with the request as metadata.

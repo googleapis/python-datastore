@@ -170,22 +170,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
     )
 
     @classmethod
-    def from_service_account_info(cls, info: dict, *args, **kwargs):
-        """Creates an instance of this client using the provided credentials info.
-
-        Args:
-            info (dict): The service account private key info.
-            args: Additional arguments to pass to the constructor.
-            kwargs: Additional arguments to pass to the constructor.
-
-        Returns:
-            DatastoreAdminClient: The constructed client.
-        """
-        credentials = service_account.Credentials.from_service_account_info(info)
-        kwargs["credentials"] = credentials
-        return cls(*args, **kwargs)
-
-    @classmethod
     def from_service_account_file(cls, filename: str, *args, **kwargs):
         """Creates an instance of this client using the provided credentials
         file.
@@ -197,7 +181,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
             kwargs: Additional arguments to pass to the constructor.
 
         Returns:
-            DatastoreAdminClient: The constructed client.
+            {@api.name}: The constructed client.
         """
         credentials = service_account.Credentials.from_service_account_file(filename)
         kwargs["credentials"] = credentials
@@ -289,10 +273,10 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 credentials identify the application to the service; if none
                 are specified, the client will attempt to ascertain the
                 credentials from the environment.
-            transport (Union[str, DatastoreAdminTransport]): The
+            transport (Union[str, ~.DatastoreAdminTransport]): The
                 transport to use. If set to None, a transport is chosen
                 automatically.
-            client_options (google.api_core.client_options.ClientOptions): Custom options for the
+            client_options (client_options_lib.ClientOptions): Custom options for the
                 client. It won't take effect if a ``transport`` instance is provided.
                 (1) The ``api_endpoint`` property can be used to override the
                 default endpoint provided by the client. GOOGLE_API_USE_MTLS_ENDPOINT
@@ -414,29 +398,27 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         Google Cloud Storage.
 
         Args:
-            request (google.cloud.datastore_admin_v1.types.ExportEntitiesRequest):
+            request (:class:`~.datastore_admin.ExportEntitiesRequest`):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.ExportEntities][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
-            project_id (str):
+            project_id (:class:`str`):
                 Required. Project ID against which to
                 make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            labels (Sequence[google.cloud.datastore_admin_v1.types.ExportEntitiesRequest.LabelsEntry]):
+            labels (:class:`Sequence[~.datastore_admin.ExportEntitiesRequest.LabelsEntry]`):
                 Client-assigned labels.
                 This corresponds to the ``labels`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            entity_filter (google.cloud.datastore_admin_v1.types.EntityFilter):
+            entity_filter (:class:`~.datastore_admin.EntityFilter`):
                 Description of what data from the
                 project is included in the export.
-
                 This corresponds to the ``entity_filter`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            output_url_prefix (str):
+            output_url_prefix (:class:`str`):
                 Required. Location for the export metadata and data
                 files.
 
@@ -461,7 +443,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 By nesting the data files deeper, the same Cloud Storage
                 bucket can be used in multiple ExportEntities operations
                 without conflict.
-
                 This corresponds to the ``output_url_prefix`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -473,11 +454,13 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.api_core.operation.Operation:
+            ~.operation.Operation:
                 An object representing a long-running operation.
 
-                The result type for the operation will be :class:`google.cloud.datastore_admin_v1.types.ExportEntitiesResponse` The response for
-                   [google.datastore.admin.v1.DatastoreAdmin.ExportEntities][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
+                The result type for the operation will be
+                :class:``~.datastore_admin.ExportEntitiesResponse``: The
+                response for
+                [google.datastore.admin.v1.DatastoreAdmin.ExportEntities][google.datastore.admin.v1.DatastoreAdmin.ExportEntities].
 
         """
         # Create or coerce a protobuf request object.
@@ -551,22 +534,21 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         imported to Cloud Datastore.
 
         Args:
-            request (google.cloud.datastore_admin_v1.types.ImportEntitiesRequest):
+            request (:class:`~.datastore_admin.ImportEntitiesRequest`):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.ImportEntities][google.datastore.admin.v1.DatastoreAdmin.ImportEntities].
-            project_id (str):
+            project_id (:class:`str`):
                 Required. Project ID against which to
                 make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            labels (Sequence[google.cloud.datastore_admin_v1.types.ImportEntitiesRequest.LabelsEntry]):
+            labels (:class:`Sequence[~.datastore_admin.ImportEntitiesRequest.LabelsEntry]`):
                 Client-assigned labels.
                 This corresponds to the ``labels`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            input_url (str):
+            input_url (:class:`str`):
                 Required. The full resource URL of the external storage
                 location. Currently, only Google Cloud Storage is
                 supported. So input_url should be of the form:
@@ -582,18 +564,16 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
                 For more information, see
                 [google.datastore.admin.v1.ExportEntitiesResponse.output_url][google.datastore.admin.v1.ExportEntitiesResponse.output_url].
-
                 This corresponds to the ``input_url`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            entity_filter (google.cloud.datastore_admin_v1.types.EntityFilter):
+            entity_filter (:class:`~.datastore_admin.EntityFilter`):
                 Optionally specify which kinds/namespaces are to be
                 imported. If provided, the list must be a subset of the
                 EntityFilter used in creating the export, otherwise a
                 FAILED_PRECONDITION error will be returned. If no filter
                 is specified then all entities from the export are
                 imported.
-
                 This corresponds to the ``entity_filter`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -605,22 +585,24 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.api_core.operation.Operation:
+            ~.operation.Operation:
                 An object representing a long-running operation.
 
-                The result type for the operation will be :class:`google.protobuf.empty_pb2.Empty` A generic empty message that you can re-use to avoid defining duplicated
-                   empty messages in your APIs. A typical example is to
-                   use it as the request or the response type of an API
-                   method. For instance:
+                The result type for the operation will be
+                :class:``~.empty.Empty``: A generic empty message that
+                you can re-use to avoid defining duplicated empty
+                messages in your APIs. A typical example is to use it as
+                the request or the response type of an API method. For
+                instance:
 
-                      service Foo {
-                         rpc Bar(google.protobuf.Empty) returns
-                         (google.protobuf.Empty);
+                ::
 
-                      }
+                    service Foo {
+                      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
+                    }
 
-                   The JSON representation for Empty is empty JSON
-                   object {}.
+                The JSON representation for ``Empty`` is empty JSON
+                object ``{}``.
 
         """
         # Create or coerce a protobuf request object.
@@ -682,7 +664,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         r"""Gets an index.
 
         Args:
-            request (google.cloud.datastore_admin_v1.types.GetIndexRequest):
+            request (:class:`~.datastore_admin.GetIndexRequest`):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.GetIndex][google.datastore.admin.v1.DatastoreAdmin.GetIndex].
 
@@ -693,7 +675,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_admin_v1.types.Index:
+            ~.index.Index:
                 A minimal index definition.
         """
         # Create or coerce a protobuf request object.
@@ -729,7 +711,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         results.
 
         Args:
-            request (google.cloud.datastore_admin_v1.types.ListIndexesRequest):
+            request (:class:`~.datastore_admin.ListIndexesRequest`):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
 
@@ -740,9 +722,9 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_admin_v1.services.datastore_admin.pagers.ListIndexesPager:
+            ~.pagers.ListIndexesPager:
                 The response for
-                   [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
+                [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.

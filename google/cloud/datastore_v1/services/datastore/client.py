@@ -117,22 +117,6 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
     )
 
     @classmethod
-    def from_service_account_info(cls, info: dict, *args, **kwargs):
-        """Creates an instance of this client using the provided credentials info.
-
-        Args:
-            info (dict): The service account private key info.
-            args: Additional arguments to pass to the constructor.
-            kwargs: Additional arguments to pass to the constructor.
-
-        Returns:
-            DatastoreClient: The constructed client.
-        """
-        credentials = service_account.Credentials.from_service_account_info(info)
-        kwargs["credentials"] = credentials
-        return cls(*args, **kwargs)
-
-    @classmethod
     def from_service_account_file(cls, filename: str, *args, **kwargs):
         """Creates an instance of this client using the provided credentials
         file.
@@ -144,7 +128,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
             kwargs: Additional arguments to pass to the constructor.
 
         Returns:
-            DatastoreClient: The constructed client.
+            {@api.name}: The constructed client.
         """
         credentials = service_account.Credentials.from_service_account_file(filename)
         kwargs["credentials"] = credentials
@@ -236,10 +220,10 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 credentials identify the application to the service; if none
                 are specified, the client will attempt to ascertain the
                 credentials from the environment.
-            transport (Union[str, DatastoreTransport]): The
+            transport (Union[str, ~.DatastoreTransport]): The
                 transport to use. If set to None, a transport is chosen
                 automatically.
-            client_options (google.api_core.client_options.ClientOptions): Custom options for the
+            client_options (client_options_lib.ClientOptions): Custom options for the
                 client. It won't take effect if a ``transport`` instance is provided.
                 (1) The ``api_endpoint`` property can be used to override the
                 default endpoint provided by the client. GOOGLE_API_USE_MTLS_ENDPOINT
@@ -351,25 +335,23 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         r"""Looks up entities by key.
 
         Args:
-            request (google.cloud.datastore_v1.types.LookupRequest):
+            request (:class:`~.datastore.LookupRequest`):
                 The request object. The request for
                 [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
-            project_id (str):
+            project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            read_options (google.cloud.datastore_v1.types.ReadOptions):
+            read_options (:class:`~.datastore.ReadOptions`):
                 The options for this lookup request.
                 This corresponds to the ``read_options`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            keys (Sequence[google.cloud.datastore_v1.types.Key]):
+            keys (:class:`Sequence[~.entity.Key]`):
                 Required. Keys of entities to look
                 up.
-
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -381,7 +363,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_v1.types.LookupResponse:
+            ~.datastore.LookupResponse:
                 The response for
                 [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
 
@@ -435,7 +417,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         r"""Queries for entities.
 
         Args:
-            request (google.cloud.datastore_v1.types.RunQueryRequest):
+            request (:class:`~.datastore.RunQueryRequest`):
                 The request object. The request for
                 [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
 
@@ -446,7 +428,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_v1.types.RunQueryResponse:
+            ~.datastore.RunQueryResponse:
                 The response for
                 [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
 
@@ -482,13 +464,12 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         r"""Begins a new transaction.
 
         Args:
-            request (google.cloud.datastore_v1.types.BeginTransactionRequest):
+            request (:class:`~.datastore.BeginTransactionRequest`):
                 The request object. The request for
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
-            project_id (str):
+            project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -500,7 +481,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_v1.types.BeginTransactionResponse:
+            ~.datastore.BeginTransactionResponse:
                 The response for
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
 
@@ -554,33 +535,30 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         or modifying some entities.
 
         Args:
-            request (google.cloud.datastore_v1.types.CommitRequest):
+            request (:class:`~.datastore.CommitRequest`):
                 The request object. The request for
                 [Datastore.Commit][google.datastore.v1.Datastore.Commit].
-            project_id (str):
+            project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            mode (google.cloud.datastore_v1.types.CommitRequest.Mode):
+            mode (:class:`~.datastore.CommitRequest.Mode`):
                 The type of commit to perform. Defaults to
                 ``TRANSACTIONAL``.
-
                 This corresponds to the ``mode`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            transaction (bytes):
+            transaction (:class:`bytes`):
                 The identifier of the transaction associated with the
                 commit. A transaction identifier is returned by a call
                 to
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
-
                 This corresponds to the ``transaction`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            mutations (Sequence[google.cloud.datastore_v1.types.Mutation]):
+            mutations (:class:`Sequence[~.datastore.Mutation]`):
                 The mutations to perform.
 
                 When mode is ``TRANSACTIONAL``, mutations affecting a
@@ -595,7 +573,6 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
                 When mode is ``NON_TRANSACTIONAL``, no two mutations may
                 affect a single entity.
-
                 This corresponds to the ``mutations`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -607,7 +584,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_v1.types.CommitResponse:
+            ~.datastore.CommitResponse:
                 The response for
                 [Datastore.Commit][google.datastore.v1.Datastore.Commit].
 
@@ -665,21 +642,19 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         r"""Rolls back a transaction.
 
         Args:
-            request (google.cloud.datastore_v1.types.RollbackRequest):
+            request (:class:`~.datastore.RollbackRequest`):
                 The request object. The request for
                 [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
-            project_id (str):
+            project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            transaction (bytes):
+            transaction (:class:`bytes`):
                 Required. The transaction identifier, returned by a call
                 to
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
-
                 This corresponds to the ``transaction`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -691,9 +666,10 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_v1.types.RollbackResponse:
-                The response for [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
-                   (an empty message).
+            ~.datastore.RollbackResponse:
+                The response for
+                [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
+                (an empty message).
 
         """
         # Create or coerce a protobuf request object.
@@ -745,22 +721,20 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         referencing an entity before it is inserted.
 
         Args:
-            request (google.cloud.datastore_v1.types.AllocateIdsRequest):
+            request (:class:`~.datastore.AllocateIdsRequest`):
                 The request object. The request for
                 [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
-            project_id (str):
+            project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            keys (Sequence[google.cloud.datastore_v1.types.Key]):
+            keys (:class:`Sequence[~.entity.Key]`):
                 Required. A list of keys with
                 incomplete key paths for which to
                 allocate IDs. No key may be
                 reserved/read-only.
-
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -772,7 +746,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_v1.types.AllocateIdsResponse:
+            ~.datastore.AllocateIdsResponse:
                 The response for
                 [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
 
@@ -827,21 +801,19 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         llocated by Cloud Datastore.
 
         Args:
-            request (google.cloud.datastore_v1.types.ReserveIdsRequest):
+            request (:class:`~.datastore.ReserveIdsRequest`):
                 The request object. The request for
                 [Datastore.ReserveIds][google.datastore.v1.Datastore.ReserveIds].
-            project_id (str):
+            project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
-
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            keys (Sequence[google.cloud.datastore_v1.types.Key]):
+            keys (:class:`Sequence[~.entity.Key]`):
                 Required. A list of keys with
                 complete key paths whose numeric IDs
                 should not be auto-allocated.
-
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -853,7 +825,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 sent along with the request as metadata.
 
         Returns:
-            google.cloud.datastore_v1.types.ReserveIdsResponse:
+            ~.datastore.ReserveIdsResponse:
                 The response for
                 [Datastore.ReserveIds][google.datastore.v1.Datastore.ReserveIds].
 

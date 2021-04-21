@@ -55,9 +55,9 @@ class LookupRequest(proto.Message):
         project_id (str):
             Required. The ID of the project against which
             to make the request.
-        read_options (google.cloud.datastore_v1.types.ReadOptions):
+        read_options (~.datastore.ReadOptions):
             The options for this lookup request.
-        keys (Sequence[google.cloud.datastore_v1.types.Key]):
+        keys (Sequence[~.entity.Key]):
             Required. Keys of entities to look up.
     """
 
@@ -73,15 +73,15 @@ class LookupResponse(proto.Message):
     [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
 
     Attributes:
-        found (Sequence[google.cloud.datastore_v1.types.EntityResult]):
+        found (Sequence[~.gd_query.EntityResult]):
             Entities found as ``ResultType.FULL`` entities. The order of
             results in this field is undefined and has no relation to
             the order of the keys in the input.
-        missing (Sequence[google.cloud.datastore_v1.types.EntityResult]):
+        missing (Sequence[~.gd_query.EntityResult]):
             Entities not found as ``ResultType.KEY_ONLY`` entities. The
             order of results in this field is undefined and has no
             relation to the order of the keys in the input.
-        deferred (Sequence[google.cloud.datastore_v1.types.Key]):
+        deferred (Sequence[~.entity.Key]):
             A list of keys that were not looked up due to
             resource constraints. The order of results in
             this field is undefined and has no relation to
@@ -105,17 +105,17 @@ class RunQueryRequest(proto.Message):
         project_id (str):
             Required. The ID of the project against which
             to make the request.
-        partition_id (google.cloud.datastore_v1.types.PartitionId):
+        partition_id (~.entity.PartitionId):
             Entities are partitioned into subsets,
             identified by a partition ID. Queries are scoped
             to a single partition. This partition ID is
             normalized with the standard default context
             partition ID.
-        read_options (google.cloud.datastore_v1.types.ReadOptions):
+        read_options (~.datastore.ReadOptions):
             The options for this query.
-        query (google.cloud.datastore_v1.types.Query):
+        query (~.gd_query.Query):
             The query to run.
-        gql_query (google.cloud.datastore_v1.types.GqlQuery):
+        gql_query (~.gd_query.GqlQuery):
             The GQL query to run.
     """
 
@@ -139,9 +139,9 @@ class RunQueryResponse(proto.Message):
     [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
 
     Attributes:
-        batch (google.cloud.datastore_v1.types.QueryResultBatch):
+        batch (~.gd_query.QueryResultBatch):
             A batch of query results (always present).
-        query (google.cloud.datastore_v1.types.Query):
+        query (~.gd_query.Query):
             The parsed form of the ``GqlQuery`` from the request, if it
             was set.
     """
@@ -159,7 +159,7 @@ class BeginTransactionRequest(proto.Message):
         project_id (str):
             Required. The ID of the project against which
             to make the request.
-        transaction_options (google.cloud.datastore_v1.types.TransactionOptions):
+        transaction_options (~.datastore.TransactionOptions):
             Options for a new transaction.
     """
 
@@ -215,14 +215,14 @@ class CommitRequest(proto.Message):
         project_id (str):
             Required. The ID of the project against which
             to make the request.
-        mode (google.cloud.datastore_v1.types.CommitRequest.Mode):
+        mode (~.datastore.CommitRequest.Mode):
             The type of commit to perform. Defaults to
             ``TRANSACTIONAL``.
         transaction (bytes):
             The identifier of the transaction associated with the
             commit. A transaction identifier is returned by a call to
             [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
-        mutations (Sequence[google.cloud.datastore_v1.types.Mutation]):
+        mutations (Sequence[~.datastore.Mutation]):
             The mutations to perform.
 
             When mode is ``TRANSACTIONAL``, mutations affecting a single
@@ -259,7 +259,7 @@ class CommitResponse(proto.Message):
     [Datastore.Commit][google.datastore.v1.Datastore.Commit].
 
     Attributes:
-        mutation_results (Sequence[google.cloud.datastore_v1.types.MutationResult]):
+        mutation_results (Sequence[~.datastore.MutationResult]):
             The result of performing the mutations.
             The i-th mutation result corresponds to the i-th
             mutation in the request.
@@ -283,7 +283,7 @@ class AllocateIdsRequest(proto.Message):
         project_id (str):
             Required. The ID of the project against which
             to make the request.
-        keys (Sequence[google.cloud.datastore_v1.types.Key]):
+        keys (Sequence[~.entity.Key]):
             Required. A list of keys with incomplete key
             paths for which to allocate IDs. No key may be
             reserved/read-only.
@@ -299,7 +299,7 @@ class AllocateIdsResponse(proto.Message):
     [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
 
     Attributes:
-        keys (Sequence[google.cloud.datastore_v1.types.Key]):
+        keys (Sequence[~.entity.Key]):
             The keys specified in the request (in the
             same order), each with its key path completed
             with a newly allocated ID.
@@ -319,7 +319,7 @@ class ReserveIdsRequest(proto.Message):
         database_id (str):
             If not empty, the ID of the database against
             which to make the request.
-        keys (Sequence[google.cloud.datastore_v1.types.Key]):
+        keys (Sequence[~.entity.Key]):
             Required. A list of keys with complete key
             paths whose numeric IDs should not be auto-
             allocated.
@@ -342,18 +342,18 @@ class Mutation(proto.Message):
     r"""A mutation to apply to an entity.
 
     Attributes:
-        insert (google.cloud.datastore_v1.types.Entity):
+        insert (~.entity.Entity):
             The entity to insert. The entity must not
             already exist. The entity key's final path
             element may be incomplete.
-        update (google.cloud.datastore_v1.types.Entity):
+        update (~.entity.Entity):
             The entity to update. The entity must already
             exist. Must have a complete key path.
-        upsert (google.cloud.datastore_v1.types.Entity):
+        upsert (~.entity.Entity):
             The entity to upsert. The entity may or may
             not already exist. The entity key's final path
             element may be incomplete.
-        delete (google.cloud.datastore_v1.types.Key):
+        delete (~.entity.Key):
             The key of the entity to delete. The entity
             may or may not already exist. Must have a
             complete key path and must not be reserved/read-
@@ -390,7 +390,7 @@ class MutationResult(proto.Message):
     r"""The result of applying a mutation.
 
     Attributes:
-        key (google.cloud.datastore_v1.types.Key):
+        key (~.entity.Key):
             The automatically allocated key.
             Set only when the mutation allocated a key.
         version (int):
@@ -419,7 +419,7 @@ class ReadOptions(proto.Message):
     r"""The options shared by read requests.
 
     Attributes:
-        read_consistency (google.cloud.datastore_v1.types.ReadOptions.ReadConsistency):
+        read_consistency (~.datastore.ReadOptions.ReadConsistency):
             The non-transactional read consistency to use. Cannot be set
             to ``STRONG`` for global queries.
         transaction (bytes):
@@ -451,10 +451,10 @@ class TransactionOptions(proto.Message):
     in read requests.
 
     Attributes:
-        read_write (google.cloud.datastore_v1.types.TransactionOptions.ReadWrite):
+        read_write (~.datastore.TransactionOptions.ReadWrite):
             The transaction should allow both reads and
             writes.
-        read_only (google.cloud.datastore_v1.types.TransactionOptions.ReadOnly):
+        read_only (~.datastore.TransactionOptions.ReadOnly):
             The transaction should only allow reads.
     """
 
