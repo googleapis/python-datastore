@@ -72,12 +72,12 @@ class Key(proto.Message):
     contexts.
 
     Attributes:
-        partition_id (~.entity.PartitionId):
+        partition_id (google.cloud.datastore_v1.types.PartitionId):
             Entities are partitioned into subsets,
             currently identified by a project ID and
             namespace ID. Queries are scoped to a single
             partition.
-        path (Sequence[~.entity.Key.PathElement]):
+        path (Sequence[google.cloud.datastore_v1.types.Key.PathElement]):
             The entity path. An entity path consists of one or more
             elements composed of a kind and a string or numerical
             identifier, which identify entities. The first element
@@ -135,7 +135,7 @@ class ArrayValue(proto.Message):
     r"""An array value.
 
     Attributes:
-        values (Sequence[~.entity.Value]):
+        values (Sequence[google.cloud.datastore_v1.types.Value]):
             Values in the array. The order of values in an array is
             preserved as long as all values have identical settings for
             'exclude_from_indexes'.
@@ -149,7 +149,7 @@ class Value(proto.Message):
     associated metadata.
 
     Attributes:
-        null_value (~.struct.NullValue):
+        null_value (google.protobuf.struct_pb2.NullValue):
             A null value.
         boolean_value (bool):
             A boolean value.
@@ -157,12 +157,12 @@ class Value(proto.Message):
             An integer value.
         double_value (float):
             A double value.
-        timestamp_value (~.timestamp.Timestamp):
+        timestamp_value (google.protobuf.timestamp_pb2.Timestamp):
             A timestamp value.
             When stored in the Datastore, precise only to
             microseconds; any additional precision is
             rounded down.
-        key_value (~.entity.Key):
+        key_value (google.cloud.datastore_v1.types.Key):
             A key value.
         string_value (str):
             A UTF-8 encoded string value. When ``exclude_from_indexes``
@@ -172,15 +172,15 @@ class Value(proto.Message):
             A blob value. May have at most 1,000,000 bytes. When
             ``exclude_from_indexes`` is false, may have at most 1500
             bytes. In JSON requests, must be base64-encoded.
-        geo_point_value (~.latlng.LatLng):
+        geo_point_value (google.type.latlng_pb2.LatLng):
             A geo point value representing a point on the
             surface of Earth.
-        entity_value (~.entity.Entity):
+        entity_value (google.cloud.datastore_v1.types.Entity):
             An entity value.
             - May have no key.
             - May have a key with an incomplete key path. -
             May have a reserved/read-only key.
-        array_value (~.entity.ArrayValue):
+        array_value (google.cloud.datastore_v1.types.ArrayValue):
             An array value. Cannot contain another array value. A
             ``Value`` instance that sets field ``array_value`` must not
             set fields ``meaning`` or ``exclude_from_indexes``.
@@ -237,14 +237,14 @@ class Entity(proto.Message):
     message.
 
     Attributes:
-        key (~.entity.Key):
+        key (google.cloud.datastore_v1.types.Key):
             The entity's key.
 
             An entity must have a key, unless otherwise documented (for
             example, an entity in ``Value.entity_value`` may have no
             key). An entity's kind is its key path's last element's
             kind, or null if it has no key.
-        properties (Sequence[~.entity.Entity.PropertiesEntry]):
+        properties (Sequence[google.cloud.datastore_v1.types.Entity.PropertiesEntry]):
             The entity's properties. The map's keys are property names.
             A property name matching regex ``__.*__`` is reserved. A
             reserved property name is forbidden in certain documented

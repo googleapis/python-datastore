@@ -4,15 +4,15 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/python-datastore.git",
-        "sha": "dd6c0ee43fe6763528374a3494de0124de0ee652"
+        "sha": "b841b2afbe8b351b926dedaa75ec78fca31250e0"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "7f31f40209008ad24058579e7112e45fc9d5715e",
-        "internalRef": "339939234"
+        "sha": "20712b8fe95001b312f62c6c5f33e3e3ec92cfaf",
+        "internalRef": "354996675"
       }
     },
     {
