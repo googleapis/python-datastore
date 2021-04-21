@@ -479,6 +479,145 @@ class DatastoreAdminAsyncClient:
         # Done; return the response.
         return response
 
+    async def create_index(
+        self,
+        request: datastore_admin.CreateIndexRequest = None,
+        *,
+        retry: retries.Retry = gapic_v1.method.DEFAULT,
+        timeout: float = None,
+        metadata: Sequence[Tuple[str, str]] = (),
+    ) -> operation_async.AsyncOperation:
+        r"""Creates the specified index. A newly created index's initial
+        state is ``CREATING``. On completion of the returned
+        [google.longrunning.Operation][google.longrunning.Operation],
+        the state will be ``READY``. If the index already exists, the
+        call will return an ``ALREADY_EXISTS`` status.
+
+        During index creation, the process could result in an error, in
+        which case the index will move to the ``ERROR`` state. The
+        process can be recovered by fixing the data that caused the
+        error, removing the index with
+        [delete][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex],
+        then re-creating the index with [create]
+        [google.datastore.admin.v1.DatastoreAdmin.CreateIndex].
+
+        Indexes with a single property cannot be created.
+
+        Args:
+            request (:class:`google.cloud.datastore_admin_v1.types.CreateIndexRequest`):
+                The request object. The request for
+                [google.datastore.admin.v1.DatastoreAdmin.CreateIndex][google.datastore.admin.v1.DatastoreAdmin.CreateIndex].
+
+            retry (google.api_core.retry.Retry): Designation of what errors, if any,
+                should be retried.
+            timeout (float): The timeout for this request.
+            metadata (Sequence[Tuple[str, str]]): Strings which should be
+                sent along with the request as metadata.
+
+        Returns:
+            google.api_core.operation_async.AsyncOperation:
+                An object representing a long-running operation.
+
+                The result type for the operation will be
+                :class:`google.cloud.datastore_admin_v1.types.Index`
+                Datastore composite index definition.
+
+        """
+        # Create or coerce a protobuf request object.
+
+        request = datastore_admin.CreateIndexRequest(request)
+
+        # Wrap the RPC method; this adds retry and timeout information,
+        # and friendly error handling.
+        rpc = gapic_v1.method_async.wrap_method(
+            self._client._transport.create_index,
+            default_timeout=60.0,
+            client_info=DEFAULT_CLIENT_INFO,
+        )
+
+        # Send the request.
+        response = await rpc(request, retry=retry, timeout=timeout, metadata=metadata,)
+
+        # Wrap the response in an operation future.
+        response = operation_async.from_gapic(
+            response,
+            self._client._transport.operations_client,
+            index.Index,
+            metadata_type=datastore_admin.IndexOperationMetadata,
+        )
+
+        # Done; return the response.
+        return response
+
+    async def delete_index(
+        self,
+        request: datastore_admin.DeleteIndexRequest = None,
+        *,
+        retry: retries.Retry = gapic_v1.method.DEFAULT,
+        timeout: float = None,
+        metadata: Sequence[Tuple[str, str]] = (),
+    ) -> operation_async.AsyncOperation:
+        r"""Deletes an existing index. An index can only be deleted if it is
+        in a ``READY`` or ``ERROR`` state. On successful execution of
+        the request, the index will be in a ``DELETING``
+        [state][google.datastore.admin.v1.Index.State]. And on
+        completion of the returned
+        [google.longrunning.Operation][google.longrunning.Operation],
+        the index will be removed.
+
+        During index deletion, the process could result in an error, in
+        which case the index will move to the ``ERROR`` state. The
+        process can be recovered by fixing the data that caused the
+        error, followed by calling
+        [delete][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex]
+        again.
+
+        Args:
+            request (:class:`google.cloud.datastore_admin_v1.types.DeleteIndexRequest`):
+                The request object. The request for
+                [google.datastore.admin.v1.DatastoreAdmin.DeleteIndex][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex].
+
+            retry (google.api_core.retry.Retry): Designation of what errors, if any,
+                should be retried.
+            timeout (float): The timeout for this request.
+            metadata (Sequence[Tuple[str, str]]): Strings which should be
+                sent along with the request as metadata.
+
+        Returns:
+            google.api_core.operation_async.AsyncOperation:
+                An object representing a long-running operation.
+
+                The result type for the operation will be
+                :class:`google.cloud.datastore_admin_v1.types.Index`
+                Datastore composite index definition.
+
+        """
+        # Create or coerce a protobuf request object.
+
+        request = datastore_admin.DeleteIndexRequest(request)
+
+        # Wrap the RPC method; this adds retry and timeout information,
+        # and friendly error handling.
+        rpc = gapic_v1.method_async.wrap_method(
+            self._client._transport.delete_index,
+            default_timeout=60.0,
+            client_info=DEFAULT_CLIENT_INFO,
+        )
+
+        # Send the request.
+        response = await rpc(request, retry=retry, timeout=timeout, metadata=metadata,)
+
+        # Wrap the response in an operation future.
+        response = operation_async.from_gapic(
+            response,
+            self._client._transport.operations_client,
+            index.Index,
+            metadata_type=datastore_admin.IndexOperationMetadata,
+        )
+
+        # Done; return the response.
+        return response
+
     async def get_index(
         self,
         request: datastore_admin.GetIndexRequest = None,
@@ -502,7 +641,7 @@ class DatastoreAdminAsyncClient:
 
         Returns:
             google.cloud.datastore_admin_v1.types.Index:
-                A minimal index definition.
+                Datastore composite index definition.
         """
         # Create or coerce a protobuf request object.
 

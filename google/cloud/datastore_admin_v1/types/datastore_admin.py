@@ -18,7 +18,7 @@
 import proto  # type: ignore
 
 
-from google.cloud.datastore_admin_v1.types import index
+from google.cloud.datastore_admin_v1.types import index as gda_index
 from google.protobuf import timestamp_pb2 as timestamp  # type: ignore
 
 
@@ -34,6 +34,8 @@ __protobuf__ = proto.module(
         "ExportEntitiesMetadata",
         "ImportEntitiesMetadata",
         "EntityFilter",
+        "CreateIndexRequest",
+        "DeleteIndexRequest",
         "GetIndexRequest",
         "ListIndexesRequest",
         "ListIndexesResponse",
@@ -321,6 +323,41 @@ class EntityFilter(proto.Message):
     namespace_ids = proto.RepeatedField(proto.STRING, number=2)
 
 
+class CreateIndexRequest(proto.Message):
+    r"""The request for
+    [google.datastore.admin.v1.DatastoreAdmin.CreateIndex][google.datastore.admin.v1.DatastoreAdmin.CreateIndex].
+
+    Attributes:
+        project_id (str):
+            Project ID against which to make the request.
+        index (google.cloud.datastore_admin_v1.types.Index):
+            The index to create. The name and state
+            fields are output only and will be ignored.
+            Single property indexes cannot be created or
+            deleted.
+    """
+
+    project_id = proto.Field(proto.STRING, number=1)
+
+    index = proto.Field(proto.MESSAGE, number=3, message=gda_index.Index,)
+
+
+class DeleteIndexRequest(proto.Message):
+    r"""The request for
+    [google.datastore.admin.v1.DatastoreAdmin.DeleteIndex][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex].
+
+    Attributes:
+        project_id (str):
+            Project ID against which to make the request.
+        index_id (str):
+            The resource ID of the index to delete.
+    """
+
+    project_id = proto.Field(proto.STRING, number=1)
+
+    index_id = proto.Field(proto.STRING, number=3)
+
+
 class GetIndexRequest(proto.Message):
     r"""The request for
     [google.datastore.admin.v1.DatastoreAdmin.GetIndex][google.datastore.admin.v1.DatastoreAdmin.GetIndex].
@@ -378,7 +415,7 @@ class ListIndexesResponse(proto.Message):
     def raw_page(self):
         return self
 
-    indexes = proto.RepeatedField(proto.MESSAGE, number=1, message=index.Index,)
+    indexes = proto.RepeatedField(proto.MESSAGE, number=1, message=gda_index.Index,)
 
     next_page_token = proto.Field(proto.STRING, number=2)
 
