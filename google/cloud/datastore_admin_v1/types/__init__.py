@@ -29,8 +29,8 @@ from .datastore_admin import (
     ListIndexesRequest,
     ListIndexesResponse,
     IndexOperationMetadata,
+    OperationType,
 )
-
 
 __all__ = (
     "Index",
@@ -46,4 +46,5 @@ __all__ = (
     "ListIndexesRequest",
     "ListIndexesResponse",
     "IndexOperationMetadata",
+    "OperationType",
 )
