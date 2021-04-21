@@ -11,8 +11,8 @@
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "5e3dacee19405529b841b53797df799c2383536c",
-        "internalRef": "355923884"
+        "sha": "8fbbcbccb1c9405e6a7b8ab1a7cd74c48ccc2c6c",
+        "internalRef": "359088094"
       }
     },
     {
@@ -98,6 +98,7 @@
     "google/cloud/datastore_admin_v1/__init__.py",
     "google/cloud/datastore_admin_v1/proto/datastore_admin.proto",
     "google/cloud/datastore_admin_v1/proto/index.proto",
+    "google/cloud/datastore_admin_v1/proto/migration.proto",
     "google/cloud/datastore_admin_v1/py.typed",
     "google/cloud/datastore_admin_v1/services/__init__.py",
     "google/cloud/datastore_admin_v1/services/datastore_admin/__init__.py",
