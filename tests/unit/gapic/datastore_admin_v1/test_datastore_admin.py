@@ -93,15 +93,19 @@ def test__get_default_mtls_endpoint():
     )
 
 
-def test_datastore_admin_client_from_service_account_info():
+@pytest.mark.parametrize(
+    "client_class", [DatastoreAdminClient, DatastoreAdminAsyncClient,]
+)
+def test_datastore_admin_client_from_service_account_info(client_class):
     creds = credentials.AnonymousCredentials()
     with mock.patch.object(
         service_account.Credentials, "from_service_account_info"
     ) as factory:
         factory.return_value = creds
         info = {"valid": True}
-        client = DatastoreAdminClient.from_service_account_info(info)
+        client = client_class.from_service_account_info(info)
         assert client.transport._credentials == creds
+        assert isinstance(client, client_class)
 
         assert client.transport._host == "datastore.googleapis.com:443"
 
@@ -117,9 +121,11 @@ def test_datastore_admin_client_from_service_account_file(client_class):
         factory.return_value = creds
         client = client_class.from_service_account_file("dummy/file/path.json")
         assert client.transport._credentials == creds
+        assert isinstance(client, client_class)
 
         client = client_class.from_service_account_json("dummy/file/path.json")
         assert client.transport._credentials == creds
+        assert isinstance(client, client_class)
 
         assert client.transport._host == "datastore.googleapis.com:443"
 
@@ -477,6 +483,22 @@ def test_export_entities_from_dict():
     test_export_entities(request_type=dict)
 
 
+def test_export_entities_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreAdminClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.export_entities), "__call__") as call:
+        client.export_entities()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.ExportEntitiesRequest()
+
+
 @pytest.mark.asyncio
 async def test_export_entities_async(
     transport: str = "grpc_asyncio", request_type=datastore_admin.ExportEntitiesRequest
@@ -644,6 +666,22 @@ def test_import_entities(
 
 def test_import_entities_from_dict():
     test_import_entities(request_type=dict)
+
+
+def test_import_entities_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreAdminClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.import_entities), "__call__") as call:
+        client.import_entities()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.ImportEntitiesRequest()
 
 
 @pytest.mark.asyncio
@@ -815,6 +853,22 @@ def test_create_index_from_dict():
     test_create_index(request_type=dict)
 
 
+def test_create_index_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreAdminClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.create_index), "__call__") as call:
+        client.create_index()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.CreateIndexRequest()
+
+
 @pytest.mark.asyncio
 async def test_create_index_async(
     transport: str = "grpc_asyncio", request_type=datastore_admin.CreateIndexRequest
@@ -881,6 +935,22 @@ def test_delete_index(
 
 def test_delete_index_from_dict():
     test_delete_index(request_type=dict)
+
+
+def test_delete_index_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreAdminClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.delete_index), "__call__") as call:
+        client.delete_index()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.DeleteIndexRequest()
 
 
 @pytest.mark.asyncio
@@ -966,6 +1036,22 @@ def test_get_index(
 
 def test_get_index_from_dict():
     test_get_index(request_type=dict)
+
+
+def test_get_index_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreAdminClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.get_index), "__call__") as call:
+        client.get_index()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.GetIndexRequest()
 
 
 @pytest.mark.asyncio
@@ -1055,6 +1141,22 @@ def test_list_indexes(
 
 def test_list_indexes_from_dict():
     test_list_indexes(request_type=dict)
+
+
+def test_list_indexes_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreAdminClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.list_indexes), "__call__") as call:
+        client.list_indexes()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.ListIndexesRequest()
 
 
 @pytest.mark.asyncio
