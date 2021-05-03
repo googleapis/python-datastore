@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/python-datastore.git",
-        "sha": "b1715e500f870fd5292bb84232b0039c2ac6be85"
+        "sha": "3c8da54de9a6837d6d96b6befd3b0ef084d8ff7f"
       }
     },
     {

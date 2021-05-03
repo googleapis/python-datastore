@@ -79,24 +79,60 @@ s.replace(
 templated_files = common.py_library(
     unit_cov_level=97,
     cov_level=97,
-    unit_test_python_versions=["3.6", "3.7", "3.8"],
+    unit_test_python_versions=["3.6", "3.7", "3.8", "3.9"],
     system_test_python_versions=["3.8"],
 )
 s.move(templated_files, excludes=["docs/multiprocessing.rst", ".coveragerc"])
 
 s.replace("noxfile.py", """["']sphinx['"]""", '''"sphinx<3.0.0"''')
 
-# Add the `sphinx-ext-doctest` extenaion
+# Preserve system tests w/ GOOGLE_DISABLE_GRPC set (#133, PR #136)
 s.replace(
-    "docs/conf.py",
+    "noxfile.py",
     """\
-    "sphinx.ext.coverage",
-    "sphinx.ext.napoleon",
+@nox.session\(python=SYSTEM_TEST_PYTHON_VERSIONS\)
+def system\(session\):
 """,
     """\
-    "sphinx.ext.coverage",
-    "sphinx.ext.doctest",
-    "sphinx.ext.napoleon",
+@nox.session(python=SYSTEM_TEST_PYTHON_VERSIONS)
+@nox.parametrize("disable_grpc", [False, True])
+def system(session, disable_grpc):
+""",
+)
+
+s.replace(
+    "noxfile.py",
+    """\
+    # Run py.test against the system tests.
+""",
+    """\
+    env = {}
+    if disable_grpc:
+        env["GOOGLE_CLOUD_DISABLE_GRPC"] = "True"
+
+    # Run py.test against the system tests.
+""",
+)
+
+s.replace(
+    "noxfile.py",
+    """\
+        session.run\("py.test", "--quiet", system_test_path, \*session.posargs\)
+""",
+    """\
+        session.run("py.test", "--quiet", system_test_path, env=env, *session.posargs)
+""",
+)
+
+s.replace(
+    "noxfile.py",
+    """\
+        session.run\("py.test", "--quiet", system_test_folder_path, \*session.posargs\)
+""",
+    """\
+        session.run(
+            "py.test", "--quiet", system_test_folder_path, env=env, *session.posargs
+        )
 """,
 )
 
