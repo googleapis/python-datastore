@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 import warnings
-from typing import Callable, Dict, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, Optional, Sequence, Tuple
 
 from google.api_core import grpc_helpers  # type: ignore
 from google.api_core import gapic_v1  # type: ignore
@@ -25,6 +27,7 @@ from google.auth.transport.grpc import SslCredentials  # type: ignore
 import grpc  # type: ignore
 
 from google.cloud.datastore_v1.types import datastore
+
 from .base import DatastoreTransport, DEFAULT_CLIENT_INFO
 
 
@@ -67,8 +70,7 @@ class DatastoreGrpcTransport(DatastoreTransport):
         """Instantiate the transport.
 
         Args:
-            host (Optional[str]):
-                 The hostname to connect to.
+            host (Optional[str]): The hostname to connect to.
             credentials (Optional[google.auth.credentials.Credentials]): The
                 authorization credentials to attach to requests. These
                 credentials identify the application to the service; if none
@@ -209,15 +211,13 @@ class DatastoreGrpcTransport(DatastoreTransport):
             google.api_core.exceptions.DuplicateCredentialArgs: If both ``credentials``
               and ``credentials_file`` are passed.
         """
-
-        self_signed_jwt_kwargs = cls._get_self_signed_jwt_kwargs(host, scopes)
-
+        scopes = scopes or cls.AUTH_SCOPES
         return grpc_helpers.create_channel(
             host,
             credentials=credentials,
             credentials_file=credentials_file,
+            scopes=scopes,
             quota_project_id=quota_project_id,
-            **self_signed_jwt_kwargs,
             **kwargs,
         )
 
@@ -229,9 +229,7 @@ class DatastoreGrpcTransport(DatastoreTransport):
 
     @property
     def lookup(self) -> Callable[[datastore.LookupRequest], datastore.LookupResponse]:
-        r"""Return a callable for the
-        lookup
-          method over gRPC.
+        r"""Return a callable for the lookup method over gRPC.
 
         Looks up entities by key.
 
@@ -257,9 +255,7 @@ class DatastoreGrpcTransport(DatastoreTransport):
     def run_query(
         self,
     ) -> Callable[[datastore.RunQueryRequest], datastore.RunQueryResponse]:
-        r"""Return a callable for the
-        run query
-          method over gRPC.
+        r"""Return a callable for the run query method over gRPC.
 
         Queries for entities.
 
@@ -287,9 +283,7 @@ class DatastoreGrpcTransport(DatastoreTransport):
     ) -> Callable[
         [datastore.BeginTransactionRequest], datastore.BeginTransactionResponse
     ]:
-        r"""Return a callable for the
-        begin transaction
-          method over gRPC.
+        r"""Return a callable for the begin transaction method over gRPC.
 
         Begins a new transaction.
 
@@ -313,9 +307,7 @@ class DatastoreGrpcTransport(DatastoreTransport):
 
     @property
     def commit(self) -> Callable[[datastore.CommitRequest], datastore.CommitResponse]:
-        r"""Return a callable for the
-        commit
-          method over gRPC.
+        r"""Return a callable for the commit method over gRPC.
 
         Commits a transaction, optionally creating, deleting
         or modifying some entities.
@@ -342,9 +334,7 @@ class DatastoreGrpcTransport(DatastoreTransport):
     def rollback(
         self,
     ) -> Callable[[datastore.RollbackRequest], datastore.RollbackResponse]:
-        r"""Return a callable for the
-        rollback
-          method over gRPC.
+        r"""Return a callable for the rollback method over gRPC.
 
         Rolls back a transaction.
 
@@ -370,9 +360,7 @@ class DatastoreGrpcTransport(DatastoreTransport):
     def allocate_ids(
         self,
     ) -> Callable[[datastore.AllocateIdsRequest], datastore.AllocateIdsResponse]:
-        r"""Return a callable for the
-        allocate ids
-          method over gRPC.
+        r"""Return a callable for the allocate ids method over gRPC.
 
         Allocates IDs for the given keys, which is useful for
         referencing an entity before it is inserted.
@@ -399,9 +387,7 @@ class DatastoreGrpcTransport(DatastoreTransport):
     def reserve_ids(
         self,
     ) -> Callable[[datastore.ReserveIdsRequest], datastore.ReserveIdsResponse]:
-        r"""Return a callable for the
-        reserve ids
-          method over gRPC.
+        r"""Return a callable for the reserve ids method over gRPC.
 
         Prevents the supplied keys' IDs from being auto-
         llocated by Cloud Datastore.
