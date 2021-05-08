@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 from collections import OrderedDict
 import functools
 import re
@@ -31,7 +29,6 @@ from google.oauth2 import service_account  # type: ignore
 from google.cloud.datastore_v1.types import datastore
 from google.cloud.datastore_v1.types import entity
 from google.cloud.datastore_v1.types import query
-
 from .transports.base import DatastoreTransport, DEFAULT_CLIENT_INFO
 from .transports.grpc_asyncio import DatastoreGrpcAsyncIOTransport
 from .client import DatastoreClient
@@ -58,18 +55,14 @@ class DatastoreAsyncClient:
     parse_common_billing_account_path = staticmethod(
         DatastoreClient.parse_common_billing_account_path
     )
-
     common_folder_path = staticmethod(DatastoreClient.common_folder_path)
     parse_common_folder_path = staticmethod(DatastoreClient.parse_common_folder_path)
-
     common_organization_path = staticmethod(DatastoreClient.common_organization_path)
     parse_common_organization_path = staticmethod(
         DatastoreClient.parse_common_organization_path
     )
-
     common_project_path = staticmethod(DatastoreClient.common_project_path)
     parse_common_project_path = staticmethod(DatastoreClient.parse_common_project_path)
-
     common_location_path = staticmethod(DatastoreClient.common_location_path)
     parse_common_location_path = staticmethod(
         DatastoreClient.parse_common_location_path
@@ -160,7 +153,6 @@ class DatastoreAsyncClient:
             google.auth.exceptions.MutualTlsChannelError: If mutual TLS transport
                 creation failed for any reason.
         """
-
         self._client = DatastoreClient(
             credentials=credentials,
             transport=transport,
@@ -183,7 +175,8 @@ class DatastoreAsyncClient:
 
         Args:
             request (:class:`google.cloud.datastore_v1.types.LookupRequest`):
-                The request object. The request for
+                The request object.
+                The request for
                 [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
             project_id (:class:`str`):
                 Required. The ID of the project
@@ -204,7 +197,6 @@ class DatastoreAsyncClient:
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -231,12 +223,10 @@ class DatastoreAsyncClient:
 
         # If we have keyword arguments corresponding to fields on the
         # request, apply these.
-
         if project_id is not None:
             request.project_id = project_id
         if read_options is not None:
             request.read_options = read_options
-
         if keys:
             request.keys.extend(keys)
 
@@ -275,9 +265,9 @@ class DatastoreAsyncClient:
 
         Args:
             request (:class:`google.cloud.datastore_v1.types.RunQueryRequest`):
-                The request object. The request for
+                The request object.
+                The request for
                 [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -291,7 +281,6 @@ class DatastoreAsyncClient:
 
         """
         # Create or coerce a protobuf request object.
-
         request = datastore.RunQueryRequest(request)
 
         # Wrap the RPC method; this adds retry and timeout information,
@@ -330,7 +319,8 @@ class DatastoreAsyncClient:
 
         Args:
             request (:class:`google.cloud.datastore_v1.types.BeginTransactionRequest`):
-                The request object. The request for
+                The request object.
+                The request for
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
             project_id (:class:`str`):
                 Required. The ID of the project
@@ -339,7 +329,6 @@ class DatastoreAsyncClient:
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -366,7 +355,6 @@ class DatastoreAsyncClient:
 
         # If we have keyword arguments corresponding to fields on the
         # request, apply these.
-
         if project_id is not None:
             request.project_id = project_id
 
@@ -401,7 +389,8 @@ class DatastoreAsyncClient:
 
         Args:
             request (:class:`google.cloud.datastore_v1.types.CommitRequest`):
-                The request object. The request for
+                The request object.
+                The request for
                 [Datastore.Commit][google.datastore.v1.Datastore.Commit].
             project_id (:class:`str`):
                 Required. The ID of the project
@@ -445,7 +434,6 @@ class DatastoreAsyncClient:
                 This corresponds to the ``mutations`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -472,14 +460,12 @@ class DatastoreAsyncClient:
 
         # If we have keyword arguments corresponding to fields on the
         # request, apply these.
-
         if project_id is not None:
             request.project_id = project_id
         if mode is not None:
             request.mode = mode
         if transaction is not None:
             request.transaction = transaction
-
         if mutations:
             request.mutations.extend(mutations)
 
@@ -511,7 +497,8 @@ class DatastoreAsyncClient:
 
         Args:
             request (:class:`google.cloud.datastore_v1.types.RollbackRequest`):
-                The request object. The request for
+                The request object.
+                The request for
                 [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
             project_id (:class:`str`):
                 Required. The ID of the project
@@ -528,7 +515,6 @@ class DatastoreAsyncClient:
                 This corresponds to the ``transaction`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -555,7 +541,6 @@ class DatastoreAsyncClient:
 
         # If we have keyword arguments corresponding to fields on the
         # request, apply these.
-
         if project_id is not None:
             request.project_id = project_id
         if transaction is not None:
@@ -590,7 +575,8 @@ class DatastoreAsyncClient:
 
         Args:
             request (:class:`google.cloud.datastore_v1.types.AllocateIdsRequest`):
-                The request object. The request for
+                The request object.
+                The request for
                 [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
             project_id (:class:`str`):
                 Required. The ID of the project
@@ -608,7 +594,6 @@ class DatastoreAsyncClient:
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -635,10 +620,8 @@ class DatastoreAsyncClient:
 
         # If we have keyword arguments corresponding to fields on the
         # request, apply these.
-
         if project_id is not None:
             request.project_id = project_id
-
         if keys:
             request.keys.extend(keys)
 
@@ -671,7 +654,8 @@ class DatastoreAsyncClient:
 
         Args:
             request (:class:`google.cloud.datastore_v1.types.ReserveIdsRequest`):
-                The request object. The request for
+                The request object.
+                The request for
                 [Datastore.ReserveIds][google.datastore.v1.Datastore.ReserveIds].
             project_id (:class:`str`):
                 Required. The ID of the project
@@ -688,7 +672,6 @@ class DatastoreAsyncClient:
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -715,10 +698,8 @@ class DatastoreAsyncClient:
 
         # If we have keyword arguments corresponding to fields on the
         # request, apply these.
-
         if project_id is not None:
             request.project_id = project_id
-
         if keys:
             request.keys.extend(keys)
 
