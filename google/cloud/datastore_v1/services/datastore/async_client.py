@@ -75,6 +75,7 @@ class DatastoreAsyncClient:
         DatastoreClient.parse_common_location_path
     )
 
+    from_service_account_info = DatastoreClient.from_service_account_info
     from_service_account_file = DatastoreClient.from_service_account_file
     from_service_account_json = from_service_account_file
 
@@ -153,23 +154,25 @@ class DatastoreAsyncClient:
         r"""Looks up entities by key.
 
         Args:
-            request (:class:`~.datastore.LookupRequest`):
+            request (:class:`google.cloud.datastore_v1.types.LookupRequest`):
                 The request object. The request for
                 [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
             project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
+
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            read_options (:class:`~.datastore.ReadOptions`):
+            read_options (:class:`google.cloud.datastore_v1.types.ReadOptions`):
                 The options for this lookup request.
                 This corresponds to the ``read_options`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            keys (:class:`Sequence[~.entity.Key]`):
+            keys (:class:`Sequence[google.cloud.datastore_v1.types.Key]`):
                 Required. Keys of entities to look
                 up.
+
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -181,7 +184,7 @@ class DatastoreAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            ~.datastore.LookupResponse:
+            google.cloud.datastore_v1.types.LookupResponse:
                 The response for
                 [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
 
@@ -242,7 +245,7 @@ class DatastoreAsyncClient:
         r"""Queries for entities.
 
         Args:
-            request (:class:`~.datastore.RunQueryRequest`):
+            request (:class:`google.cloud.datastore_v1.types.RunQueryRequest`):
                 The request object. The request for
                 [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
 
@@ -253,7 +256,7 @@ class DatastoreAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            ~.datastore.RunQueryResponse:
+            google.cloud.datastore_v1.types.RunQueryResponse:
                 The response for
                 [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
 
@@ -296,12 +299,13 @@ class DatastoreAsyncClient:
         r"""Begins a new transaction.
 
         Args:
-            request (:class:`~.datastore.BeginTransactionRequest`):
+            request (:class:`google.cloud.datastore_v1.types.BeginTransactionRequest`):
                 The request object. The request for
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
             project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
+
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -313,7 +317,7 @@ class DatastoreAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            ~.datastore.BeginTransactionResponse:
+            google.cloud.datastore_v1.types.BeginTransactionResponse:
                 The response for
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
 
@@ -366,18 +370,20 @@ class DatastoreAsyncClient:
         or modifying some entities.
 
         Args:
-            request (:class:`~.datastore.CommitRequest`):
+            request (:class:`google.cloud.datastore_v1.types.CommitRequest`):
                 The request object. The request for
                 [Datastore.Commit][google.datastore.v1.Datastore.Commit].
             project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
+
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            mode (:class:`~.datastore.CommitRequest.Mode`):
+            mode (:class:`google.cloud.datastore_v1.types.CommitRequest.Mode`):
                 The type of commit to perform. Defaults to
                 ``TRANSACTIONAL``.
+
                 This corresponds to the ``mode`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -386,10 +392,11 @@ class DatastoreAsyncClient:
                 commit. A transaction identifier is returned by a call
                 to
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
+
                 This corresponds to the ``transaction`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            mutations (:class:`Sequence[~.datastore.Mutation]`):
+            mutations (:class:`Sequence[google.cloud.datastore_v1.types.Mutation]`):
                 The mutations to perform.
 
                 When mode is ``TRANSACTIONAL``, mutations affecting a
@@ -404,6 +411,7 @@ class DatastoreAsyncClient:
 
                 When mode is ``NON_TRANSACTIONAL``, no two mutations may
                 affect a single entity.
+
                 This corresponds to the ``mutations`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -415,7 +423,7 @@ class DatastoreAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            ~.datastore.CommitResponse:
+            google.cloud.datastore_v1.types.CommitResponse:
                 The response for
                 [Datastore.Commit][google.datastore.v1.Datastore.Commit].
 
@@ -472,12 +480,13 @@ class DatastoreAsyncClient:
         r"""Rolls back a transaction.
 
         Args:
-            request (:class:`~.datastore.RollbackRequest`):
+            request (:class:`google.cloud.datastore_v1.types.RollbackRequest`):
                 The request object. The request for
                 [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
             project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
+
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -485,6 +494,7 @@ class DatastoreAsyncClient:
                 Required. The transaction identifier, returned by a call
                 to
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
+
                 This corresponds to the ``transaction`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -496,10 +506,9 @@ class DatastoreAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            ~.datastore.RollbackResponse:
-                The response for
-                [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
-                (an empty message).
+            google.cloud.datastore_v1.types.RollbackResponse:
+                The response for [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
+                   (an empty message).
 
         """
         # Create or coerce a protobuf request object.
@@ -550,20 +559,22 @@ class DatastoreAsyncClient:
         referencing an entity before it is inserted.
 
         Args:
-            request (:class:`~.datastore.AllocateIdsRequest`):
+            request (:class:`google.cloud.datastore_v1.types.AllocateIdsRequest`):
                 The request object. The request for
                 [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
             project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
+
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            keys (:class:`Sequence[~.entity.Key]`):
+            keys (:class:`Sequence[google.cloud.datastore_v1.types.Key]`):
                 Required. A list of keys with
                 incomplete key paths for which to
                 allocate IDs. No key may be
                 reserved/read-only.
+
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -575,7 +586,7 @@ class DatastoreAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            ~.datastore.AllocateIdsResponse:
+            google.cloud.datastore_v1.types.AllocateIdsResponse:
                 The response for
                 [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
 
@@ -629,19 +640,21 @@ class DatastoreAsyncClient:
         llocated by Cloud Datastore.
 
         Args:
-            request (:class:`~.datastore.ReserveIdsRequest`):
+            request (:class:`google.cloud.datastore_v1.types.ReserveIdsRequest`):
                 The request object. The request for
                 [Datastore.ReserveIds][google.datastore.v1.Datastore.ReserveIds].
             project_id (:class:`str`):
                 Required. The ID of the project
                 against which to make the request.
+
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            keys (:class:`Sequence[~.entity.Key]`):
+            keys (:class:`Sequence[google.cloud.datastore_v1.types.Key]`):
                 Required. A list of keys with
                 complete key paths whose numeric IDs
                 should not be auto-allocated.
+
                 This corresponds to the ``keys`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
@@ -653,7 +666,7 @@ class DatastoreAsyncClient:
                 sent along with the request as metadata.
 
         Returns:
-            ~.datastore.ReserveIdsResponse:
+            google.cloud.datastore_v1.types.ReserveIdsResponse:
                 The response for
                 [Datastore.ReserveIds][google.datastore.v1.Datastore.ReserveIds].
 
