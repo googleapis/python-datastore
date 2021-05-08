@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,23 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 import warnings
-from typing import Callable, Dict, Optional, Sequence, Tuple
+from typing import Callable, Dict, Optional, Sequence, Tuple, Union
 
 from google.api_core import grpc_helpers  # type: ignore
 from google.api_core import operations_v1  # type: ignore
 from google.api_core import gapic_v1  # type: ignore
-from google import auth  # type: ignore
-from google.auth import credentials  # type: ignore
+import google.auth  # type: ignore
+from google.auth import credentials as ga_credentials  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 
 import grpc  # type: ignore
 
 from google.cloud.datastore_admin_v1.types import datastore_admin
 from google.cloud.datastore_admin_v1.types import index
-from google.longrunning import operations_pb2 as operations  # type: ignore
-
+from google.longrunning import operations_pb2  # type: ignore
 from .base import DatastoreAdminTransport, DEFAULT_CLIENT_INFO
 
 
@@ -110,7 +107,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
         self,
         *,
         host: str = "datastore.googleapis.com",
-        credentials: credentials.Credentials = None,
+        credentials: ga_credentials.Credentials = None,
         credentials_file: str = None,
         scopes: Sequence[str] = None,
         channel: grpc.Channel = None,
@@ -124,7 +121,8 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
         """Instantiate the transport.
 
         Args:
-            host (Optional[str]): The hostname to connect to.
+            host (Optional[str]):
+                 The hostname to connect to.
             credentials (Optional[google.auth.credentials.Credentials]): The
                 authorization credentials to attach to requests. These
                 credentials identify the application to the service; if none
@@ -235,7 +233,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def create_channel(
         cls,
         host: str = "datastore.googleapis.com",
-        credentials: credentials.Credentials = None,
+        credentials: ga_credentials.Credentials = None,
         credentials_file: str = None,
         scopes: Optional[Sequence[str]] = None,
         quota_project_id: Optional[str] = None,
@@ -266,13 +264,15 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
             google.api_core.exceptions.DuplicateCredentialArgs: If both ``credentials``
               and ``credentials_file`` are passed.
         """
-        scopes = scopes or cls.AUTH_SCOPES
+
+        self_signed_jwt_kwargs = cls._get_self_signed_jwt_kwargs(host, scopes)
+
         return grpc_helpers.create_channel(
             host,
             credentials=credentials,
             credentials_file=credentials_file,
-            scopes=scopes,
             quota_project_id=quota_project_id,
+            **self_signed_jwt_kwargs,
             **kwargs,
         )
 
@@ -299,7 +299,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     @property
     def export_entities(
         self,
-    ) -> Callable[[datastore_admin.ExportEntitiesRequest], operations.Operation]:
+    ) -> Callable[[datastore_admin.ExportEntitiesRequest], operations_pb2.Operation]:
         r"""Return a callable for the export entities method over gRPC.
 
         Exports a copy of all or a subset of entities from
@@ -327,14 +327,14 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
             self._stubs["export_entities"] = self.grpc_channel.unary_unary(
                 "/google.datastore.admin.v1.DatastoreAdmin/ExportEntities",
                 request_serializer=datastore_admin.ExportEntitiesRequest.serialize,
-                response_deserializer=operations.Operation.FromString,
+                response_deserializer=operations_pb2.Operation.FromString,
             )
         return self._stubs["export_entities"]
 
     @property
     def import_entities(
         self,
-    ) -> Callable[[datastore_admin.ImportEntitiesRequest], operations.Operation]:
+    ) -> Callable[[datastore_admin.ImportEntitiesRequest], operations_pb2.Operation]:
         r"""Return a callable for the import entities method over gRPC.
 
         Imports entities into Google Cloud Datastore.
@@ -359,14 +359,14 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
             self._stubs["import_entities"] = self.grpc_channel.unary_unary(
                 "/google.datastore.admin.v1.DatastoreAdmin/ImportEntities",
                 request_serializer=datastore_admin.ImportEntitiesRequest.serialize,
-                response_deserializer=operations.Operation.FromString,
+                response_deserializer=operations_pb2.Operation.FromString,
             )
         return self._stubs["import_entities"]
 
     @property
     def create_index(
         self,
-    ) -> Callable[[datastore_admin.CreateIndexRequest], operations.Operation]:
+    ) -> Callable[[datastore_admin.CreateIndexRequest], operations_pb2.Operation]:
         r"""Return a callable for the create index method over gRPC.
 
         Creates the specified index. A newly created index's initial
@@ -399,14 +399,14 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
             self._stubs["create_index"] = self.grpc_channel.unary_unary(
                 "/google.datastore.admin.v1.DatastoreAdmin/CreateIndex",
                 request_serializer=datastore_admin.CreateIndexRequest.serialize,
-                response_deserializer=operations.Operation.FromString,
+                response_deserializer=operations_pb2.Operation.FromString,
             )
         return self._stubs["create_index"]
 
     @property
     def delete_index(
         self,
-    ) -> Callable[[datastore_admin.DeleteIndexRequest], operations.Operation]:
+    ) -> Callable[[datastore_admin.DeleteIndexRequest], operations_pb2.Operation]:
         r"""Return a callable for the delete index method over gRPC.
 
         Deletes an existing index. An index can only be deleted if it is
@@ -438,7 +438,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
             self._stubs["delete_index"] = self.grpc_channel.unary_unary(
                 "/google.datastore.admin.v1.DatastoreAdmin/DeleteIndex",
                 request_serializer=datastore_admin.DeleteIndexRequest.serialize,
-                response_deserializer=operations.Operation.FromString,
+                response_deserializer=operations_pb2.Operation.FromString,
             )
         return self._stubs["delete_index"]
 

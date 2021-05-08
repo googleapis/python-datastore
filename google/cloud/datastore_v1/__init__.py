@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +15,8 @@
 #
 
 from .services.datastore import DatastoreClient
+from .services.datastore import DatastoreAsyncClient
+
 from .types.datastore import AllocateIdsRequest
 from .types.datastore import AllocateIdsResponse
 from .types.datastore import BeginTransactionRequest
@@ -52,7 +53,6 @@ from .types.query import PropertyReference
 from .types.query import Query
 from .types.query import QueryResultBatch
 
-
 __all__ = (
     "AllocateIdsRequest",
     "AllocateIdsResponse",
@@ -62,6 +62,7 @@ __all__ = (
     "CommitRequest",
     "CommitResponse",
     "CompositeFilter",
+    "DatastoreClient",
     "Entity",
     "EntityResult",
     "Filter",
@@ -89,5 +90,4 @@ __all__ = (
     "RunQueryResponse",
     "TransactionOptions",
     "Value",
-    "DatastoreClient",
 )
