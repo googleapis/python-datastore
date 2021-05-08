@@ -391,6 +391,85 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
         return self._stubs["import_entities"]
 
     @property
+    def create_index(
+        self,
+    ) -> Callable[[datastore_admin.CreateIndexRequest], operations.Operation]:
+        r"""Return a callable for the create index method over gRPC.
+
+        Creates the specified index. A newly created index's initial
+        state is ``CREATING``. On completion of the returned
+        [google.longrunning.Operation][google.longrunning.Operation],
+        the state will be ``READY``. If the index already exists, the
+        call will return an ``ALREADY_EXISTS`` status.
+
+        During index creation, the process could result in an error, in
+        which case the index will move to the ``ERROR`` state. The
+        process can be recovered by fixing the data that caused the
+        error, removing the index with
+        [delete][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex],
+        then re-creating the index with [create]
+        [google.datastore.admin.v1.DatastoreAdmin.CreateIndex].
+
+        Indexes with a single property cannot be created.
+
+        Returns:
+            Callable[[~.CreateIndexRequest],
+                    ~.Operation]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "create_index" not in self._stubs:
+            self._stubs["create_index"] = self.grpc_channel.unary_unary(
+                "/google.datastore.admin.v1.DatastoreAdmin/CreateIndex",
+                request_serializer=datastore_admin.CreateIndexRequest.serialize,
+                response_deserializer=operations.Operation.FromString,
+            )
+        return self._stubs["create_index"]
+
+    @property
+    def delete_index(
+        self,
+    ) -> Callable[[datastore_admin.DeleteIndexRequest], operations.Operation]:
+        r"""Return a callable for the delete index method over gRPC.
+
+        Deletes an existing index. An index can only be deleted if it is
+        in a ``READY`` or ``ERROR`` state. On successful execution of
+        the request, the index will be in a ``DELETING``
+        [state][google.datastore.admin.v1.Index.State]. And on
+        completion of the returned
+        [google.longrunning.Operation][google.longrunning.Operation],
+        the index will be removed.
+
+        During index deletion, the process could result in an error, in
+        which case the index will move to the ``ERROR`` state. The
+        process can be recovered by fixing the data that caused the
+        error, followed by calling
+        [delete][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex]
+        again.
+
+        Returns:
+            Callable[[~.DeleteIndexRequest],
+                    ~.Operation]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "delete_index" not in self._stubs:
+            self._stubs["delete_index"] = self.grpc_channel.unary_unary(
+                "/google.datastore.admin.v1.DatastoreAdmin/DeleteIndex",
+                request_serializer=datastore_admin.DeleteIndexRequest.serialize,
+                response_deserializer=operations.Operation.FromString,
+            )
+        return self._stubs["delete_index"]
+
+    @property
     def get_index(self) -> Callable[[datastore_admin.GetIndexRequest], index.Index]:
         r"""Return a callable for the get index method over gRPC.
 

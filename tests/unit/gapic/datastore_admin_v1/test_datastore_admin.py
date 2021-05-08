@@ -783,6 +783,142 @@ async def test_import_entities_flattened_error_async():
         )
 
 
+def test_create_index(
+    transport: str = "grpc", request_type=datastore_admin.CreateIndexRequest
+):
+    client = DatastoreAdminClient(
+        credentials=credentials.AnonymousCredentials(), transport=transport,
+    )
+
+    # Everything is optional in proto3 as far as the runtime is concerned,
+    # and we are mocking out the actual API, so just send an empty request.
+    request = request_type()
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.create_index), "__call__") as call:
+        # Designate an appropriate return value for the call.
+        call.return_value = operations_pb2.Operation(name="operations/spam")
+
+        response = client.create_index(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.CreateIndexRequest()
+
+    # Establish that the response is the type that we expect.
+    assert isinstance(response, future.Future)
+
+
+def test_create_index_from_dict():
+    test_create_index(request_type=dict)
+
+
+@pytest.mark.asyncio
+async def test_create_index_async(
+    transport: str = "grpc_asyncio", request_type=datastore_admin.CreateIndexRequest
+):
+    client = DatastoreAdminAsyncClient(
+        credentials=credentials.AnonymousCredentials(), transport=transport,
+    )
+
+    # Everything is optional in proto3 as far as the runtime is concerned,
+    # and we are mocking out the actual API, so just send an empty request.
+    request = request_type()
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.create_index), "__call__") as call:
+        # Designate an appropriate return value for the call.
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            operations_pb2.Operation(name="operations/spam")
+        )
+
+        response = await client.create_index(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.CreateIndexRequest()
+
+    # Establish that the response is the type that we expect.
+    assert isinstance(response, future.Future)
+
+
+@pytest.mark.asyncio
+async def test_create_index_async_from_dict():
+    await test_create_index_async(request_type=dict)
+
+
+def test_delete_index(
+    transport: str = "grpc", request_type=datastore_admin.DeleteIndexRequest
+):
+    client = DatastoreAdminClient(
+        credentials=credentials.AnonymousCredentials(), transport=transport,
+    )
+
+    # Everything is optional in proto3 as far as the runtime is concerned,
+    # and we are mocking out the actual API, so just send an empty request.
+    request = request_type()
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.delete_index), "__call__") as call:
+        # Designate an appropriate return value for the call.
+        call.return_value = operations_pb2.Operation(name="operations/spam")
+
+        response = client.delete_index(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.DeleteIndexRequest()
+
+    # Establish that the response is the type that we expect.
+    assert isinstance(response, future.Future)
+
+
+def test_delete_index_from_dict():
+    test_delete_index(request_type=dict)
+
+
+@pytest.mark.asyncio
+async def test_delete_index_async(
+    transport: str = "grpc_asyncio", request_type=datastore_admin.DeleteIndexRequest
+):
+    client = DatastoreAdminAsyncClient(
+        credentials=credentials.AnonymousCredentials(), transport=transport,
+    )
+
+    # Everything is optional in proto3 as far as the runtime is concerned,
+    # and we are mocking out the actual API, so just send an empty request.
+    request = request_type()
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.delete_index), "__call__") as call:
+        # Designate an appropriate return value for the call.
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            operations_pb2.Operation(name="operations/spam")
+        )
+
+        response = await client.delete_index(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore_admin.DeleteIndexRequest()
+
+    # Establish that the response is the type that we expect.
+    assert isinstance(response, future.Future)
+
+
+@pytest.mark.asyncio
+async def test_delete_index_async_from_dict():
+    await test_delete_index_async(request_type=dict)
+
+
 def test_get_index(
     transport: str = "grpc", request_type=datastore_admin.GetIndexRequest
 ):
@@ -1179,6 +1315,8 @@ def test_datastore_admin_base_transport():
     methods = (
         "export_entities",
         "import_entities",
+        "create_index",
+        "delete_index",
         "get_index",
         "list_indexes",
     )

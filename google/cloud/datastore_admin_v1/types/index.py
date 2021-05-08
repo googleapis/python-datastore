@@ -22,7 +22,7 @@ __protobuf__ = proto.module(package="google.datastore.admin.v1", manifest={"Inde
 
 
 class Index(proto.Message):
-    r"""A minimal index definition.
+    r"""Datastore composite index definition.
 
     Attributes:
         project_id (str):
