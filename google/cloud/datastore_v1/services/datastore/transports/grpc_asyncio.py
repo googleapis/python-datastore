@@ -235,7 +235,9 @@ class DatastoreGrpcAsyncIOTransport(DatastoreTransport):
     def lookup(
         self,
     ) -> Callable[[datastore.LookupRequest], Awaitable[datastore.LookupResponse]]:
-        r"""Return a callable for the lookup method over gRPC.
+        r"""Return a callable for the
+        lookup
+          method over gRPC.
 
         Looks up entities by key.
 
@@ -261,7 +263,9 @@ class DatastoreGrpcAsyncIOTransport(DatastoreTransport):
     def run_query(
         self,
     ) -> Callable[[datastore.RunQueryRequest], Awaitable[datastore.RunQueryResponse]]:
-        r"""Return a callable for the run query method over gRPC.
+        r"""Return a callable for the
+        run query
+          method over gRPC.
 
         Queries for entities.
 
@@ -290,7 +294,9 @@ class DatastoreGrpcAsyncIOTransport(DatastoreTransport):
         [datastore.BeginTransactionRequest],
         Awaitable[datastore.BeginTransactionResponse],
     ]:
-        r"""Return a callable for the begin transaction method over gRPC.
+        r"""Return a callable for the
+        begin transaction
+          method over gRPC.
 
         Begins a new transaction.
 
@@ -316,7 +322,9 @@ class DatastoreGrpcAsyncIOTransport(DatastoreTransport):
     def commit(
         self,
     ) -> Callable[[datastore.CommitRequest], Awaitable[datastore.CommitResponse]]:
-        r"""Return a callable for the commit method over gRPC.
+        r"""Return a callable for the
+        commit
+          method over gRPC.
 
         Commits a transaction, optionally creating, deleting
         or modifying some entities.
@@ -343,7 +351,9 @@ class DatastoreGrpcAsyncIOTransport(DatastoreTransport):
     def rollback(
         self,
     ) -> Callable[[datastore.RollbackRequest], Awaitable[datastore.RollbackResponse]]:
-        r"""Return a callable for the rollback method over gRPC.
+        r"""Return a callable for the
+        rollback
+          method over gRPC.
 
         Rolls back a transaction.
 
@@ -371,7 +381,9 @@ class DatastoreGrpcAsyncIOTransport(DatastoreTransport):
     ) -> Callable[
         [datastore.AllocateIdsRequest], Awaitable[datastore.AllocateIdsResponse]
     ]:
-        r"""Return a callable for the allocate ids method over gRPC.
+        r"""Return a callable for the
+        allocate ids
+          method over gRPC.
 
         Allocates IDs for the given keys, which is useful for
         referencing an entity before it is inserted.
@@ -400,7 +412,9 @@ class DatastoreGrpcAsyncIOTransport(DatastoreTransport):
     ) -> Callable[
         [datastore.ReserveIdsRequest], Awaitable[datastore.ReserveIdsResponse]
     ]:
-        r"""Return a callable for the reserve ids method over gRPC.
+        r"""Return a callable for the
+        reserve ids
+          method over gRPC.
 
         Prevents the supplied keys' IDs from being auto-
         llocated by Cloud Datastore.
