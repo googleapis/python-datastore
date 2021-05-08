@@ -500,13 +500,12 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
             if project_id is not None:
                 request.project_id = project_id
+            if labels is not None:
+                request.labels = labels
             if entity_filter is not None:
                 request.entity_filter = entity_filter
             if output_url_prefix is not None:
                 request.output_url_prefix = output_url_prefix
-
-            if labels:
-                request.labels.update(labels)
 
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
@@ -641,13 +640,12 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
             if project_id is not None:
                 request.project_id = project_id
+            if labels is not None:
+                request.labels = labels
             if input_url is not None:
                 request.input_url = input_url
             if entity_filter is not None:
                 request.entity_filter = entity_filter
-
-            if labels:
-                request.labels.update(labels)
 
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
