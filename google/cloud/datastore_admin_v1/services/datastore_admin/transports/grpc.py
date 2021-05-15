@@ -300,7 +300,9 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def export_entities(
         self,
     ) -> Callable[[datastore_admin.ExportEntitiesRequest], operations.Operation]:
-        r"""Return a callable for the export entities method over gRPC.
+        r"""Return a callable for the
+        export entities
+          method over gRPC.
 
         Exports a copy of all or a subset of entities from
         Google Cloud Datastore to another storage system, such
@@ -335,7 +337,9 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def import_entities(
         self,
     ) -> Callable[[datastore_admin.ImportEntitiesRequest], operations.Operation]:
-        r"""Return a callable for the import entities method over gRPC.
+        r"""Return a callable for the
+        import entities
+          method over gRPC.
 
         Imports entities into Google Cloud Datastore.
         Existing entities with the same key are overwritten. The
@@ -367,7 +371,9 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def create_index(
         self,
     ) -> Callable[[datastore_admin.CreateIndexRequest], operations.Operation]:
-        r"""Return a callable for the create index method over gRPC.
+        r"""Return a callable for the
+        create index
+          method over gRPC.
 
         Creates the specified index. A newly created index's initial
         state is ``CREATING``. On completion of the returned
@@ -407,7 +413,9 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def delete_index(
         self,
     ) -> Callable[[datastore_admin.DeleteIndexRequest], operations.Operation]:
-        r"""Return a callable for the delete index method over gRPC.
+        r"""Return a callable for the
+        delete index
+          method over gRPC.
 
         Deletes an existing index. An index can only be deleted if it is
         in a ``READY`` or ``ERROR`` state. On successful execution of
@@ -444,7 +452,9 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
 
     @property
     def get_index(self) -> Callable[[datastore_admin.GetIndexRequest], index.Index]:
-        r"""Return a callable for the get index method over gRPC.
+        r"""Return a callable for the
+        get index
+          method over gRPC.
 
         Gets an index.
 
@@ -472,7 +482,9 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     ) -> Callable[
         [datastore_admin.ListIndexesRequest], datastore_admin.ListIndexesResponse
     ]:
-        r"""Return a callable for the list indexes method over gRPC.
+        r"""Return a callable for the
+        list indexes
+          method over gRPC.
 
         Lists the indexes that match the specified filters.
         Datastore uses an eventually consistent query to fetch
