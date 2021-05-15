@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 import proto  # type: ignore
 
-
-from google.protobuf import struct_pb2 as struct  # type: ignore
-from google.protobuf import timestamp_pb2 as timestamp  # type: ignore
-from google.type import latlng_pb2 as latlng  # type: ignore
+from google.protobuf import struct_pb2  # type: ignore
+from google.protobuf import timestamp_pb2  # type: ignore
+from google.type import latlng_pb2  # type: ignore
 
 
 __protobuf__ = proto.module(
@@ -59,9 +56,8 @@ class PartitionId(proto.Message):
             which the entities belong.
     """
 
-    project_id = proto.Field(proto.STRING, number=2)
-
-    namespace_id = proto.Field(proto.STRING, number=4)
+    project_id = proto.Field(proto.STRING, number=2,)
+    namespace_id = proto.Field(proto.STRING, number=4,)
 
 
 class Key(proto.Message):
@@ -120,20 +116,16 @@ class Key(proto.Message):
                 when UTF-8 encoded. Cannot be ``""``.
         """
 
-        kind = proto.Field(proto.STRING, number=1)
-
-        id = proto.Field(proto.INT64, number=2, oneof="id_type")
-
-        name = proto.Field(proto.STRING, number=3, oneof="id_type")
+        kind = proto.Field(proto.STRING, number=1,)
+        id = proto.Field(proto.INT64, number=2, oneof="id_type",)
+        name = proto.Field(proto.STRING, number=3, oneof="id_type",)
 
     partition_id = proto.Field(proto.MESSAGE, number=1, message="PartitionId",)
-
     path = proto.RepeatedField(proto.MESSAGE, number=2, message=PathElement,)
 
 
 class ArrayValue(proto.Message):
     r"""An array value.
-
     Attributes:
         values (Sequence[google.cloud.datastore_v1.types.Value]):
             Values in the array. The order of values in an array is
@@ -193,40 +185,28 @@ class Value(proto.Message):
     """
 
     null_value = proto.Field(
-        proto.ENUM, number=11, oneof="value_type", enum=struct.NullValue,
+        proto.ENUM, number=11, oneof="value_type", enum=struct_pb2.NullValue,
     )
-
-    boolean_value = proto.Field(proto.BOOL, number=1, oneof="value_type")
-
-    integer_value = proto.Field(proto.INT64, number=2, oneof="value_type")
-
-    double_value = proto.Field(proto.DOUBLE, number=3, oneof="value_type")
-
+    boolean_value = proto.Field(proto.BOOL, number=1, oneof="value_type",)
+    integer_value = proto.Field(proto.INT64, number=2, oneof="value_type",)
+    double_value = proto.Field(proto.DOUBLE, number=3, oneof="value_type",)
     timestamp_value = proto.Field(
-        proto.MESSAGE, number=10, oneof="value_type", message=timestamp.Timestamp,
+        proto.MESSAGE, number=10, oneof="value_type", message=timestamp_pb2.Timestamp,
     )
-
     key_value = proto.Field(proto.MESSAGE, number=5, oneof="value_type", message="Key",)
-
-    string_value = proto.Field(proto.STRING, number=17, oneof="value_type")
-
-    blob_value = proto.Field(proto.BYTES, number=18, oneof="value_type")
-
+    string_value = proto.Field(proto.STRING, number=17, oneof="value_type",)
+    blob_value = proto.Field(proto.BYTES, number=18, oneof="value_type",)
     geo_point_value = proto.Field(
-        proto.MESSAGE, number=8, oneof="value_type", message=latlng.LatLng,
+        proto.MESSAGE, number=8, oneof="value_type", message=latlng_pb2.LatLng,
     )
-
     entity_value = proto.Field(
         proto.MESSAGE, number=6, oneof="value_type", message="Entity",
     )
-
     array_value = proto.Field(
         proto.MESSAGE, number=9, oneof="value_type", message="ArrayValue",
     )
-
-    meaning = proto.Field(proto.INT32, number=14)
-
-    exclude_from_indexes = proto.Field(proto.BOOL, number=19)
+    meaning = proto.Field(proto.INT32, number=14,)
+    exclude_from_indexes = proto.Field(proto.BOOL, number=19,)
 
 
 class Entity(proto.Message):
@@ -253,7 +233,6 @@ class Entity(proto.Message):
     """
 
     key = proto.Field(proto.MESSAGE, number=1, message="Key",)
-
     properties = proto.MapField(proto.STRING, proto.MESSAGE, number=3, message="Value",)
 
 

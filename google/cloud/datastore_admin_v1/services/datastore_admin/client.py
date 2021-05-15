@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 from collections import OrderedDict
 from distutils import util
 import os
@@ -23,10 +21,10 @@ from typing import Callable, Dict, Optional, Sequence, Tuple, Type, Union
 import pkg_resources
 
 from google.api_core import client_options as client_options_lib  # type: ignore
-from google.api_core import exceptions  # type: ignore
+from google.api_core import exceptions as core_exceptions  # type: ignore
 from google.api_core import gapic_v1  # type: ignore
 from google.api_core import retry as retries  # type: ignore
-from google.auth import credentials  # type: ignore
+from google.auth import credentials as ga_credentials  # type: ignore
 from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.auth.exceptions import MutualTLSChannelError  # type: ignore
@@ -37,8 +35,7 @@ from google.api_core import operation_async  # type: ignore
 from google.cloud.datastore_admin_v1.services.datastore_admin import pagers
 from google.cloud.datastore_admin_v1.types import datastore_admin
 from google.cloud.datastore_admin_v1.types import index
-from google.protobuf import empty_pb2 as empty  # type: ignore
-
+from google.protobuf import empty_pb2  # type: ignore
 from .transports.base import DatastoreAdminTransport, DEFAULT_CLIENT_INFO
 from .transports.grpc import DatastoreAdminGrpcTransport
 from .transports.grpc_asyncio import DatastoreAdminGrpcAsyncIOTransport
@@ -276,7 +273,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
     def __init__(
         self,
         *,
-        credentials: Optional[credentials.Credentials] = None,
+        credentials: Optional[ga_credentials.Credentials] = None,
         transport: Union[str, DatastoreAdminTransport, None] = None,
         client_options: Optional[client_options_lib.ClientOptions] = None,
         client_info: gapic_v1.client_info.ClientInfo = DEFAULT_CLIENT_INFO,
@@ -461,7 +458,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 This corresponds to the ``output_url_prefix`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -494,10 +490,8 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         # there are no flattened fields.
         if not isinstance(request, datastore_admin.ExportEntitiesRequest):
             request = datastore_admin.ExportEntitiesRequest(request)
-
             # If we have keyword arguments corresponding to fields on the
             # request, apply these.
-
             if project_id is not None:
                 request.project_id = project_id
             if labels is not None:
@@ -592,7 +586,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 This corresponds to the ``entity_filter`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -634,10 +627,8 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         # there are no flattened fields.
         if not isinstance(request, datastore_admin.ImportEntitiesRequest):
             request = datastore_admin.ImportEntitiesRequest(request)
-
             # If we have keyword arguments corresponding to fields on the
             # request, apply these.
-
             if project_id is not None:
                 request.project_id = project_id
             if labels is not None:
@@ -658,7 +649,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         response = operation.from_gapic(
             response,
             self._transport.operations_client,
-            empty.Empty,
+            empty_pb2.Empty,
             metadata_type=datastore_admin.ImportEntitiesMetadata,
         )
 
@@ -693,7 +684,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
             request (google.cloud.datastore_admin_v1.types.CreateIndexRequest):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.CreateIndex][google.datastore.admin.v1.DatastoreAdmin.CreateIndex].
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -710,7 +700,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         """
         # Create or coerce a protobuf request object.
-
         # Minor optimization to avoid making a copy if the user passes
         # in a datastore_admin.CreateIndexRequest.
         # There's no risk of modifying the input as we've already verified
@@ -763,7 +752,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
             request (google.cloud.datastore_admin_v1.types.DeleteIndexRequest):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.DeleteIndex][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex].
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -780,7 +768,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         """
         # Create or coerce a protobuf request object.
-
         # Minor optimization to avoid making a copy if the user passes
         # in a datastore_admin.DeleteIndexRequest.
         # There's no risk of modifying the input as we've already verified
@@ -820,7 +807,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
             request (google.cloud.datastore_admin_v1.types.GetIndexRequest):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.GetIndex][google.datastore.admin.v1.DatastoreAdmin.GetIndex].
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -832,7 +818,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 Datastore composite index definition.
         """
         # Create or coerce a protobuf request object.
-
         # Minor optimization to avoid making a copy if the user passes
         # in a datastore_admin.GetIndexRequest.
         # There's no risk of modifying the input as we've already verified
@@ -867,7 +852,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
             request (google.cloud.datastore_admin_v1.types.ListIndexesRequest):
                 The request object. The request for
                 [google.datastore.admin.v1.DatastoreAdmin.ListIndexes][google.datastore.admin.v1.DatastoreAdmin.ListIndexes].
-
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
             timeout (float): The timeout for this request.
@@ -884,7 +868,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         """
         # Create or coerce a protobuf request object.
-
         # Minor optimization to avoid making a copy if the user passes
         # in a datastore_admin.ListIndexesRequest.
         # There's no risk of modifying the input as we've already verified
