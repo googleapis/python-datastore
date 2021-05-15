@@ -345,8 +345,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         Args:
             request (google.cloud.datastore_v1.types.LookupRequest):
-                The request object.
-                The request for
+                The request object. The request for
                 [Datastore.Lookup][google.datastore.v1.Datastore.Lookup].
             project_id (str):
                 Required. The ID of the project
@@ -426,8 +425,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         Args:
             request (google.cloud.datastore_v1.types.RunQueryRequest):
-                The request object.
-                The request for
+                The request object. The request for
                 [Datastore.RunQuery][google.datastore.v1.Datastore.RunQuery].
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -472,8 +470,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         Args:
             request (google.cloud.datastore_v1.types.BeginTransactionRequest):
-                The request object.
-                The request for
+                The request object. The request for
                 [Datastore.BeginTransaction][google.datastore.v1.Datastore.BeginTransaction].
             project_id (str):
                 Required. The ID of the project
@@ -542,8 +539,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         Args:
             request (google.cloud.datastore_v1.types.CommitRequest):
-                The request object.
-                The request for
+                The request object. The request for
                 [Datastore.Commit][google.datastore.v1.Datastore.Commit].
             project_id (str):
                 Required. The ID of the project
@@ -650,8 +646,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         Args:
             request (google.cloud.datastore_v1.types.RollbackRequest):
-                The request object.
-                The request for
+                The request object. The request for
                 [Datastore.Rollback][google.datastore.v1.Datastore.Rollback].
             project_id (str):
                 Required. The ID of the project
@@ -728,8 +723,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         Args:
             request (google.cloud.datastore_v1.types.AllocateIdsRequest):
-                The request object.
-                The request for
+                The request object. The request for
                 [Datastore.AllocateIds][google.datastore.v1.Datastore.AllocateIds].
             project_id (str):
                 Required. The ID of the project
@@ -807,8 +801,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         Args:
             request (google.cloud.datastore_v1.types.ReserveIdsRequest):
-                The request object.
-                The request for
+                The request object. The request for
                 [Datastore.ReserveIds][google.datastore.v1.Datastore.ReserveIds].
             project_id (str):
                 Required. The ID of the project

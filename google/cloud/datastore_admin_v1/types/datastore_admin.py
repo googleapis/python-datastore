@@ -83,7 +83,7 @@ class CommonMetadata(proto.Message):
     start_time = proto.Field(proto.MESSAGE, number=1, message=timestamp.Timestamp,)
     end_time = proto.Field(proto.MESSAGE, number=2, message=timestamp.Timestamp,)
     operation_type = proto.Field(proto.ENUM, number=3, enum="OperationType",)
-    labels = proto.MapField(proto.STRING, proto.STRING, number=4)
+    labels = proto.MapField(proto.STRING, proto.STRING, number=4,)
     state = proto.Field(proto.ENUM, number=5, enum=State,)
 
 
@@ -142,7 +142,7 @@ class ExportEntitiesRequest(proto.Message):
     """
 
     project_id = proto.Field(proto.STRING, number=1,)
-    labels = proto.MapField(proto.STRING, proto.STRING, number=2)
+    labels = proto.MapField(proto.STRING, proto.STRING, number=2,)
     entity_filter = proto.Field(proto.MESSAGE, number=3, message="EntityFilter",)
     output_url_prefix = proto.Field(proto.STRING, number=4,)
 
@@ -182,7 +182,7 @@ class ImportEntitiesRequest(proto.Message):
     """
 
     project_id = proto.Field(proto.STRING, number=1,)
-    labels = proto.MapField(proto.STRING, proto.STRING, number=2)
+    labels = proto.MapField(proto.STRING, proto.STRING, number=2,)
     input_url = proto.Field(proto.STRING, number=3,)
     entity_filter = proto.Field(proto.MESSAGE, number=4, message="EntityFilter",)
 

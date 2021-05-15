@@ -29,11 +29,12 @@ from .types.datastore_admin import ImportEntitiesRequest
 from .types.datastore_admin import IndexOperationMetadata
 from .types.datastore_admin import ListIndexesRequest
 from .types.datastore_admin import ListIndexesResponse
-from .types.datastore_admin import OperationType
 from .types.datastore_admin import Progress
+from .types.datastore_admin import OperationType
 from .types.index import Index
 
 __all__ = (
+    "DatastoreAdminClient",
     "CommonMetadata",
     "CreateIndexRequest",
     "DeleteIndexRequest",
@@ -44,11 +45,10 @@ __all__ = (
     "GetIndexRequest",
     "ImportEntitiesMetadata",
     "ImportEntitiesRequest",
-    "Index",
     "IndexOperationMetadata",
     "ListIndexesRequest",
     "ListIndexesResponse",
-    "OperationType",
     "Progress",
-    "DatastoreAdminClient",
+    "OperationType",
+    "Index",
 )
