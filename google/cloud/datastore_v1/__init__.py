@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +15,7 @@
 #
 
 from .services.datastore import DatastoreClient
+
 from .types.datastore import AllocateIdsRequest
 from .types.datastore import AllocateIdsResponse
 from .types.datastore import BeginTransactionRequest
@@ -51,7 +51,6 @@ from .types.query import PropertyOrder
 from .types.query import PropertyReference
 from .types.query import Query
 from .types.query import QueryResultBatch
-
 
 __all__ = (
     "AllocateIdsRequest",
