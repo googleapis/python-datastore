@@ -54,6 +54,7 @@ from .types.query import Query
 from .types.query import QueryResultBatch
 
 __all__ = (
+    "DatastoreAsyncClient",
     "AllocateIdsRequest",
     "AllocateIdsResponse",
     "ArrayValue",

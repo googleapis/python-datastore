@@ -35,6 +35,7 @@ from .types.datastore_admin import OperationType
 from .types.index import Index
 
 __all__ = (
+    "DatastoreAdminAsyncClient",
     "CommonMetadata",
     "CreateIndexRequest",
     "DatastoreAdminClient",
