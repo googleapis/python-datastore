@@ -84,15 +84,17 @@ def test__get_default_mtls_endpoint():
     assert DatastoreClient._get_default_mtls_endpoint(non_googleapi) == non_googleapi
 
 
-def test_datastore_client_from_service_account_info():
+@pytest.mark.parametrize("client_class", [DatastoreClient, DatastoreAsyncClient,])
+def test_datastore_client_from_service_account_info(client_class):
     creds = credentials.AnonymousCredentials()
     with mock.patch.object(
         service_account.Credentials, "from_service_account_info"
     ) as factory:
         factory.return_value = creds
         info = {"valid": True}
-        client = DatastoreClient.from_service_account_info(info)
+        client = client_class.from_service_account_info(info)
         assert client.transport._credentials == creds
+        assert isinstance(client, client_class)
 
         assert client.transport._host == "datastore.googleapis.com:443"
 
@@ -106,9 +108,11 @@ def test_datastore_client_from_service_account_file(client_class):
         factory.return_value = creds
         client = client_class.from_service_account_file("dummy/file/path.json")
         assert client.transport._credentials == creds
+        assert isinstance(client, client_class)
 
         client = client_class.from_service_account_json("dummy/file/path.json")
         assert client.transport._credentials == creds
+        assert isinstance(client, client_class)
 
         assert client.transport._host == "datastore.googleapis.com:443"
 
@@ -457,6 +461,22 @@ def test_lookup_from_dict():
     test_lookup(request_type=dict)
 
 
+def test_lookup_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.lookup), "__call__") as call:
+        client.lookup()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore.LookupRequest()
+
+
 @pytest.mark.asyncio
 async def test_lookup_async(
     transport: str = "grpc_asyncio", request_type=datastore.LookupRequest
@@ -645,6 +665,22 @@ def test_run_query_from_dict():
     test_run_query(request_type=dict)
 
 
+def test_run_query_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.run_query), "__call__") as call:
+        client.run_query()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore.RunQueryRequest()
+
+
 @pytest.mark.asyncio
 async def test_run_query_async(
     transport: str = "grpc_asyncio", request_type=datastore.RunQueryRequest
@@ -718,6 +754,24 @@ def test_begin_transaction(
 
 def test_begin_transaction_from_dict():
     test_begin_transaction(request_type=dict)
+
+
+def test_begin_transaction_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(
+        type(client.transport.begin_transaction), "__call__"
+    ) as call:
+        client.begin_transaction()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore.BeginTransactionRequest()
 
 
 @pytest.mark.asyncio
@@ -862,6 +916,22 @@ def test_commit(transport: str = "grpc", request_type=datastore.CommitRequest):
 
 def test_commit_from_dict():
     test_commit(request_type=dict)
+
+
+def test_commit_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.commit), "__call__") as call:
+        client.commit()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore.CommitRequest()
 
 
 @pytest.mark.asyncio
@@ -1086,6 +1156,22 @@ def test_rollback_from_dict():
     test_rollback(request_type=dict)
 
 
+def test_rollback_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.rollback), "__call__") as call:
+        client.rollback()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore.RollbackRequest()
+
+
 @pytest.mark.asyncio
 async def test_rollback_async(
     transport: str = "grpc_asyncio", request_type=datastore.RollbackRequest
@@ -1232,6 +1318,22 @@ def test_allocate_ids(
 
 def test_allocate_ids_from_dict():
     test_allocate_ids(request_type=dict)
+
+
+def test_allocate_ids_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.allocate_ids), "__call__") as call:
+        client.allocate_ids()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore.AllocateIdsRequest()
 
 
 @pytest.mark.asyncio
@@ -1400,6 +1502,22 @@ def test_reserve_ids(transport: str = "grpc", request_type=datastore.ReserveIdsR
 
 def test_reserve_ids_from_dict():
     test_reserve_ids(request_type=dict)
+
+
+def test_reserve_ids_empty_call():
+    # This test is a coverage failsafe to make sure that totally empty calls,
+    # i.e. request == None and no flattened fields passed, work.
+    client = DatastoreClient(
+        credentials=credentials.AnonymousCredentials(), transport="grpc",
+    )
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.reserve_ids), "__call__") as call:
+        client.reserve_ids()
+        call.assert_called()
+        _, args, _ = call.mock_calls[0]
+
+        assert args[0] == datastore.ReserveIdsRequest()
 
 
 @pytest.mark.asyncio
