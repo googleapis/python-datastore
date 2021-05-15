@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 import warnings
-from typing import Callable, Dict, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, Optional, Sequence, Tuple
 
 from google.api_core import grpc_helpers  # type: ignore
 from google.api_core import operations_v1  # type: ignore
@@ -28,6 +30,7 @@ import grpc  # type: ignore
 from google.cloud.datastore_admin_v1.types import datastore_admin
 from google.cloud.datastore_admin_v1.types import index
 from google.longrunning import operations_pb2 as operations  # type: ignore
+
 from .base import DatastoreAdminTransport, DEFAULT_CLIENT_INFO
 
 
@@ -121,8 +124,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
         """Instantiate the transport.
 
         Args:
-            host (Optional[str]):
-                 The hostname to connect to.
+            host (Optional[str]): The hostname to connect to.
             credentials (Optional[google.auth.credentials.Credentials]): The
                 authorization credentials to attach to requests. These
                 credentials identify the application to the service; if none
@@ -264,15 +266,13 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
             google.api_core.exceptions.DuplicateCredentialArgs: If both ``credentials``
               and ``credentials_file`` are passed.
         """
-
-        self_signed_jwt_kwargs = cls._get_self_signed_jwt_kwargs(host, scopes)
-
+        scopes = scopes or cls.AUTH_SCOPES
         return grpc_helpers.create_channel(
             host,
             credentials=credentials,
             credentials_file=credentials_file,
+            scopes=scopes,
             quota_project_id=quota_project_id,
-            **self_signed_jwt_kwargs,
             **kwargs,
         )
 
@@ -300,9 +300,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def export_entities(
         self,
     ) -> Callable[[datastore_admin.ExportEntitiesRequest], operations.Operation]:
-        r"""Return a callable for the
-        export entities
-          method over gRPC.
+        r"""Return a callable for the export entities method over gRPC.
 
         Exports a copy of all or a subset of entities from
         Google Cloud Datastore to another storage system, such
@@ -337,9 +335,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def import_entities(
         self,
     ) -> Callable[[datastore_admin.ImportEntitiesRequest], operations.Operation]:
-        r"""Return a callable for the
-        import entities
-          method over gRPC.
+        r"""Return a callable for the import entities method over gRPC.
 
         Imports entities into Google Cloud Datastore.
         Existing entities with the same key are overwritten. The
@@ -371,9 +367,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def create_index(
         self,
     ) -> Callable[[datastore_admin.CreateIndexRequest], operations.Operation]:
-        r"""Return a callable for the
-        create index
-          method over gRPC.
+        r"""Return a callable for the create index method over gRPC.
 
         Creates the specified index. A newly created index's initial
         state is ``CREATING``. On completion of the returned
@@ -413,9 +407,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     def delete_index(
         self,
     ) -> Callable[[datastore_admin.DeleteIndexRequest], operations.Operation]:
-        r"""Return a callable for the
-        delete index
-          method over gRPC.
+        r"""Return a callable for the delete index method over gRPC.
 
         Deletes an existing index. An index can only be deleted if it is
         in a ``READY`` or ``ERROR`` state. On successful execution of
@@ -452,9 +444,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
 
     @property
     def get_index(self) -> Callable[[datastore_admin.GetIndexRequest], index.Index]:
-        r"""Return a callable for the
-        get index
-          method over gRPC.
+        r"""Return a callable for the get index method over gRPC.
 
         Gets an index.
 
@@ -482,9 +472,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     ) -> Callable[
         [datastore_admin.ListIndexesRequest], datastore_admin.ListIndexesResponse
     ]:
-        r"""Return a callable for the
-        list indexes
-          method over gRPC.
+        r"""Return a callable for the list indexes method over gRPC.
 
         Lists the indexes that match the specified filters.
         Datastore uses an eventually consistent query to fetch

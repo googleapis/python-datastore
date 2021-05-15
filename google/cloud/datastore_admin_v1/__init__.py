@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +16,6 @@
 #
 
 from .services.datastore_admin import DatastoreAdminClient
-
 from .types.datastore_admin import CommonMetadata
 from .types.datastore_admin import CreateIndexRequest
 from .types.datastore_admin import DeleteIndexRequest
@@ -32,6 +32,7 @@ from .types.datastore_admin import ListIndexesResponse
 from .types.datastore_admin import OperationType
 from .types.datastore_admin import Progress
 from .types.index import Index
+
 
 __all__ = (
     "CommonMetadata",
