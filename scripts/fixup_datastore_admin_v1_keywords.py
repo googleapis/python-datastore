@@ -41,6 +41,8 @@ def partition(
 class datastore_adminCallTransformer(cst.CSTTransformer):
     CTRL_PARAMS: Tuple[str] = ('retry', 'timeout', 'metadata')
     METHOD_TO_PARAMS: Dict[str, Tuple[str]] = {
+    'create_index': ('project_id', 'index', ),
+    'delete_index': ('project_id', 'index_id', ),
     'export_entities': ('project_id', 'output_url_prefix', 'labels', 'entity_filter', ),
     'get_index': ('project_id', 'index_id', ),
     'import_entities': ('project_id', 'input_url', 'labels', 'entity_filter', ),

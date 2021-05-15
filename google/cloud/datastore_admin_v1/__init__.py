@@ -17,6 +17,8 @@
 
 from .services.datastore_admin import DatastoreAdminClient
 from .types.datastore_admin import CommonMetadata
+from .types.datastore_admin import CreateIndexRequest
+from .types.datastore_admin import DeleteIndexRequest
 from .types.datastore_admin import EntityFilter
 from .types.datastore_admin import ExportEntitiesMetadata
 from .types.datastore_admin import ExportEntitiesRequest
@@ -34,6 +36,8 @@ from .types.index import Index
 
 __all__ = (
     "CommonMetadata",
+    "CreateIndexRequest",
+    "DeleteIndexRequest",
     "EntityFilter",
     "ExportEntitiesMetadata",
     "ExportEntitiesRequest",
