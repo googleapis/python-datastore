@@ -32,13 +32,13 @@ class Index(proto.Message):
         kind (str):
             Required. The entity kind to which this index
             applies.
-        ancestor (~.index.Index.AncestorMode):
+        ancestor (google.cloud.datastore_admin_v1.types.Index.AncestorMode):
             Required. The index's ancestor mode. Must not be
             ANCESTOR_MODE_UNSPECIFIED.
-        properties (Sequence[~.index.Index.IndexedProperty]):
+        properties (Sequence[google.cloud.datastore_admin_v1.types.Index.IndexedProperty]):
             Required. An ordered sequence of property
             names and their index attributes.
-        state (~.index.Index.State):
+        state (google.cloud.datastore_admin_v1.types.Index.State):
             Output only. The state of the index.
     """
 
@@ -70,7 +70,7 @@ class Index(proto.Message):
         Attributes:
             name (str):
                 Required. The property name to index.
-            direction (~.index.Index.Direction):
+            direction (google.cloud.datastore_admin_v1.types.Index.Direction):
                 Required. The indexed property's direction. Must not be
                 DIRECTION_UNSPECIFIED.
         """
