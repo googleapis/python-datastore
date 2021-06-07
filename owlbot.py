@@ -53,16 +53,11 @@ s.remove_staging_dirs()
 # ----------------------------------------------------------------------------
 # Add templated files
 # ----------------------------------------------------------------------------
-# TODO: cov_level should be 99%, reduced due to regression in test coverage.
 templated_files = common.py_library(
-    unit_cov_level=97,
-    cov_level=97,
-    unit_test_python_versions=["3.6", "3.7", "3.8", "3.9"],
-    system_test_python_versions=["3.8"],
+    microgenerator=True,
 )
 s.move(templated_files, excludes=["docs/multiprocessing.rst", ".coveragerc"])
 
-s.replace("noxfile.py", """["']sphinx['"]""", '''"sphinx<3.0.0"''')
 
 # Preserve system tests w/ GOOGLE_DISABLE_GRPC set (#133, PR #136)
 s.replace(
@@ -94,22 +89,40 @@ s.replace(
 
 s.replace(
     "noxfile.py",
-    """\
-        session.run\("py.test", "--quiet", system_test_path, \*session.posargs\)
-""",
-    """\
-        session.run("py.test", "--quiet", system_test_path, env=env, *session.posargs)
+    """session\.run\(
+            "py\.test",
+            "--quiet",
+            f"--junitxml=system_\{session\.python\}_sponge_log\.xml",
+            system_test_path,
+            \*session\.posargs
+        \)""",
+    """session.run(
+            "py.test",
+            "--quiet",
+            f"--junitxml=system_{session.python}_sponge_log.xml",
+            system_test_path,
+            env=env,
+            *session.posargs
+        )
 """,
 )
 
 s.replace(
     "noxfile.py",
-    """\
-        session.run\("py.test", "--quiet", system_test_folder_path, \*session.posargs\)
-""",
-    """\
-        session.run(
-            "py.test", "--quiet", system_test_folder_path, env=env, *session.posargs
+    """session\.run\(
+            "py\.test",
+            "--quiet",
+            f"--junitxml=system_\{session\.python\}_sponge_log\.xml",
+            system_test_folder_path,
+            \*session\.posargs
+        \)""",
+    """session.run(
+            "py.test",
+            "--quiet",
+            f"--junitxml=system_{session.python}_sponge_log.xml",
+            system_test_folder_path,
+            env=env,
+            *session.posargs
         )
 """,
 )
