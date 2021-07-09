@@ -107,15 +107,12 @@ def entity_from_protobuf(pb):
     :rtype: :class:`google.cloud.datastore.entity.Entity`
     :returns: The entity derived from the protobuf.
     """
-    if not isinstance(pb, entity_pb2.Entity):
-        proto_pb = entity_pb2.Entity.wrap(pb)
-    else:
-        proto_pb = pb
+    if isinstance(pb, entity_pb2.Entity):
         pb = pb._pb
 
     key = None
-    if "key" in proto_pb:  # Message field (Key)
-        key = key_from_protobuf(proto_pb.key)
+    if pb.HasField("key"):  # Message field (Key)
+        key = key_from_protobuf(pb.key)
 
     entity_props = {}
     entity_meanings = {}
