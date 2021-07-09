@@ -47,14 +47,12 @@ def _get_meaning(value_pb, is_list=False):
               means it just returns a list of meanings. If all the
               list meanings agree, it just condenses them.
     """
-    meaning = None
     if is_list:
 
-        values = (
-            value_pb._pb.array_value.values
-            if hasattr(value_pb, "_pb")
-            else value_pb.array_value.values
-        )
+        # Use 'raw' protobuf message if possible
+        value_pb = getattr(value_pb, "_pb", value_pb)
+
+        values = value_pb.array_value.values
 
         # An empty list will have no values, hence no shared meaning
         # set among them.
@@ -65,16 +63,18 @@ def _get_meaning(value_pb, is_list=False):
         # the rest which may be enum/int values.
         all_meanings = [_get_meaning(sub_value_pb) for sub_value_pb in values]
         unique_meanings = set(all_meanings)
+
         if len(unique_meanings) == 1:
             # If there is a unique meaning, we preserve it.
-            meaning = unique_meanings.pop()
+            return unique_meanings.pop()
         else:  # We know len(value_pb.array_value.values) > 0.
             # If the meaning is not unique, just return all of them.
-            meaning = all_meanings
-    elif value_pb.meaning:  # Simple field (int32).
-        meaning = value_pb.meaning
+            return all_meanings
 
-    return meaning
+    elif value_pb.meaning:  # Simple field (int32).
+        return value_pb.meaning
+
+    return None
 
 
 def _new_value_pb(entity_pb, name):
