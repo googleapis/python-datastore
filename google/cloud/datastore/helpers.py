@@ -89,13 +89,9 @@ def _new_value_pb(entity_pb, name):
     :rtype: :class:`.entity_pb2.Value`
     :returns: The new ``Value`` protobuf that was added to the entity.
     """
-    properties = entity_pb.properties
-    try:
-        properties = properties._pb
-    except AttributeError:
-        # TODO(microgenerator): shouldn't need this. the issue is that
-        # we have wrapped and non-wrapped protos coming here.
-        pass
+    # TODO(microgenerator): shouldn't need this. the issue is that
+    # we have wrapped and non-wrapped protos coming here.
+    properties = getattr(entity_pb.properties, "_pb", entity_pb.properties)
     return properties.get_or_create(name)
 
 
