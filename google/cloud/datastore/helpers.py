@@ -34,8 +34,8 @@ from google.cloud.datastore.key import Key
 def _get_meaning(value_pb, is_list=False):
     """Get the meaning from a protobuf value.
 
-    :type value_pb: :class:`.entity_pb2.Value`
-    :param value_pb: The protobuf value to be checked for an
+    :type value_pb: :class:`.entity_pb2.Value._pb`
+    :param value_pb: The *raw* protobuf value to be checked for an
                      associated meaning.
 
     :type is_list: bool
@@ -49,9 +49,6 @@ def _get_meaning(value_pb, is_list=False):
               list meanings agree, it just condenses them.
     """
     if is_list:
-
-        # Use 'raw' protobuf message if possible
-        value_pb = getattr(value_pb, "_pb", value_pb)
 
         values = value_pb.array_value.values
 
