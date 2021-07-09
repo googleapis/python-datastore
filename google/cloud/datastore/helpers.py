@@ -22,6 +22,7 @@ import itertools
 
 from google.protobuf import struct_pb2
 from google.type import latlng_pb2
+from proto.datetime_helpers import DatetimeWithNanoseconds
 
 from google.cloud._helpers import _datetime_to_pb_timestamp
 from google.cloud.datastore_v1.types import datastore as datastore_pb2
@@ -364,7 +365,7 @@ def _pb_attr_value(val):
     return name + "_value", value
 
 
-def _get_value_from_value_pb(value):
+def _get_value_from_value_pb(pb):
     """Given a protobuf for a Value, get the correct value.
 
     The Cloud Datastore Protobuf API returns a Property Protobuf which
@@ -374,56 +375,47 @@ def _get_value_from_value_pb(value):
     Some work is done to coerce the return value into a more useful type
     (particularly in the case of a timestamp value, or a key value).
 
-    :type value_pb: :class:`.entity_pb2.Value`
-    :param value_pb: The Value Protobuf.
+    :type pb: :class:`.entity_pb2.Value._pb`
+    :param pb: The *raw* Value Protobuf.
 
     :rtype: object
     :returns: The value provided by the Protobuf.
     :raises: :class:`ValueError <exceptions.ValueError>` if no value type
              has been set.
     """
-    if not getattr(value, "_pb", False):
-        # Coerce raw pb type into proto-plus pythonic type.
-        value = entity_pb2.Value.wrap(value)
-
-    value_type = value._pb.WhichOneof("value_type")
+    value_type = pb.WhichOneof("value_type")
 
     if value_type == "timestamp_value":
-        # Do not access `._pb` here, as that returns a Timestamp proto,
-        # but this should return a Pythonic `DatetimeWithNanoseconds` value,
-        # which is found at `value.timestamp_value`
-        result = value.timestamp_value
+        result = DatetimeWithNanoseconds.from_timestamp_pb(pb.timestamp_value)
 
     elif value_type == "key_value":
-        result = key_from_protobuf(value._pb.key_value)
+        result = key_from_protobuf(pb.key_value)
 
     elif value_type == "boolean_value":
-        result = value._pb.boolean_value
+        result = pb.boolean_value
 
     elif value_type == "double_value":
-        result = value._pb.double_value
+        result = pb.double_value
 
     elif value_type == "integer_value":
-        result = value._pb.integer_value
+        result = pb.integer_value
 
     elif value_type == "string_value":
-        result = value._pb.string_value
+        result = pb.string_value
 
     elif value_type == "blob_value":
-        result = value._pb.blob_value
+        result = pb.blob_value
 
     elif value_type == "entity_value":
-        result = entity_from_protobuf(value._pb.entity_value)
+        result = entity_from_protobuf(pb.entity_value)
 
     elif value_type == "array_value":
         result = [
-            _get_value_from_value_pb(value) for value in value._pb.array_value.values
+            _get_value_from_value_pb(item_value) for item_value in pb.array_value.values
         ]
 
     elif value_type == "geo_point_value":
-        result = GeoPoint(
-            value._pb.geo_point_value.latitude, value._pb.geo_point_value.longitude,
-        )
+        result = GeoPoint(pb.geo_point_value.latitude, pb.geo_point_value.longitude,)
 
     elif value_type == "null_value":
         result = None
