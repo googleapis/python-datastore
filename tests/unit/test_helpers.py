@@ -33,28 +33,6 @@ class Test__new_value_pb(unittest.TestCase):
         self.assertEqual(entity_pb._pb.properties[name], result)
 
 
-class Test__property_tuples(unittest.TestCase):
-    def _call_fut(self, entity_pb):
-        from google.cloud.datastore.helpers import _property_tuples
-
-        return _property_tuples(entity_pb)
-
-    def test_it(self):
-        import types
-        from google.cloud.datastore_v1.types import entity as entity_pb2
-        from google.cloud.datastore.helpers import _new_value_pb
-
-        entity_pb = entity_pb2.Entity()
-        name1 = "foo"
-        name2 = "bar"
-        val_pb1 = _new_value_pb(entity_pb, name1)
-        val_pb2 = _new_value_pb(entity_pb, name2)
-
-        result = self._call_fut(entity_pb)
-        self.assertIsInstance(result, types.GeneratorType)
-        self.assertEqual(sorted(result), sorted([(name1, val_pb1), (name2, val_pb2)]))
-
-
 class Test_entity_from_protobuf(unittest.TestCase):
     def _call_fut(self, val):
         from google.cloud.datastore.helpers import entity_from_protobuf
@@ -221,11 +199,9 @@ class Test_entity_to_protobuf(unittest.TestCase):
         return entity_to_protobuf(entity)
 
     def _compare_entity_proto(self, entity_pb1, entity_pb2):
-        from google.cloud.datastore.helpers import _property_tuples
-
         self.assertEqual(entity_pb1.key, entity_pb2.key)
-        value_list1 = sorted(_property_tuples(entity_pb1))
-        value_list2 = sorted(_property_tuples(entity_pb2))
+        value_list1 = sorted(entity_pb1.properties.items())
+        value_list2 = sorted(entity_pb2.properties.items())
         self.assertEqual(len(value_list1), len(value_list2))
         for pair1, pair2 in zip(value_list1, value_list2):
             name1, val1 = pair1
@@ -860,18 +836,16 @@ class Test_set_protobuf_value(unittest.TestCase):
 
     def test_entity_empty_wo_key(self):
         from google.cloud.datastore.entity import Entity
-        from google.cloud.datastore.helpers import _property_tuples
 
         pb = self._makePB()
         entity = Entity()
         self._call_fut(pb, entity)
         value = pb.entity_value
         self.assertEqual(value.key.SerializeToString(), b"")
-        self.assertEqual(len(list(_property_tuples(value))), 0)
+        self.assertEqual(len(list(value.properties.items())), 0)
 
     def test_entity_w_key(self):
         from google.cloud.datastore.entity import Entity
-        from google.cloud.datastore.helpers import _property_tuples
         from google.cloud.datastore.key import Key
 
         name = "foo"
@@ -884,7 +858,7 @@ class Test_set_protobuf_value(unittest.TestCase):
         entity_pb = pb.entity_value
         self.assertEqual(entity_pb.key, key.to_protobuf()._pb)
 
-        prop_dict = dict(_property_tuples(entity_pb))
+        prop_dict = dict(entity_pb.properties.items())
         self.assertEqual(len(prop_dict), 1)
         self.assertEqual(list(prop_dict.keys()), [name])
         self.assertEqual(prop_dict[name].string_value, value)

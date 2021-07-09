@@ -95,19 +95,6 @@ def _new_value_pb(entity_pb, name):
     return properties.get_or_create(name)
 
 
-def _property_tuples(entity_pb):
-    """Iterator of name, ``Value`` tuples from entity properties.
-
-    :type entity_pb: :class:`.entity_pb2.Entity`
-    :param entity_pb: An entity protobuf to add a new property to.
-
-    :rtype: :class:`generator`
-    :returns: An iterator that yields tuples of a name and ``Value``
-              corresponding to properties on the entity.
-    """
-    return iter(entity_pb.properties.items())
-
-
 def entity_from_protobuf(pb):
     """Factory method for creating an entity based on a protobuf.
 
@@ -134,7 +121,7 @@ def entity_from_protobuf(pb):
     entity_meanings = {}
     exclude_from_indexes = []
 
-    for prop_name, value_pb in _property_tuples(proto_pb._pb):
+    for prop_name, value_pb in pb.properties.items():
         value = _get_value_from_value_pb(value_pb)
         entity_props[prop_name] = value
 
