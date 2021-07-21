@@ -19,7 +19,7 @@ from collections import OrderedDict
 from distutils import util
 import os
 import re
-from typing import Callable, Dict, Optional, Sequence, Tuple, Type, Union
+from typing import Dict, Optional, Sequence, Tuple, Type, Union
 import pkg_resources
 
 from google.api_core import client_options as client_options_lib  # type: ignore
@@ -34,7 +34,6 @@ from google.oauth2 import service_account  # type: ignore
 
 from google.cloud.datastore_v1.types import datastore
 from google.cloud.datastore_v1.types import entity
-from google.cloud.datastore_v1.types import query
 
 from .transports.base import DatastoreTransport, DEFAULT_CLIENT_INFO
 from .transports.grpc import DatastoreGrpcTransport
