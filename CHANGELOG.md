@@ -7,14 +7,13 @@
 ### [2.1.6](https://www.github.com/googleapis/python-datastore/compare/v2.1.5...v2.1.6) (2021-07-26)
 
 
-### Features
-
-* add Samples section to CONTRIBUTING.rst ([#195](https://www.github.com/googleapis/python-datastore/issues/195)) ([f607fb5](https://www.github.com/googleapis/python-datastore/commit/f607fb544a2f7279267e5a5a534fc31e573b6b74))
-
-
 ### Miscellaneous Chores
 
 * fix release level ([#200](https://www.github.com/googleapis/python-datastore/issues/200)) ([709acec](https://www.github.com/googleapis/python-datastore/commit/709acecf88ce7dbfcb29d510e658f1c103ef2498))
+
+
+### Documentation
+* add Samples section to CONTRIBUTING.rst ([#195](https://www.github.com/googleapis/python-datastore/issues/195)) ([f607fb5](https://www.github.com/googleapis/python-datastore/commit/f607fb544a2f7279267e5a5a534fc31e573b6b74))
 
 ### [2.1.5](https://www.github.com/googleapis/python-datastore/compare/v2.1.4...v2.1.5) (2021-07-20)
 
