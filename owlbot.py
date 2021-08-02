@@ -58,7 +58,7 @@ s.move(templated_files, excludes=["docs/multiprocessing.rst", ".coveragerc"])
 
 
 # Preserve system tests w/ GOOGLE_DISABLE_GRPC set (#133, PR #136)
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     r"""\
 @nox.session\(python=SYSTEM_TEST_PYTHON_VERSIONS\)
@@ -71,7 +71,7 @@ def system(session, disable_grpc):
 """,
 )
 
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     """\
     # Run py.test against the system tests.
@@ -81,11 +81,11 @@ s.replace(
     if disable_grpc:
         env["GOOGLE_CLOUD_DISABLE_GRPC"] = "True"
 
-    # Run py.test against the system tests.
+# Run py.test against the system tests.
 """,
 )
 
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     """\
     system_test_path,
@@ -96,7 +96,7 @@ s.replace(
 """,
 )
 
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     """\
     system_test_folder_path,
@@ -106,19 +106,17 @@ s.replace(
     env=env,
 """,
 )
-
-s.shell.run(["nox", "-s", "blacken"], hide_output=False)
 
 # Add documentation about creating indexes and populating data for system
 # tests.
-num = s.replace(
+assert 1 == s.replace(
     "CONTRIBUTING.rst",
-    r"""\
+    r"""
 \*\*\*\*\*\*\*\*\*\*\*\*\*
 Test Coverage
 \*\*\*\*\*\*\*\*\*\*\*\*\*
 """,
-    """\
+    """
 - You'll need to create composite
   `indexes <https://cloud.google.com/datastore/docs/tools/indexconfig>`__
   with the ``gcloud`` command line
@@ -151,5 +149,4 @@ Test Coverage
 """,
 )
 
-if num != 1:
-    raise Exception("Required replacement not made.")
+s.shell.run(["nox", "-s", "blacken"], hide_output=False)
