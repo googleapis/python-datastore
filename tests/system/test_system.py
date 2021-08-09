@@ -33,22 +33,6 @@ class Config(object):
     TO_DELETE = []
 
 
-def clone_client(client):
-    emulator_dataset = os.getenv(DATASTORE_DATASET)
-
-    if emulator_dataset is None:
-        return datastore.Client(
-            project=client.project,
-            namespace=client.namespace,
-            credentials=client._credentials,
-            _http=client._http,
-        )
-    else:
-        return datastore.Client(
-            project=client.project, namespace=client.namespace, _http=client._http,
-        )
-
-
 def setUpModule():
     emulator_dataset = os.getenv(DATASTORE_DATASET)
     # Isolated namespace so concurrent test runs don't collide.
