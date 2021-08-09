@@ -12,24 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
 import pytest
 import requests
 
 from google.cloud import datastore
-from google.cloud.datastore.client import DATASTORE_DATASET
 from . import _helpers
 
 
 @pytest.fixture(scope="session")
 def in_emulator():
-    return DATASTORE_DATASET in os.environment
-
-
-@pytest.fixture(scope="session")
-def emulator_dataset():
-    return os.getenv(DATASTORE_DATASET)
+    return _helpers.get_emulator_dataset() is not None
 
 
 @pytest.fixture(scope="session")
@@ -38,7 +30,9 @@ def test_namespace():
 
 
 @pytest.fixture(scope="session")
-def datastore_client(test_namespace, emulator_dataset):
+def datastore_client(test_namespace):
+    emulator_dataset = _helpers.get_emulator_dataset()
+
     if emulator_dataset is not None:
         http = requests.Session()  # Un-authorized.
         return datastore.Client(
