@@ -20,6 +20,8 @@ from google.cloud._helpers import UTC
 from google.cloud import datastore
 from google.cloud.datastore.helpers import GeoPoint
 
+from . import _helpers
+
 
 def parent_key(datastore_client):
     return datastore_client.key("Blog", "PizzaMan")
@@ -144,3 +146,18 @@ def test_client_put_w_entity_w_self_reference(datastore_client, entities_to_dele
 
     stored_persons = list(query.fetch(limit=2))
     assert stored_persons == [entity]
+
+
+def test_client_put_w_empty_array(datastore_client, entities_to_delete):
+    local_client = _helpers.clone_client(datastore_client)
+
+    key = local_client.key("EmptyArray", 1234)
+    local_client = datastore.Client()
+    entity = datastore.Entity(key=key)
+    entity["children"] = []
+    local_client.put(entity)
+    entities_to_delete.append(entity)
+
+    retrieved = local_client.get(entity.key)
+
+    assert entity["children"] == retrieved["children"]

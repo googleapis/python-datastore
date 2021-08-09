@@ -48,4 +48,5 @@ def entities_to_delete(datastore_client):
 
     yield entities_to_delete
 
-    datastore_client.delete_multi(entities_to_delete)
+    with datastore_client.transaction():
+        datastore_client.delete_multi(entities_to_delete)
