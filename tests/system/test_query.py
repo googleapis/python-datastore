@@ -276,3 +276,49 @@ def test_query_distinct_on(ancestor_query):
     assert len(entities) == expected_matches
     assert entities[0]["name"] == "Catelyn"
     assert entities[1]["name"] == "Arya"
+
+
+@pytest.fixture(scope="session")
+def large_query_client(datastore_client):
+    large_query_client = _helpers.clone_client(
+        datastore_client, namespace=populate_datastore.LARGE_CHARACTER_NAMESPACE,
+    )
+    # Populate the datastore if necessary.
+    populate_datastore.add_large_character_entities(client=large_query_client)
+
+    return large_query_client
+
+
+@pytest.fixture(scope="function")
+def large_query(large_query_client):
+    # Use the client for this test instead of the global.
+    return large_query_client.query(
+        kind=populate_datastore.LARGE_CHARACTER_KIND,
+        namespace=populate_datastore.LARGE_CHARACTER_NAMESPACE,
+    )
+
+
+@pytest.mark.parametrize(
+    "limit,offset,expected",
+    [
+        # with no offset there are the correct # of results
+        (None, None, populate_datastore.LARGE_CHARACTER_TOTAL_OBJECTS,),
+        # with no limit there are results (offset provided)
+        (None, 900, populate_datastore.LARGE_CHARACTER_TOTAL_OBJECTS - 900,),
+        # Offset beyond items larger: verify 200 items found
+        (200, 1100, 200,),
+        # offset within range, expect 50 despite larger limit")
+        (100, populate_datastore.LARGE_CHARACTER_TOTAL_OBJECTS - 50, 50),
+        # Offset beyond items larger Verify no items found")
+        (200, populate_datastore.LARGE_CHARACTER_TOTAL_OBJECTS + 1000, 0),
+    ],
+)
+def test_large_query(large_query, limit, offset, expected):
+    page_query = large_query
+    page_query.add_filter("family", "=", "Stark")
+    page_query.add_filter("alive", "=", False)
+
+    iterator = page_query.fetch(limit=limit, offset=offset)
+
+    entities = [e for e in iterator]
+    assert len(entities) == expected
