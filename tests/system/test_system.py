@@ -12,15 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 import os
 import unittest
 
 import requests
 
-from google.cloud._helpers import UTC
 from google.cloud import datastore
-from google.cloud.datastore.helpers import GeoPoint
 from google.cloud.datastore.client import DATASTORE_DATASET
 from google.cloud.exceptions import Conflict
 
@@ -82,136 +79,6 @@ class TestDatastore(unittest.TestCase):
     def tearDown(self):
         with Config.CLIENT.transaction():
             Config.CLIENT.delete_multi(self.case_entities_to_delete)
-
-
-class TestDatastoreSave(TestDatastore):
-    @classmethod
-    def setUpClass(cls):
-        cls.PARENT = Config.CLIENT.key("Blog", "PizzaMan")
-
-    def _get_post(self, id_or_name=None, post_content=None):
-        post_content = post_content or {
-            "title": u"How to make the perfect pizza in your grill",
-            "tags": [u"pizza", u"grill"],
-            "publishedAt": datetime.datetime(2001, 1, 1, tzinfo=UTC),
-            "author": u"Silvano",
-            "isDraft": False,
-            "wordCount": 400,
-            "rating": 5.0,
-        }
-        # Create an entity with the given content.
-        # NOTE: Using a parent to ensure consistency for query
-        #       in `test_empty_kind`.
-        key = Config.CLIENT.key("Post", parent=self.PARENT)
-        entity = datastore.Entity(key=key)
-        entity.update(post_content)
-
-        # Update the entity key.
-        if id_or_name is not None:
-            entity.key = entity.key.completed_key(id_or_name)
-
-        return entity
-
-    def _generic_test_post(self, name=None, key_id=None):
-        entity = self._get_post(id_or_name=(name or key_id))
-        Config.CLIENT.put(entity)
-
-        # Register entity to be deleted.
-        self.case_entities_to_delete.append(entity)
-
-        if name is not None:
-            self.assertEqual(entity.key.name, name)
-        if key_id is not None:
-            self.assertEqual(entity.key.id, key_id)
-        retrieved_entity = Config.CLIENT.get(entity.key)
-        # Check the given and retrieved are the the same.
-        self.assertEqual(retrieved_entity, entity)
-
-    def test_post_with_name(self):
-        self._generic_test_post(name="post1")
-
-    def test_post_with_id(self):
-        self._generic_test_post(key_id=123456789)
-
-    def test_post_with_generated_id(self):
-        self._generic_test_post()
-
-    def test_save_multiple(self):
-        with Config.CLIENT.transaction() as xact:
-            entity1 = self._get_post()
-            xact.put(entity1)
-            # Register entity to be deleted.
-            self.case_entities_to_delete.append(entity1)
-
-            second_post_content = {
-                "title": u"How to make the perfect homemade pasta",
-                "tags": [u"pasta", u"homemade"],
-                "publishedAt": datetime.datetime(2001, 1, 1),
-                "author": u"Silvano",
-                "isDraft": False,
-                "wordCount": 450,
-                "rating": 4.5,
-            }
-            entity2 = self._get_post(post_content=second_post_content)
-            xact.put(entity2)
-            # Register entity to be deleted.
-            self.case_entities_to_delete.append(entity2)
-
-        keys = [entity1.key, entity2.key]
-        matches = Config.CLIENT.get_multi(keys)
-        self.assertEqual(len(matches), 2)
-
-    def test_empty_kind(self):
-        query = Config.CLIENT.query(kind="Post")
-        query.ancestor = self.PARENT
-        posts = list(query.fetch(limit=2))
-        self.assertEqual(posts, [])
-
-    def test_all_value_types(self):
-        key = Config.CLIENT.key("TestPanObject", 1234)
-        entity = datastore.Entity(key=key)
-        entity["timestamp"] = datetime.datetime(2014, 9, 9, tzinfo=UTC)
-        key_stored = Config.CLIENT.key("SavedKey", "right-here")
-        entity["key"] = key_stored
-        entity["truthy"] = True
-        entity["float"] = 2.718281828
-        entity["int"] = 3735928559
-        entity["words"] = u"foo"
-        entity["blob"] = b"seekretz"
-        entity_stored = datastore.Entity(key=key_stored)
-        entity_stored["hi"] = "bye"
-        entity["nested"] = entity_stored
-        entity["items"] = [1, 2, 3]
-        entity["geo"] = GeoPoint(1.0, 2.0)
-        entity["nothing_here"] = None
-
-        # Store the entity.
-        self.case_entities_to_delete.append(entity)
-        Config.CLIENT.put(entity)
-
-        # Check the original and retrieved are the the same.
-        retrieved_entity = Config.CLIENT.get(entity.key)
-        self.assertEqual(retrieved_entity, entity)
-
-
-class TestDatastoreSaveKeys(TestDatastore):
-    def test_save_key_self_reference(self):
-        parent_key = Config.CLIENT.key("Residence", "NewYork")
-        key = Config.CLIENT.key("Person", "name", parent=parent_key)
-        entity = datastore.Entity(key=key)
-        entity["fullName"] = u"Full name"
-        entity["linkedTo"] = key  # Self reference.
-
-        Config.CLIENT.put(entity)
-        self.case_entities_to_delete.append(entity)
-
-        query = Config.CLIENT.query(kind="Person")
-        # Adding ancestor to ensure consistency.
-        query.ancestor = parent_key
-        query.add_filter("linkedTo", "=", key)
-
-        stored_persons = list(query.fetch(limit=2))
-        self.assertEqual(stored_persons, [entity])
 
 
 class TestDatastoreQuery(TestDatastore):
