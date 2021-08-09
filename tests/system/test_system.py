@@ -15,7 +15,6 @@
 import datetime
 import os
 import unittest
-import warnings
 
 import requests
 
@@ -83,47 +82,6 @@ class TestDatastore(unittest.TestCase):
     def tearDown(self):
         with Config.CLIENT.transaction():
             Config.CLIENT.delete_multi(self.case_entities_to_delete)
-
-
-class TestDatastoreAllocateIDs(TestDatastore):
-    def test_allocate_ids(self):
-        num_ids = 10
-        allocated_keys = Config.CLIENT.allocate_ids(Config.CLIENT.key("Kind"), num_ids)
-        self.assertEqual(len(allocated_keys), num_ids)
-
-        unique_ids = set()
-        for key in allocated_keys:
-            unique_ids.add(key.id)
-            self.assertIsNone(key.name)
-            self.assertNotEqual(key.id, None)
-
-        self.assertEqual(len(unique_ids), num_ids)
-
-
-class TestDatastoreReserveIDs(TestDatastore):
-    def test_reserve_ids_sequential(self):
-        # Smoke test to make sure it doesn't blow up. No return value or
-        # verifiable side effect to verify.
-        num_ids = 10
-        Config.CLIENT.reserve_ids_sequential(Config.CLIENT.key("Kind", 1234), num_ids)
-
-    def test_reserve_ids(self):
-        with warnings.catch_warnings(record=True) as warned:
-            num_ids = 10
-            Config.CLIENT.reserve_ids(Config.CLIENT.key("Kind", 1234), num_ids)
-
-        warned = [
-            warning
-            for warning in warned
-            if "reserve_ids_sequential" in str(warning.message)
-        ]
-        assert len(warned) == 1
-
-    def test_reserve_ids_multi(self):
-        # Smoke test to make sure it doesn't blow up. No return value or
-        # verifiable side effect to verify.
-        keys = [Config.CLIENT.key("KIND", 1234), Config.CLIENT.key("KIND", 1235)]
-        Config.CLIENT.reserve_ids_multi(keys)
 
 
 class TestDatastoreSave(TestDatastore):
