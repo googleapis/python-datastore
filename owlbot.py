@@ -15,6 +15,7 @@
 """This script is used to synthesize generated parts of this library."""
 import synthtool as s
 from synthtool import gcp
+from synthtool.languages import python
 
 common = gcp.CommonTemplates()
 
@@ -56,6 +57,7 @@ s.remove_staging_dirs()
 templated_files = common.py_library(microgenerator=True, split_system_tests=True,)
 s.move(templated_files, excludes=["docs/multiprocessing.rst", ".coveragerc"])
 
+python.py_samples(skip_readmes=True)
 
 # Preserve system tests w/ GOOGLE_DISABLE_GRPC set (#133, PR #136)
 assert 1 == s.replace(
