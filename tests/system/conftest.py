@@ -21,7 +21,7 @@ from . import _helpers
 
 @pytest.fixture(scope="session")
 def in_emulator():
-    return _helpers.get_emulator_dataset() is not None
+    return _helpers.EMULATOR_DATASET is not None
 
 
 @pytest.fixture(scope="session")
@@ -31,12 +31,10 @@ def test_namespace():
 
 @pytest.fixture(scope="session")
 def datastore_client(test_namespace):
-    emulator_dataset = _helpers.get_emulator_dataset()
-
-    if emulator_dataset is not None:
+    if _helpers.EMULATOR_DATASET is not None:
         http = requests.Session()  # Un-authorized.
         return datastore.Client(
-            project=emulator_dataset, namespace=test_namespace, _http=http,
+            project=_helpers.EMULATOR_DATASET, namespace=test_namespace, _http=http,
         )
     else:
         return datastore.Client(namespace=test_namespace)

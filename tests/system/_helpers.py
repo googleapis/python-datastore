@@ -18,26 +18,22 @@ from google.cloud import datastore
 from google.cloud.datastore.client import DATASTORE_DATASET
 from test_utils.system import unique_resource_id
 
+EMULATOR_DATASET = os.getenv(DATASTORE_DATASET)
+
 
 def unique_id(prefix, separator="-"):
     return f"{prefix}{unique_resource_id(separator)}"
-
-
-def get_emulator_dataset():
-    return os.getenv(DATASTORE_DATASET)
 
 
 _SENTINEL = object()
 
 
 def clone_client(base_client, namespace=_SENTINEL):
-    emulator_dataset = os.getenv(DATASTORE_DATASET)
-
     if namespace is _SENTINEL:
         namespace = base_client.namespace
 
     kwargs = {}
-    if emulator_dataset is None:
+    if EMULATOR_DATASET is None:
         kwargs["credentials"] = base_client._credentials
 
     return datastore.Client(
