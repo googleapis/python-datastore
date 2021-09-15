@@ -41,15 +41,26 @@ class Transaction(Batch):
     operations (either ``insert`` or ``upsert``) into the same
     mutation, and execute those within a transaction:
 
-    .. doctest:: txn-put-multi
+    .. testsetup:: txn
 
+        import uuid
+
+        from google.cloud import datastore
+
+        unique = str(uuid.uuid4())[0:8]
+        client = datastore.Client(namespace='ns{}'.format(unique))
+
+    .. doctest:: txn
+
+        >>> entity1 = datastore.Entity(client.key('EntityKind', 1234))
+        >>> entity2 = datastore.Entity(client.key('EntityKind', 2345))
         >>> with client.transaction():
         ...     client.put_multi([entity1, entity2])
 
     Because it derives from :class:`~google.cloud.datastore.batch.Batch`,
     :class:`Transaction` also provides :meth:`put` and :meth:`delete` methods:
 
-    .. doctest:: txn-api
+    .. doctest:: txn
 
        >>> with client.transaction() as xact:
        ...     xact.put(entity1)
@@ -58,24 +69,12 @@ class Transaction(Batch):
     By default, the transaction is rolled back if the transaction block
     exits with an error:
 
-    .. testsetup:: txn-error
+    .. doctest:: txn
 
-        import os
-        import uuid
-
-        from google.cloud import datastore
-
-        unique = os.getenv('CIRCLE_BUILD_NUM', str(uuid.uuid4())[0:8])
-        client = datastore.Client(namespace='ns{}'.format(unique))
-
-        def do_some_work():
-            return
-
-        class SomeException(Exception):
-            pass
-
-    .. doctest:: txn-error
-
+        >>> def do_some_work():
+        ...    return
+        >>> class SomeException(Exception):
+        ...    pass
         >>> with client.transaction():
         ...     do_some_work()
         ...     raise SomeException  # rolls back
@@ -92,10 +91,10 @@ class Transaction(Batch):
         entities will not be available at save time!  That means, if you
         try:
 
-        .. doctest:: txn-entity-key
+        .. doctest:: txn
 
             >>> with client.transaction():
-            ...     entity = Entity(key=client.key('Thing'))
+            ...     entity = datastore.Entity(key=client.key('Thing'))
             ...     client.put(entity)
 
        ``entity`` won't have a complete key until the transaction is
@@ -104,10 +103,10 @@ class Transaction(Batch):
        Once you exit the transaction (or call :meth:`commit`), the
        automatically generated ID will be assigned to the entity:
 
-       .. doctest:: txn-entity-key-after
+       .. doctest:: txn
 
           >>> with client.transaction():
-          ...     entity = Entity(key=client.key('Thing'))
+          ...     entity = datastore.Entity(key=client.key('Thing'))
           ...     client.put(entity)
           ...     print(entity.key.is_partial)  # There is no ID on this key.
           ...
@@ -118,12 +117,12 @@ class Transaction(Batch):
     If you don't want to use the context manager you can initialize a
     transaction manually:
 
-    .. doctest:: txn-manual
+    .. doctest:: txn
 
        >>> transaction = client.transaction()
        >>> transaction.begin()
        >>>
-       >>> entity = Entity(key=client.key('Thing'))
+       >>> entity = datastore.Entity(key=client.key('Thing'))
        >>> transaction.put(entity)
        >>>
        >>> transaction.commit()
