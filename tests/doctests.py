@@ -21,6 +21,8 @@ from google.cloud import datastore
 
 
 SPHINX_CONF = """\
+root_doc = "contents"
+
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
