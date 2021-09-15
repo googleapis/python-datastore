@@ -40,8 +40,23 @@ class Entity(dict):
     Use :meth:`~google.cloud.datastore.client.Client.get` to retrieve an
     existing entity:
 
+    .. testsetup:: entity-ctor
+
+        import uuid
+
+        from google.cloud import datastore
+        from google.cloud import datastore
+
+        unique = str(uuid.uuid4())[0:8]
+        client = datastore.Client(namespace='ns{}'.format(unique))
+
+        entity = datastore.Entity(client.key('EntityKind', 1234))
+        entity['property'] = 'value'
+        client.put(entity)
+
     .. doctest:: entity-ctor
 
+        >>> key = client.key('EntityKind', 1234)
         >>> client.get(key)
         <Entity('EntityKind', 1234) {'property': 'value'}>
 
