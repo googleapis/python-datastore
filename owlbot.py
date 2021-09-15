@@ -113,6 +113,19 @@ assert 1 == s.replace(
 assert 1 == s.replace(
     "noxfile.py",
     r"""\
+    "blacken",
+    "docs",
+""",
+    """\
+    "blacken",
+    "docs",
+    "doctests",
+""",
+)
+
+assert 1 == s.replace(
+    "noxfile.py",
+    r"""\
 @nox.session\(python=DEFAULT_PYTHON_VERSION\)
 def docfx\(session\):
 """,
