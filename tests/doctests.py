@@ -35,6 +35,7 @@ Section %02d
 
 .. automodule:: google.cloud.%s
   :members:
+  :private-members:
 
 """
 
