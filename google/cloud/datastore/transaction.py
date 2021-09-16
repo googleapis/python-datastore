@@ -94,10 +94,10 @@ class Transaction(Batch):
         .. doctest:: txn
 
             >>> with client.transaction():
-            ...     entity = datastore.Entity(key=client.key('Thing'))
-            ...     client.put(entity)
+            ...     thing1 = datastore.Entity(key=client.key('Thing'))
+            ...     client.put(thing1)
 
-       ``entity`` won't have a complete key until the transaction is
+       ``thing1`` won't have a complete key until the transaction is
        committed.
 
        Once you exit the transaction (or call :meth:`commit`), the
@@ -106,12 +106,12 @@ class Transaction(Batch):
        .. doctest:: txn
 
           >>> with client.transaction():
-          ...     entity = datastore.Entity(key=client.key('Thing'))
-          ...     client.put(entity)
-          ...     print(entity.key.is_partial)  # There is no ID on this key.
+          ...     thing2 = datastore.Entity(key=client.key('Thing'))
+          ...     client.put(thing2)
+          ...     print(thing2.key.is_partial)  # There is no ID on this key.
           ...
           True
-          >>> print(entity.key.is_partial)  # There *is* an ID.
+          >>> print(thing2.key.is_partial)  # There *is* an ID.
           False
 
     If you don't want to use the context manager you can initialize a
@@ -122,10 +122,19 @@ class Transaction(Batch):
        >>> transaction = client.transaction()
        >>> transaction.begin()
        >>>
-       >>> entity = datastore.Entity(key=client.key('Thing'))
-       >>> transaction.put(entity)
+       >>> thing3 = datastore.Entity(key=client.key('Thing'))
+       >>> transaction.put(thing3)
        >>>
        >>> transaction.commit()
+
+    .. testcleanup:: txn
+
+        with client.batch() as batch:
+            batch.delete(client.key('EntityKind', 1234))
+            batch.delete(client.key('EntityKind', 2345))
+            batch.delete(thing1.key)
+            batch.delete(thing2.key)
+            batch.delete(thing3.key)
 
     :type client: :class:`google.cloud.datastore.client.Client`
     :param client: the client used to connect to datastore.

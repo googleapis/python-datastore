@@ -68,6 +68,10 @@ class Entity(dict):
         >>> entity['age'] = 20
         >>> entity['name'] = 'JJ'
 
+    .. testcleanup:: entity-ctor
+
+        client.delete(entity.key)
+
     However, not all types are allowed as a value for a Google Cloud Datastore
     entity. The following basic types are supported by the API:
 
