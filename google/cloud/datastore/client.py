@@ -764,7 +764,7 @@ class Client(ClientWithProject):
             unique = str(uuid.uuid4())[0:8]
             client = datastore.Client(namespace='ns{}'.format(unique))
 
-            def do_something(entity):
+            def do_something_with(entity):
                 pass
 
         .. doctest:: query
@@ -781,7 +781,7 @@ class Client(ClientWithProject):
             >>> query = client.query(kind='MyKind', filters=filters)
             >>> query_iter = query.fetch()
             >>> for entity in query_iter:
-            ...     do_something(entity)
+            ...     do_something_with(entity)
 
         or manually page through results
 
