@@ -57,7 +57,7 @@ s.remove_staging_dirs()
 templated_files = common.py_library(microgenerator=True, split_system_tests=True,)
 s.move(
     templated_files,
-    excludes=["docs/multiprocessing.rst", ".coveragerc", "CODEOOWNERS"],
+    excludes=["docs/multiprocessing.rst", ".coveragerc", ".github/CODEOOWNERS"],
 )
 
 python.py_samples(skip_readmes=True)
