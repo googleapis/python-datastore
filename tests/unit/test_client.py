@@ -236,12 +236,14 @@ def test_client_ctor_w_emulator_wo_creds():
 
 
 def test_client_base_url_property():
+    from google.api_core.client_options import ClientOptions
     from google.cloud.datastore.client import _DATASTORE_BASE_URL
 
     alternate_url = "https://alias.example.com/"
     creds = _make_credentials()
+    client_options = ClientOptions()
 
-    client = _make_client(credentials=creds)
+    client = _make_client(credentials=creds, client_options=client_options)
     assert client.base_url == _DATASTORE_BASE_URL
 
     client.base_url = alternate_url
