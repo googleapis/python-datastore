@@ -36,7 +36,10 @@ try:
 except ImportError:  # pragma: NO COVER
     from google.api_core import client_info
 
-    make_datastore_api = lambda s : None
+    def no_datastore_api(self):
+        return None
+
+    make_datastore_api = no_datastore_api
     _HAVE_GRPC = False
     _CLIENT_INFO = client_info.ClientInfo(client_library_version=__version__)
 else:
