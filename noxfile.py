@@ -37,6 +37,7 @@ CURRENT_DIRECTORY = pathlib.Path(__file__).parent.absolute()
 nox.options.sessions = [
     "unit",
     "system",
+    "mypy",
     "cover",
     "lint",
     "lint_setup_py",
@@ -77,6 +78,23 @@ def lint_setup_py(session):
     """Verify that setup.py is valid (including RST check)."""
     session.install("docutils", "pygments")
     session.run("python", "setup.py", "check", "--restructuredtext", "--strict")
+
+
+@nox.session(python=DEFAULT_PYTHON_VERSION)
+def mypy(session):
+    """Verify type hints are mypy compatible."""
+
+    session.install("-e", ".")
+    session.install(
+        "mypy"
+    )
+
+    session.run(
+        "mypy",
+        "-p",
+        "google.cloud.datastore",
+        "--no-incremental"
+    )
 
 
 def default(session):
@@ -258,4 +276,20 @@ def docfx(session):
         os.path.join("docs", "_build", "doctrees", ""),
         os.path.join("docs", ""),
         os.path.join("docs", "_build", "html", ""),
+    )
+
+@nox.session(python=DEFAULT_PYTHON_VERSION)
+def mypy(session):
+    """Verify type hints are mypy compatible."""
+
+    session.install("-e", ".")
+    session.install(
+        "mypy"
+    )
+
+    session.run(
+        "mypy",
+        "-p",
+        "google.cloud.datastore",
+        "--no-incremental"
     )

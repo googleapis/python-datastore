@@ -200,4 +200,45 @@ Test Coverage
 """,
 )
 
+# add type checker nox session
+s.replace("noxfile.py",
+    """nox.options.sessions = \[
+    "unit",
+    "system",""",
+    """nox.options.sessions = [
+    "unit",
+    "system",
+    "mypy",""",
+)
+
+
+s.replace(
+    "noxfile.py",
+    """\
+@nox.session\(python=DEFAULT_PYTHON_VERSION\)
+def lint_setup_py\(session\):
+""",
+    '''\
+@nox.session(python=DEFAULT_PYTHON_VERSION)
+def mypy(session):
+    """Verify type hints are mypy compatible."""
+
+    session.install("-e", ".")
+    session.install(
+        "mypy"
+    )
+
+    session.run(
+        "mypy",
+        "-p",
+        "google.cloud.datastore",
+        "--no-incremental"
+    )
+
+
+@nox.session(python=DEFAULT_PYTHON_VERSION)
+def lint_setup_py(session):
+''',
+)
+
 s.shell.run(["nox", "-s", "blacken"], hide_output=False)
