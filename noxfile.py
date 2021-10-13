@@ -74,27 +74,20 @@ def blacken(session):
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION)
-def lint_setup_py(session):
-    """Verify that setup.py is valid (including RST check)."""
-    session.install("docutils", "pygments")
-    session.run("python", "setup.py", "check", "--restructuredtext", "--strict")
-
-
-@nox.session(python=DEFAULT_PYTHON_VERSION)
 def mypy(session):
     """Verify type hints are mypy compatible."""
 
     session.install("-e", ".")
-    session.install(
-        "mypy"
-    )
+    session.install("mypy")
 
-    session.run(
-        "mypy",
-        "-p",
-        "google.cloud.datastore",
-        "--no-incremental"
-    )
+    session.run("mypy", "-p", "google.cloud.datastore", "--no-incremental")
+
+
+@nox.session(python=DEFAULT_PYTHON_VERSION)
+def lint_setup_py(session):
+    """Verify that setup.py is valid (including RST check)."""
+    session.install("docutils", "pygments")
+    session.run("python", "setup.py", "check", "--restructuredtext", "--strict")
 
 
 def default(session):
@@ -276,20 +269,4 @@ def docfx(session):
         os.path.join("docs", "_build", "doctrees", ""),
         os.path.join("docs", ""),
         os.path.join("docs", "_build", "html", ""),
-    )
-
-@nox.session(python=DEFAULT_PYTHON_VERSION)
-def mypy(session):
-    """Verify type hints are mypy compatible."""
-
-    session.install("-e", ".")
-    session.install(
-        "mypy"
-    )
-
-    session.run(
-        "mypy",
-        "-p",
-        "google.cloud.datastore",
-        "--no-incremental"
     )
