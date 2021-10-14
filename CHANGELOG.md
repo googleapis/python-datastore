@@ -4,6 +4,13 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+### [2.2.1](https://www.github.com/googleapis/python-datastore/compare/v2.2.0...v2.2.1) (2021-10-14)
+
+
+### Bug Fixes
+
+* improve type hints, mypy check ([#242](https://www.github.com/googleapis/python-datastore/issues/242)) ([6398bbc](https://www.github.com/googleapis/python-datastore/commit/6398bbcaf8a9d845a4b3d06cfc673a633851f48b))
+
 ## [2.2.0](https://www.github.com/googleapis/python-datastore/compare/v2.1.6...v2.2.0) (2021-10-08)
 
 
