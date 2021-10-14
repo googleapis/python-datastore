@@ -35,10 +35,9 @@ try:
 except ImportError:  # pragma: NO COVER
     from google.api_core import client_info as api_core_client_info
 
-    def no_datastore_api(self):
-        return None
+    def make_datastore_api(client):
+        raise RuntimeError("No gRPC available")
 
-    make_datastore_api = no_datastore_api
     _HAVE_GRPC = False
     _CLIENT_INFO = api_core_client_info.ClientInfo(client_library_version=__version__)
 else:
