@@ -16,7 +16,7 @@
 import os
 import warnings
 
-import google.api_core.client_options  # type: ignore
+import google.api_core.client_options
 from google.auth.credentials import AnonymousCredentials  # type: ignore
 from google.cloud._helpers import _LocalStack  # type: ignore
 from google.cloud._helpers import _determine_default_project as _base_default_project  # type: ignore
@@ -32,18 +32,17 @@ from google.cloud.datastore.transaction import Transaction
 
 try:
     from google.cloud.datastore._gapic import make_datastore_api
-
 except ImportError:  # pragma: NO COVER
-    from google.api_core import client_info
+    from google.api_core import client_info as api_core_client_info
 
     def no_datastore_api(self):
         return None
 
     make_datastore_api = no_datastore_api
     _HAVE_GRPC = False
-    _CLIENT_INFO = client_info.ClientInfo(client_library_version=__version__)
+    _CLIENT_INFO = api_core_client_info.ClientInfo(client_library_version=__version__)
 else:
-    from google.api_core.gapic_v1 import client_info  # type: ignore
+    from google.api_core.gapic_v1 import client_info
 
     _HAVE_GRPC = True
     _CLIENT_INFO = client_info.ClientInfo(
