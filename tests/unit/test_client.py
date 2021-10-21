@@ -1237,32 +1237,7 @@ def test_client_reserve_ids_w_completed_key_w_ancestor():
     _assert_reserve_ids_warning(warned)
 
 
-def test_client_reserve_ids_multi_w_partial_key():
-    incomplete_key = _Key(_Key.kind, None)
-    creds = _make_credentials()
-    client = _make_client(credentials=creds)
-    with pytest.raises(ValueError):
-        client.reserve_ids_multi([incomplete_key])
-
-
-def test_client_reserve_ids_multi():
-    creds = _make_credentials()
-    client = _make_client(credentials=creds, _use_grpc=False)
-    key1 = _Key(_Key.kind, "one")
-    key2 = _Key(_Key.kind, "two")
-    reserve_ids = mock.Mock()
-    ds_api = mock.Mock(reserve_ids=reserve_ids, spec=["reserve_ids"])
-    client._datastore_api_internal = ds_api
-
-    client.reserve_ids_multi([key1, key2])
-
-    expected_keys = [key1.to_protobuf(), key2.to_protobuf()]
-    reserve_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys}
-    )
-
-
-def test_key_w_project():
+def test_client_key_w_project():
     KIND = "KIND"
     ID = 1234
 
@@ -1273,7 +1248,7 @@ def test_key_w_project():
         client.key(KIND, ID, project=PROJECT)
 
 
-def test_key_wo_project():
+def test_client_key_wo_project():
     kind = "KIND"
     id_ = 1234
 
@@ -1287,7 +1262,7 @@ def test_key_wo_project():
         mock_klass.assert_called_once_with(kind, id_, project=PROJECT, namespace=None)
 
 
-def test_key_w_namespace():
+def test_client_key_w_namespace():
     kind = "KIND"
     id_ = 1234
     namespace = object()
@@ -1304,7 +1279,7 @@ def test_key_w_namespace():
         )
 
 
-def test_key_w_namespace_collision():
+def test_client_key_w_namespace_collision():
     kind = "KIND"
     id_ = 1234
     namespace1 = object()
@@ -1319,6 +1294,32 @@ def test_key_w_namespace_collision():
         assert key is mock_klass.return_value
         mock_klass.assert_called_once_with(
             kind, id_, project=PROJECT, namespace=namespace2
+        )
+
+
+def test_client_entity_w_defaults():
+    creds = _make_credentials()
+    client = _make_client(credentials=creds)
+
+    patch = mock.patch("google.cloud.datastore.client.Entity", spec=["__call__"])
+    with patch as mock_klass:
+        entity = client.entity()
+        assert entity is mock_klass.return_value
+        mock_klass.assert_called_once_with(key=None, exclude_from_indexes=())
+
+
+def test_client_entity_w_explicit():
+    key = mock.Mock(spec=[])
+    exclude_from_indexes = ["foo", "bar"]
+    creds = _make_credentials()
+    client = _make_client(credentials=creds)
+
+    patch = mock.patch("google.cloud.datastore.client.Entity", spec=["__call__"])
+    with patch as mock_klass:
+        entity = client.entity(key, exclude_from_indexes)
+        assert entity is mock_klass.return_value
+        mock_klass.assert_called_once_with(
+            key=key, exclude_from_indexes=exclude_from_indexes
         )
 
 
@@ -1457,6 +1458,31 @@ def test_client_query_w_namespace_collision():
         mock_klass.assert_called_once_with(
             client, project=PROJECT, namespace=namespace2, kind=kind
         )
+
+
+def test_client_reserve_ids_multi_w_partial_key():
+    incomplete_key = _Key(_Key.kind, None)
+    creds = _make_credentials()
+    client = _make_client(credentials=creds)
+    with pytest.raises(ValueError):
+        client.reserve_ids_multi([incomplete_key])
+
+
+def test_client_reserve_ids_multi():
+    creds = _make_credentials()
+    client = _make_client(credentials=creds, _use_grpc=False)
+    key1 = _Key(_Key.kind, "one")
+    key2 = _Key(_Key.kind, "two")
+    reserve_ids = mock.Mock()
+    ds_api = mock.Mock(reserve_ids=reserve_ids, spec=["reserve_ids"])
+    client._datastore_api_internal = ds_api
+
+    client.reserve_ids_multi([key1, key2])
+
+    expected_keys = [key1.to_protobuf(), key2.to_protobuf()]
+    reserve_ids.assert_called_once_with(
+        request={"project_id": PROJECT, "keys": expected_keys}
+    )
 
 
 class _NoCommitBatch(object):
