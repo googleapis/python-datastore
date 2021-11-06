@@ -80,7 +80,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
     """Google Cloud Datastore Admin API
     The Datastore Admin API provides several admin services for
     Cloud Datastore.
-    -----------------------------------------------------------------------------
     ## Concepts
 
     Project, namespace, kind, and entity as defined in the Google
@@ -91,8 +90,6 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
     EntityFilter: Allows specifying a subset of entities in a
     project. This is specified as a combination of kinds and
     namespaces (either or both of which may be all).
-
-    -----------------------------------------------------------------------------
     ## Services
 
     # Export/Import

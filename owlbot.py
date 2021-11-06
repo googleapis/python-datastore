@@ -79,7 +79,7 @@ for library in get_staging_dirs(datastore_admin_default_version, "datastore_admi
 
     # Remove spurious markup
     s.replace(
-        "google/**/datastore_admin/client.py",
+        library / "google/**/datastore_admin/client.py",
         r"\s+---------------------------------(-)+",
         "",
     )
