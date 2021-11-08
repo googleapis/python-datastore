@@ -10,7 +10,6 @@
 ### Features
 
 * add context manager support in client ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
-* Added methods for creating and deleting composite indexes ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
 * Added methods for creating and deleting composite indexes ([#248](https://www.github.com/googleapis/python-datastore/issues/248)) ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
 * support self-signed JWT flow for service accounts ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
 
