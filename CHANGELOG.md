@@ -10,20 +10,20 @@
 ### Features
 
 * add context manager support in client ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
-* Added methods for creating and deleting composite indexes ([#248](https://www.github.com/googleapis/python-datastore/issues/248)) ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
-* support self-signed JWT flow for service accounts ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
+* add methods for creating and deleting composite indexes ([#248](https://www.github.com/googleapis/python-datastore/issues/248)) ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
+* add support for self-signed JWT flow for service accounts ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
 
 
 ### Bug Fixes
 
 * add 'dict' annotation type to 'request' ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
-* add async client to %name_%version/init.py ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
+* export async client from 'google/cloud/datastore_v1' ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
 * **deps:** require google-api-core >= 1.28.0 ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
 
 
 ### Documentation
 
-* list oneofs in docstring ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
+* list 'oneofs' in docstrings for message classes ([d6c8868](https://www.github.com/googleapis/python-datastore/commit/d6c8868088daa99979f03b0ba359f7ad1c842b39))
 
 ## [2.3.0](https://www.github.com/googleapis/python-datastore/compare/v2.2.0...v2.3.0) (2021-10-18)
 
