@@ -18,6 +18,7 @@ import mock
 
 import grpc
 from grpc.experimental import aio
+import json
 import math
 import pytest
 from proto.marshal.rules.dates import DurationRule, TimestampRule
@@ -38,10 +39,10 @@ from google.cloud.datastore_v1.types import datastore
 from google.cloud.datastore_v1.types import entity
 from google.cloud.datastore_v1.types import query
 from google.oauth2 import service_account
-from google.protobuf import struct_pb2
-from google.protobuf import timestamp_pb2
-from google.protobuf import wrappers_pb2
-from google.type import latlng_pb2
+from google.protobuf import struct_pb2  # type: ignore
+from google.protobuf import timestamp_pb2  # type: ignore
+from google.protobuf import wrappers_pb2  # type: ignore
+from google.type import latlng_pb2  # type: ignore
 import google.auth
 
 

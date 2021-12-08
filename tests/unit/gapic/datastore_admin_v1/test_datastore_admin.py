@@ -18,6 +18,7 @@ import mock
 
 import grpc
 from grpc.experimental import aio
+import json
 import math
 import pytest
 from proto.marshal.rules.dates import DurationRule, TimestampRule
@@ -29,7 +30,8 @@ from google.api_core import future
 from google.api_core import gapic_v1
 from google.api_core import grpc_helpers
 from google.api_core import grpc_helpers_async
-from google.api_core import operation_async
+from google.api_core import operation
+from google.api_core import operation_async  # type: ignore
 from google.api_core import operations_v1
 from google.api_core import path_template
 from google.auth import credentials as ga_credentials
@@ -46,6 +48,7 @@ from google.cloud.datastore_admin_v1.types import datastore_admin
 from google.cloud.datastore_admin_v1.types import index
 from google.longrunning import operations_pb2
 from google.oauth2 import service_account
+from google.protobuf import json_format
 import google.auth
 
 
