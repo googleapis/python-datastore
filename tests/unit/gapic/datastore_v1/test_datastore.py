@@ -38,10 +38,10 @@ from google.cloud.datastore_v1.types import datastore
 from google.cloud.datastore_v1.types import entity
 from google.cloud.datastore_v1.types import query
 from google.oauth2 import service_account
-from google.protobuf import struct_pb2
-from google.protobuf import timestamp_pb2
-from google.protobuf import wrappers_pb2
-from google.type import latlng_pb2
+from google.protobuf import struct_pb2  # type: ignore
+from google.protobuf import timestamp_pb2  # type: ignore
+from google.protobuf import wrappers_pb2  # type: ignore
+from google.type import latlng_pb2  # type: ignore
 import google.auth
 
 
@@ -238,20 +238,20 @@ def test_datastore_client_client_options(client_class, transport_class, transpor
     # unsupported value.
     with mock.patch.dict(os.environ, {"GOOGLE_API_USE_MTLS_ENDPOINT": "Unsupported"}):
         with pytest.raises(MutualTLSChannelError):
-            client = client_class()
+            client = client_class(transport=transport_name)
 
     # Check the case GOOGLE_API_USE_CLIENT_CERTIFICATE has unsupported value.
     with mock.patch.dict(
         os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "Unsupported"}
     ):
         with pytest.raises(ValueError):
-            client = client_class()
+            client = client_class(transport=transport_name)
 
     # Check the case quota_project_id is provided
     options = client_options.ClientOptions(quota_project_id="octopus")
     with mock.patch.object(transport_class, "__init__") as patched:
         patched.return_value = None
-        client = client_class(transport=transport_name, client_options=options)
+        client = client_class(client_options=options, transport=transport_name)
         patched.assert_called_once_with(
             credentials=None,
             credentials_file=None,
@@ -308,7 +308,7 @@ def test_datastore_client_mtls_env_auto(
         )
         with mock.patch.object(transport_class, "__init__") as patched:
             patched.return_value = None
-            client = client_class(transport=transport_name, client_options=options)
+            client = client_class(client_options=options, transport=transport_name)
 
             if use_client_cert_env == "false":
                 expected_client_cert_source = None
@@ -403,7 +403,7 @@ def test_datastore_client_client_options_scopes(
     options = client_options.ClientOptions(scopes=["1", "2"],)
     with mock.patch.object(transport_class, "__init__") as patched:
         patched.return_value = None
-        client = client_class(transport=transport_name, client_options=options)
+        client = client_class(client_options=options, transport=transport_name)
         patched.assert_called_once_with(
             credentials=None,
             credentials_file=None,
@@ -434,7 +434,7 @@ def test_datastore_client_client_options_credentials_file(
     options = client_options.ClientOptions(credentials_file="credentials.json")
     with mock.patch.object(transport_class, "__init__") as patched:
         patched.return_value = None
-        client = client_class(transport=transport_name, client_options=options)
+        client = client_class(client_options=options, transport=transport_name)
         patched.assert_called_once_with(
             credentials=None,
             credentials_file="credentials.json",
@@ -465,7 +465,8 @@ def test_datastore_client_client_options_from_dict():
         )
 
 
-def test_lookup(transport: str = "grpc", request_type=datastore.LookupRequest):
+@pytest.mark.parametrize("request_type", [datastore.LookupRequest, dict,])
+def test_lookup(request_type, transport: str = "grpc"):
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(), transport=transport,
     )
@@ -487,10 +488,6 @@ def test_lookup(transport: str = "grpc", request_type=datastore.LookupRequest):
 
     # Establish that the response is the type that we expect.
     assert isinstance(response, datastore.LookupResponse)
-
-
-def test_lookup_from_dict():
-    test_lookup(request_type=dict)
 
 
 def test_lookup_empty_call():
@@ -668,7 +665,8 @@ async def test_lookup_flattened_error_async():
         )
 
 
-def test_run_query(transport: str = "grpc", request_type=datastore.RunQueryRequest):
+@pytest.mark.parametrize("request_type", [datastore.RunQueryRequest, dict,])
+def test_run_query(request_type, transport: str = "grpc"):
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(), transport=transport,
     )
@@ -690,10 +688,6 @@ def test_run_query(transport: str = "grpc", request_type=datastore.RunQueryReque
 
     # Establish that the response is the type that we expect.
     assert isinstance(response, datastore.RunQueryResponse)
-
-
-def test_run_query_from_dict():
-    test_run_query(request_type=dict)
 
 
 def test_run_query_empty_call():
@@ -745,9 +739,8 @@ async def test_run_query_async_from_dict():
     await test_run_query_async(request_type=dict)
 
 
-def test_begin_transaction(
-    transport: str = "grpc", request_type=datastore.BeginTransactionRequest
-):
+@pytest.mark.parametrize("request_type", [datastore.BeginTransactionRequest, dict,])
+def test_begin_transaction(request_type, transport: str = "grpc"):
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(), transport=transport,
     )
@@ -774,10 +767,6 @@ def test_begin_transaction(
     # Establish that the response is the type that we expect.
     assert isinstance(response, datastore.BeginTransactionResponse)
     assert response.transaction == b"transaction_blob"
-
-
-def test_begin_transaction_from_dict():
-    test_begin_transaction(request_type=dict)
 
 
 def test_begin_transaction_empty_call():
@@ -906,7 +895,8 @@ async def test_begin_transaction_flattened_error_async():
         )
 
 
-def test_commit(transport: str = "grpc", request_type=datastore.CommitRequest):
+@pytest.mark.parametrize("request_type", [datastore.CommitRequest, dict,])
+def test_commit(request_type, transport: str = "grpc"):
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(), transport=transport,
     )
@@ -929,10 +919,6 @@ def test_commit(transport: str = "grpc", request_type=datastore.CommitRequest):
     # Establish that the response is the type that we expect.
     assert isinstance(response, datastore.CommitResponse)
     assert response.index_updates == 1389
-
-
-def test_commit_from_dict():
-    test_commit(request_type=dict)
 
 
 def test_commit_empty_call():
@@ -1141,7 +1127,8 @@ async def test_commit_flattened_error_async():
         )
 
 
-def test_rollback(transport: str = "grpc", request_type=datastore.RollbackRequest):
+@pytest.mark.parametrize("request_type", [datastore.RollbackRequest, dict,])
+def test_rollback(request_type, transport: str = "grpc"):
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(), transport=transport,
     )
@@ -1163,10 +1150,6 @@ def test_rollback(transport: str = "grpc", request_type=datastore.RollbackReques
 
     # Establish that the response is the type that we expect.
     assert isinstance(response, datastore.RollbackResponse)
-
-
-def test_rollback_from_dict():
-    test_rollback(request_type=dict)
 
 
 def test_rollback_empty_call():
@@ -1300,9 +1283,8 @@ async def test_rollback_flattened_error_async():
         )
 
 
-def test_allocate_ids(
-    transport: str = "grpc", request_type=datastore.AllocateIdsRequest
-):
+@pytest.mark.parametrize("request_type", [datastore.AllocateIdsRequest, dict,])
+def test_allocate_ids(request_type, transport: str = "grpc"):
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(), transport=transport,
     )
@@ -1324,10 +1306,6 @@ def test_allocate_ids(
 
     # Establish that the response is the type that we expect.
     assert isinstance(response, datastore.AllocateIdsResponse)
-
-
-def test_allocate_ids_from_dict():
-    test_allocate_ids(request_type=dict)
 
 
 def test_allocate_ids_empty_call():
@@ -1483,7 +1461,8 @@ async def test_allocate_ids_flattened_error_async():
         )
 
 
-def test_reserve_ids(transport: str = "grpc", request_type=datastore.ReserveIdsRequest):
+@pytest.mark.parametrize("request_type", [datastore.ReserveIdsRequest, dict,])
+def test_reserve_ids(request_type, transport: str = "grpc"):
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(), transport=transport,
     )
@@ -1505,10 +1484,6 @@ def test_reserve_ids(transport: str = "grpc", request_type=datastore.ReserveIdsR
 
     # Establish that the response is the type that we expect.
     assert isinstance(response, datastore.ReserveIdsResponse)
-
-
-def test_reserve_ids_from_dict():
-    test_reserve_ids(request_type=dict)
 
 
 def test_reserve_ids_empty_call():
@@ -2155,7 +2130,7 @@ def test_parse_common_location_path():
     assert expected == actual
 
 
-def test_client_withDEFAULT_CLIENT_INFO():
+def test_client_with_default_client_info():
     client_info = gapic_v1.client_info.ClientInfo()
 
     with mock.patch.object(

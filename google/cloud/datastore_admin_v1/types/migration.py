@@ -17,12 +17,12 @@ import proto  # type: ignore
 
 
 __protobuf__ = proto.module(
-    package='google.datastore.admin.v1',
+    package="google.datastore.admin.v1",
     manifest={
-        'MigrationState',
-        'MigrationStep',
-        'MigrationStateEvent',
-        'MigrationProgressEvent',
+        "MigrationState",
+        "MigrationStep",
+        "MigrationStateEvent",
+        "MigrationProgressEvent",
     },
 )
 
@@ -57,11 +57,7 @@ class MigrationStateEvent(proto.Message):
             The new state of the migration.
     """
 
-    state = proto.Field(
-        proto.ENUM,
-        number=1,
-        enum='MigrationState',
-    )
+    state = proto.Field(proto.ENUM, number=1, enum="MigrationState",)
 
 
 class MigrationProgressEvent(proto.Message):
@@ -92,6 +88,7 @@ class MigrationProgressEvent(proto.Message):
 
             This field is a member of `oneof`_ ``step_details``.
     """
+
     class ConcurrencyMode(proto.Enum):
         r"""Concurrency modes for transactions in Cloud Firestore."""
         CONCURRENCY_MODE_UNSPECIFIED = 0
@@ -108,9 +105,7 @@ class MigrationProgressEvent(proto.Message):
         """
 
         concurrency_mode = proto.Field(
-            proto.ENUM,
-            number=1,
-            enum='MigrationProgressEvent.ConcurrencyMode',
+            proto.ENUM, number=1, enum="MigrationProgressEvent.ConcurrencyMode",
         )
 
     class RedirectWritesStepDetails(proto.Message):
@@ -122,26 +117,17 @@ class MigrationProgressEvent(proto.Message):
         """
 
         concurrency_mode = proto.Field(
-            proto.ENUM,
-            number=1,
-            enum='MigrationProgressEvent.ConcurrencyMode',
+            proto.ENUM, number=1, enum="MigrationProgressEvent.ConcurrencyMode",
         )
 
-    step = proto.Field(
-        proto.ENUM,
-        number=1,
-        enum='MigrationStep',
-    )
+    step = proto.Field(proto.ENUM, number=1, enum="MigrationStep",)
     prepare_step_details = proto.Field(
-        proto.MESSAGE,
-        number=2,
-        oneof='step_details',
-        message=PrepareStepDetails,
+        proto.MESSAGE, number=2, oneof="step_details", message=PrepareStepDetails,
     )
     redirect_writes_step_details = proto.Field(
         proto.MESSAGE,
         number=3,
-        oneof='step_details',
+        oneof="step_details",
         message=RedirectWritesStepDetails,
     )
 
