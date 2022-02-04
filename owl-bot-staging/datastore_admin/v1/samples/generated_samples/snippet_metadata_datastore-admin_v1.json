@@ -1,0 +1,518 @@
+{
+  "snippets": [
+    {
+      "clientMethod": {
+        "async": true,
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "CreateIndex"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_create_index_async.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_CreateIndex_async",
+      "segments": [
+        {
+          "end": 45,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 45,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 37,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 38,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 46,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "CreateIndex"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_create_index_sync.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_CreateIndex_sync",
+      "segments": [
+        {
+          "end": 45,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 45,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 37,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 38,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 46,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "async": true,
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "DeleteIndex"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_delete_index_async.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_DeleteIndex_async",
+      "segments": [
+        {
+          "end": 45,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 45,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 37,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 38,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 46,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "DeleteIndex"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_delete_index_sync.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_DeleteIndex_sync",
+      "segments": [
+        {
+          "end": 45,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 45,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 37,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 38,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 46,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "async": true,
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "ExportEntities"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_export_entities_async.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_ExportEntities_async",
+      "segments": [
+        {
+          "end": 47,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 47,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 39,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 40,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 48,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "ExportEntities"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_export_entities_sync.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_ExportEntities_sync",
+      "segments": [
+        {
+          "end": 47,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 47,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 39,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 40,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 48,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "async": true,
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "GetIndex"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_get_index_async.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_GetIndex_async",
+      "segments": [
+        {
+          "end": 43,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 43,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 37,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "end": 40,
+          "start": 38,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 44,
+          "start": 41,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "GetIndex"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_get_index_sync.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_GetIndex_sync",
+      "segments": [
+        {
+          "end": 43,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 43,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 37,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "end": 40,
+          "start": 38,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 44,
+          "start": 41,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "async": true,
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "ImportEntities"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_import_entities_async.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_ImportEntities_async",
+      "segments": [
+        {
+          "end": 47,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 47,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 39,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 40,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 48,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "ImportEntities"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_import_entities_sync.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_ImportEntities_sync",
+      "segments": [
+        {
+          "end": 47,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 47,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 39,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 40,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 48,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "async": true,
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "ListIndexes"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_list_indexes_async.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_ListIndexes_async",
+      "segments": [
+        {
+          "end": 42,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 42,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 37,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 38,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 43,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    },
+    {
+      "clientMethod": {
+        "method": {
+          "service": {
+            "shortName": "DatastoreAdmin"
+          },
+          "shortName": "ListIndexes"
+        }
+      },
+      "file": "datastore_generated_datastore_admin_v1_datastore_admin_list_indexes_sync.py",
+      "regionTag": "datastore_generated_datastore_admin_v1_DatastoreAdmin_ListIndexes_sync",
+      "segments": [
+        {
+          "end": 42,
+          "start": 27,
+          "type": "FULL"
+        },
+        {
+          "end": 42,
+          "start": 27,
+          "type": "SHORT"
+        },
+        {
+          "end": 33,
+          "start": 31,
+          "type": "CLIENT_INITIALIZATION"
+        },
+        {
+          "end": 37,
+          "start": 34,
+          "type": "REQUEST_INITIALIZATION"
+        },
+        {
+          "start": 38,
+          "type": "REQUEST_EXECUTION"
+        },
+        {
+          "end": 43,
+          "type": "RESPONSE_HANDLING"
+        }
+      ]
+    }
+  ]
+}
