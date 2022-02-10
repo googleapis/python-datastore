@@ -16,6 +16,7 @@
 from .datastore_admin import (
     CommonMetadata,
     CreateIndexRequest,
+    DatastoreFirestoreMigrationMetadata,
     DeleteIndexRequest,
     EntityFilter,
     ExportEntitiesMetadata,
@@ -31,10 +32,17 @@ from .datastore_admin import (
     OperationType,
 )
 from .index import Index
+from .migration import (
+    MigrationProgressEvent,
+    MigrationStateEvent,
+    MigrationState,
+    MigrationStep,
+)
 
 __all__ = (
     "CommonMetadata",
     "CreateIndexRequest",
+    "DatastoreFirestoreMigrationMetadata",
     "DeleteIndexRequest",
     "EntityFilter",
     "ExportEntitiesMetadata",
@@ -49,4 +57,8 @@ __all__ = (
     "Progress",
     "OperationType",
     "Index",
+    "MigrationProgressEvent",
+    "MigrationStateEvent",
+    "MigrationState",
+    "MigrationStep",
 )
