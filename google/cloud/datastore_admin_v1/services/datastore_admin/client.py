@@ -466,8 +466,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         Google Cloud Storage.
 
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -625,8 +624,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         imported to Cloud Datastore.
 
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -792,8 +790,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         Indexes with a single property cannot be created.
 
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -884,8 +881,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         again.
 
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -962,8 +958,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
     ) -> index.Index:
         r"""Gets an index.
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -1027,8 +1022,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         results.
 
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 

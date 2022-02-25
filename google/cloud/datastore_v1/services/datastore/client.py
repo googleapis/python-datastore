@@ -402,8 +402,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
     ) -> datastore.LookupResponse:
         r"""Looks up entities by key.
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_v1
 
@@ -502,8 +501,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
     ) -> datastore.RunQueryResponse:
         r"""Queries for entities.
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_v1
 
@@ -567,8 +565,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
     ) -> datastore.BeginTransactionResponse:
         r"""Begins a new transaction.
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_v1
 
@@ -657,8 +654,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         or modifying some entities.
 
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_v1
 
@@ -785,8 +781,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
     ) -> datastore.RollbackResponse:
         r"""Rolls back a transaction.
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_v1
 
@@ -884,8 +879,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         referencing an entity before it is inserted.
 
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_v1
 
@@ -983,8 +977,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         auto-allocated by Cloud Datastore.
 
 
-
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_v1
 

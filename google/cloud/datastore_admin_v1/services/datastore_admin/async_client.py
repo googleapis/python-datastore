@@ -286,7 +286,7 @@ class DatastoreAdminAsyncClient:
         Google Cloud Storage.
 
 
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -445,7 +445,7 @@ class DatastoreAdminAsyncClient:
         imported to Cloud Datastore.
 
 
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -612,7 +612,7 @@ class DatastoreAdminAsyncClient:
         Indexes with a single property cannot be created.
 
 
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -702,7 +702,7 @@ class DatastoreAdminAsyncClient:
         again.
 
 
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -778,7 +778,7 @@ class DatastoreAdminAsyncClient:
     ) -> index.Index:
         r"""Gets an index.
 
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
@@ -851,7 +851,7 @@ class DatastoreAdminAsyncClient:
         results.
 
 
-        .. code-block::
+        .. code-block:: python
 
             from google.cloud import datastore_admin_v1
 
