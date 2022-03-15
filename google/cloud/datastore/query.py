@@ -88,7 +88,7 @@ class Query(object):
         "=": query_pb2.PropertyFilter.Operator.EQUAL,
         "!=": query_pb2.PropertyFilter.Operator.NOT_EQUAL,
         "IN": query_pb2.PropertyFilter.Operator.IN,
-        "NOT_IN": query_pb2.PropertyFilter.Operator.NOT_IN
+        "NOT_IN": query_pb2.PropertyFilter.Operator.NOT_IN,
     }
     """Mapping of operator strings and their protobuf equivalents."""
 
