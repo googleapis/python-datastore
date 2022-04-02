@@ -55,7 +55,9 @@ def clone_client(client):
         )
     else:
         return datastore.Client(
-            project=client.project, namespace=client.namespace, _http=client._http,
+            project=client.project,
+            namespace=client.namespace,
+            _http=client._http,
         )
 
 
@@ -68,7 +70,9 @@ def setUpModule():
     else:
         http = requests.Session()  # Un-authorized.
         Config.CLIENT = datastore.Client(
-            project=emulator_dataset, namespace=test_namespace, _http=http,
+            project=emulator_dataset,
+            namespace=test_namespace,
+            _http=http,
         )
 
 

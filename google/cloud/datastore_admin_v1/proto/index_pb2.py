@@ -347,8 +347,14 @@ _INDEX = _descriptor.Descriptor(
         ),
     ],
     extensions=[],
-    nested_types=[_INDEX_INDEXEDPROPERTY,],
-    enum_types=[_INDEX_ANCESTORMODE, _INDEX_DIRECTION, _INDEX_STATE,],
+    nested_types=[
+        _INDEX_INDEXEDPROPERTY,
+    ],
+    enum_types=[
+        _INDEX_ANCESTORMODE,
+        _INDEX_DIRECTION,
+        _INDEX_STATE,
+    ],
     serialized_options=None,
     is_extendable=False,
     syntax="proto3",

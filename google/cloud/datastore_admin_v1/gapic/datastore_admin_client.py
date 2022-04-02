@@ -230,7 +230,9 @@ class DatastoreAdminClient(object):
                 self.transport = transport
         else:
             self.transport = datastore_admin_grpc_transport.DatastoreAdminGrpcTransport(
-                address=api_endpoint, channel=channel, credentials=credentials,
+                address=api_endpoint,
+                channel=channel,
+                credentials=credentials,
             )
 
         if client_info is None:
@@ -555,7 +557,8 @@ class DatastoreAdminClient(object):
             )
 
         request = datastore_admin_pb2.GetIndexRequest(
-            project_id=project_id, index_id=index_id,
+            project_id=project_id,
+            index_id=index_id,
         )
         return self._inner_api_calls["get_index"](
             request, retry=retry, timeout=timeout, metadata=metadata
@@ -636,7 +639,9 @@ class DatastoreAdminClient(object):
             )
 
         request = datastore_admin_pb2.ListIndexesRequest(
-            project_id=project_id, filter=filter_, page_size=page_size,
+            project_id=project_id,
+            filter=filter_,
+            page_size=page_size,
         )
         if metadata is None:
             metadata = []

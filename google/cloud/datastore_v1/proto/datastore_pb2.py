@@ -732,7 +732,9 @@ _COMMITREQUEST = _descriptor.Descriptor(
     ],
     extensions=[],
     nested_types=[],
-    enum_types=[_COMMITREQUEST_MODE,],
+    enum_types=[
+        _COMMITREQUEST_MODE,
+    ],
     serialized_options=None,
     is_extendable=False,
     syntax="proto3",
@@ -1275,7 +1277,9 @@ _READOPTIONS = _descriptor.Descriptor(
     ],
     extensions=[],
     nested_types=[],
-    enum_types=[_READOPTIONS_READCONSISTENCY,],
+    enum_types=[
+        _READOPTIONS_READCONSISTENCY,
+    ],
     serialized_options=None,
     is_extendable=False,
     syntax="proto3",
@@ -1403,7 +1407,10 @@ _TRANSACTIONOPTIONS = _descriptor.Descriptor(
         ),
     ],
     extensions=[],
-    nested_types=[_TRANSACTIONOPTIONS_READWRITE, _TRANSACTIONOPTIONS_READONLY,],
+    nested_types=[
+        _TRANSACTIONOPTIONS_READWRITE,
+        _TRANSACTIONOPTIONS_READONLY,
+    ],
     enum_types=[],
     serialized_options=None,
     is_extendable=False,
