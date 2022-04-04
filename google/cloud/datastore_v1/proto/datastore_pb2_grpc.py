@@ -71,22 +71,19 @@ class DatastoreServicer(object):
     """
 
     def Lookup(self, request, context):
-        """Looks up entities by key.
-        """
+        """Looks up entities by key."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
     def RunQuery(self, request, context):
-        """Queries for entities.
-        """
+        """Queries for entities."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
     def BeginTransaction(self, request, context):
-        """Begins a new transaction.
-        """
+        """Begins a new transaction."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
@@ -100,8 +97,7 @@ class DatastoreServicer(object):
         raise NotImplementedError("Method not implemented!")
 
     def Rollback(self, request, context):
-        """Rolls back a transaction.
-        """
+        """Rolls back a transaction."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")

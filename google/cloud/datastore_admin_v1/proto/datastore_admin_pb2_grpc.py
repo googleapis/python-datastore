@@ -195,8 +195,7 @@ class DatastoreAdminServicer(object):
         raise NotImplementedError("Method not implemented!")
 
     def GetIndex(self, request, context):
-        """Gets an index.
-        """
+        """Gets an index."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")

@@ -229,7 +229,9 @@ _KEY = _descriptor.Descriptor(
         ),
     ],
     extensions=[],
-    nested_types=[_KEY_PATHELEMENT,],
+    nested_types=[
+        _KEY_PATHELEMENT,
+    ],
     enum_types=[],
     serialized_options=None,
     is_extendable=False,
@@ -667,7 +669,9 @@ _ENTITY = _descriptor.Descriptor(
         ),
     ],
     extensions=[],
-    nested_types=[_ENTITY_PROPERTIESENTRY,],
+    nested_types=[
+        _ENTITY_PROPERTIESENTRY,
+    ],
     enum_types=[],
     serialized_options=None,
     is_extendable=False,
