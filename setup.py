@@ -29,8 +29,8 @@ description = "Google Cloud Datastore API client library"
 # 'Development Status :: 5 - Production/Stable'
 release_status = "Development Status :: 5 - Production/Stable"
 dependencies = [
-    "google-api-core[grpc] >= 1.14.0, < 2.0.0dev",
-    "google-cloud-core >= 1.4.0, < 2.0dev",
+    "google-api-core[grpc] >= 1.31.5, <3.0.0dev,!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0",
+    "google-cloud-core >= 1.4.0, < 3.0dev",
 ]
 extras = {}
 
