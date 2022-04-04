@@ -4,6 +4,13 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+### [1.15.4](https://github.com/googleapis/python-datastore/compare/v1.15.3...v1.15.4) (2022-04-04)
+
+
+### Bug Fixes
+
+* **deps:** require google-api-core >= 1.31.5, >= 2.3.2 on v1 release ([#283](https://github.com/googleapis/python-datastore/issues/283)) ([1e89d90](https://github.com/googleapis/python-datastore/commit/1e89d9012d8662577812915414cce00f0000d982))
+
 ### [1.15.3](https://www.github.com/googleapis/python-datastore/compare/v1.15.2...v1.15.3) (2020-10-06)
 
 
