@@ -349,8 +349,12 @@ _COMMONMETADATA = _descriptor.Descriptor(
         ),
     ],
     extensions=[],
-    nested_types=[_COMMONMETADATA_LABELSENTRY,],
-    enum_types=[_COMMONMETADATA_STATE,],
+    nested_types=[
+        _COMMONMETADATA_LABELSENTRY,
+    ],
+    enum_types=[
+        _COMMONMETADATA_STATE,
+    ],
     serialized_options=None,
     is_extendable=False,
     syntax="proto3",
@@ -566,7 +570,9 @@ _EXPORTENTITIESREQUEST = _descriptor.Descriptor(
         ),
     ],
     extensions=[],
-    nested_types=[_EXPORTENTITIESREQUEST_LABELSENTRY,],
+    nested_types=[
+        _EXPORTENTITIESREQUEST_LABELSENTRY,
+    ],
     enum_types=[],
     serialized_options=None,
     is_extendable=False,
@@ -723,7 +729,9 @@ _IMPORTENTITIESREQUEST = _descriptor.Descriptor(
         ),
     ],
     extensions=[],
-    nested_types=[_IMPORTENTITIESREQUEST_LABELSENTRY,],
+    nested_types=[
+        _IMPORTENTITIESREQUEST_LABELSENTRY,
+    ],
     enum_types=[],
     serialized_options=None,
     is_extendable=False,

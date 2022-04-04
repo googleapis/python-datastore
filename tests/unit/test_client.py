@@ -181,7 +181,9 @@ class TestClient(unittest.TestCase):
         self.assertIsNone(client.current_batch)
         self.assertIsNone(client.current_transaction)
 
-        default.assert_called_once_with(scopes=klass.SCOPE,)
+        default.assert_called_once_with(
+            scopes=klass.SCOPE,
+        )
         _determine_default_project.assert_called_once_with(None)
 
     def test_constructor_w_explicit_inputs(self):
