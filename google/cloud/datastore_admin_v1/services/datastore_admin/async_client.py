@@ -16,7 +16,7 @@
 from collections import OrderedDict
 import functools
 import re
-from typing import Dict, Optional, Sequence, Tuple, Type, Union
+from typing import Dict, Mapping, Optional, Sequence, Tuple, Type, Union
 import pkg_resources
 
 from google.api_core.client_options import ClientOptions
@@ -267,7 +267,7 @@ class DatastoreAdminAsyncClient:
         request: Union[datastore_admin.ExportEntitiesRequest, dict] = None,
         *,
         project_id: str = None,
-        labels: Dict[str, str] = None,
+        labels: Mapping[str, str] = None,
         entity_filter: datastore_admin.EntityFilter = None,
         output_url_prefix: str = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
@@ -321,7 +321,7 @@ class DatastoreAdminAsyncClient:
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            labels (:class:`Dict[str, str]`):
+            labels (:class:`Mapping[str, str]`):
                 Client-assigned labels.
                 This corresponds to the ``labels`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -434,7 +434,7 @@ class DatastoreAdminAsyncClient:
         request: Union[datastore_admin.ImportEntitiesRequest, dict] = None,
         *,
         project_id: str = None,
-        labels: Dict[str, str] = None,
+        labels: Mapping[str, str] = None,
         input_url: str = None,
         entity_filter: datastore_admin.EntityFilter = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
@@ -485,7 +485,7 @@ class DatastoreAdminAsyncClient:
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            labels (:class:`Dict[str, str]`):
+            labels (:class:`Mapping[str, str]`):
                 Client-assigned labels.
                 This corresponds to the ``labels`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -842,8 +842,7 @@ class DatastoreAdminAsyncClient:
                 maximum=60.0,
                 multiplier=1.3,
                 predicate=retries.if_exception_type(
-                    core_exceptions.DeadlineExceeded,
-                    core_exceptions.ServiceUnavailable,
+                    core_exceptions.GoogleAPICallError,
                 ),
                 deadline=60.0,
             ),
@@ -926,8 +925,7 @@ class DatastoreAdminAsyncClient:
                 maximum=60.0,
                 multiplier=1.3,
                 predicate=retries.if_exception_type(
-                    core_exceptions.DeadlineExceeded,
-                    core_exceptions.ServiceUnavailable,
+                    core_exceptions.GoogleAPICallError,
                 ),
                 deadline=60.0,
             ),

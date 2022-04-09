@@ -16,7 +16,7 @@
 from collections import OrderedDict
 import os
 import re
-from typing import Dict, Optional, Sequence, Tuple, Type, Union
+from typing import Dict, Mapping, Optional, Sequence, Tuple, Type, Union
 import pkg_resources
 
 from google.api_core import client_options as client_options_lib
@@ -468,7 +468,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         request: Union[datastore_admin.ExportEntitiesRequest, dict] = None,
         *,
         project_id: str = None,
-        labels: Dict[str, str] = None,
+        labels: Mapping[str, str] = None,
         entity_filter: datastore_admin.EntityFilter = None,
         output_url_prefix: str = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
@@ -489,7 +489,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_admin_v1
+                    from google.cloud import datastore_admin_v1
 
             def sample_export_entities():
                 # Create a client
@@ -522,7 +522,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            labels (Dict[str, str]):
+            labels (Mapping[str, str]):
                 Client-assigned labels.
                 This corresponds to the ``labels`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -634,7 +634,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         request: Union[datastore_admin.ImportEntitiesRequest, dict] = None,
         *,
         project_id: str = None,
-        labels: Dict[str, str] = None,
+        labels: Mapping[str, str] = None,
         input_url: str = None,
         entity_filter: datastore_admin.EntityFilter = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
@@ -652,7 +652,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_admin_v1
+                    from google.cloud import datastore_admin_v1
 
             def sample_import_entities():
                 # Create a client
@@ -685,7 +685,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
                 This corresponds to the ``project_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            labels (Dict[str, str]):
+            labels (Mapping[str, str]):
                 Client-assigned labels.
                 This corresponds to the ``labels`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -823,7 +823,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_admin_v1
+                    from google.cloud import datastore_admin_v1
 
             def sample_create_index():
                 # Create a client
@@ -919,7 +919,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_admin_v1
+                    from google.cloud import datastore_admin_v1
 
             def sample_delete_index():
                 # Create a client
@@ -1001,7 +1001,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_admin_v1
+                    from google.cloud import datastore_admin_v1
 
             def sample_get_index():
                 # Create a client
@@ -1070,7 +1070,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_admin_v1
+                    from google.cloud import datastore_admin_v1
 
             def sample_list_indexes():
                 # Create a client
