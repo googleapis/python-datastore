@@ -368,7 +368,7 @@ class GqlQuery(proto.Message):
             and instead must bind all values. For example,
             ``SELECT * FROM Kind WHERE a = 'string literal'`` is not
             allowed, while ``SELECT * FROM Kind WHERE a = @value`` is.
-        named_bindings (Sequence[google.cloud.datastore_v1.types.GqlQuery.NamedBindingsEntry]):
+        named_bindings (Mapping[str, google.cloud.datastore_v1.types.GqlQueryParameter]):
             For each non-reserved named binding site in the query
             string, there must be a named parameter with that name, but
             not necessarily the inverse.
