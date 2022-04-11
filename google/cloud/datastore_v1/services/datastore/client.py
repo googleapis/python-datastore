@@ -16,7 +16,7 @@
 from collections import OrderedDict
 import os
 import re
-from typing import Dict, Optional, Sequence, Tuple, Type, Union
+from typing import Dict, Mapping, Optional, Sequence, Tuple, Type, Union
 import pkg_resources
 
 from google.api_core import client_options as client_options_lib
@@ -37,6 +37,7 @@ except AttributeError:  # pragma: NO COVER
 from google.cloud.datastore_v1.types import datastore
 from google.cloud.datastore_v1.types import entity
 from google.cloud.datastore_v1.types import query
+from google.protobuf import timestamp_pb2  # type: ignore
 from .transports.base import DatastoreTransport, DEFAULT_CLIENT_INFO
 from .transports.grpc import DatastoreGrpcTransport
 from .transports.grpc_asyncio import DatastoreGrpcAsyncIOTransport
@@ -425,7 +426,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_v1
+                    from google.cloud import datastore_v1
 
             def sample_lookup():
                 # Create a client
@@ -529,7 +530,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_v1
+                    from google.cloud import datastore_v1
 
             def sample_run_query():
                 # Create a client
@@ -598,7 +599,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_v1
+                    from google.cloud import datastore_v1
 
             def sample_begin_transaction():
                 # Create a client
@@ -692,7 +693,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_v1
+                    from google.cloud import datastore_v1
 
             def sample_commit():
                 # Create a client
@@ -824,7 +825,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_v1
+                    from google.cloud import datastore_v1
 
             def sample_rollback():
                 # Create a client
@@ -927,7 +928,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_v1
+                    from google.cloud import datastore_v1
 
             def sample_allocate_ids():
                 # Create a client
@@ -1030,7 +1031,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import datastore_v1
+                    from google.cloud import datastore_v1
 
             def sample_reserve_ids():
                 # Create a client
