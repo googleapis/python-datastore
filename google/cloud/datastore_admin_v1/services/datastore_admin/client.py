@@ -486,10 +486,9 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         before completion it may leave partial data behind in
         Google Cloud Storage.
 
-
         .. code-block:: python
 
-                    from google.cloud import datastore_admin_v1
+            from google.cloud import datastore_admin_v1
 
             def sample_export_entities():
                 # Create a client
@@ -649,10 +648,9 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         is possible that a subset of the data has already been
         imported to Cloud Datastore.
 
-
         .. code-block:: python
 
-                    from google.cloud import datastore_admin_v1
+            from google.cloud import datastore_admin_v1
 
             def sample_import_entities():
                 # Create a client
@@ -820,10 +818,9 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         Indexes with a single property cannot be created.
 
-
         .. code-block:: python
 
-                    from google.cloud import datastore_admin_v1
+            from google.cloud import datastore_admin_v1
 
             def sample_create_index():
                 # Create a client
@@ -916,10 +913,9 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         [delete][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex]
         again.
 
-
         .. code-block:: python
 
-                    from google.cloud import datastore_admin_v1
+            from google.cloud import datastore_admin_v1
 
             def sample_delete_index():
                 # Create a client
@@ -1001,7 +997,7 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
 
         .. code-block:: python
 
-                    from google.cloud import datastore_admin_v1
+            from google.cloud import datastore_admin_v1
 
             def sample_get_index():
                 # Create a client
@@ -1067,10 +1063,9 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         the list of indexes and may occasionally return stale
         results.
 
-
         .. code-block:: python
 
-                    from google.cloud import datastore_admin_v1
+            from google.cloud import datastore_admin_v1
 
             def sample_list_indexes():
                 # Create a client

@@ -499,7 +499,6 @@ class DatastoreAsyncClient:
         r"""Commits a transaction, optionally creating, deleting
         or modifying some entities.
 
-
         .. code-block:: python
 
             from google.cloud import datastore_v1
@@ -734,7 +733,6 @@ class DatastoreAsyncClient:
         r"""Allocates IDs for the given keys, which is useful for
         referencing an entity before it is inserted.
 
-
         .. code-block:: python
 
             from google.cloud import datastore_v1
@@ -836,7 +834,6 @@ class DatastoreAsyncClient:
     ) -> datastore.ReserveIdsResponse:
         r"""Prevents the supplied keys' IDs from being
         auto-allocated by Cloud Datastore.
-
 
         .. code-block:: python
 

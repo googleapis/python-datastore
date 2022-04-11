@@ -285,7 +285,6 @@ class DatastoreAdminAsyncClient:
         before completion it may leave partial data behind in
         Google Cloud Storage.
 
-
         .. code-block:: python
 
             from google.cloud import datastore_admin_v1
@@ -448,7 +447,6 @@ class DatastoreAdminAsyncClient:
         created. If an ImportEntities operation is cancelled, it
         is possible that a subset of the data has already been
         imported to Cloud Datastore.
-
 
         .. code-block:: python
 
@@ -621,7 +619,6 @@ class DatastoreAdminAsyncClient:
 
         Indexes with a single property cannot be created.
 
-
         .. code-block:: python
 
             from google.cloud import datastore_admin_v1
@@ -715,7 +712,6 @@ class DatastoreAdminAsyncClient:
         error, followed by calling
         [delete][google.datastore.admin.v1.DatastoreAdmin.DeleteIndex]
         again.
-
 
         .. code-block:: python
 
@@ -873,7 +869,6 @@ class DatastoreAdminAsyncClient:
         Datastore uses an eventually consistent query to fetch
         the list of indexes and may occasionally return stale
         results.
-
 
         .. code-block:: python
 

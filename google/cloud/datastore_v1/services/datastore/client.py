@@ -426,7 +426,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-                    from google.cloud import datastore_v1
+            from google.cloud import datastore_v1
 
             def sample_lookup():
                 # Create a client
@@ -530,7 +530,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-                    from google.cloud import datastore_v1
+            from google.cloud import datastore_v1
 
             def sample_run_query():
                 # Create a client
@@ -599,7 +599,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-                    from google.cloud import datastore_v1
+            from google.cloud import datastore_v1
 
             def sample_begin_transaction():
                 # Create a client
@@ -690,10 +690,9 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         r"""Commits a transaction, optionally creating, deleting
         or modifying some entities.
 
-
         .. code-block:: python
 
-                    from google.cloud import datastore_v1
+            from google.cloud import datastore_v1
 
             def sample_commit():
                 # Create a client
@@ -825,7 +824,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
 
         .. code-block:: python
 
-                    from google.cloud import datastore_v1
+            from google.cloud import datastore_v1
 
             def sample_rollback():
                 # Create a client
@@ -925,10 +924,9 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         r"""Allocates IDs for the given keys, which is useful for
         referencing an entity before it is inserted.
 
-
         .. code-block:: python
 
-                    from google.cloud import datastore_v1
+            from google.cloud import datastore_v1
 
             def sample_allocate_ids():
                 # Create a client
@@ -1028,10 +1026,9 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         r"""Prevents the supplied keys' IDs from being
         auto-allocated by Cloud Datastore.
 
-
         .. code-block:: python
 
-                    from google.cloud import datastore_v1
+            from google.cloud import datastore_v1
 
             def sample_reserve_ids():
                 # Create a client
