@@ -220,9 +220,9 @@ class DatastoreAsyncClient:
 
             from google.cloud import datastore_v1
 
-            def sample_lookup():
+            async def sample_lookup():
                 # Create a client
-                client = datastore_v1.DatastoreClient()
+                client = datastore_v1.DatastoreAsyncClient()
 
                 # Initialize request argument(s)
                 request = datastore_v1.LookupRequest(
@@ -230,7 +230,7 @@ class DatastoreAsyncClient:
                 )
 
                 # Make the request
-                response = client.lookup(request=request)
+                response = await client.lookup(request=request)
 
                 # Handle the response
                 print(response)
@@ -309,6 +309,14 @@ class DatastoreAsyncClient:
             client_info=DEFAULT_CLIENT_INFO,
         )
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = await rpc(
             request,
@@ -334,9 +342,9 @@ class DatastoreAsyncClient:
 
             from google.cloud import datastore_v1
 
-            def sample_run_query():
+            async def sample_run_query():
                 # Create a client
-                client = datastore_v1.DatastoreClient()
+                client = datastore_v1.DatastoreAsyncClient()
 
                 # Initialize request argument(s)
                 request = datastore_v1.RunQueryRequest(
@@ -344,7 +352,7 @@ class DatastoreAsyncClient:
                 )
 
                 # Make the request
-                response = client.run_query(request=request)
+                response = await client.run_query(request=request)
 
                 # Handle the response
                 print(response)
@@ -386,6 +394,14 @@ class DatastoreAsyncClient:
             client_info=DEFAULT_CLIENT_INFO,
         )
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = await rpc(
             request,
@@ -412,9 +428,9 @@ class DatastoreAsyncClient:
 
             from google.cloud import datastore_v1
 
-            def sample_begin_transaction():
+            async def sample_begin_transaction():
                 # Create a client
-                client = datastore_v1.DatastoreClient()
+                client = datastore_v1.DatastoreAsyncClient()
 
                 # Initialize request argument(s)
                 request = datastore_v1.BeginTransactionRequest(
@@ -422,7 +438,7 @@ class DatastoreAsyncClient:
                 )
 
                 # Make the request
-                response = client.begin_transaction(request=request)
+                response = await client.begin_transaction(request=request)
 
                 # Handle the response
                 print(response)
@@ -475,6 +491,14 @@ class DatastoreAsyncClient:
             client_info=DEFAULT_CLIENT_INFO,
         )
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = await rpc(
             request,
@@ -505,9 +529,9 @@ class DatastoreAsyncClient:
 
             from google.cloud import datastore_v1
 
-            def sample_commit():
+            async def sample_commit():
                 # Create a client
-                client = datastore_v1.DatastoreClient()
+                client = datastore_v1.DatastoreAsyncClient()
 
                 # Initialize request argument(s)
                 request = datastore_v1.CommitRequest(
@@ -516,7 +540,7 @@ class DatastoreAsyncClient:
                 )
 
                 # Make the request
-                response = client.commit(request=request)
+                response = await client.commit(request=request)
 
                 # Handle the response
                 print(response)
@@ -610,6 +634,14 @@ class DatastoreAsyncClient:
             client_info=DEFAULT_CLIENT_INFO,
         )
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = await rpc(
             request,
@@ -637,9 +669,9 @@ class DatastoreAsyncClient:
 
             from google.cloud import datastore_v1
 
-            def sample_rollback():
+            async def sample_rollback():
                 # Create a client
-                client = datastore_v1.DatastoreClient()
+                client = datastore_v1.DatastoreAsyncClient()
 
                 # Initialize request argument(s)
                 request = datastore_v1.RollbackRequest(
@@ -648,7 +680,7 @@ class DatastoreAsyncClient:
                 )
 
                 # Make the request
-                response = client.rollback(request=request)
+                response = await client.rollback(request=request)
 
                 # Handle the response
                 print(response)
@@ -711,6 +743,14 @@ class DatastoreAsyncClient:
             client_info=DEFAULT_CLIENT_INFO,
         )
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = await rpc(
             request,
@@ -739,9 +779,9 @@ class DatastoreAsyncClient:
 
             from google.cloud import datastore_v1
 
-            def sample_allocate_ids():
+            async def sample_allocate_ids():
                 # Create a client
-                client = datastore_v1.DatastoreClient()
+                client = datastore_v1.DatastoreAsyncClient()
 
                 # Initialize request argument(s)
                 request = datastore_v1.AllocateIdsRequest(
@@ -749,7 +789,7 @@ class DatastoreAsyncClient:
                 )
 
                 # Make the request
-                response = client.allocate_ids(request=request)
+                response = await client.allocate_ids(request=request)
 
                 # Handle the response
                 print(response)
@@ -813,6 +853,14 @@ class DatastoreAsyncClient:
             client_info=DEFAULT_CLIENT_INFO,
         )
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = await rpc(
             request,
@@ -841,9 +889,9 @@ class DatastoreAsyncClient:
 
             from google.cloud import datastore_v1
 
-            def sample_reserve_ids():
+            async def sample_reserve_ids():
                 # Create a client
-                client = datastore_v1.DatastoreClient()
+                client = datastore_v1.DatastoreAsyncClient()
 
                 # Initialize request argument(s)
                 request = datastore_v1.ReserveIdsRequest(
@@ -851,7 +899,7 @@ class DatastoreAsyncClient:
                 )
 
                 # Make the request
-                response = client.reserve_ids(request=request)
+                response = await client.reserve_ids(request=request)
 
                 # Handle the response
                 print(response)
@@ -922,6 +970,14 @@ class DatastoreAsyncClient:
             ),
             default_timeout=60.0,
             client_info=DEFAULT_CLIENT_INFO,
+        )
+
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
         )
 
         # Send the request.

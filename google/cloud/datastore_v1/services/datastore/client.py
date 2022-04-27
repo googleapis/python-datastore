@@ -507,6 +507,14 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.lookup]
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = rpc(
             request,
@@ -574,6 +582,14 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.run_query]
+
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
 
         # Send the request.
         response = rpc(
@@ -663,6 +679,14 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.begin_transaction]
+
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
 
         # Send the request.
         response = rpc(
@@ -799,6 +823,14 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.commit]
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = rpc(
             request,
@@ -899,6 +931,14 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.rollback]
+
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
 
         # Send the request.
         response = rpc(
@@ -1002,6 +1042,14 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.allocate_ids]
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = rpc(
             request,
@@ -1102,6 +1150,14 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.reserve_ids]
+
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
 
         # Send the request.
         response = rpc(

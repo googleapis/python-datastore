@@ -709,6 +709,67 @@ async def test_lookup_async_from_dict():
     await test_lookup_async(request_type=dict)
 
 
+def test_lookup_field_headers():
+    client = DatastoreClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.LookupRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.lookup), "__call__") as call:
+        call.return_value = datastore.LookupResponse()
+        client.lookup(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
+@pytest.mark.asyncio
+async def test_lookup_field_headers_async():
+    client = DatastoreAsyncClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.LookupRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.lookup), "__call__") as call:
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            datastore.LookupResponse()
+        )
+        await client.lookup(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
 def test_lookup_flattened():
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(),
@@ -926,6 +987,67 @@ async def test_run_query_async_from_dict():
     await test_run_query_async(request_type=dict)
 
 
+def test_run_query_field_headers():
+    client = DatastoreClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.RunQueryRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.run_query), "__call__") as call:
+        call.return_value = datastore.RunQueryResponse()
+        client.run_query(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
+@pytest.mark.asyncio
+async def test_run_query_field_headers_async():
+    client = DatastoreAsyncClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.RunQueryRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.run_query), "__call__") as call:
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            datastore.RunQueryResponse()
+        )
+        await client.run_query(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
 @pytest.mark.parametrize(
     "request_type",
     [
@@ -1019,6 +1141,71 @@ async def test_begin_transaction_async(
 @pytest.mark.asyncio
 async def test_begin_transaction_async_from_dict():
     await test_begin_transaction_async(request_type=dict)
+
+
+def test_begin_transaction_field_headers():
+    client = DatastoreClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.BeginTransactionRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(
+        type(client.transport.begin_transaction), "__call__"
+    ) as call:
+        call.return_value = datastore.BeginTransactionResponse()
+        client.begin_transaction(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
+@pytest.mark.asyncio
+async def test_begin_transaction_field_headers_async():
+    client = DatastoreAsyncClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.BeginTransactionRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(
+        type(client.transport.begin_transaction), "__call__"
+    ) as call:
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            datastore.BeginTransactionResponse()
+        )
+        await client.begin_transaction(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
 
 
 def test_begin_transaction_flattened():
@@ -1194,6 +1381,67 @@ async def test_commit_async(
 @pytest.mark.asyncio
 async def test_commit_async_from_dict():
     await test_commit_async(request_type=dict)
+
+
+def test_commit_field_headers():
+    client = DatastoreClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.CommitRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.commit), "__call__") as call:
+        call.return_value = datastore.CommitResponse()
+        client.commit(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
+@pytest.mark.asyncio
+async def test_commit_field_headers_async():
+    client = DatastoreAsyncClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.CommitRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.commit), "__call__") as call:
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            datastore.CommitResponse()
+        )
+        await client.commit(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
 
 
 def test_commit_flattened():
@@ -1443,6 +1691,67 @@ async def test_rollback_async_from_dict():
     await test_rollback_async(request_type=dict)
 
 
+def test_rollback_field_headers():
+    client = DatastoreClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.RollbackRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.rollback), "__call__") as call:
+        call.return_value = datastore.RollbackResponse()
+        client.rollback(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
+@pytest.mark.asyncio
+async def test_rollback_field_headers_async():
+    client = DatastoreAsyncClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.RollbackRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.rollback), "__call__") as call:
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            datastore.RollbackResponse()
+        )
+        await client.rollback(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
 def test_rollback_flattened():
     client = DatastoreClient(
         credentials=ga_credentials.AnonymousCredentials(),
@@ -1616,6 +1925,67 @@ async def test_allocate_ids_async(
 @pytest.mark.asyncio
 async def test_allocate_ids_async_from_dict():
     await test_allocate_ids_async(request_type=dict)
+
+
+def test_allocate_ids_field_headers():
+    client = DatastoreClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.AllocateIdsRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.allocate_ids), "__call__") as call:
+        call.return_value = datastore.AllocateIdsResponse()
+        client.allocate_ids(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
+@pytest.mark.asyncio
+async def test_allocate_ids_field_headers_async():
+    client = DatastoreAsyncClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.AllocateIdsRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.allocate_ids), "__call__") as call:
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            datastore.AllocateIdsResponse()
+        )
+        await client.allocate_ids(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
 
 
 def test_allocate_ids_flattened():
@@ -1811,6 +2181,67 @@ async def test_reserve_ids_async(
 @pytest.mark.asyncio
 async def test_reserve_ids_async_from_dict():
     await test_reserve_ids_async(request_type=dict)
+
+
+def test_reserve_ids_field_headers():
+    client = DatastoreClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.ReserveIdsRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.reserve_ids), "__call__") as call:
+        call.return_value = datastore.ReserveIdsResponse()
+        client.reserve_ids(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls) == 1
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
+
+
+@pytest.mark.asyncio
+async def test_reserve_ids_field_headers_async():
+    client = DatastoreAsyncClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+    )
+
+    # Any value that is part of the HTTP/1.1 URI should be sent as
+    # a field header. Set these to a non-empty value.
+    request = datastore.ReserveIdsRequest()
+
+    request.project_id = "project_id_value"
+
+    # Mock the actual call within the gRPC stub, and fake the request.
+    with mock.patch.object(type(client.transport.reserve_ids), "__call__") as call:
+        call.return_value = grpc_helpers_async.FakeUnaryUnaryCall(
+            datastore.ReserveIdsResponse()
+        )
+        await client.reserve_ids(request)
+
+        # Establish that the underlying gRPC stub method was called.
+        assert len(call.mock_calls)
+        _, args, _ = call.mock_calls[0]
+        assert args[0] == request
+
+    # Establish that the field header was sent.
+    _, _, kw = call.mock_calls[0]
+    assert (
+        "x-goog-request-params",
+        "project_id=project_id_value",
+    ) in kw["metadata"]
 
 
 def test_reserve_ids_flattened():

@@ -609,6 +609,14 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.export_entities]
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = rpc(
             request,
@@ -775,6 +783,14 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.import_entities]
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = rpc(
             request,
@@ -871,6 +887,14 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.create_index]
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
+
         # Send the request.
         response = rpc(
             request,
@@ -966,6 +990,17 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.delete_index]
 
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (
+                    ("project_id", request.project_id),
+                    ("index_id", request.index_id),
+                )
+            ),
+        )
+
         # Send the request.
         response = rpc(
             request,
@@ -1038,6 +1073,17 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.get_index]
+
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (
+                    ("project_id", request.project_id),
+                    ("index_id", request.index_id),
+                )
+            ),
+        )
 
         # Send the request.
         response = rpc(
@@ -1112,6 +1158,14 @@ class DatastoreAdminClient(metaclass=DatastoreAdminClientMeta):
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
         rpc = self._transport._wrapped_methods[self._transport.list_indexes]
+
+        # Certain fields should be provided within the metadata header;
+        # add these here.
+        metadata = tuple(metadata) + (
+            gapic_v1.routing_header.to_grpc_metadata(
+                (("project_id", request.project_id),)
+            ),
+        )
 
         # Send the request.
         response = rpc(
