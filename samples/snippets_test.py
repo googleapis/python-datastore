@@ -51,28 +51,28 @@ class TestDatastoreSnippets:
     def test_in_query(self, client):
         tasks = snippets.in_query(client)
         client.entities_to_delete.extend(tasks)
-        assert tasks
-    
+        assert tasks is not None
+
     @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_not_equals_query(self, client):
         tasks = snippets.not_equals_query(client)
         client.entities_to_delete.extend(tasks)
-        assert tasks
+        assert tasks is not None
 
     @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_not_in_query(self, client):
         tasks = snippets.not_in_query(client)
         client.entities_to_delete.extend(tasks)
-        assert tasks
+        assert tasks is not None
 
     @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_eq_query_sorted(self, client):
         tasks = snippets.eq_query_sorted(client)
         client.entities_to_delete.extend(tasks)
-        assert tasks
+        assert tasks is not None
 
     @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_in_query_sorted(self, client):
         tasks = snippets.in_query_sorted(client)
         client.entities_to_delete.extend(tasks)
-        assert tasks
+        assert tasks is not None

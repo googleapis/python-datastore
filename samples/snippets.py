@@ -12,12 +12,10 @@
 # limitations under the License.
 
 import argparse
-from collections import defaultdict
-import datetime
 from pprint import pprint
 
-import google.cloud.exceptions
 from google.cloud import datastore  # noqa: I100
+
 
 def _preamble():
     # [START datastore_size_coloration_query]
@@ -30,6 +28,7 @@ def _preamble():
     # [END datastore_size_coloration_query]
     assert client is not None
 
+
 def in_query(client):
     # [START datastore_in_query]
     query = client.query(kind="Task")
@@ -37,6 +36,7 @@ def in_query(client):
     # [END datastore_in_query]
 
     return list(query.fetch())
+
 
 def not_equals_query(client):
     # [START datastore_not_equals_query]
@@ -46,7 +46,8 @@ def not_equals_query(client):
 
     return list(query.fetch())
 
-def not_equals_query(client):
+
+def not_in_query(client):
     # [START datastore_not_in_query]
     query = client.query(kind="Task")
     query.add_filter("category", "NOT_IN", ["work", "chores", "school"])
@@ -65,6 +66,7 @@ def eq_query_sorted(client):
 
     return list(query.fetch())
 
+
 def in_query_sorted(client):
     # [START datastore_in_query_sorted]
     query = client.query(kind="Task")
@@ -74,6 +76,7 @@ def in_query_sorted(client):
     # [END datastore_in_query_sorted]
 
     return list(query.fetch())
+
 
 def main(project_id):
     client = datastore.Client(project_id)
