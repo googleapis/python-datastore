@@ -60,7 +60,7 @@ def eq_query_sorted(client):
     # [START datastore_eq_query_sorted]
     query = client.query(kind="Task")
     query.add_filter("tag", "=", "learn")
-    # Ordering on equality filters are ignored
+    # Ordering on equality filters is ignored
     query.order = ['tag']
     # [END datastore_eq_query_sorted]
 
