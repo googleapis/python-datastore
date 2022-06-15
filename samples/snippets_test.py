@@ -14,9 +14,7 @@
 import os
 
 import backoff
-import google.api_core.exceptions
 from google.cloud import datastore
-from google.cloud import datastore_admin_v1
 
 
 import pytest
@@ -68,4 +66,3 @@ class TestDatastoreSnippets:
         tasks = snippets.not_in_query(client)
         client.entities_to_delete.extend(tasks)
         assert tasks is not None
-
