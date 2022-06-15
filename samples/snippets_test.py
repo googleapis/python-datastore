@@ -47,30 +47,6 @@ def client():
     client.cleanup()
 
 
-@pytest.fixture(scope="module")
-def create_tag_index():
-    # Create an admin client
-    admin_client = datastore_admin_v1.DatastoreAdminClient()
-    # Create index for tag propery.
-    tag_property_index = datastore_admin_v1.Index.IndexedProperty(
-        name='tag',
-        direction=datastore_admin_v1.Index.Direction.ASCENDING
-        )
-    index = datastore_admin_v1.Index(
-        kind='Task',
-        ancestor=datastore_admin_v1.Index.AncestorMode.NONE,
-        properties=[tag_property_index, tag_property_index]
-        )
-    request = datastore_admin_v1.CreateIndexRequest(project_id=PROJECT, index=index)
-    # Make the request. Pass if the index already exists.
-    try:
-        response = admin_client.create_index(request)
-        return response
-
-    except (google.api_core.exceptions.AlreadyExists):
-        pass
-
-
 @pytest.mark.flaky
 class TestDatastoreSnippets:
     # These tests mostly just test the absence of exceptions.
@@ -93,14 +69,3 @@ class TestDatastoreSnippets:
         client.entities_to_delete.extend(tasks)
         assert tasks is not None
 
-    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
-    def test_eq_query_sorted(self, client, create_tag_index):
-        tasks = snippets.eq_query_sorted(client)
-        client.entities_to_delete.extend(tasks)
-        assert tasks is not None
-
-    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
-    def test_in_query_sorted(self, client, create_tag_index):
-        tasks = snippets.in_query_sorted(client)
-        client.entities_to_delete.extend(tasks)
-        assert tasks is not None

@@ -56,28 +56,6 @@ def not_in_query(client):
     return list(query.fetch())
 
 
-def eq_query_sorted(client):
-    # [START datastore_eq_query_sorted]
-    query = client.query(kind="Task")
-    query.add_filter("tag", "=", "learn")
-    # Ordering on equality filters is ignored
-    query.order = ['tag']
-    # [END datastore_eq_query_sorted]
-
-    return list(query.fetch())
-
-
-def in_query_sorted(client):
-    # [START datastore_in_query_sorted]
-    query = client.query(kind="Task")
-    query.add_filter("tag", "IN", ["learn", "study"])
-    # Ordering on equality filters are ignored
-    query.order = ['tag']
-    # [END datastore_in_query_sorted]
-
-    return list(query.fetch())
-
-
 def main(project_id):
     client = datastore.Client(project_id)
 
