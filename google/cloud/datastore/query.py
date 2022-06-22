@@ -256,7 +256,9 @@ class Query(object):
         """
         if self.OPERATORS.get(operator) is None:
             error_message = 'Invalid expression: "%s"' % (operator,)
-            choices_message = "Please use one of: =, <, <=, >, >=, !=, IN, NOT_IN, COUNT."
+            choices_message = (
+                "Please use one of: =, <, <=, >, >=, !=, IN, NOT_IN, COUNT."
+            )
             raise ValueError(error_message, choices_message)
 
         if property_name == "__key__" and not isinstance(value, Key):
