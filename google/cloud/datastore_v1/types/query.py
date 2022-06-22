@@ -349,6 +349,7 @@ class PropertyFilter(proto.Message):
         NOT_EQUAL = 9
         HAS_ANCESTOR = 11
         NOT_IN = 13
+        COUNT = 14
 
     property = proto.Field(
         proto.MESSAGE,

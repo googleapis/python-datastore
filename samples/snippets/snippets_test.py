@@ -15,8 +15,6 @@ import os
 
 import backoff
 from google.cloud import datastore
-
-
 import pytest
 
 import snippets

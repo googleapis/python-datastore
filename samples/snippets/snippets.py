@@ -56,6 +56,15 @@ def not_in_query(client):
     return list(query.fetch())
 
 
+def count_query(client):
+    # [START datastore_count_query]
+    query = client.query(kind="Task")
+    query.add_filter("category", "COUNT", ["work"])
+    # [END datastore_count_query]
+
+    return list(query.fetch())
+
+
 def main(project_id):
     client = datastore.Client(project_id)
 
