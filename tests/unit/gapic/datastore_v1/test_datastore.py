@@ -2630,7 +2630,6 @@ def test_datastore_transport_auth_adc(transport_class):
     [
         transports.DatastoreGrpcTransport,
         transports.DatastoreGrpcAsyncIOTransport,
-        transports.DatastoreRestTransport,
     ],
 )
 def test_datastore_transport_auth_gdch_credentials(transport_class):

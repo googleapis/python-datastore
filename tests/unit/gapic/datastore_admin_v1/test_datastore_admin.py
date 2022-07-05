@@ -2242,7 +2242,6 @@ def test_datastore_admin_transport_auth_adc(transport_class):
     [
         transports.DatastoreAdminGrpcTransport,
         transports.DatastoreAdminGrpcAsyncIOTransport,
-        transports.DatastoreAdminRestTransport,
     ],
 )
 def test_datastore_admin_transport_auth_gdch_credentials(transport_class):
