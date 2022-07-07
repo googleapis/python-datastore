@@ -254,9 +254,7 @@ def get_read_options(eventual, transaction_id, read_time=None):
     if transaction_id is None:
         if eventual:
             if read_time is not None:
-                raise ValueError(
-                    "eventual must be False when read_time is " "specified"
-                )
+                raise ValueError("eventual must be False when read_time is specified")
             else:
                 return datastore_pb2.ReadOptions(
                     read_consistency=datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
