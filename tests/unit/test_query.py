@@ -633,7 +633,7 @@ def test_iterator__next_page_in_transaction():
 
 
 def test_iterator__next_page_w_read_time():
-    read_time = datetime.datetime.fromtimestamp(1641058200.123456)
+    read_time = datetime.datetime.utcfromtimestamp(1641058200.123456)
     _next_page_helper(read_time=read_time)
 
 

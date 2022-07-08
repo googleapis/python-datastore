@@ -566,7 +566,7 @@ def test__get_read_options_w_default_wo_txn_w_read_time():
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
     from google.protobuf.timestamp_pb2 import Timestamp
 
-    read_time = datetime.fromtimestamp(1641058200.123456)
+    read_time = datetime.utcfromtimestamp(1641058200.123456)
     read_time_pb = Timestamp(seconds=1641058200, nanos=123456000)
     read_options = get_read_options(False, None, read_time)
     expected = datastore_pb2.ReadOptions(read_time=read_time_pb)
