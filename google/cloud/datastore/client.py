@@ -175,6 +175,7 @@ def _extended_lookup(
     :param read_time:
         (Optional) Read time to use for read consistency. Incompatible with
         ``eventual==True`` or ``transaction_id``.
+       This feature is in private preview.
 
     :rtype: list of :class:`.entity_pb2.Entity`
     :returns: The requested entities.
