@@ -144,8 +144,8 @@ class Transaction(Batch):
     :param read_only: indicates the transaction is read only.
 
     :type read_time: datetime
-    :param read_time: (Optional) time at which the transaction reads entities.
-                      Only allowed when ``read_only=True``.
+    :param read_time: (Optional) Time at which the transaction reads entities.
+                      Only allowed when ``read_only=True``. This feature is in private preview.
 
     :raises: :class:`ValueError` if read_time is specified when
              ``read_only=False``.

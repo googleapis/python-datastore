@@ -173,7 +173,7 @@ def _extended_lookup(
 
     :type read_time: datetime
     :param read_time:
-        (Optional) read time to use for read consistency. Incompatible with
+        (Optional) Read time to use for read consistency. Incompatible with
         ``eventual==True`` or ``transaction_id``.
 
     :rtype: list of :class:`.entity_pb2.Entity`
@@ -452,9 +452,9 @@ class Client(ClientWithProject):
             to each individual attempt.
 
         :type read_time: datetime
-        :param read_time: read the entity from the specified time (may be null).
+        :param read_time: Read the entity from the specified time (may be null).
                           Cannot be used with eventual consistency or inside a
-                          transaction, or will raise ValueError.
+                          transaction, or will raise ValueError. This feature is in private preview.
 
         :rtype: :class:`google.cloud.datastore.entity.Entity` or ``NoneType``
         :returns: The requested entity if it exists.
@@ -523,7 +523,7 @@ class Client(ClientWithProject):
             to each individual attempt.
 
         :type read_time: datetime
-        :param read_time: (Optional) read time to use for read consistency.
+        :param read_time: (Optional) Read time to use for read consistency. This feature is in private preview.
 
         :rtype: list of :class:`google.cloud.datastore.entity.Entity`
         :returns: The requested entities.

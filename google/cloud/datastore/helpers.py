@@ -244,7 +244,7 @@ def get_read_options(eventual, transaction_id, read_time=None):
     :param transaction_id: A transaction identifier (may be null).
 
     :type read_time: datetime
-    :param read_time: read data from the specified time (may be null).
+    :param read_time: Read data from the specified time (may be null). This feature is in private preview.
 
     :rtype: :class:`.datastore_pb2.ReadOptions`
     :returns: The read options corresponding to the inputs.

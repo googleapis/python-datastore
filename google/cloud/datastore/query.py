@@ -495,9 +495,9 @@ class Iterator(page_iterator.Iterator):
         to each individual attempt.
 
     :type read_time: datetime
-    :param read_time: (Optional) runs the query with read time consistency.
+    :param read_time: (Optional) Runs the query with read time consistency.
                       Cannot be used with eventual consistency or inside a
-                      transaction, otherwise will raise ValueError.
+                      transaction, otherwise will raise ValueError. This feature is in private preview.
     """
 
     next_page_token = None
