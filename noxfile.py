@@ -311,8 +311,13 @@ def docs(session):
     )
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION)
+@nox.session(python="3.6")
 def doctests(session):
+    # Doctests run against Python 3.6 only.
+    # It is difficult to make doctests run against both Python 2 and Python 3
+    # because they test string output equivalence, which is difficult to
+    # make match (e.g. unicode literals starting with "u").
+
     # Install all test dependencies, then install this package into the
     # virtualenv's dist-packages.
     session.install("mock", "pytest", "sphinx", "google-cloud-testutils")
