@@ -57,6 +57,9 @@ class PartitionId(proto.Message):
         project_id (str):
             The ID of the project to which the entities
             belong.
+        database_id (str):
+            If not empty, the ID of the database to which
+            the entities belong.
         namespace_id (str):
             If not empty, the ID of the namespace to
             which the entities belong.
@@ -65,6 +68,10 @@ class PartitionId(proto.Message):
     project_id = proto.Field(
         proto.STRING,
         number=2,
+    )
+    database_id = proto.Field(
+        proto.STRING,
+        number=3,
     )
     namespace_id = proto.Field(
         proto.STRING,
