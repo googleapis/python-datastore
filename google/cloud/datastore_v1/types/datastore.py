@@ -659,8 +659,8 @@ class ReadOptions(proto.Message):
 
     Attributes:
         read_consistency (google.cloud.datastore_v1.types.ReadOptions.ReadConsistency):
-            The non-transactional read consistency to use. Cannot be set
-            to ``STRONG`` for global queries.
+            The non-transactional read consistency to
+            use.
 
             This field is a member of `oneof`_ ``consistency_type``.
         transaction (bytes):
