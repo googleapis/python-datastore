@@ -26,6 +26,7 @@ from google.auth import credentials as ga_credentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
 from google.cloud.datastore_v1.types import datastore
+from google.longrunning import operations_pb2
 
 try:
     DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
@@ -160,6 +161,21 @@ class DatastoreTransport(abc.ABC):
                 default_timeout=60.0,
                 client_info=client_info,
             ),
+            self.run_aggregation_query: gapic_v1.method.wrap_method(
+                self.run_aggregation_query,
+                default_retry=retries.Retry(
+                    initial=0.1,
+                    maximum=60.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.DeadlineExceeded,
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=60.0,
+                ),
+                default_timeout=60.0,
+                client_info=client_info,
+            ),
             self.begin_transaction: gapic_v1.method.wrap_method(
                 self.begin_transaction,
                 default_timeout=60.0,
@@ -225,6 +241,18 @@ class DatastoreTransport(abc.ABC):
         raise NotImplementedError()
 
     @property
+    def run_aggregation_query(
+        self,
+    ) -> Callable[
+        [datastore.RunAggregationQueryRequest],
+        Union[
+            datastore.RunAggregationQueryResponse,
+            Awaitable[datastore.RunAggregationQueryResponse],
+        ],
+    ]:
+        raise NotImplementedError()
+
+    @property
     def begin_transaction(
         self,
     ) -> Callable[
@@ -270,6 +298,39 @@ class DatastoreTransport(abc.ABC):
         [datastore.ReserveIdsRequest],
         Union[datastore.ReserveIdsResponse, Awaitable[datastore.ReserveIdsResponse]],
     ]:
+        raise NotImplementedError()
+
+    @property
+    def list_operations(
+        self,
+    ) -> Callable[
+        [operations_pb2.ListOperationsRequest],
+        Union[
+            operations_pb2.ListOperationsResponse,
+            Awaitable[operations_pb2.ListOperationsResponse],
+        ],
+    ]:
+        raise NotImplementedError()
+
+    @property
+    def get_operation(
+        self,
+    ) -> Callable[
+        [operations_pb2.GetOperationRequest],
+        Union[operations_pb2.Operation, Awaitable[operations_pb2.Operation]],
+    ]:
+        raise NotImplementedError()
+
+    @property
+    def cancel_operation(
+        self,
+    ) -> Callable[[operations_pb2.CancelOperationRequest], None,]:
+        raise NotImplementedError()
+
+    @property
+    def delete_operation(
+        self,
+    ) -> Callable[[operations_pb2.DeleteOperationRequest], None,]:
         raise NotImplementedError()
 
     @property

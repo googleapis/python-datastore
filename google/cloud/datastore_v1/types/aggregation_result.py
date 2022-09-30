@@ -21,10 +21,10 @@ from google.protobuf import timestamp_pb2  # type: ignore
 
 
 __protobuf__ = proto.module(
-    package='google.datastore.v1',
+    package="google.datastore.v1",
     manifest={
-        'AggregationResult',
-        'AggregationResultBatch',
+        "AggregationResult",
+        "AggregationResultBatch",
     },
 )
 
@@ -79,7 +79,7 @@ class AggregationResultBatch(proto.Message):
     aggregation_results = proto.RepeatedField(
         proto.MESSAGE,
         number=1,
-        message='AggregationResult',
+        message="AggregationResult",
     )
     more_results = proto.Field(
         proto.ENUM,
