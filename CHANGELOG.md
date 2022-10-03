@@ -4,6 +4,27 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+## [2.8.1](https://github.com/googleapis/python-datastore/compare/v2.8.0...v2.8.1) (2022-08-12)
+
+
+### Bug Fixes
+
+* **deps:** allow protobuf < 5.0.0 ([#347](https://github.com/googleapis/python-datastore/issues/347)) ([de13860](https://github.com/googleapis/python-datastore/commit/de13860bface16c59a4085ecf9374c61c176629b))
+* **deps:** require proto-plus >= 1.22.0 ([de13860](https://github.com/googleapis/python-datastore/commit/de13860bface16c59a4085ecf9374c61c176629b))
+
+
+### Documentation
+
+* Move the schedule_export samples from python-docs-samples ([#344](https://github.com/googleapis/python-datastore/issues/344)) ([2174800](https://github.com/googleapis/python-datastore/commit/21748009b35fbbfb2a2730d792e793472235dfd3))
+* **samples:** Add an example of using read_time in queries and get() ([#342](https://github.com/googleapis/python-datastore/issues/342)) ([ffc5f17](https://github.com/googleapis/python-datastore/commit/ffc5f176cf106e2180fe5f1475ab24010ff7e1e0))
+
+## [2.8.0](https://github.com/googleapis/python-datastore/compare/v2.7.2...v2.8.0) (2022-07-15)
+
+
+### Features
+
+* Add read_time support for get and query ([#334](https://github.com/googleapis/python-datastore/issues/334)) ([58b4b74](https://github.com/googleapis/python-datastore/commit/58b4b74c968a0e50702303ec37377e9c7e05347d))
+
 ## [2.7.2](https://github.com/googleapis/python-datastore/compare/v2.7.1...v2.7.2) (2022-07-10)
 
 
