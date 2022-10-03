@@ -48,19 +48,16 @@ def aggregation_query_client(datastore_client):
 def ancestor_key(aggregation_query_client, in_emulator):
 
     # In the emulator, re-populating the datastore is cheap.
-    # if in_emulator:
-    #     print("in emulator")
-    print("add characters")
-    populate_datastore.add_characters(client=aggregation_query_client)
+    if in_emulator:
+        populate_datastore.add_characters(client=aggregation_query_client)
 
     ancestor_key = aggregation_query_client.key(*populate_datastore.ANCESTOR)
 
     yield ancestor_key
 
     # In the emulator, destroy the query entities.
-    # if in_emulator:
-    clear_datastore.remove_all_entities(client=aggregation_query_client)
-    print("cleared")
+    if in_emulator:
+        clear_datastore.remove_all_entities(client=aggregation_query_client)
 
 
 def _make_query(aggregation_query_client, ancestor_key):
