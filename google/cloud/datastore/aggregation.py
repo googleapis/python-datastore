@@ -50,7 +50,6 @@ class BaseAggregation(ABC):
         raise NotImplementedError
 
 
-
 class CountAggregation(BaseAggregation):
     """
     Representation of a "Count" aggregation query.
@@ -62,10 +61,10 @@ class CountAggregation(BaseAggregation):
     :param value: The resulting value from the aggregation.
 
     """
+
     def __init__(self, limit=None, alias=None):
         self.limit = limit
         self.alias = alias
-
 
     def _to_pb(self):
         """
@@ -88,6 +87,7 @@ class AggregationResult(object):
     :param value: The resulting value from the aggregation.
 
     """
+
     def __init__(self, alias, value):
         self.alias = alias
         self.value = value

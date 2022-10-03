@@ -33,6 +33,7 @@ def test_count_aggregation_to_pb():
     expected_aggregation_query_pb.alias = count_aggregation.alias
     assert count_aggregation._to_pb() == expected_aggregation_query_pb
 
+
 @pytest.fixture
 def client():
     return _make_client()
@@ -47,6 +48,7 @@ def test_pb_over_query(client):
     assert pb.nested_query == _pb_from_query(query)
     assert pb.aggregations == []
 
+
 def test_pb_over_query_with_count(client):
     from google.cloud.datastore.query import _pb_from_query
 
@@ -58,6 +60,7 @@ def test_pb_over_query_with_count(client):
     assert pb.nested_query == _pb_from_query(query)
     assert len(pb.aggregations) == 1
     assert pb.aggregations[0] == CountAggregation(alias="total", limit=10)._to_pb()
+
 
 def test_pb_over_query_with_add_aggregation(client):
     from google.cloud.datastore.query import _pb_from_query
@@ -71,11 +74,13 @@ def test_pb_over_query_with_add_aggregation(client):
     assert len(pb.aggregations) == 1
     assert pb.aggregations[0] == CountAggregation(alias="total", limit=10)._to_pb()
 
+
 def test_pb_over_query_with_add_aggregations(client):
     from google.cloud.datastore.query import _pb_from_query
+
     aggregations = [
         CountAggregation(alias="total", limit=10),
-        CountAggregation(alias="all", limit=2)
+        CountAggregation(alias="all", limit=2),
     ]
 
     query = _make_query(client)
@@ -101,7 +106,6 @@ def test_query_fetch_defaults_w_client_attr(client):
     assert iterator.client is client
     assert iterator._retry is None
     assert iterator._timeout is None
-
 
 
 def test_query_fetch_w_explicit_client_w_retry_w_timeout(client):
@@ -187,9 +191,7 @@ def test_iterator__build_protobuf_all_values():
     query = Query(client)
     aggregation_query = AggregationQuery(client=client, query=query)
 
-    iterator = _make_aggregation_iterator(
-        aggregation_query, client
-    )
+    iterator = _make_aggregation_iterator(aggregation_query, client)
     iterator.num_results = 4
 
     pb = iterator._build_protobuf()
@@ -201,19 +203,17 @@ def test_iterator__build_protobuf_all_values():
 def test_iterator__process_query_results():
     from google.cloud.datastore_v1.types import query as query_pb2
     from google.cloud.datastore.aggregation import AggregationResult
+
     iterator = _make_aggregation_iterator(None, None)
 
     aggregation_pbs = [AggregationResult(alias="total", value=1)]
 
     more_results_enum = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
-    response_pb = _make_aggregation_query_response(
-        aggregation_pbs, more_results_enum
-    )
+    response_pb = _make_aggregation_query_response(aggregation_pbs, more_results_enum)
     result = iterator._process_query_results(response_pb)
     assert result == [
-            r.aggregate_properties
-            for r in response_pb.batch.aggregation_results
-        ]
+        r.aggregate_properties for r in response_pb.batch.aggregation_results
+    ]
     assert iterator._more_results
 
 
@@ -237,19 +237,18 @@ def _make_aggregation_query(*args, **kw):
 
 def _make_aggregation_iterator(*args, **kw):
     from google.cloud.datastore.aggregation import AggregationResultIterator
+
     return AggregationResultIterator(*args, **kw)
 
 
-def _make_aggregation_query_response(
-    aggregation_pbs, more_results_enum
-):
+def _make_aggregation_query_response(aggregation_pbs, more_results_enum):
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
     from google.cloud.datastore_v1.types import aggregation_result
 
     aggregation_results = []
     for aggr in aggregation_pbs:
         result = aggregation_result.AggregationResult()
-        result.aggregate_properties.alias=aggr.alias
+        result.aggregate_properties.alias = aggr.alias
         result.aggregate_properties.value = aggr.value
         aggregation_results.append(result)
 
@@ -267,4 +266,6 @@ def _make_datastore_api_for_aggregation(*results):
     else:
         run_aggregation_query = mock.Mock(side_effect=results, spec=[])
 
-    return mock.Mock(run_aggregation_query=run_aggregation_query, spec=["run_aggregation_query"])
+    return mock.Mock(
+        run_aggregation_query=run_aggregation_query, spec=["run_aggregation_query"]
+    )

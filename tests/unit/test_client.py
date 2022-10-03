@@ -1519,7 +1519,9 @@ def test_client_aggregation_query_w_defaults():
     creds = _make_credentials()
     client = _make_client(credentials=creds)
     query = client.query()
-    patch = mock.patch("google.cloud.datastore.client.AggregationQuery", spec=["__call__"])
+    patch = mock.patch(
+        "google.cloud.datastore.client.AggregationQuery", spec=["__call__"]
+    )
     with patch as mock_klass:
         aggregation_query = client.aggregation_query(query=query)
         assert aggregation_query is mock_klass.return_value

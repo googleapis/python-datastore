@@ -843,73 +843,73 @@ class Client(ClientWithProject):
     def aggregation_query(self, query):
         """Proxy to :class:`google.cloud.datastore.aggregation.AggregationQuery`.
 
-                Using aggregation_query to count over a query:
+        Using aggregation_query to count over a query:
 
-                .. testsetup:: aggregation_query
+        .. testsetup:: aggregation_query
 
-                    import uuid
+            import uuid
 
-                    from google.cloud import datastore
-                    from google.cloud.datastore.aggregation import CountAggregation
+            from google.cloud import datastore
+            from google.cloud.datastore.aggregation import CountAggregation
 
-                    unique = str(uuid.uuid4())[0:8]
-                    client = datastore.Client(namespace='ns{}'.format(unique))
+            unique = str(uuid.uuid4())[0:8]
+            client = datastore.Client(namespace='ns{}'.format(unique))
 
-                    def do_something_with(entity):
-                        pass
+            def do_something_with(entity):
+                pass
 
-                .. doctest:: aggregation_query
+        .. doctest:: aggregation_query
 
-                    >>> query = client.query(kind='MyKind')
-                    >>> aggregation_query = client.aggregation_query(query)
-                    >>> aggregation_query.count(alias='total')
-                    <google.cloud.datastore.aggregation_query.AggregationQuery object at ...>
+            >>> query = client.query(kind='MyKind')
+            >>> aggregation_query = client.aggregation_query(query)
+            >>> aggregation_query.count(alias='total')
+            <google.cloud.datastore.aggregation_query.AggregationQuery object at ...>
 
-                Adding an aggregation to the aggregation_query
+        Adding an aggregation to the aggregation_query
 
-                .. doctest:: aggregation_query
+        .. doctest:: aggregation_query
 
-                    >>> query = client.query(kind='MyKind')
-                    >>> aggregation_query.add_aggregation(CountAggregation(alias='total'))
+            >>> query = client.query(kind='MyKind')
+            >>> aggregation_query.add_aggregation(CountAggregation(alias='total'))
 
-                Adding multiple aggregations to the aggregation_query
+        Adding multiple aggregations to the aggregation_query
 
-                .. doctest:: aggregation_query
+        .. doctest:: aggregation_query
 
-                    >>> query = client.query(kind='MyKind')
-                    >>> total_count = CountAggregation(alias='total')
-                    >>> count_up_to = CountAggregation(up_to=10)
-                    >>> aggregation_query.add_aggregations([total_count, count_up_to])
+            >>> query = client.query(kind='MyKind')
+            >>> total_count = CountAggregation(alias='total')
+            >>> count_up_to = CountAggregation(up_to=10)
+            >>> aggregation_query.add_aggregations([total_count, count_up_to])
 
-                Using the aggregation_query iterator
+        Using the aggregation_query iterator
 
-                .. doctest:: aggregation_query
+        .. doctest:: aggregation_query
 
-                    >>> query = client.query(kind='MyKind')
-                    >>> aggregation_query = client.aggregation_query(query)
-                    >>> aggregation_query.count(alias='total')
-                    >>> aggregation_query_iter = aggregation_query.fetch()
-                    >>> for aggregation_result in aggregation_query_iter:
-                    ...     do_something_with(aggregation_result)
+            >>> query = client.query(kind='MyKind')
+            >>> aggregation_query = client.aggregation_query(query)
+            >>> aggregation_query.count(alias='total')
+            >>> aggregation_query_iter = aggregation_query.fetch()
+            >>> for aggregation_result in aggregation_query_iter:
+            ...     do_something_with(aggregation_result)
 
-                or manually page through results
+        or manually page through results
 
-                .. doctest:: aggregation_query
+        .. doctest:: aggregation_query
 
-                    >>> aggregation_query_iter = aggregation_query.fetch()
-                    >>> pages = aggregation_query_iter.pages
-                    >>>
-                    >>> first_page = next(pages)
-                    >>> first_page_entities = list(first_page)
-                    >>> aggregation_query_iter.next_page_token is None
-                    True
+            >>> aggregation_query_iter = aggregation_query.fetch()
+            >>> pages = aggregation_query_iter.pages
+            >>>
+            >>> first_page = next(pages)
+            >>> first_page_entities = list(first_page)
+            >>> aggregation_query_iter.next_page_token is None
+            True
 
-                :param kwargs: Parameters for initializing and instance of
-                               :class:`~google.cloud.datastore.aggregation.AggregationQuery`.
+        :param kwargs: Parameters for initializing and instance of
+                       :class:`~google.cloud.datastore.aggregation.AggregationQuery`.
 
-                :rtype: :class:`~google.cloud.datastore.aggregation.AggregationQuery`
-                :returns: An AggregationQuery object.
-                """
+        :rtype: :class:`~google.cloud.datastore.aggregation.AggregationQuery`
+        :returns: An AggregationQuery object.
+        """
         return AggregationQuery(self, query)
 
     def reserve_ids_sequential(self, complete_key, num_ids, retry=None, timeout=None):

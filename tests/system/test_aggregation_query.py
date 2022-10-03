@@ -62,6 +62,7 @@ def ancestor_key(aggregation_query_client, in_emulator):
     clear_datastore.remove_all_entities(client=aggregation_query_client)
     print("cleared")
 
+
 def _make_query(aggregation_query_client, ancestor_key):
     return aggregation_query_client.query(kind="Character", ancestor=ancestor_key)
 
@@ -82,6 +83,7 @@ def test_aggregation_query_default(aggregation_query_client, nested_query):
         assert r.alias == "property_1"
         assert r.value == 8
 
+
 def test_aggregation_query_with_alias(aggregation_query_client, nested_query):
     query = nested_query
 
@@ -93,7 +95,10 @@ def test_aggregation_query_with_alias(aggregation_query_client, nested_query):
         assert r.alias == "total"
         assert r.value > 0
 
-def test_aggregation_query_multiple_aggregations(aggregation_query_client, nested_query):
+
+def test_aggregation_query_multiple_aggregations(
+    aggregation_query_client, nested_query
+):
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
@@ -105,6 +110,7 @@ def test_aggregation_query_multiple_aggregations(aggregation_query_client, neste
         assert r.alias in ["all", "total"]
         assert r.value > 0
 
+
 def test_aggregation_query_with_limit(aggregation_query_client, nested_query):
     query = nested_query
 
@@ -115,6 +121,7 @@ def test_aggregation_query_with_limit(aggregation_query_client, nested_query):
     for r in result[0]:
         assert r.alias == "total"
         assert r.value == 5
+
 
 def test_aggregation_query_add_aggregation(aggregation_query_client, nested_query):
     from google.cloud.datastore.aggregation import CountAggregation
@@ -146,9 +153,13 @@ def test_aggregation_query_add_aggregations(aggregation_query_client, nested_que
         assert r.alias in ["total", "all"]
         assert r.value > 0
 
-def test_aggregation_query_add_aggregations_duplicated_alias(aggregation_query_client, nested_query):
+
+def test_aggregation_query_add_aggregations_duplicated_alias(
+    aggregation_query_client, nested_query
+):
     from google.cloud.datastore.aggregation import CountAggregation
     from google.api_core.exceptions import InvalidArgument
+
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
@@ -169,7 +180,6 @@ def test_aggregation_query_add_aggregations_duplicated_alias(aggregation_query_c
     aggregation_query.count(alias="total")
     with pytest.raises(InvalidArgument):
         _do_fetch(aggregation_query)
-
 
 
 #
