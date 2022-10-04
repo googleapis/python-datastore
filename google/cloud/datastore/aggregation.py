@@ -14,13 +14,13 @@
 #
 # """Create / interact with Google Cloud Datastore aggregation queries."""
 import abc
+from abc import ABC
 
 from google.api_core import page_iterator
 
 from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore_v1.types import query as query_pb2
 from google.cloud.datastore import helpers
-
 from google.cloud.datastore.query import _pb_from_query
 
 
@@ -32,9 +32,6 @@ _FINISHED = (
     query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_LIMIT,
     query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_CURSOR,
 )
-
-
-from abc import ABC
 
 
 class BaseAggregation(ABC):
