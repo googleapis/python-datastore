@@ -53,8 +53,7 @@ else:
 
 _MAX_LOOPS = 128
 """Maximum number of iterations to wait for deferred keys."""
-_DATASTORE_BASE_URL = "https://nightly-datastore.sandbox.googleapis.com/"
-# _DATASTORE_BASE_URL = "https://datastore.googleapis.com"
+_DATASTORE_BASE_URL = "https://datastore.googleapis.com"
 """Datastore API request URL base."""
 
 DATASTORE_EMULATOR_HOST = "DATASTORE_EMULATOR_HOST"
