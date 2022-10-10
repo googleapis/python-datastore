@@ -4,6 +4,13 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+
+## [2.8.3](https://github.com/googleapis/python-datastore/compare/v2.8.2...v2.8.3) (2022-10-10)
+
+### Bug Fixes
+
+* **deps:** Allow protobuf 3.19.5 ([#372](https://github.com/googleapis/python-datastore/issues/372)) ([9305154](https://github.com/googleapis/python-datastore/commit/9305154e8853f9038506c86163dfb4cde36c0d8e))
+
 ## [2.8.2](https://github.com/googleapis/python-datastore/compare/v2.8.1...v2.8.2) (2022-10-03)
 
 
