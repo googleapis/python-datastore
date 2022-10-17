@@ -267,7 +267,6 @@ def test_iterator__next_page_in_transaction():
 
 def _next_page_helper(txn_id=None, retry=None, timeout=None):
     from google.api_core import page_iterator
-    from google.cloud.datastore.query import Query
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
     from google.cloud.datastore_v1.types import entity as entity_pb2
     from google.cloud.datastore_v1.types import query as query_pb2
