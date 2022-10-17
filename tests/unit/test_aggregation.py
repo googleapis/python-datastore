@@ -169,10 +169,9 @@ def test_iterator_constructor_explicit():
 
 def test_iterator__build_protobuf_empty():
     from google.cloud.datastore_v1.types import query as query_pb2
-    from google.cloud.datastore.query import Query
 
     client = _Client(None)
-    query = Query(client)
+    query = _make_query(client)
     aggregation_query = AggregationQuery(client=client, query=query)
     iterator = _make_aggregation_iterator(aggregation_query, client)
 
@@ -184,10 +183,9 @@ def test_iterator__build_protobuf_empty():
 
 def test_iterator__build_protobuf_all_values():
     from google.cloud.datastore_v1.types import query as query_pb2
-    from google.cloud.datastore.query import Query
 
     client = _Client(None)
-    query = Query(client)
+    query = _make_query(client)
     aggregation_query = AggregationQuery(client=client, query=query)
 
     iterator = _make_aggregation_iterator(aggregation_query, client)
@@ -214,6 +212,145 @@ def test_iterator__process_query_results():
         r.aggregate_properties for r in response_pb.batch.aggregation_results
     ]
     assert iterator._more_results
+
+
+def test_iterator__process_query_results_finished_result():
+    from google.cloud.datastore_v1.types import query as query_pb2
+    from google.cloud.datastore.aggregation import AggregationResult
+
+    iterator = _make_aggregation_iterator(None, None)
+
+    aggregation_pbs = [AggregationResult(alias="total", value=1)]
+
+    more_results_enum = query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS
+    response_pb = _make_aggregation_query_response(aggregation_pbs, more_results_enum)
+    result = iterator._process_query_results(response_pb)
+    assert result == [
+        r.aggregate_properties for r in response_pb.batch.aggregation_results
+    ]
+    assert iterator._more_results is False
+
+
+def test_iterator__process_query_results_unexpected_result():
+    from google.cloud.datastore_v1.types import query as query_pb2
+    from google.cloud.datastore.aggregation import AggregationResult
+
+    iterator = _make_aggregation_iterator(None, None)
+
+    aggregation_pbs = [AggregationResult(alias="total", value=1)]
+
+    more_results_enum = (
+        query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_TYPE_UNSPECIFIED
+    )
+    response_pb = _make_aggregation_query_response(aggregation_pbs, more_results_enum)
+    with pytest.raises(ValueError):
+        iterator._process_query_results(response_pb)
+
+
+def test_aggregation_iterator__next_page():
+    _next_page_helper()
+
+
+def test_iterator__next_page_w_retry():
+    retry = mock.Mock()
+    _next_page_helper(retry=retry)
+
+
+def test_iterator__next_page_w_timeout():
+    _next_page_helper(timeout=100000)
+
+
+def test_iterator__next_page_in_transaction():
+    txn_id = b"1xo1md\xe2\x98\x83"
+    _next_page_helper(txn_id=txn_id)
+
+
+def _next_page_helper(txn_id=None, retry=None, timeout=None):
+    from google.api_core import page_iterator
+    from google.cloud.datastore.query import Query
+    from google.cloud.datastore_v1.types import datastore as datastore_pb2
+    from google.cloud.datastore_v1.types import entity as entity_pb2
+    from google.cloud.datastore_v1.types import query as query_pb2
+    from google.cloud.datastore.aggregation import AggregationResult
+
+    more_enum = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
+    aggregation_pbs = [AggregationResult(alias="total", value=1)]
+
+    result_1 = _make_aggregation_query_response([], more_enum)
+    result_2 = _make_aggregation_query_response(
+        aggregation_pbs, query_pb2.QueryResultBatch.MoreResultsType.NO_MORE_RESULTS
+    )
+
+    project = "prujekt"
+    ds_api = _make_datastore_api_for_aggregation(result_1, result_2)
+    if txn_id is None:
+        client = _Client(project, datastore_api=ds_api)
+    else:
+        transaction = mock.Mock(id=txn_id, spec=["id"])
+        client = _Client(project, datastore_api=ds_api, transaction=transaction)
+
+    query = _make_query(client)
+    kwargs = {}
+
+    if retry is not None:
+        kwargs["retry"] = retry
+
+    if timeout is not None:
+        kwargs["timeout"] = timeout
+
+    it_kwargs = kwargs.copy()  # so it doesn't get overwritten later
+
+    aggregation_query = AggregationQuery(client=client, query=query)
+
+    iterator = _make_aggregation_iterator(aggregation_query, client, **it_kwargs)
+    page = iterator._next_page()
+
+    assert isinstance(page, page_iterator.Page)
+    assert page._parent is iterator
+
+    partition_id = entity_pb2.PartitionId(project_id=project)
+    if txn_id is not None:
+        read_options = datastore_pb2.ReadOptions(transaction=txn_id)
+    else:
+        read_options = datastore_pb2.ReadOptions()
+
+    aggregation_query = AggregationQuery(client=client, query=query)
+    assert ds_api.run_aggregation_query.call_count == 2
+    expected_call = mock.call(
+        request={
+            "project_id": project,
+            "partition_id": partition_id,
+            "read_options": read_options,
+            "aggregation_query": aggregation_query._to_pb(),
+        },
+        **kwargs
+    )
+    assert ds_api.run_aggregation_query.call_args_list == (
+        [expected_call, expected_call]
+    )
+
+
+def test__item_to_aggregation_result():
+    from google.cloud.datastore.aggregation import _item_to_aggregation_result
+    from google.cloud.datastore_v1.types import query as query_pb2
+    from google.cloud.datastore.aggregation import AggregationResult
+
+    client = _Client(_PROJECT)
+    query = _make_query(client)
+
+    aggregation_query = AggregationQuery(client=client, query=query)
+
+    iterator = _make_aggregation_iterator(aggregation_query, client)
+
+    aggregation_pbs = [AggregationResult(alias="total", value=1)]
+
+    more_results_enum = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
+    response_pb = _make_aggregation_query_response(aggregation_pbs, more_results_enum)
+    aggregation_result = iterator._process_query_results(response_pb)[0]
+
+    result = _item_to_aggregation_result(iterator, aggregation_result)
+
+    assert result is not None
 
 
 class _Client(object):

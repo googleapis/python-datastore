@@ -44,7 +44,6 @@ class BaseAggregation(ABC):
         """
         Convert this instance to the protobuf representation
         """
-        raise NotImplementedError
 
 
 class CountAggregation(BaseAggregation):
@@ -302,7 +301,7 @@ class AggregationResultIterator(page_iterator.Iterator):
     ):
         super(AggregationResultIterator, self).__init__(
             client=client,
-            item_to_value=_item_to_pb,
+            item_to_value=_item_to_aggregation_result,
         )
 
         self._aggregation_query = aggregation_query
@@ -319,8 +318,8 @@ class AggregationResultIterator(page_iterator.Iterator):
         Relies on the current state of the iterator.
 
         :rtype:
-            :class:`.query_pb2.Query`
-        :returns: The query protobuf object for the current
+            :class:`.query_pb2.AggregationQuery.Aggregation`
+        :returns: The aggregation_query protobuf object for the current
                   state of the iterator.
         """
         pb = self._aggregation_query._to_pb()
@@ -417,18 +416,18 @@ class AggregationResultIterator(page_iterator.Iterator):
 
 
 # pylint: disable=unused-argument
-def _item_to_pb(iterator, pb):
+def _item_to_aggregation_result(iterator, pb):
     """Convert a raw protobuf aggregation result to the native object.
 
     :type iterator: :class:`~google.api_core.page_iterator.Iterator`
     :param iterator: The iterator that is currently in use.
 
     :type pb:
-        :class:`.entity_pb2.Entity`
-    :param entity_pb: An entity protobuf to convert to a native entity.
+        :class:`proto.marshal.collections.maps.MapComposite`
+    :param pb: The aggregation properties pb from the aggregation query result
 
-    :rtype: :class:`~proto.marshal.collections.maps.MapComposite`
-    :returns: The next entity in the page.
+    :rtype: :class:`google.cloud.datastore.aggregation.AggregationResult`
+    :returns: The list of AggregationResults
     """
     results = [AggregationResult(alias=k, value=pb[k].integer_value) for k in pb.keys()]
     return results
