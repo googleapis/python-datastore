@@ -333,7 +333,9 @@ def test__item_to_aggregation_result():
     from google.cloud.datastore.aggregation import _item_to_aggregation_result
     from google.cloud.datastore.aggregation import AggregationResult
 
-    with mock.patch("proto.marshal.collections.maps.MapComposite") as map_composite_mock:
+    with mock.patch(
+        "proto.marshal.collections.maps.MapComposite"
+    ) as map_composite_mock:
         map_composite_mock.keys.return_value = {"total": {"integer_value": 1}}
 
         result = _item_to_aggregation_result(None, map_composite_mock)
@@ -343,6 +345,7 @@ def test__item_to_aggregation_result():
 
         assert result[0].alias == "total"
         assert result[0].value == map_composite_mock.__getitem__().integer_value
+
 
 class _Client(object):
     def __init__(self, project, datastore_api=None, namespace=None, transaction=None):
