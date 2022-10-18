@@ -331,26 +331,18 @@ def _next_page_helper(txn_id=None, retry=None, timeout=None):
 
 def test__item_to_aggregation_result():
     from google.cloud.datastore.aggregation import _item_to_aggregation_result
-    from google.cloud.datastore_v1.types import query as query_pb2
     from google.cloud.datastore.aggregation import AggregationResult
 
-    client = _Client(_PROJECT)
-    query = _make_query(client)
+    with mock.patch("proto.marshal.collections.maps.MapComposite") as map_composite_mock:
+        map_composite_mock.keys.return_value = {"total": {"integer_value": 1}}
 
-    aggregation_query = AggregationQuery(client=client, query=query)
+        result = _item_to_aggregation_result(None, map_composite_mock)
 
-    iterator = _make_aggregation_iterator(aggregation_query, client)
+        assert len(result) == 1
+        assert type(result[0]) == AggregationResult
 
-    aggregation_pbs = [AggregationResult(alias="total", value=1)]
-
-    more_results_enum = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
-    response_pb = _make_aggregation_query_response(aggregation_pbs, more_results_enum)
-    aggregation_result = iterator._process_query_results(response_pb)[0]
-
-    result = _item_to_aggregation_result(iterator, aggregation_result)
-
-    assert result is not None
-
+        assert result[0].alias == "total"
+        assert result[0].value == map_composite_mock.__getitem__().integer_value
 
 class _Client(object):
     def __init__(self, project, datastore_api=None, namespace=None, transaction=None):
