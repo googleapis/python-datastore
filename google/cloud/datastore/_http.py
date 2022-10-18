@@ -296,7 +296,9 @@ class HTTPDatastoreAPI(object):
         :rtype: :class:`.datastore_pb2.RunAggregationQueryResponse`
         :returns: The returned protobuf response object.
         """
-        request_pb = _make_request_pb(request, _datastore_pb2.RunAggregationQueryRequest)
+        request_pb = _make_request_pb(
+            request, _datastore_pb2.RunAggregationQueryRequest
+        )
         project_id = request_pb.project_id
 
         return _rpc(
