@@ -265,6 +265,20 @@ def test_iterator__next_page_in_transaction():
     _next_page_helper(txn_id=txn_id)
 
 
+def test_iterator__next_page_no_more():
+    from google.cloud.datastore.query import Query
+
+    ds_api = _make_datastore_api_for_aggregation()
+    client = _Client(None, datastore_api=ds_api)
+    query = Query(client)
+
+    iterator = _make_aggregation_iterator(query, client)
+    iterator._more_results = False
+    page = iterator._next_page()
+    assert page is None
+    ds_api.run_aggregation_query.assert_not_called()
+
+
 def _next_page_helper(txn_id=None, retry=None, timeout=None):
     from google.api_core import page_iterator
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
