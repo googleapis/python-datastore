@@ -346,7 +346,6 @@ class AggregationResultIterator(page_iterator.Iterator):
             result.aggregate_properties
             for result in response_pb.batch.aggregation_results
         ]
-        # return query_result_from_pb(response_pb)
 
     def _next_page(self):
         """Get the next page in the iterator.

@@ -165,3 +165,46 @@ def test_aggregation_query_add_aggregations_duplicated_alias(
     aggregation_query.count(alias="total")
     with pytest.raises(BadRequest):
         _do_fetch(aggregation_query)
+
+
+def test_aggregation_query_with_nested_query_filtered(aggregation_query_client, nested_query):
+    query = nested_query
+
+    query.add_filter("appearances", ">=", 20)
+    expected_matches = 6
+
+    # We expect 6, but allow the query to get 1 extra.
+    entities = _do_fetch(query, limit=expected_matches + 1)
+
+    assert len(entities) == expected_matches
+
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.count(alias="total")
+    result = _do_fetch(aggregation_query)
+    assert len(result) == 1
+
+    for r in result[0]:
+        assert r.alias == "total"
+        assert r.value == 6
+
+
+def test_aggregation_query_with_nested_query_multiple_filters(aggregation_query_client, nested_query):
+    query = nested_query
+
+    query.add_filter("appearances", ">=", 26)
+    query = query.add_filter("family", "=", "Stark")
+    expected_matches = 4
+
+    # We expect 4, but allow the query to get 1 extra.
+    entities = _do_fetch(query, limit=expected_matches + 1)
+
+    assert len(entities) == expected_matches
+
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.count(alias="total")
+    result = _do_fetch(aggregation_query)
+    assert len(result) == 1
+
+    for r in result[0]:
+        assert r.alias == "total"
+        assert r.value == 4
