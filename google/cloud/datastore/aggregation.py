@@ -202,12 +202,16 @@ class AggregationQuery(object):
 
             >>> andy = datastore.Entity(client.key('Person', 1234))
             >>> andy['name'] = 'Andy'
+            >>> sally = datastore.Entity(client.key('Person', 2345))
+            >>> sally['name'] = 'Sally'
+            >>> bobby = datastore.Entity(client.key('Person', 3456))
+            >>> bobby['name'] = 'Bobby'
             >>> client.put_multi([andy, sally, bobby])
             >>> query = client.query(kind='Andy')
             >>> aggregation_query = client.aggregation_query(query)
             >>> result = aggregation_query.count(alias="total").fetch()
             >>> result
-            [<Aggregation alias=total, value=2>]
+            <google.cloud.datastore.aggregation.AggregationResultIterator object at ...>
 
         .. testcleanup:: aggregation-query-fetch
 

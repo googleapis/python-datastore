@@ -862,7 +862,9 @@ class Client(ClientWithProject):
             >>> query = client.query(kind='MyKind')
             >>> aggregation_query = client.aggregation_query(query)
             >>> aggregation_query.count(alias='total')
-            <google.cloud.datastore.aggregation_query.AggregationQuery object at ...>
+            <google.cloud.datastore.aggregation.AggregationQuery object at ...>
+            >>> aggregation_query.fetch()
+            <google.cloud.datastore.aggregation.AggregationResultIterator object at ...>
 
         Adding an aggregation to the aggregation_query
 
@@ -870,6 +872,8 @@ class Client(ClientWithProject):
 
             >>> query = client.query(kind='MyKind')
             >>> aggregation_query.add_aggregation(CountAggregation(alias='total'))
+            >>> aggregation_query.fetch()
+            <google.cloud.datastore.aggregation.AggregationResultIterator object at ...>
 
         Adding multiple aggregations to the aggregation_query
 
@@ -877,8 +881,11 @@ class Client(ClientWithProject):
 
             >>> query = client.query(kind='MyKind')
             >>> total_count = CountAggregation(alias='total')
-            >>> count_up_to = CountAggregation(up_to=10)
-            >>> aggregation_query.add_aggregations([total_count, count_up_to])
+            >>> count_limit = CountAggregation(limit=10)
+            >>> aggregation_query.add_aggregations([total_count, count_limit])
+            >>> aggregation_query.fetch()
+            <google.cloud.datastore.aggregation.AggregationResultIterator object at ...>
+
 
         Using the aggregation_query iterator
 
@@ -887,6 +894,7 @@ class Client(ClientWithProject):
             >>> query = client.query(kind='MyKind')
             >>> aggregation_query = client.aggregation_query(query)
             >>> aggregation_query.count(alias='total')
+            <google.cloud.datastore.aggregation.AggregationQuery object at ...>
             >>> aggregation_query_iter = aggregation_query.fetch()
             >>> for aggregation_result in aggregation_query_iter:
             ...     do_something_with(aggregation_result)
