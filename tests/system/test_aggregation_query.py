@@ -167,7 +167,9 @@ def test_aggregation_query_add_aggregations_duplicated_alias(
         _do_fetch(aggregation_query)
 
 
-def test_aggregation_query_with_nested_query_filtered(aggregation_query_client, nested_query):
+def test_aggregation_query_with_nested_query_filtered(
+    aggregation_query_client, nested_query
+):
     query = nested_query
 
     query.add_filter("appearances", ">=", 20)
@@ -188,7 +190,9 @@ def test_aggregation_query_with_nested_query_filtered(aggregation_query_client, 
         assert r.value == 6
 
 
-def test_aggregation_query_with_nested_query_multiple_filters(aggregation_query_client, nested_query):
+def test_aggregation_query_with_nested_query_multiple_filters(
+    aggregation_query_client, nested_query
+):
     query = nested_query
 
     query.add_filter("appearances", ">=", 26)
