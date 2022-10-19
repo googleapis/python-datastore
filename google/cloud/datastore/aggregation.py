@@ -259,8 +259,8 @@ class AggregationQuery(object):
 class AggregationResultIterator(page_iterator.Iterator):
     """Represent the state of a given execution of a Query.
 
-    :type query: :class:`~google.cloud.datastore.query.Query`
-    :param query: Query object holding permanent configuration (i.e.
+    :type aggregation_query: :class:`~google.cloud.datastore.aggregation.AggregationQuery`
+    :param aggregation_query: AggregationQuery object holding permanent configuration (i.e.
                   things that don't change on with each page in
                   a results set).
 
