@@ -574,7 +574,6 @@ def _run_aggregation_query_helper(
     aggregation_query_pb = query_pb2.AggregationQuery()
     aggregation_query_pb.nested_query = query_pb
     count_aggregation = query_pb2.AggregationQuery.Aggregation()
-    count_aggregation.count.up_to = 5
     count_aggregation.alias = "total"
     aggregation_query_pb.aggregations.append(count_aggregation)
     partition_kw = {"project_id": project}

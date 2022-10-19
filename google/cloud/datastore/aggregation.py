@@ -58,8 +58,7 @@ class CountAggregation(BaseAggregation):
 
     """
 
-    def __init__(self, limit=None, alias=None):
-        self.limit = limit
+    def __init__(self, alias=None):
         self.alias = alias
 
     def _to_pb(self):
@@ -67,7 +66,7 @@ class CountAggregation(BaseAggregation):
         Convert this instance to the protobuf representation
         """
         aggregation_pb = query_pb2.AggregationQuery.Aggregation()
-        aggregation_pb.count.up_to = self.limit
+        aggregation_pb.count = query_pb2.AggregationQuery.Aggregation.Count()
         aggregation_pb.alias = self.alias
         return aggregation_pb
 
@@ -144,18 +143,14 @@ class AggregationQuery(object):
             pb.aggregations.append(aggregation_pb)
         return pb
 
-    def count(self, alias=None, limit=None):
+    def count(self, alias=None):
         """
         Adds a count over the nested query
 
         :type alias: str
         :param alias: (Optional) The alias for the count
-
-        :type limit: int
-        :param limit: (Optional) limit passed through to the iterator.
-
         """
-        count_aggregation = CountAggregation(limit=limit, alias=alias)
+        count_aggregation = CountAggregation(alias=alias)
         self._aggregations.append(count_aggregation)
         return self
 

@@ -108,18 +108,6 @@ def test_aggregation_query_multiple_aggregations(
         assert r.value > 0
 
 
-def test_aggregation_query_with_limit(aggregation_query_client, nested_query):
-    query = nested_query
-
-    aggregation_query = aggregation_query_client.aggregation_query(query)
-    aggregation_query.count(alias="total", limit=5)
-    result = _do_fetch(aggregation_query)
-    assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "total"
-        assert r.value == 5
-
-
 def test_aggregation_query_add_aggregation(aggregation_query_client, nested_query):
     from google.cloud.datastore.aggregation import CountAggregation
 

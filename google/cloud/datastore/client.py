@@ -881,8 +881,8 @@ class Client(ClientWithProject):
 
             >>> query = client.query(kind='MyKind')
             >>> total_count = CountAggregation(alias='total')
-            >>> count_limit = CountAggregation(limit=10)
-            >>> aggregation_query.add_aggregations([total_count, count_limit])
+            >>> all_count = CountAggregation(alias='all')
+            >>> aggregation_query.add_aggregations([total_count, all_count])
             >>> aggregation_query.fetch()
             <google.cloud.datastore.aggregation.AggregationResultIterator object at ...>
 
