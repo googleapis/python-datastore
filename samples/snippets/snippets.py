@@ -169,7 +169,6 @@ def count_query_with_stale_read(client):
 
     task1 = datastore.Entity(client.key("Task", "task1"))
     task2 = datastore.Entity(client.key("Task", "task2"))
-    task3 = datastore.Entity(client.key("Task", "task3"))
 
     # Saving two tasks
     task1["done"] = True
