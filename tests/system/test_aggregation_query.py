@@ -93,6 +93,23 @@ def test_aggregation_query_with_alias(aggregation_query_client, nested_query):
         assert r.value > 0
 
 
+def test_aggregation_query_with_limit(aggregation_query_client, nested_query):
+    query = nested_query
+
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.count()  # count without limit
+    result = _do_fetch(aggregation_query)
+    assert len(result) == 1
+    for r in result[0]:
+        assert r.value > 1
+
+    aggregation_query.count(limit=1)  # count with limit = 1
+    result = _do_fetch(aggregation_query)
+    assert len(result) == 1
+    for r in result[0]:
+        assert r.value == 1
+
+
 def test_aggregation_query_multiple_aggregations(
     aggregation_query_client, nested_query
 ):

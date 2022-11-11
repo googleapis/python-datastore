@@ -25,10 +25,12 @@ _PROJECT = "PROJECT"
 def test_count_aggregation_to_pb():
     from google.cloud.datastore_v1.types import query as query_pb2
 
-    count_aggregation = CountAggregation(alias="total")
+    count_aggregation = CountAggregation(alias="total", limit=5)
 
     expected_aggregation_query_pb = query_pb2.AggregationQuery.Aggregation()
-    expected_aggregation_query_pb.count = query_pb2.AggregationQuery.Aggregation.Count()
+    expected_aggregation_query_pb.count = query_pb2.AggregationQuery.Aggregation.Count(
+        up_to=5
+    )
     expected_aggregation_query_pb.alias = count_aggregation.alias
     assert count_aggregation._to_pb() == expected_aggregation_query_pb
 
@@ -54,11 +56,11 @@ def test_pb_over_query_with_count(client):
     query = _make_query(client)
     aggregation_query = _make_aggregation_query(client=client, query=query)
 
-    aggregation_query.count(alias="total")
+    aggregation_query.count(alias="total", limit=5)
     pb = aggregation_query._to_pb()
     assert pb.nested_query == _pb_from_query(query)
     assert len(pb.aggregations) == 1
-    assert pb.aggregations[0] == CountAggregation(alias="total")._to_pb()
+    assert pb.aggregations[0] == CountAggregation(alias="total", limit=5)._to_pb()
 
 
 def test_pb_over_query_with_add_aggregation(client):
@@ -67,11 +69,11 @@ def test_pb_over_query_with_add_aggregation(client):
     query = _make_query(client)
     aggregation_query = _make_aggregation_query(client=client, query=query)
 
-    aggregation_query.add_aggregation(CountAggregation(alias="total"))
+    aggregation_query.add_aggregation(CountAggregation(alias="total", limit=5))
     pb = aggregation_query._to_pb()
     assert pb.nested_query == _pb_from_query(query)
     assert len(pb.aggregations) == 1
-    assert pb.aggregations[0] == CountAggregation(alias="total")._to_pb()
+    assert pb.aggregations[0] == CountAggregation(alias="total", limit=5)._to_pb()
 
 
 def test_pb_over_query_with_add_aggregations(client):
@@ -80,6 +82,7 @@ def test_pb_over_query_with_add_aggregations(client):
     aggregations = [
         CountAggregation(alias="total"),
         CountAggregation(alias="all"),
+        CountAggregation(limit=5),
     ]
 
     query = _make_query(client)
@@ -88,9 +91,10 @@ def test_pb_over_query_with_add_aggregations(client):
     aggregation_query.add_aggregations(aggregations)
     pb = aggregation_query._to_pb()
     assert pb.nested_query == _pb_from_query(query)
-    assert len(pb.aggregations) == 2
+    assert len(pb.aggregations) == 3
     assert pb.aggregations[0] == CountAggregation(alias="total")._to_pb()
     assert pb.aggregations[1] == CountAggregation(alias="all")._to_pb()
+    assert pb.aggregations[2] == CountAggregation(limit=5)._to_pb()
 
 
 def test_query_fetch_defaults_w_client_attr(client):

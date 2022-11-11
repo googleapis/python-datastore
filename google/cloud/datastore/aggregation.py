@@ -58,8 +58,9 @@ class CountAggregation(BaseAggregation):
 
     """
 
-    def __init__(self, alias=None):
+    def __init__(self, alias=None, limit=None):
         self.alias = alias
+        self.limit = limit
 
     def _to_pb(self):
         """
@@ -67,6 +68,7 @@ class CountAggregation(BaseAggregation):
         """
         aggregation_pb = query_pb2.AggregationQuery.Aggregation()
         aggregation_pb.count = query_pb2.AggregationQuery.Aggregation.Count()
+        aggregation_pb.count.up_to = self.limit
         aggregation_pb.alias = self.alias
         return aggregation_pb
 
@@ -143,14 +145,17 @@ class AggregationQuery(object):
             pb.aggregations.append(aggregation_pb)
         return pb
 
-    def count(self, alias=None):
+    def count(self, alias=None, limit=None):
         """
         Adds a count over the nested query
 
         :type alias: str
         :param alias: (Optional) The alias for the count
+
+        :type limit: int
+        :param limit: (Optional) The limit for the count
         """
-        count_aggregation = CountAggregation(alias=alias)
+        count_aggregation = CountAggregation(alias=alias, limit=limit)
         self._aggregations.append(count_aggregation)
         return self
 
