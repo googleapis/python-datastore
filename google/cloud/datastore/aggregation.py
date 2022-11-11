@@ -364,7 +364,6 @@ class AggregationResultIterator(page_iterator.Iterator):
             return None
 
         query_pb = self._build_protobuf()
-        breakpoint()
         transaction = self.client.current_transaction
         if transaction is None:
             transaction_id = None
