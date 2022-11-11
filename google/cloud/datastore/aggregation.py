@@ -68,7 +68,8 @@ class CountAggregation(BaseAggregation):
         """
         aggregation_pb = query_pb2.AggregationQuery.Aggregation()
         aggregation_pb.count = query_pb2.AggregationQuery.Aggregation.Count()
-        aggregation_pb.count.up_to = self.limit
+        if self.limit is not None and self.limit > 0:
+            aggregation_pb.count.up_to = self.limit
         aggregation_pb.alias = self.alias
         return aggregation_pb
 
@@ -209,7 +210,7 @@ class AggregationQuery(object):
             >>> client.put_multi([andy, sally, bobby])
             >>> query = client.query(kind='Andy')
             >>> aggregation_query = client.aggregation_query(query)
-            >>> result = aggregation_query.count(alias="total").fetch()
+            >>> result = aggregation_query.count(alias="total", limit=5).fetch()
             >>> result
             <google.cloud.datastore.aggregation.AggregationResultIterator object at ...>
 
@@ -363,6 +364,7 @@ class AggregationResultIterator(page_iterator.Iterator):
             return None
 
         query_pb = self._build_protobuf()
+        breakpoint()
         transaction = self.client.current_transaction
         if transaction is None:
             transaction_id = None
