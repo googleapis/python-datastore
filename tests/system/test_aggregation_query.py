@@ -98,14 +98,14 @@ def test_aggregation_query_with_limit(aggregation_query_client, nested_query):
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.count(alias="total")
-    result = _do_fetch(aggregation_query)
+    result = _do_fetch(aggregation_query)  # count without limit
     assert len(result) == 1
     for r in result[0]:
         assert r.alias == "total"
-        assert r.value > 0
+        assert r.value == 8
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
-    aggregation_query.count(alias="total_up_to", limit=2)  # count with limit = 1
+    aggregation_query.count(alias="total_up_to", limit=2)  # count with limit = 2
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
     for r in result[0]:
