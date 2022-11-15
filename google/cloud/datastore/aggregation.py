@@ -58,9 +58,8 @@ class CountAggregation(BaseAggregation):
 
     """
 
-    def __init__(self, alias=None, limit=None):
+    def __init__(self, alias=None):
         self.alias = alias
-        self.limit = limit
 
     def _to_pb(self):
         """
@@ -68,8 +67,6 @@ class CountAggregation(BaseAggregation):
         """
         aggregation_pb = query_pb2.AggregationQuery.Aggregation()
         aggregation_pb.count = query_pb2.AggregationQuery.Aggregation.Count()
-        if self.limit is not None and self.limit > 0:
-            aggregation_pb.count.up_to = self.limit
         aggregation_pb.alias = self.alias
         return aggregation_pb
 
@@ -146,17 +143,14 @@ class AggregationQuery(object):
             pb.aggregations.append(aggregation_pb)
         return pb
 
-    def count(self, alias=None, limit=None):
+    def count(self, alias=None):
         """
         Adds a count over the nested query
 
         :type alias: str
         :param alias: (Optional) The alias for the count
-
-        :type limit: int
-        :param limit: (Optional) The limit for the count
         """
-        count_aggregation = CountAggregation(alias=alias, limit=limit)
+        count_aggregation = CountAggregation(alias=alias)
         self._aggregations.append(count_aggregation)
         return self
 
@@ -180,6 +174,7 @@ class AggregationQuery(object):
     def fetch(
         self,
         client=None,
+        limit=None,
         eventual=False,
         retry=None,
         timeout=None,
@@ -210,7 +205,7 @@ class AggregationQuery(object):
             >>> client.put_multi([andy, sally, bobby])
             >>> query = client.query(kind='Andy')
             >>> aggregation_query = client.aggregation_query(query)
-            >>> result = aggregation_query.count(alias="total", limit=5).fetch()
+            >>> result = aggregation_query.count(alias="total").fetch(fetch=5)
             >>> result
             <google.cloud.datastore.aggregation.AggregationResultIterator object at ...>
 
@@ -254,6 +249,7 @@ class AggregationQuery(object):
         return AggregationResultIterator(
             self,
             client,
+            limit=limit,
             eventual=eventual,
             retry=retry,
             timeout=timeout,
@@ -299,6 +295,7 @@ class AggregationResultIterator(page_iterator.Iterator):
         self,
         aggregation_query,
         client,
+        limit=None,
         eventual=False,
         retry=None,
         timeout=None,
@@ -314,6 +311,7 @@ class AggregationResultIterator(page_iterator.Iterator):
         self._retry = retry
         self._timeout = timeout
         self._read_time = read_time
+        self._limit = limit
         # The attributes below will change over the life of the iterator.
         self._more_results = True
 
@@ -328,6 +326,9 @@ class AggregationResultIterator(page_iterator.Iterator):
                   state of the iterator.
         """
         pb = self._aggregation_query._to_pb()
+        if self._limit is not None and self._limit > 0:
+            for aggregation in pb.aggregations:
+                aggregation.count.up_to = self._limit
         return pb
 
     def _process_query_results(self, response_pb):
