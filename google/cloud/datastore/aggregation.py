@@ -205,7 +205,7 @@ class AggregationQuery(object):
             >>> client.put_multi([andy, sally, bobby])
             >>> query = client.query(kind='Andy')
             >>> aggregation_query = client.aggregation_query(query)
-            >>> result = aggregation_query.count(alias="total").fetch(fetch=5)
+            >>> result = aggregation_query.count(alias="total").fetch(limit=5)
             >>> result
             <google.cloud.datastore.aggregation.AggregationResultIterator object at ...>
 
