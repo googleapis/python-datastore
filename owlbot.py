@@ -176,6 +176,29 @@ assert 1 == s.replace(
 """,
 )
 
+assert 1 == s.replace(
+    "noxfile.py",
+    r"""\
+@nox.session\(python="3.9"\)
+def docfx\(session\):
+""",
+    """\
+@nox.session(python="3.9")
+def doctests(session):
+    # Install all test dependencies, then install this package into the
+    # virtualenv's dist-packages.
+    session.install("mock", "pytest", "sphinx", "google-cloud-testutils")
+    session.install("-e", ".")
+
+    # Run py.test against the system tests.
+    session.run("py.test", "tests/doctests.py")
+
+
+@nox.session(python="3.9")
+def docfx(session):
+""",
+)
+
 # Work around: https://github.com/googleapis/gapic-generator-python/issues/689
 s.replace(
     [
