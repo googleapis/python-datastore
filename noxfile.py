@@ -318,6 +318,17 @@ def docs(session):
 
 
 @nox.session(python="3.9")
+def doctests(session):
+    # Install all test dependencies, then install this package into the
+    # virtualenv's dist-packages.
+    session.install("mock", "pytest", "sphinx", "google-cloud-testutils")
+    session.install("-e", ".")
+
+    # Run py.test against the system tests.
+    session.run("py.test", "tests/doctests.py")
+
+
+@nox.session(python="3.9")
 def docfx(session):
     """Build the docfx yaml files for this library."""
 
