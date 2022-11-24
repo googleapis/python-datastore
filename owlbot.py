@@ -86,6 +86,7 @@ for library in get_staging_dirs(datastore_admin_default_version, "datastore_admi
         "",
     )
 
+    s.move(library / f"google/cloud/datastore_admin")
     s.move(library / f"google/cloud/datastore_admin_{library.name}")
     s.move(library / "tests")
     s.move(library / "scripts")
