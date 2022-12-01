@@ -116,7 +116,7 @@ def count_query_on_kind(client):
     task2 = datastore.Entity(client.key("Task", "task2"))
 
     tasks = [task1, task2]
-    client.put_multi([task1, task2])
+    client.put_multi(tasks)
     all_tasks_query = client.query(kind="Task")
     all_tasks_count_query = client.aggregation_query(all_tasks_query).count()
     query_result = all_tasks_count_query.fetch()
@@ -124,6 +124,24 @@ def count_query_on_kind(client):
         for aggregation in aggregation_results:
             print(f"Total tasks (accessible from default alias) is {aggregation.value}")
     # [END datastore_count_on_kind]
+    return tasks
+
+
+def count_query_with_limit(client):
+    # [START datastore_count_with_limit]
+    task1 = datastore.Entity(client.key("Task", "task1"))
+    task2 = datastore.Entity(client.key("Task", "task2"))
+    task3 = datastore.Entity(client.key("Task", "task3"))
+
+    tasks = [task1, task2, task3]
+    client.put_multi(tasks)
+    all_tasks_query = client.query(kind="Task")
+    all_tasks_count_query = client.aggregation_query(all_tasks_query).count()
+    query_result = all_tasks_count_query.fetch(limit=2)
+    for aggregation_results in query_result:
+        for aggregation in aggregation_results:
+            print(f"We have at least {aggregation.value} tasks")
+    # [END datastore_count_with_limit]
     return tasks
 
 

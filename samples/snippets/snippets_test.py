@@ -89,6 +89,15 @@ class TestDatastoreSnippets:
         client.entities_to_delete.extend(tasks)
 
     @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_count_query_with_limit(self, capsys, client):
+        tasks = snippets.count_query_with_limit(client)
+        captured = capsys.readouterr()
+        assert captured.out.strip() == "We have at least 2 tasks"
+        assert captured.err == ""
+
+        client.entities_to_delete.extend(tasks)
+
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_count_query_property_filter(self, capsys, client):
         tasks = snippets.count_query_property_filter(client)
         captured = capsys.readouterr()
