@@ -183,8 +183,11 @@ def count_query_property_filter(client):
 
 
 def count_query_with_stale_read(client):
-    # [START datastore_count_query_with_stale_read]
 
+    tasks = [task for task in client.query(kind="Task").fetch()]
+    client.delete_multi(tasks)  # ensure the database is empty before starting
+
+    # [START datastore_count_query_with_stale_read]
     task1 = datastore.Entity(client.key("Task", "task1"))
     task2 = datastore.Entity(client.key("Task", "task2"))
 
