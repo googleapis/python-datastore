@@ -55,7 +55,6 @@ The main concepts with this API are:
 """
 
 
-from google.cloud.datastore import gapic_version
 from google.cloud.datastore.version import __version__
 from google.cloud.datastore.batch import Batch
 from google.cloud.datastore.client import Client
@@ -64,13 +63,4 @@ from google.cloud.datastore.key import Key
 from google.cloud.datastore.query import Query
 from google.cloud.datastore.transaction import Transaction
 
-__all__ = [
-    "__version__",
-    "Batch",
-    "Client",
-    "Entity",
-    "Key",
-    "Query",
-    "Transaction",
-    "gapic_version",
-]
+__all__ = ["__version__", "Batch", "Client", "Entity", "Key", "Query", "Transaction"]
