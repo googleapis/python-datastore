@@ -106,7 +106,7 @@ def count_query_in_transaction(client):
             else:
                 print(f"Found existing {tasks_count.value} tasks, rolling back")
                 client.entities_to_delete.extend(tasks)
-                raise Exception("User 'John' cannot have more than 2 tasks")
+                raise ValueError("User 'John' cannot have more than 2 tasks")
     # [END datastore_count_in_transaction]
 
 

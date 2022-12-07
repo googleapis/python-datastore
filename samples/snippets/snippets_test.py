@@ -73,7 +73,7 @@ class TestDatastoreSnippets:
 
     @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_count_query_in_transaction(self, client):
-        with pytest.raises(Exception) as excinfo:
+        with pytest.raises(ValueError) as excinfo:
             snippets.count_query_in_transaction(client)
         assert "User 'John' cannot have more than 2 tasks" in str(excinfo.value)
 
