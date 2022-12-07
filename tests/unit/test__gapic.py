@@ -93,6 +93,7 @@ def test_emulator(make_chan, mock_transport, mock_klass):
         transport=mock.sentinel.transport, client_info=mock.sentinel.client_info
     )
 
+
 def test_version_from_gapic_version_matches_datastore_version():
     from google.cloud.datastore import gapic_version
     from google.cloud.datastore_v1 import gapic_version as gapic_version_v1
