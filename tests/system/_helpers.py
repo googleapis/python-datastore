@@ -18,6 +18,8 @@ from google.cloud import datastore
 from google.cloud.datastore.client import DATASTORE_DATASET
 from test_utils.system import unique_resource_id
 
+_DATASTORE_DATABASE = "SYSTEM_TESTS_DATABASE"
+TEST_DATABASE = os.getenv(_DATASTORE_DATABASE)
 EMULATOR_DATASET = os.getenv(DATASTORE_DATASET)
 
 

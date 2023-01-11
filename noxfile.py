@@ -230,7 +230,8 @@ def install_systemtest_dependencies(session, *constraints):
 
 @nox.session(python=SYSTEM_TEST_PYTHON_VERSIONS)
 @nox.parametrize("disable_grpc", [False, True])
-def system(session, disable_grpc):
+@nox.parametrize("use_named_db", [False, True])
+def system(session, disable_grpc, use_named_db):
     """Run the system test suite."""
     constraints_path = str(
         CURRENT_DIRECTORY / "testing" / f"constraints-{session.python}.txt"
@@ -244,6 +245,8 @@ def system(session, disable_grpc):
     # Install pyopenssl for mTLS testing.
     if os.environ.get("GOOGLE_API_USE_CLIENT_CERTIFICATE", "false") == "true":
         session.install("pyopenssl")
+    if use_named_db and os.environ.get("RUN_NAMED_DB_TESTS", "false") == "false":
+        session.skip("RUN_NAMED_DB_TESTS is set to false, skipping")
 
     system_test_exists = os.path.exists(system_test_path)
     system_test_folder_exists = os.path.exists(system_test_folder_path)
@@ -256,6 +259,7 @@ def system(session, disable_grpc):
     env = {}
     if disable_grpc:
         env["GOOGLE_CLOUD_DISABLE_GRPC"] = "True"
+    env["SYSTEM_TESTS_DATABASE"] = "system-tests-named-db" if use_named_db else ""
 
     # Run py.test against the system tests.
     if system_test_exists:
