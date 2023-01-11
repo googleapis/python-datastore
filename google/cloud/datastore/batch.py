@@ -23,6 +23,7 @@ https://cloud.google.com/datastore/docs/concepts/entities#batch_operations
 
 from google.cloud.datastore import helpers
 from google.cloud.datastore_v1.types import datastore as _datastore_pb2
+from google.cloud.datastore.constants import DEFAULT_DATABASE
 
 
 class Batch(object):
@@ -123,6 +124,15 @@ class Batch(object):
         return self._client.project
 
     @property
+    def database(self):
+        """Getter for database in which the batch will run.
+
+        :rtype: :class:`str`
+        :returns: The database in which the batch will run.
+        """
+        return self._client.database
+
+    @property
     def namespace(self):
         """Getter for namespace in which the batch will run.
 
@@ -218,6 +228,12 @@ class Batch(object):
         if self.project != entity.key.project:
             raise ValueError("Key must be from same project as batch")
 
+        entity_key_database = entity.key.database
+        if entity_key_database is None:
+            entity_key_database = DEFAULT_DATABASE
+        if self.database != entity_key_database:
+            raise ValueError("Key must be from same database as batch")
+
         if entity.key.is_partial:
             entity_pb = self._add_partial_key_entity_pb()
             self._partial_key_entities.append(entity)
@@ -244,6 +260,12 @@ class Batch(object):
 
         if self.project != key.project:
             raise ValueError("Key must be from same project as batch")
+
+        key_db = key.database
+        if key_db is None:
+            key_db = DEFAULT_DATABASE
+        if self.database != key_db:
+            raise ValueError("Key must be from same database as batch")
 
         key_pb = key.to_protobuf()
         self._add_delete_key_pb()._pb.CopyFrom(key_pb._pb)
@@ -284,6 +306,7 @@ class Batch(object):
         commit_response_pb = self._client._datastore_api.commit(
             request={
                 "project_id": self.project,
+                "database_id": self.database,
                 "mode": mode,
                 "transaction": self._id,
                 "mutations": self._mutations,

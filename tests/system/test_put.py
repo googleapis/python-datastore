@@ -155,7 +155,7 @@ def test_client_put_w_empty_array(datastore_client, entities_to_delete):
     local_client = _helpers.clone_client(datastore_client)
 
     key = local_client.key("EmptyArray", 1234)
-    local_client = datastore.Client()
+    local_client = datastore.Client(database=local_client.database)
     entity = datastore.Entity(key=key)
     entity["children"] = []
     local_client.put(entity)

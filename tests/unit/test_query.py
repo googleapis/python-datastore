@@ -25,6 +25,7 @@ def test_query_ctor_defaults():
     assert query._client is client
     assert query.project == client.project
     assert query.kind is None
+    assert query.database == client.database
     assert query.namespace == client.namespace
     assert query.ancestor is None
     assert query.filters == []
@@ -37,6 +38,7 @@ def test_query_ctor_explicit():
     from google.cloud.datastore.key import Key
 
     _PROJECT = "OTHER_PROJECT"
+    _DATABASE = "OTHER_DATABASE"
     _KIND = "KIND"
     _NAMESPACE = "OTHER_NAMESPACE"
     client = _make_client()
@@ -49,6 +51,7 @@ def test_query_ctor_explicit():
         client,
         kind=_KIND,
         project=_PROJECT,
+        database=_DATABASE,
         namespace=_NAMESPACE,
         ancestor=ancestor,
         filters=FILTERS,
@@ -58,6 +61,7 @@ def test_query_ctor_explicit():
     )
     assert query._client is client
     assert query.project == _PROJECT
+    assert query.database == _DATABASE
     assert query.kind == _KIND
     assert query.namespace == _NAMESPACE
     assert query.ancestor.path == ancestor.path
@@ -89,6 +93,26 @@ def test_query_ctor_bad_filters():
     FILTERS_CANT_UNPACK = [("one", "two")]
     with pytest.raises(ValueError):
         _make_query(_make_client(), filters=FILTERS_CANT_UNPACK)
+
+
+def test_query_project_getter():
+    PROJECT = "PROJECT"
+    query = _make_query(_make_client(), project=PROJECT)
+    assert query.project == PROJECT
+
+
+def test_query_database_getter():
+    DATABASE = "DATABASE"
+    OTHER_DATABASE = "OTHER-DATABASE"
+    query = _make_query(_make_client(), database=DATABASE)
+    assert query.database == DATABASE
+
+    # Fallback to client
+    client = _make_client()
+    client.database = None
+    query = _make_query(client)
+    client.database = OTHER_DATABASE
+    assert query.database == OTHER_DATABASE
 
 
 def test_query_namespace_setter_w_non_string():
@@ -556,7 +580,9 @@ def test_iterator__process_query_results_bad_enum():
         iterator._process_query_results(response_pb)
 
 
-def _next_page_helper(txn_id=None, retry=None, timeout=None, read_time=None):
+def _next_page_helper(
+    txn_id=None, retry=None, timeout=None, read_time=None, database=""
+):
     from google.api_core import page_iterator
     from google.cloud.datastore.query import Query
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
@@ -569,10 +595,12 @@ def _next_page_helper(txn_id=None, retry=None, timeout=None, read_time=None):
     project = "prujekt"
     ds_api = _make_datastore_api(result)
     if txn_id is None:
-        client = _Client(project, datastore_api=ds_api)
+        client = _Client(project, database=database, datastore_api=ds_api)
     else:
         transaction = mock.Mock(id=txn_id, spec=["id"])
-        client = _Client(project, datastore_api=ds_api, transaction=transaction)
+        client = _Client(
+            project, database=database, datastore_api=ds_api, transaction=transaction
+        )
 
     query = Query(client)
     kwargs = {}
@@ -594,7 +622,7 @@ def _next_page_helper(txn_id=None, retry=None, timeout=None, read_time=None):
     assert isinstance(page, page_iterator.Page)
     assert page._parent is iterator
 
-    partition_id = entity_pb2.PartitionId(project_id=project)
+    partition_id = entity_pb2.PartitionId(project_id=project, database_id=database)
     if txn_id is not None:
         read_options = datastore_pb2.ReadOptions(transaction=txn_id)
     elif read_time is not None:
@@ -607,6 +635,7 @@ def _next_page_helper(txn_id=None, retry=None, timeout=None, read_time=None):
     ds_api.run_query.assert_called_once_with(
         request={
             "project_id": project,
+            "database_id": database,
             "partition_id": partition_id,
             "read_options": read_options,
             "query": empty_query,
@@ -635,6 +664,10 @@ def test_iterator__next_page_in_transaction():
 def test_iterator__next_page_w_read_time():
     read_time = datetime.datetime.utcfromtimestamp(1641058200.123456)
     _next_page_helper(read_time=read_time)
+
+
+def test_iterator__next_page_w_database():
+    _next_page_helper(database="base-of-data")
 
 
 def test_iterator__next_page_no_more():
@@ -694,6 +727,7 @@ def test_iterator__next_page_w_skipped_lt_offset():
         mock.call(
             request={
                 "project_id": project,
+                "database_id": "",
                 "partition_id": partition_id,
                 "read_options": read_options,
                 "query": query,
@@ -832,10 +866,13 @@ class _Query(object):
         projection=(),
         order=(),
         distinct_on=(),
+        *,
+        database=None,
     ):
         self._client = client
         self.kind = kind
         self.project = project
+        self.database = database
         self.namespace = namespace
         self.ancestor = ancestor
         self.filters = filters
@@ -845,9 +882,18 @@ class _Query(object):
 
 
 class _Client(object):
-    def __init__(self, project, datastore_api=None, namespace=None, transaction=None):
+    def __init__(
+        self,
+        project,
+        datastore_api=None,
+        namespace=None,
+        transaction=None,
+        *,
+        database="",
+    ):
         self.project = project
         self._datastore_api = datastore_api
+        self.database = database
         self.namespace = namespace
         self._transaction = transaction
 

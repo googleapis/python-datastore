@@ -225,6 +225,7 @@ class Transaction(Batch):
 
         request = {
             "project_id": self.project,
+            "database_id": self.database,
             "transaction_options": self._options,
         }
         try:
@@ -259,7 +260,12 @@ class Transaction(Batch):
         try:
             # No need to use the response it contains nothing.
             self._client._datastore_api.rollback(
-                request={"project_id": self.project, "transaction": self._id}, **kwargs
+                request={
+                    "project_id": self.project,
+                    "database_id": self.database,
+                    "transaction": self._id,
+                },
+                **kwargs
             )
         finally:
             super(Transaction, self).rollback()

@@ -29,6 +29,7 @@ from google.cloud.datastore_v1.types import datastore as datastore_pb2
 from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore.entity import Entity
 from google.cloud.datastore.key import Key
+from google.cloud.datastore.constants import DEFAULT_DATABASE
 from google.protobuf import timestamp_pb2
 
 
@@ -300,11 +301,14 @@ def key_from_protobuf(pb):
     project = None
     if pb.partition_id.project_id:  # Simple field (string)
         project = pb.partition_id.project_id
+    database = DEFAULT_DATABASE
+    if pb.partition_id.database_id:  # Simple field (string)
+        database = pb.partition_id.database_id
     namespace = None
     if pb.partition_id.namespace_id:  # Simple field (string)
         namespace = pb.partition_id.namespace_id
 
-    return Key(*path_args, namespace=namespace, project=project)
+    return Key(*path_args, namespace=namespace, project=project, database=database)
 
 
 def _pb_attr_value(val):
