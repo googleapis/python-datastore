@@ -176,6 +176,11 @@ class Query(object):
     :type distinct_on: sequence of string
     :param distinct_on: field names used to group query results.
 
+    :type database: str
+    :param database:
+        (optional) The database associated with the query. If not passed,
+        uses the client's value.
+
     :raises: ValueError if ``project`` is not passed and no implicit
              default is set.
     """
@@ -203,6 +208,8 @@ class Query(object):
         projection=(),
         order=(),
         distinct_on=(),
+        *,
+        database=None,
     ):
 
         self._client = client
@@ -214,6 +221,15 @@ class Query(object):
             self._project = client.project
         else:
             self._project = None
+
+        # database defaults to None to allow distinguishing between an explicit
+        # query against the default database (for which you would pass database="")
+        # and a fallback to the client (for which you would either simply omit the parameter,
+        # or explicitly pass database=None)
+        if database is None:
+            self._database = client.database
+        else:
+            self._database = database
 
         if namespace:
             self._namespace = namespace
@@ -244,6 +260,17 @@ class Query(object):
         :returns: The project for the query.
         """
         return self._project or self._client.project
+
+    @property
+    def database(self):
+        """Get the database for this Query.
+
+        :rtype: str or None
+        :returns: The database for the query.
+        """
+        if self._database is not None:
+            return self._database
+        return self._client.database
 
     @property
     def namespace(self):
@@ -789,7 +816,9 @@ class Iterator(page_iterator.Iterator):
         )
 
         partition_id = entity_pb2.PartitionId(
-            project_id=self._query.project, namespace_id=self._query.namespace
+            project_id=self._query.project,
+            database_id=self._query.database,
+            namespace_id=self._query.namespace,
         )
 
         kwargs = {}
@@ -803,6 +832,7 @@ class Iterator(page_iterator.Iterator):
         response_pb = self.client._datastore_api.run_query(
             request={
                 "project_id": self._query.project,
+                "database_id": self._query.database,
                 "partition_id": partition_id,
                 "read_options": read_options,
                 "query": query_pb,
@@ -827,6 +857,7 @@ class Iterator(page_iterator.Iterator):
             response_pb = self.client._datastore_api.run_query(
                 request={
                     "project_id": self._query.project,
+                    "database_id": self._query.database,
                     "partition_id": partition_id,
                     "read_options": read_options,
                     "query": query_pb,

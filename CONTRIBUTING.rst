@@ -174,6 +174,7 @@ Running System Tests
 
 - You'll also need stored data in your dataset. To populate this data, run::
 
+   $ export SYSTEM_TESTS_DATABASE=system-tests-named-db
    $ python tests/system/utils/populate_datastore.py
 
 - If you make a mistake during development (i.e. a failing test that

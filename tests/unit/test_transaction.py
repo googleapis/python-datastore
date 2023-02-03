@@ -20,11 +20,13 @@ def test_transaction_ctor_defaults():
     from google.cloud.datastore.transaction import Transaction
 
     project = "PROJECT"
-    client = _Client(project)
+    database = "DATABASE"
+    client = _Client(project, database=database)
 
     xact = _make_transaction(client)
 
     assert xact.project == project
+    assert xact.database == database
     assert xact._client is client
     assert xact.id is None
     assert xact._status == Transaction._INITIAL
@@ -76,9 +78,10 @@ def test_transaction_current():
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
     project = "PROJECT"
+    database = "DATABASE"
     id_ = 678
     ds_api = _make_datastore_api(xact_id=id_)
-    client = _Client(project, datastore_api=ds_api)
+    client = _Client(project, database=database, datastore_api=ds_api)
     xact1 = _make_transaction(client)
     xact2 = _make_transaction(client)
     assert xact1.current() is None
@@ -108,7 +111,7 @@ def test_transaction_current():
 
     begin_txn = ds_api.begin_transaction
     assert begin_txn.call_count == 2
-    expected_request = _make_begin_request(project)
+    expected_request = _make_begin_request(project, database=database)
     begin_txn.assert_called_with(request=expected_request)
 
     commit_method = ds_api.commit
@@ -117,6 +120,7 @@ def test_transaction_current():
     commit_method.assert_called_with(
         request={
             "project_id": project,
+            "database_id": database,
             "mode": mode,
             "mutations": [],
             "transaction": id_,
@@ -128,16 +132,17 @@ def test_transaction_current():
 
 def test_transaction_begin():
     project = "PROJECT"
+    database = "DATABASE"
     id_ = 889
     ds_api = _make_datastore_api(xact_id=id_)
-    client = _Client(project, datastore_api=ds_api)
+    client = _Client(project, database=database, datastore_api=ds_api)
     xact = _make_transaction(client)
 
     xact.begin()
 
     assert xact.id == id_
 
-    expected_request = _make_begin_request(project)
+    expected_request = _make_begin_request(project, database=database)
     ds_api.begin_transaction.assert_called_once_with(request=expected_request)
 
 
@@ -213,7 +218,7 @@ def test_transaction_begin_tombstoned():
     xact.rollback()
 
     client._datastore_api.rollback.assert_called_once_with(
-        request={"project_id": project, "transaction": id_}
+        request={"project_id": project, "database_id": "", "transaction": id_}
     )
     assert xact.id is None
 
@@ -240,9 +245,10 @@ def test_transaction_begin_w_begin_transaction_failure():
 
 def test_transaction_rollback():
     project = "PROJECT"
+    database = "DATABASE"
     id_ = 239
     ds_api = _make_datastore_api(xact_id=id_)
-    client = _Client(project, datastore_api=ds_api)
+    client = _Client(project, database=database, datastore_api=ds_api)
     xact = _make_transaction(client)
     xact.begin()
 
@@ -250,7 +256,7 @@ def test_transaction_rollback():
 
     assert xact.id is None
     ds_api.rollback.assert_called_once_with(
-        request={"project_id": project, "transaction": id_}
+        request={"project_id": project, "database_id": database, "transaction": id_}
     )
 
 
@@ -269,7 +275,7 @@ def test_transaction_rollback_w_retry_w_timeout():
 
     assert xact.id is None
     ds_api.rollback.assert_called_once_with(
-        request={"project_id": project, "transaction": id_},
+        request={"project_id": project, "database_id": "", "transaction": id_},
         retry=retry,
         timeout=timeout,
     )
@@ -279,11 +285,12 @@ def test_transaction_commit_no_partial_keys():
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
     project = "PROJECT"
+    database = "DATABASE"
     id_ = 1002930
     mode = datastore_pb2.CommitRequest.Mode.TRANSACTIONAL
 
     ds_api = _make_datastore_api(xact_id=id_)
-    client = _Client(project, datastore_api=ds_api)
+    client = _Client(project, database=database, datastore_api=ds_api)
     xact = _make_transaction(client)
     xact.begin()
     xact.commit()
@@ -291,6 +298,7 @@ def test_transaction_commit_no_partial_keys():
     ds_api.commit.assert_called_once_with(
         request={
             "project_id": project,
+            "database_id": database,
             "mode": mode,
             "mutations": [],
             "transaction": id_,
@@ -323,6 +331,7 @@ def test_transaction_commit_w_partial_keys_w_retry_w_timeout():
     ds_api.commit.assert_called_once_with(
         request={
             "project_id": project,
+            "database_id": "",
             "mode": mode,
             "mutations": xact.mutations,
             "transaction": id2,
@@ -356,6 +365,7 @@ def test_transaction_context_manager_no_raise():
     client._datastore_api.commit.assert_called_once_with(
         request={
             "project_id": project,
+            "database_id": "",
             "mode": mode,
             "mutations": [],
             "transaction": id_,
@@ -388,7 +398,7 @@ def test_transaction_context_manager_w_raise():
     client._datastore_api.commit.assert_not_called()
 
     client._datastore_api.rollback.assert_called_once_with(
-        request={"project_id": project, "transaction": id_}
+        request={"project_id": project, "database_id": "", "transaction": id_}
     )
 
 
@@ -405,11 +415,12 @@ def test_transaction_put_read_only():
         xact.put(entity)
 
 
-def _make_key(kind, id_, project):
+def _make_key(kind, id_, project, database=""):
     from google.cloud.datastore_v1.types import entity as entity_pb2
 
     key = entity_pb2.Key()
     key.partition_id.project_id = project
+    key.partition_id.database_id = database
     elem = key._pb.path.add()
     elem.kind = kind
     elem.id = id_
@@ -425,12 +436,13 @@ class _Entity(dict):
 
 
 class _Client(object):
-    def __init__(self, project, datastore_api=None, namespace=None):
+    def __init__(self, project, datastore_api=None, namespace=None, database=""):
         self.project = project
         if datastore_api is None:
             datastore_api = _make_datastore_api()
         self._datastore_api = datastore_api
         self.namespace = namespace
+        self.database = database
         self._batches = []
 
     def _push_batch(self, batch):
@@ -483,10 +495,11 @@ def _make_transaction(client, **kw):
     return Transaction(client, **kw)
 
 
-def _make_begin_request(project, read_only=False, read_time=None):
+def _make_begin_request(project, read_only=False, read_time=None, database=""):
     expected_options = _make_options(read_only=read_only, read_time=read_time)
     return {
         "project_id": project,
+        "database_id": database,
         "transaction_options": expected_options,
     }
 

@@ -19,6 +19,7 @@ import mock
 import pytest
 
 PROJECT = "dummy-project-123"
+DATABASE = "dummy-database-123"
 
 
 def test__get_gcd_project_wo_value_set():
@@ -98,11 +99,13 @@ def _make_client(
     client_options=None,
     _http=None,
     _use_grpc=None,
+    database="",
 ):
     from google.cloud.datastore.client import Client
 
     return Client(
         project=project,
+        database=database,
         namespace=namespace,
         credentials=credentials,
         client_info=client_info,
@@ -142,6 +145,7 @@ def test_client_ctor_w_implicit_inputs():
             client = Client()
 
     assert client.project == other
+    assert client.database == ""
     assert client.namespace is None
     assert client._credentials is creds
     assert client._client_info is _CLIENT_INFO
@@ -162,6 +166,7 @@ def test_client_ctor_w_explicit_inputs():
     from google.api_core.client_options import ClientOptions
 
     other = "other"
+    database = "database"
     namespace = "namespace"
     creds = _make_credentials()
     client_info = mock.Mock()
@@ -169,6 +174,7 @@ def test_client_ctor_w_explicit_inputs():
     http = object()
     client = _make_client(
         project=other,
+        database=database,
         namespace=namespace,
         credentials=creds,
         client_info=client_info,
@@ -176,6 +182,7 @@ def test_client_ctor_w_explicit_inputs():
         _http=http,
     )
     assert client.project == other
+    assert client.database == database
     assert client.namespace == namespace
     assert client._credentials is creds
     assert client._client_info is client_info
@@ -424,6 +431,7 @@ def test_client_get_multi_miss():
     ds_api.lookup.assert_called_once_with(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "keys": [key.to_protobuf()],
             "read_options": read_options,
         }
@@ -461,7 +469,12 @@ def test_client_get_multi_miss_w_missing():
 
     read_options = datastore_pb2.ReadOptions()
     ds_api.lookup.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": [key_pb], "read_options": read_options}
+        request={
+            "project_id": PROJECT,
+            "database_id": "",
+            "keys": [key_pb],
+            "read_options": read_options,
+        }
     )
 
 
@@ -510,7 +523,12 @@ def test_client_get_multi_miss_w_deferred():
 
     read_options = datastore_pb2.ReadOptions()
     ds_api.lookup.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": [key_pb], "read_options": read_options}
+        request={
+            "project_id": PROJECT,
+            "database_id": "",
+            "keys": [key_pb],
+            "read_options": read_options,
+        }
     )
 
 
@@ -560,6 +578,7 @@ def test_client_get_multi_w_deferred_from_backend_but_not_passed():
     ds_api.lookup.assert_any_call(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "keys": [key2_pb],
             "read_options": read_options,
         },
@@ -568,6 +587,7 @@ def test_client_get_multi_w_deferred_from_backend_but_not_passed():
     ds_api.lookup.assert_any_call(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "keys": [key1_pb, key2_pb],
             "read_options": read_options,
         },
@@ -610,6 +630,7 @@ def test_client_get_multi_hit_w_retry_w_timeout():
     ds_api.lookup.assert_called_once_with(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "keys": [key.to_protobuf()],
             "read_options": read_options,
         },
@@ -654,6 +675,7 @@ def test_client_get_multi_hit_w_transaction():
     ds_api.lookup.assert_called_once_with(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "keys": [key.to_protobuf()],
             "read_options": read_options,
         }
@@ -698,6 +720,7 @@ def test_client_get_multi_hit_w_read_time():
     ds_api.lookup.assert_called_once_with(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "keys": [key.to_protobuf()],
             "read_options": read_options,
         }
@@ -737,6 +760,7 @@ def test_client_get_multi_hit_multiple_keys_same_project():
     ds_api.lookup.assert_called_once_with(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "keys": [key1.to_protobuf(), key2.to_protobuf()],
             "read_options": read_options,
         }
@@ -853,6 +877,7 @@ def test_client_put_multi_no_batch_w_partial_key_w_retry_w_timeout():
     ds_api.commit.assert_called_once_with(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "mode": datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL,
             "mutations": mock.ANY,
             "transaction": None,
@@ -944,6 +969,7 @@ def test_client_delete_multi_no_batch_w_retry_w_timeout():
     ds_api.commit.assert_called_once_with(
         request={
             "project_id": PROJECT,
+            "database_id": "",
             "mode": datastore_pb2.CommitRequest.Mode.NON_TRANSACTIONAL,
             "mutations": mock.ANY,
             "transaction": None,
@@ -1036,7 +1062,30 @@ def test_client_allocate_ids_w_partial_key():
 
     expected_keys = [incomplete_key.to_protobuf()] * num_ids
     alloc_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys}
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys}
+    )
+
+
+def test_client_allocate_ids_w_partial_key_w_specified_database():
+    num_ids = 2
+
+    incomplete_key = _Key(_Key.kind, None, database=DATABASE)
+
+    creds = _make_credentials()
+    client = _make_client(credentials=creds, _use_grpc=False)
+    allocated = mock.Mock(keys=[_KeyPB(i) for i in range(num_ids)], spec=["keys"])
+    alloc_ids = mock.Mock(return_value=allocated, spec=[])
+    ds_api = mock.Mock(allocate_ids=alloc_ids, spec=["allocate_ids"])
+    client._datastore_api_internal = ds_api
+
+    result = client.allocate_ids(incomplete_key, num_ids)
+
+    # Check the IDs returned.
+    assert [key.id for key in result] == list(range(num_ids))
+
+    expected_keys = [incomplete_key.to_protobuf()] * num_ids
+    alloc_ids.assert_called_once_with(
+        request={"project_id": PROJECT, "database_id": DATABASE, "keys": expected_keys}
     )
 
 
@@ -1061,7 +1110,7 @@ def test_client_allocate_ids_w_partial_key_w_retry_w_timeout():
 
     expected_keys = [incomplete_key.to_protobuf()] * num_ids
     alloc_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys},
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys},
         retry=retry,
         timeout=timeout,
     )
@@ -1084,7 +1133,7 @@ def test_client_reserve_ids_sequential_w_completed_key():
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     reserve_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys}
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys}
     )
 
 
@@ -1108,7 +1157,7 @@ def test_client_reserve_ids_sequential_w_completed_key_w_retry_w_timeout():
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     reserve_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys},
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys},
         retry=retry,
         timeout=timeout,
     )
@@ -1132,7 +1181,7 @@ def test_client_reserve_ids_sequential_w_completed_key_w_ancestor():
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     reserve_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys}
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys}
     )
 
 
@@ -1230,7 +1279,7 @@ def test_client_reserve_ids_w_completed_key():
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     reserve_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys}
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys}
     )
     _assert_reserve_ids_warning(warned)
 
@@ -1258,7 +1307,7 @@ def test_client_reserve_ids_w_completed_key_w_retry_w_timeout():
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     reserve_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys},
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys},
         retry=retry,
         timeout=timeout,
     )
@@ -1286,7 +1335,7 @@ def test_client_reserve_ids_w_completed_key_w_ancestor():
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     reserve_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys}
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys}
     )
 
     _assert_reserve_ids_warning(warned)
@@ -1314,7 +1363,37 @@ def test_client_key_wo_project():
     with patch as mock_klass:
         key = client.key(kind, id_)
         assert key is mock_klass.return_value
-        mock_klass.assert_called_once_with(kind, id_, project=PROJECT, namespace=None)
+        mock_klass.assert_called_once_with(
+            kind, id_, project=PROJECT, namespace=None, database=""
+        )
+
+
+def test_client_key_w_database():
+    KIND = "KIND"
+    ID = 1234
+
+    creds = _make_credentials()
+    client = _make_client(credentials=creds)
+
+    with pytest.raises(TypeError):
+        client.key(KIND, ID, database=DATABASE)
+
+
+def test_client_key_wo_database():
+    kind = "KIND"
+    id_ = 1234
+    database = "DATABASE"
+
+    creds = _make_credentials()
+    client = _make_client(database=database, credentials=creds)
+
+    patch = mock.patch("google.cloud.datastore.client.Key", spec=["__call__"])
+    with patch as mock_klass:
+        key = client.key(kind, id_)
+        assert key is mock_klass.return_value
+        mock_klass.assert_called_once_with(
+            kind, id_, project=PROJECT, namespace=None, database=database
+        )
 
 
 def test_client_key_w_namespace():
@@ -1330,7 +1409,7 @@ def test_client_key_w_namespace():
         key = client.key(kind, id_)
         assert key is mock_klass.return_value
         mock_klass.assert_called_once_with(
-            kind, id_, project=PROJECT, namespace=namespace
+            kind, id_, project=PROJECT, namespace=namespace, database=""
         )
 
 
@@ -1348,7 +1427,7 @@ def test_client_key_w_namespace_collision():
         key = client.key(kind, id_, namespace=namespace2)
         assert key is mock_klass.return_value
         mock_klass.assert_called_once_with(
-            kind, id_, project=PROJECT, namespace=namespace2
+            kind, id_, project=PROJECT, namespace=namespace2, database=""
         )
 
 
@@ -1434,6 +1513,16 @@ def test_client_query_w_project():
         client.query(kind=KIND, project=PROJECT)
 
 
+def test_client_query_w_database():
+    KIND = "KIND"
+
+    creds = _make_credentials()
+    client = _make_client(credentials=creds)
+
+    with pytest.raises(TypeError):
+        client.query(kind=KIND, database=DATABASE)
+
+
 def test_client_query_w_defaults():
     creds = _make_credentials()
     client = _make_client(credentials=creds)
@@ -1442,7 +1531,9 @@ def test_client_query_w_defaults():
     with patch as mock_klass:
         query = client.query()
         assert query is mock_klass.return_value
-        mock_klass.assert_called_once_with(client, project=PROJECT, namespace=None)
+        mock_klass.assert_called_once_with(
+            client, project=PROJECT, namespace=None, database=""
+        )
 
 
 def test_client_query_w_explicit():
@@ -1474,6 +1565,7 @@ def test_client_query_w_explicit():
             project=PROJECT,
             kind=kind,
             namespace=namespace,
+            database="",
             ancestor=ancestor,
             filters=filters,
             projection=projection,
@@ -1494,7 +1586,7 @@ def test_client_query_w_namespace():
         query = client.query(kind=kind)
         assert query is mock_klass.return_value
         mock_klass.assert_called_once_with(
-            client, project=PROJECT, namespace=namespace, kind=kind
+            client, project=PROJECT, namespace=namespace, kind=kind, database=""
         )
 
 
@@ -1511,7 +1603,7 @@ def test_client_query_w_namespace_collision():
         query = client.query(kind=kind, namespace=namespace2)
         assert query is mock_klass.return_value
         mock_klass.assert_called_once_with(
-            client, project=PROJECT, namespace=namespace2, kind=kind
+            client, project=PROJECT, namespace=namespace2, kind=kind, database=""
         )
 
 
@@ -1572,7 +1664,7 @@ def test_client_reserve_ids_multi():
 
     expected_keys = [key1.to_protobuf(), key2.to_protobuf()]
     reserve_ids.assert_called_once_with(
-        request={"project_id": PROJECT, "keys": expected_keys}
+        request={"project_id": PROJECT, "database_id": "", "keys": expected_keys}
     )
 
 
@@ -1621,6 +1713,7 @@ class _Key(object):
     id = 1234
     name = None
     _project = project = PROJECT
+    _database = database = ""
     _namespace = None
 
     _key = "KEY"

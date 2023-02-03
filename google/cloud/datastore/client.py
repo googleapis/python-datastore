@@ -25,6 +25,7 @@ from google.cloud.datastore.version import __version__
 from google.cloud.datastore import helpers
 from google.cloud.datastore._http import HTTPDatastoreAPI
 from google.cloud.datastore.batch import Batch
+from google.cloud.datastore.constants import DEFAULT_DATABASE
 from google.cloud.datastore.entity import Entity
 from google.cloud.datastore.key import Key
 from google.cloud.datastore.query import Query
@@ -126,6 +127,7 @@ def _extended_lookup(
     retry=None,
     timeout=None,
     read_time=None,
+    database=DEFAULT_DATABASE,
 ):
     """Repeat lookup until all keys found (unless stop requested).
 
@@ -179,6 +181,10 @@ def _extended_lookup(
         ``eventual==True`` or ``transaction_id``.
         This feature is in private preview.
 
+    :type database: str
+    :param database:
+        (Optional) Database from which to fetch data. Defaults to the (default) database.
+
     :rtype: list of :class:`.entity_pb2.Entity`
     :returns: The requested entities.
     :raises: :class:`ValueError` if missing / deferred are not null or
@@ -201,6 +207,7 @@ def _extended_lookup(
         lookup_response = datastore_api.lookup(
             request={
                 "project_id": project,
+                "database_id": database,
                 "keys": key_pbs,
                 "read_options": read_options,
             },
@@ -276,6 +283,9 @@ class Client(ClientWithProject):
                       environment variable.
                       This parameter should be considered private, and could
                       change in the future.
+
+    :type database: str
+    :param database: (Optional) database to pass to proxied API methods.
     """
 
     SCOPE = ("https://www.googleapis.com/auth/datastore",)
@@ -290,6 +300,8 @@ class Client(ClientWithProject):
         client_options=None,
         _http=None,
         _use_grpc=None,
+        *,
+        database=DEFAULT_DATABASE,
     ):
         emulator_host = os.getenv(DATASTORE_EMULATOR_HOST)
 
@@ -306,6 +318,7 @@ class Client(ClientWithProject):
             client_options=client_options,
             _http=_http,
         )
+        self.database = database
         self.namespace = namespace
         self._client_info = client_info
         self._client_options = client_options
@@ -549,6 +562,7 @@ class Client(ClientWithProject):
         entity_pbs = _extended_lookup(
             datastore_api=self._datastore_api,
             project=self.project,
+            database=self.database,
             key_pbs=[key.to_protobuf() for key in keys],
             eventual=eventual,
             missing=missing,
@@ -740,7 +754,11 @@ class Client(ClientWithProject):
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         response_pb = self._datastore_api.allocate_ids(
-            request={"project_id": incomplete_key.project, "keys": incomplete_key_pbs},
+            request={
+                "project_id": incomplete_key.project,
+                "database_id": incomplete_key.database,
+                "keys": incomplete_key_pbs,
+            },
             **kwargs,
         )
         allocated_ids = [
@@ -753,11 +771,14 @@ class Client(ClientWithProject):
     def key(self, *path_args, **kwargs):
         """Proxy to :class:`google.cloud.datastore.key.Key`.
 
-        Passes our ``project``.
+        Passes our ``project`` and our ``database``.
         """
         if "project" in kwargs:
             raise TypeError("Cannot pass project")
         kwargs["project"] = self.project
+        if "database" in kwargs:
+            raise TypeError("Cannot pass database")
+        kwargs["database"] = self.database
         if "namespace" not in kwargs:
             kwargs["namespace"] = self.namespace
         return Key(*path_args, **kwargs)
@@ -780,7 +801,7 @@ class Client(ClientWithProject):
     def query(self, **kwargs):
         """Proxy to :class:`google.cloud.datastore.query.Query`.
 
-        Passes our ``project``.
+        Passes our ``project``  and our ``database``.
 
         Using query to search a datastore:
 
@@ -834,7 +855,10 @@ class Client(ClientWithProject):
             raise TypeError("Cannot pass client")
         if "project" in kwargs:
             raise TypeError("Cannot pass project")
+        if "database" in kwargs:
+            raise TypeError("Cannot pass database")
         kwargs["project"] = self.project
+        kwargs["database"] = self.database
         if "namespace" not in kwargs:
             kwargs["namespace"] = self.namespace
         return Query(self, **kwargs)
@@ -963,18 +987,26 @@ class Client(ClientWithProject):
         key_class = type(complete_key)
         namespace = complete_key._namespace
         project = complete_key._project
+        database = complete_key._database
         flat_path = list(complete_key._flat_path[:-1])
         start_id = complete_key._flat_path[-1]
 
         key_pbs = []
         for id in range(start_id, start_id + num_ids):
             path = flat_path + [id]
-            key = key_class(*path, project=project, namespace=namespace)
+            key = key_class(
+                *path, project=project, database=database, namespace=namespace
+            )
             key_pbs.append(key.to_protobuf())
 
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
         self._datastore_api.reserve_ids(
-            request={"project_id": complete_key.project, "keys": key_pbs}, **kwargs
+            request={
+                "project_id": complete_key.project,
+                "database_id": complete_key.database,
+                "keys": key_pbs,
+            },
+            **kwargs,
         )
         return None
 
@@ -1021,7 +1053,12 @@ class Client(ClientWithProject):
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
         key_pbs = [key.to_protobuf() for key in complete_keys]
         self._datastore_api.reserve_ids(
-            request={"project_id": complete_keys[0].project, "keys": key_pbs}, **kwargs
+            request={
+                "project_id": complete_keys[0].project,
+                "database_id": complete_keys[0].database,
+                "keys": key_pbs,
+            },
+            **kwargs,
         )
 
         return None
