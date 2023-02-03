@@ -27,12 +27,14 @@ def _make_batch(client):
 
 def test_batch_ctor():
     project = "PROJECT"
+    database = "DATABASE"
     namespace = "NAMESPACE"
-    client = _Client(project, namespace=namespace)
+    client = _Client(project, database=database, namespace=namespace)
     batch = _make_batch(client)
 
     assert batch.project == project
     assert batch._client is client
+    assert batch.database == database
     assert batch.namespace == namespace
     assert batch._id is None
     assert batch._status == batch._INITIAL
@@ -44,7 +46,8 @@ def test_batch_current():
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
     project = "PROJECT"
-    client = _Client(project)
+    database = "DATABASE"
+    client = _Client(project, database=database)
     batch1 = _make_batch(client)
     batch2 = _make_batch(client)
 
@@ -71,6 +74,7 @@ def test_batch_current():
     commit_method.assert_called_with(
         request={
             "project_id": project,
+            "database_id": database,
             "mode": mode,
             "mutations": [],
             "transaction": None,
@@ -107,6 +111,19 @@ def test_batch_put_w_key_wrong_project():
     batch = _make_batch(client)
     entity = _Entity()
     entity.key = _Key(project="OTHER")
+
+    batch.begin()
+    with pytest.raises(ValueError):
+        batch.put(entity)
+
+
+def test_batch_put_w_key_wrong_database():
+    project = "PROJECT"
+    database = "DATABASE"
+    client = _Client(project, database=database)
+    batch = _make_batch(client)
+    entity = _Entity()
+    entity.key = _Key(project=project, database=None)
 
     batch.begin()
     with pytest.raises(ValueError):
@@ -191,7 +208,18 @@ def test_batch_delete_w_key_wrong_project():
     key = _Key(project="OTHER")
 
     batch.begin()
+    with pytest.raises(ValueError):
+        batch.delete(key)
 
+
+def test_batch_delete_w_key_wrong_database():
+    project = "PROJECT"
+    database = "DATABASE"
+    client = _Client(project, database=database)
+    batch = _make_batch(client)
+    key = _Key(project=project, database=None)
+
+    batch.begin()
     with pytest.raises(ValueError):
         batch.delete(key)
 
@@ -289,6 +317,7 @@ def _batch_commit_helper(timeout=None, retry=None):
     commit_method.assert_called_with(
         request={
             "project_id": project,
+            "database_id": "",
             "mode": mode,
             "mutations": [],
             "transaction": None,
@@ -335,6 +364,7 @@ def test_batch_commit_w_partial_key_entity():
     ds_api.commit.assert_called_once_with(
         request={
             "project_id": project,
+            "database_id": "",
             "mode": mode,
             "mutations": [],
             "transaction": None,
@@ -369,6 +399,7 @@ def test_batch_as_context_mgr_wo_error():
     commit_method.assert_called_with(
         request={
             "project_id": project,
+            "database_id": "",
             "mode": mode,
             "mutations": batch.mutations,
             "transaction": None,
@@ -414,6 +445,7 @@ def test_batch_as_context_mgr_nested():
     commit_method.assert_called_with(
         request={
             "project_id": project,
+            "database_id": "",
             "mode": mode,
             "mutations": batch1.mutations,
             "transaction": None,
@@ -422,6 +454,7 @@ def test_batch_as_context_mgr_nested():
     commit_method.assert_called_with(
         request={
             "project_id": project,
+            "database_id": "",
             "mode": mode,
             "mutations": batch2.mutations,
             "transaction": None,
@@ -511,8 +544,9 @@ class _Key(object):
     _id = 1234
     _stored = None
 
-    def __init__(self, project):
+    def __init__(self, project, database=""):
         self.project = project
+        self.database = database
 
     @property
     def is_partial(self):
@@ -534,18 +568,19 @@ class _Key(object):
 
     def completed_key(self, new_id):
         assert self.is_partial
-        new_key = self.__class__(self.project)
+        new_key = self.__class__(self.project, self.database)
         new_key._id = new_id
         return new_key
 
 
 class _Client(object):
-    def __init__(self, project, datastore_api=None, namespace=None):
+    def __init__(self, project, datastore_api=None, namespace=None, database=""):
         self.project = project
         if datastore_api is None:
             datastore_api = _make_datastore_api()
         self._datastore_api = datastore_api
         self.namespace = namespace
+        self.database = database
         self._batches = []
 
     def _push_batch(self, batch):

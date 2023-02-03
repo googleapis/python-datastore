@@ -38,6 +38,45 @@ def client():
     return _make_client()
 
 
+def test_project(client):
+    # Fallback to client
+    query = _make_query(client)
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+    assert aggregation_query.project == _PROJECT
+
+    # Fallback to query
+    query = _make_query(client, project="other-project")
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+    assert aggregation_query.project == "other-project"
+
+
+def test_database(client):
+    # Fallback to client
+    client.database = None
+    query = _make_query(client, database=None)
+    client.database = "other-database"
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+    assert aggregation_query.database == "other-database"
+
+    # Fallback to query
+    query = _make_query(client, database="third-database")
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+    assert aggregation_query.database == "third-database"
+
+
+def test_namespace(client):
+    # Fallback to client
+    client.namespace = "other-namespace"
+    query = _make_query(client)
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+    assert aggregation_query.namespace == "other-namespace"
+
+    # Fallback to query
+    query = _make_query(client, namespace="third-namespace")
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+    assert aggregation_query.namespace == "third-namespace"
+
+
 def test_pb_over_query(client):
     from google.cloud.datastore.query import _pb_from_query
 
@@ -353,11 +392,12 @@ def _next_page_helper(txn_id=None, retry=None, timeout=None):
     expected_call = mock.call(
         request={
             "project_id": project,
+            "database_id": "",
             "partition_id": partition_id,
             "read_options": read_options,
             "aggregation_query": aggregation_query._to_pb(),
         },
-        **kwargs
+        **kwargs,
     )
     assert ds_api.run_aggregation_query.call_args_list == (
         [expected_call, expected_call]
@@ -383,8 +423,17 @@ def test__item_to_aggregation_result():
 
 
 class _Client(object):
-    def __init__(self, project, datastore_api=None, namespace=None, transaction=None):
+    def __init__(
+        self,
+        project,
+        datastore_api=None,
+        namespace=None,
+        transaction=None,
+        *,
+        database="",
+    ):
         self.project = project
+        self.database = database
         self._datastore_api = datastore_api
         self.namespace = namespace
         self._transaction = transaction

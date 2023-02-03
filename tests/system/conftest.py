@@ -31,15 +31,22 @@ def test_namespace():
 
 @pytest.fixture(scope="session")
 def datastore_client(test_namespace):
+    database = ""
+    if _helpers.TEST_DATABASE is not None:
+        database = _helpers.TEST_DATABASE
     if _helpers.EMULATOR_DATASET is not None:
         http = requests.Session()  # Un-authorized.
-        return datastore.Client(
+        client = datastore.Client(
             project=_helpers.EMULATOR_DATASET,
+            database=database,
             namespace=test_namespace,
             _http=http,
         )
     else:
-        return datastore.Client(namespace=test_namespace)
+        client = datastore.Client(database=database, namespace=test_namespace)
+
+    assert client.database == database
+    return client
 
 
 @pytest.fixture(scope="function")

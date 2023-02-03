@@ -120,7 +120,8 @@ def system\(session\):
     """\
 @nox.session(python=SYSTEM_TEST_PYTHON_VERSIONS)
 @nox.parametrize("disable_grpc", [False, True])
-def system(session, disable_grpc):
+@nox.parametrize("use_named_db", [False, True])
+def system(session, disable_grpc, use_named_db):
 """,
 )
 
@@ -133,6 +134,7 @@ assert 1 == s.replace(
     env = {}
     if disable_grpc:
         env["GOOGLE_CLOUD_DISABLE_GRPC"] = "True"
+    env["SYSTEM_TESTS_DATABASE"] = "system-tests-named-db" if use_named_db else ""
 
 # Run py.test against the system tests.
 """,
