@@ -15,14 +15,20 @@
 """Create / interact with Google Cloud Datastore queries."""
 
 import base64
+import warnings
+
 
 from google.api_core import page_iterator
 from google.cloud._helpers import _ensure_tuple_or_list
+
 
 from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore_v1.types import query as query_pb2
 from google.cloud.datastore import helpers
 from google.cloud.datastore.key import Key
+
+import abc
+from abc import ABC
 
 
 _NOT_FINISHED = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
@@ -33,6 +39,100 @@ _FINISHED = (
     query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_LIMIT,
     query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_CURSOR,
 )
+
+
+class BaseFilter(ABC):
+    """Base class for Filters"""
+
+    @abc.abstractmethod
+    def build_pb(self, container_pb=None):
+        """Build the protobuf representation based on values in the Filter."""
+
+
+class PropertyFilter(BaseFilter):
+    """Class representation of a Property Filter"""
+
+    def __init__(self, property_name, operator, value):
+        if property_name == "__key__" and not isinstance(value, Key):
+            raise ValueError('Invalid key: "%s"' % value)
+        if Query.OPERATORS.get(operator) is None:
+            error_message = 'Invalid expression: "%s"' % (operator,)
+            choices_message = "Please use one of: =, <, <=, >, >=, !=, IN, NOT_IN."
+            raise ValueError(error_message, choices_message)
+        self.property_name = property_name
+        self.operator = operator
+        self.value = value
+
+    def build_pb(self, container_pb=None):
+        """Build the protobuf representation based on values in the Property Filter."""
+        container_pb.op = Query.OPERATORS.get(self.operator)
+        container_pb.property.name = self.property_name
+        if self.property_name == "__key__":
+            key_pb = self.value.to_protobuf()
+            container_pb.value.key_value.CopyFrom(key_pb._pb)
+        else:
+            helpers._set_protobuf_value(container_pb.value, self.value)
+        return container_pb
+
+    def __repr__(self):
+        return f"<{self.property_name} {self.operator} '{self.value}'>"
+
+
+class BaseCompositeFilter(BaseFilter):
+    """Base class for a Composite Filter. (either OR or AND)."""
+
+    def __init__(
+        self,
+        operation=query_pb2.CompositeFilter.Operator.OPERATOR_UNSPECIFIED,
+        filters=None,
+    ):
+        self.operation = operation
+        if filters is None:
+            self.filters = []
+        else:
+            self.filters = filters
+
+    def __repr__(self):
+        repr = f"op: {self.operation}\nFilters:"
+        for filter in self.filters:
+            repr += f"\n\t{filter}"
+        return repr
+
+    def build_pb(self, container_pb=None):
+        """Build the protobuf representation based on values in the Property Filter."""
+        container_pb.op = self.operation
+        for filter in self.filters:
+            if isinstance(filter, PropertyFilter):
+                child_pb = container_pb.filters.add().property_filter
+                filter.build_pb(container_pb=child_pb)
+            elif isinstance(filter, BaseCompositeFilter):
+                child_pb = container_pb.filters.add().composite_filter
+                filter.build_pb(container_pb=child_pb)
+            else:
+                # unpack to legacy filter
+                property_name, operator, value = filter
+                filter = PropertyFilter(property_name, operator, value)
+                child_pb = container_pb.filters.add().property_filter
+                filter.build_pb(container_pb=child_pb)
+        return container_pb
+
+
+class Or(BaseCompositeFilter):
+    """Class representation of an OR Filter."""
+
+    def __init__(self, filters):
+        super().__init__(
+            operation=query_pb2.CompositeFilter.Operator.OR, filters=filters
+        )
+
+
+class And(BaseCompositeFilter):
+    """Class representation of an AND Filter."""
+
+    def __init__(self, filters):
+        super().__init__(
+            operation=query_pb2.CompositeFilter.Operator.AND, filters=filters
+        )
 
 
 class Query(object):
@@ -107,13 +207,33 @@ class Query(object):
 
         self._client = client
         self._kind = kind
-        self._project = project or client.project
-        self._namespace = namespace or client.namespace
+
+        if project:
+            self._project = project
+        elif hasattr(client, "project"):
+            self._project = client.project
+        else:
+            self._project = None
+
+        if namespace:
+            self._namespace = namespace
+        elif hasattr(client, "namespace"):
+            self._namespace = client.namespace
+        else:
+            self._project = None
+
         self._ancestor = ancestor
         self._filters = []
+
         # Verify filters passed in.
-        for property_name, operator, value in filters:
-            self.add_filter(property_name, operator, value)
+        for filter in filters:
+            if isinstance(filter, PropertyFilter):
+                self.add_filter(property_filter=filter)
+            elif isinstance(filter, BaseCompositeFilter):
+                self.add_filter(composite_filter=filter)
+            else:
+                property_name, operator, value = filter
+                self.add_filter(property_name, operator, value)
         self._projection = _ensure_tuple_or_list("projection", projection)
         self._order = _ensure_tuple_or_list("order", order)
         self._distinct_on = _ensure_tuple_or_list("distinct_on", distinct_on)
@@ -209,30 +329,62 @@ class Query(object):
         """
         return self._filters[:]
 
-    def add_filter(self, property_name, operator, value):
+    def add_filter(
+        self,
+        property_name=None,
+        operator=None,
+        value=None,
+        *,
+        composite_filter=None,
+        property_filter=None,
+    ):
         """Filter the query based on a property name, operator and a value.
 
         Expressions take the form of::
 
-          .add_filter('<property>', '<operator>', <value>)
+          .add_filter(
+            property_filter=PropertyFilter('<property>', '<operator>', <value>)
+          )
 
         where property is a property stored on the entity in the datastore
         and operator is one of ``OPERATORS``
         (ie, ``=``, ``<``, ``<=``, ``>``, ``>=``, ``!=``, ``IN``, ``NOT_IN``):
+
+        Both AND and OR operations are supported through the 'composite_filter' parameter::
+
+           .add_filter(
+               composite_filter=And(
+                   [
+                       PropertyFilter('<property>', '<operator>', <value>),
+                       PropertyFilter('<property>', '<operator>', <value>)
+
+                   ]
+               )
+           )
+
+           .add_filter(
+               composite_filter=Or(
+                   [
+                       PropertyFilter('<property>', '<operator>', <value>),
+                       PropertyFilter('<property>', '<operator>', <value>)
+                   ]
+               )
+           )
 
         .. testsetup:: query-filter
 
             import uuid
 
             from google.cloud import datastore
+            from google.cloud.datastore.query import PropertyFilter
 
             client = datastore.Client()
 
         .. doctest:: query-filter
 
             >>> query = client.query(kind='Person')
-            >>> query = query.add_filter('name', '=', 'James')
-            >>> query = query.add_filter('age', '>', 50)
+            >>> query = query.add_filter(property_filter=PropertyFilter('name', '=', 'James'))
+            >>> query = query.add_filter(property_filter=PropertyFilter('age', '>', 50))
 
         :type property_name: str
         :param property_name: A property name.
@@ -253,15 +405,50 @@ class Query(object):
                  specified values, or if a filter names ``'__key__'`` but
                  passes an invalid value (a key is required).
         """
-        if self.OPERATORS.get(operator) is None:
-            error_message = 'Invalid expression: "%s"' % (operator,)
-            choices_message = "Please use one of: =, <, <=, >, >=, !=, IN, NOT_IN."
-            raise ValueError(error_message, choices_message)
+        if isinstance(property_name, PropertyFilter):
+            raise ValueError(
+                "PropertyFilter object must be passed using keyword argument 'property_filter'"
+            )
+        if isinstance(property_name, BaseCompositeFilter):
+            raise ValueError(
+                "Or and And objects must be passed using keyword argument 'composite_filter'"
+            )
 
-        if property_name == "__key__" and not isinstance(value, Key):
-            raise ValueError('Invalid key: "%s"' % value)
+        if property_name is not None and operator is not None:
+            if property_filter is not None:
+                raise ValueError(
+                    "Can't pass in both the positional arguments and 'property_filter' at the same time"
+                )
+            if composite_filter is not None:
+                raise ValueError(
+                    "Can't pass in both the positional arguments and 'composite_filter' at the same time"
+                )
 
-        self._filters.append((property_name, operator, value))
+            if property_name == "__key__" and not isinstance(value, Key):
+                raise ValueError('Invalid key: "%s"' % value)
+
+            if self.OPERATORS.get(operator) is None:
+                error_message = 'Invalid expression: "%s"' % (operator,)
+                choices_message = "Please use one of: =, <, <=, >, >=, !=, IN, NOT_IN."
+                raise ValueError(error_message, choices_message)
+
+            warnings.warn(
+                "Adding filter using positional arguments is deprecated. Please use one of 'composite_filter' or 'property_filter' keyword arguments.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            self._filters.append((property_name, operator, value))
+
+        if property_filter is not None and composite_filter is not None:
+            raise ValueError(
+                "Can't add both property filter and composite filter at the same time"
+            )
+
+        if property_filter is not None:
+            self._filters.append(property_filter)
+        elif composite_filter is not None:
+            self._filters.append(composite_filter)
+
         return self
 
     @property
@@ -368,7 +555,7 @@ class Query(object):
             import uuid
 
             from google.cloud import datastore
-
+            from google.cloud.datastore.query import PropertyFilter
             unique = str(uuid.uuid4())[0:8]
             client = datastore.Client(namespace='ns{}'.format(unique))
 
@@ -383,7 +570,7 @@ class Query(object):
             >>> bobby['name'] = 'Bobby'
             >>> client.put_multi([andy, sally, bobby])
             >>> query = client.query(kind='Person')
-            >>> result = list(query.add_filter('name', '=', 'Sally').fetch())
+            >>> result = list(query.add_filter(property_filter=PropertyFilter('name', '=', 'Sally')).fetch())
             >>> result
             [<Entity('Person', 2345) {'name': 'Sally'}>]
 
@@ -688,6 +875,19 @@ def _pb_from_query(query):
     composite_filter = pb.filter.composite_filter
     composite_filter.op = query_pb2.CompositeFilter.Operator.AND
 
+    for filter in query.filters:
+        if isinstance(filter, BaseCompositeFilter):
+            pb_to_add = pb.filter.composite_filter.filters._pb.add().composite_filter
+            filter.build_pb(container_pb=pb_to_add)
+        elif isinstance(filter, PropertyFilter):
+            pb_to_add = pb.filter.composite_filter.filters._pb.add().property_filter
+            filter.build_pb(container_pb=pb_to_add)
+        else:
+            property_name, operator, value = filter
+            filter = PropertyFilter(property_name, operator, value)
+            pb_to_add = pb.filter.composite_filter.filters._pb.add().property_filter
+            filter.build_pb(container_pb=pb_to_add)
+
     if query.ancestor:
         ancestor_pb = query.ancestor.to_protobuf()
 
@@ -696,21 +896,6 @@ def _pb_from_query(query):
         ancestor_filter.property.name = "__key__"
         ancestor_filter.op = query_pb2.PropertyFilter.Operator.HAS_ANCESTOR
         ancestor_filter.value.key_value.CopyFrom(ancestor_pb._pb)
-
-    for property_name, operator, value in query.filters:
-        pb_op_enum = query.OPERATORS.get(operator)
-
-        # Add the specific filter
-        property_filter = composite_filter.filters._pb.add().property_filter
-        property_filter.property.name = property_name
-        property_filter.op = pb_op_enum
-
-        # Set the value to filter on based on the type.
-        if property_name == "__key__":
-            key_pb = value.to_protobuf()
-            property_filter.value.key_value.CopyFrom(key_pb._pb)
-        else:
-            helpers._set_protobuf_value(property_filter.value, value)
 
     if not composite_filter.filters:
         pb._pb.ClearField("filter")
