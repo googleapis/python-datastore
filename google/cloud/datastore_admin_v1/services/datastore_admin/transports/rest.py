@@ -44,7 +44,10 @@ from google.cloud.datastore_admin_v1.types import datastore_admin
 from google.cloud.datastore_admin_v1.types import index
 from google.longrunning import operations_pb2  # type: ignore
 
-from .base import DatastoreAdminTransport, DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
+from .base import (
+    DatastoreAdminTransport,
+    DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO,
+)
 
 
 DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
@@ -122,7 +125,12 @@ class DatastoreAdminRestInterceptor:
 
 
     """
-    def pre_create_index(self, request: datastore_admin.CreateIndexRequest, metadata: Sequence[Tuple[str, str]]) -> Tuple[datastore_admin.CreateIndexRequest, Sequence[Tuple[str, str]]]:
+
+    def pre_create_index(
+        self,
+        request: datastore_admin.CreateIndexRequest,
+        metadata: Sequence[Tuple[str, str]],
+    ) -> Tuple[datastore_admin.CreateIndexRequest, Sequence[Tuple[str, str]]]:
         """Pre-rpc interceptor for create_index
 
         Override in a subclass to manipulate the request or metadata
@@ -130,7 +138,9 @@ class DatastoreAdminRestInterceptor:
         """
         return request, metadata
 
-    def post_create_index(self, response: operations_pb2.Operation) -> operations_pb2.Operation:
+    def post_create_index(
+        self, response: operations_pb2.Operation
+    ) -> operations_pb2.Operation:
         """Post-rpc interceptor for create_index
 
         Override in a subclass to manipulate the response
@@ -138,7 +148,12 @@ class DatastoreAdminRestInterceptor:
         it is returned to user code.
         """
         return response
-    def pre_delete_index(self, request: datastore_admin.DeleteIndexRequest, metadata: Sequence[Tuple[str, str]]) -> Tuple[datastore_admin.DeleteIndexRequest, Sequence[Tuple[str, str]]]:
+
+    def pre_delete_index(
+        self,
+        request: datastore_admin.DeleteIndexRequest,
+        metadata: Sequence[Tuple[str, str]],
+    ) -> Tuple[datastore_admin.DeleteIndexRequest, Sequence[Tuple[str, str]]]:
         """Pre-rpc interceptor for delete_index
 
         Override in a subclass to manipulate the request or metadata
@@ -146,7 +161,9 @@ class DatastoreAdminRestInterceptor:
         """
         return request, metadata
 
-    def post_delete_index(self, response: operations_pb2.Operation) -> operations_pb2.Operation:
+    def post_delete_index(
+        self, response: operations_pb2.Operation
+    ) -> operations_pb2.Operation:
         """Post-rpc interceptor for delete_index
 
         Override in a subclass to manipulate the response
@@ -154,7 +171,12 @@ class DatastoreAdminRestInterceptor:
         it is returned to user code.
         """
         return response
-    def pre_export_entities(self, request: datastore_admin.ExportEntitiesRequest, metadata: Sequence[Tuple[str, str]]) -> Tuple[datastore_admin.ExportEntitiesRequest, Sequence[Tuple[str, str]]]:
+
+    def pre_export_entities(
+        self,
+        request: datastore_admin.ExportEntitiesRequest,
+        metadata: Sequence[Tuple[str, str]],
+    ) -> Tuple[datastore_admin.ExportEntitiesRequest, Sequence[Tuple[str, str]]]:
         """Pre-rpc interceptor for export_entities
 
         Override in a subclass to manipulate the request or metadata
@@ -162,7 +184,9 @@ class DatastoreAdminRestInterceptor:
         """
         return request, metadata
 
-    def post_export_entities(self, response: operations_pb2.Operation) -> operations_pb2.Operation:
+    def post_export_entities(
+        self, response: operations_pb2.Operation
+    ) -> operations_pb2.Operation:
         """Post-rpc interceptor for export_entities
 
         Override in a subclass to manipulate the response
@@ -170,7 +194,12 @@ class DatastoreAdminRestInterceptor:
         it is returned to user code.
         """
         return response
-    def pre_get_index(self, request: datastore_admin.GetIndexRequest, metadata: Sequence[Tuple[str, str]]) -> Tuple[datastore_admin.GetIndexRequest, Sequence[Tuple[str, str]]]:
+
+    def pre_get_index(
+        self,
+        request: datastore_admin.GetIndexRequest,
+        metadata: Sequence[Tuple[str, str]],
+    ) -> Tuple[datastore_admin.GetIndexRequest, Sequence[Tuple[str, str]]]:
         """Pre-rpc interceptor for get_index
 
         Override in a subclass to manipulate the request or metadata
@@ -186,7 +215,12 @@ class DatastoreAdminRestInterceptor:
         it is returned to user code.
         """
         return response
-    def pre_import_entities(self, request: datastore_admin.ImportEntitiesRequest, metadata: Sequence[Tuple[str, str]]) -> Tuple[datastore_admin.ImportEntitiesRequest, Sequence[Tuple[str, str]]]:
+
+    def pre_import_entities(
+        self,
+        request: datastore_admin.ImportEntitiesRequest,
+        metadata: Sequence[Tuple[str, str]],
+    ) -> Tuple[datastore_admin.ImportEntitiesRequest, Sequence[Tuple[str, str]]]:
         """Pre-rpc interceptor for import_entities
 
         Override in a subclass to manipulate the request or metadata
@@ -194,7 +228,9 @@ class DatastoreAdminRestInterceptor:
         """
         return request, metadata
 
-    def post_import_entities(self, response: operations_pb2.Operation) -> operations_pb2.Operation:
+    def post_import_entities(
+        self, response: operations_pb2.Operation
+    ) -> operations_pb2.Operation:
         """Post-rpc interceptor for import_entities
 
         Override in a subclass to manipulate the response
@@ -202,7 +238,12 @@ class DatastoreAdminRestInterceptor:
         it is returned to user code.
         """
         return response
-    def pre_list_indexes(self, request: datastore_admin.ListIndexesRequest, metadata: Sequence[Tuple[str, str]]) -> Tuple[datastore_admin.ListIndexesRequest, Sequence[Tuple[str, str]]]:
+
+    def pre_list_indexes(
+        self,
+        request: datastore_admin.ListIndexesRequest,
+        metadata: Sequence[Tuple[str, str]],
+    ) -> Tuple[datastore_admin.ListIndexesRequest, Sequence[Tuple[str, str]]]:
         """Pre-rpc interceptor for list_indexes
 
         Override in a subclass to manipulate the request or metadata
@@ -210,7 +251,9 @@ class DatastoreAdminRestInterceptor:
         """
         return request, metadata
 
-    def post_list_indexes(self, response: datastore_admin.ListIndexesResponse) -> datastore_admin.ListIndexesResponse:
+    def post_list_indexes(
+        self, response: datastore_admin.ListIndexesResponse
+    ) -> datastore_admin.ListIndexesResponse:
         """Post-rpc interceptor for list_indexes
 
         Override in a subclass to manipulate the response
@@ -297,20 +340,21 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
 
     """
 
-    def __init__(self, *,
-            host: str = 'datastore.googleapis.com',
-            credentials: Optional[ga_credentials.Credentials] = None,
-            credentials_file: Optional[str] = None,
-            scopes: Optional[Sequence[str]] = None,
-            client_cert_source_for_mtls: Optional[Callable[[
-                ], Tuple[bytes, bytes]]] = None,
-            quota_project_id: Optional[str] = None,
-            client_info: gapic_v1.client_info.ClientInfo = DEFAULT_CLIENT_INFO,
-            always_use_jwt_access: Optional[bool] = False,
-            url_scheme: str = 'https',
-            interceptor: Optional[DatastoreAdminRestInterceptor] = None,
-            api_audience: Optional[str] = None,
-            ) -> None:
+    def __init__(
+        self,
+        *,
+        host: str = "datastore.googleapis.com",
+        credentials: Optional[ga_credentials.Credentials] = None,
+        credentials_file: Optional[str] = None,
+        scopes: Optional[Sequence[str]] = None,
+        client_cert_source_for_mtls: Optional[Callable[[], Tuple[bytes, bytes]]] = None,
+        quota_project_id: Optional[str] = None,
+        client_info: gapic_v1.client_info.ClientInfo = DEFAULT_CLIENT_INFO,
+        always_use_jwt_access: Optional[bool] = False,
+        url_scheme: str = "https",
+        interceptor: Optional[DatastoreAdminRestInterceptor] = None,
+        api_audience: Optional[str] = None,
+    ) -> None:
         """Instantiate the transport.
 
         Args:
@@ -349,7 +393,9 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         # credentials object
         maybe_url_match = re.match("^(?P<scheme>http(?:s)?://)?(?P<host>.*)$", host)
         if maybe_url_match is None:
-            raise ValueError(f"Unexpected hostname structure: {host}")  # pragma: NO COVER
+            raise ValueError(
+                f"Unexpected hostname structure: {host}"
+            )  # pragma: NO COVER
 
         url_match_items = maybe_url_match.groupdict()
 
@@ -360,10 +406,11 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
             credentials=credentials,
             client_info=client_info,
             always_use_jwt_access=always_use_jwt_access,
-            api_audience=api_audience
+            api_audience=api_audience,
         )
         self._session = AuthorizedSession(
-            self._credentials, default_host=self.DEFAULT_HOST)
+            self._credentials, default_host=self.DEFAULT_HOST
+        )
         self._operations_client: Optional[operations_v1.AbstractOperationsClient] = None
         if client_cert_source_for_mtls:
             self._session.configure_mtls_channel(client_cert_source_for_mtls)
@@ -379,18 +426,20 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         """
         # Only create a new client if we do not already have one.
         if self._operations_client is None:
-            http_options: Dict[str, List[Dict[str, str]]] = {
-            }
+            http_options: Dict[str, List[Dict[str, str]]] = {}
 
             rest_transport = operations_v1.OperationsRestTransport(
-                    host=self._host,
-                    # use the credentials which are saved
-                    credentials=self._credentials,
-                    scopes=self._scopes,
-                    http_options=http_options,
-                    path_prefix="v1")
+                host=self._host,
+                # use the credentials which are saved
+                credentials=self._credentials,
+                scopes=self._scopes,
+                http_options=http_options,
+                path_prefix="v1",
+            )
 
-            self._operations_client = operations_v1.AbstractOperationsClient(transport=rest_transport)
+            self._operations_client = operations_v1.AbstractOperationsClient(
+                transport=rest_transport
+            )
 
         # Return the client from cache.
         return self._operations_client
@@ -399,12 +448,14 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         def __hash__(self):
             return hash("CreateIndex")
 
-        def __call__(self,
-                request: datastore_admin.CreateIndexRequest, *,
-                retry: OptionalRetry=gapic_v1.method.DEFAULT,
-                timeout: Optional[float]=None,
-                metadata: Sequence[Tuple[str, str]]=(),
-                ) -> operations_pb2.Operation:
+        def __call__(
+            self,
+            request: datastore_admin.CreateIndexRequest,
+            *,
+            retry: OptionalRetry = gapic_v1.method.DEFAULT,
+            timeout: Optional[float] = None,
+            metadata: Sequence[Tuple[str, str]] = (),
+        ) -> operations_pb2.Operation:
             r"""Call the create index method over HTTP.
 
             Args:
@@ -426,11 +477,12 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
 
             """
 
-            http_options: List[Dict[str, str]] = [{
-                'method': 'post',
-                'uri': '/v1/projects/{project_id}/indexes',
-                'body': 'index',
-            },
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "post",
+                    "uri": "/v1/projects/{project_id}/indexes",
+                    "body": "index",
+                },
             ]
             request, metadata = self._interceptor.pre_create_index(request, metadata)
             pb_request = datastore_admin.CreateIndexRequest.pb(request)
@@ -439,32 +491,34 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
             # Jsonify the request body
 
             body = json_format.MessageToJson(
-                transcoded_request['body'],
-                including_default_value_fields=False,
-                use_integers_for_enums=True
-            )
-            uri = transcoded_request['uri']
-            method = transcoded_request['method']
-
-            # Jsonify the query params
-            query_params = json.loads(json_format.MessageToJson(
-                transcoded_request['query_params'],
+                transcoded_request["body"],
                 including_default_value_fields=False,
                 use_integers_for_enums=True,
-            ))
+            )
+            uri = transcoded_request["uri"]
+            method = transcoded_request["method"]
+
+            # Jsonify the query params
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    including_default_value_fields=False,
+                    use_integers_for_enums=True,
+                )
+            )
 
             query_params["$alt"] = "json;enum-encoding=int"
 
             # Send the request
             headers = dict(metadata)
-            headers['Content-Type'] = 'application/json'
+            headers["Content-Type"] = "application/json"
             response = getattr(self._session, method)(
                 "{host}{uri}".format(host=self._host, uri=uri),
                 timeout=timeout,
                 headers=headers,
                 params=rest_helpers.flatten_query_params(query_params, strict=True),
                 data=body,
-                )
+            )
 
             # In case of error, raise the appropriate core_exceptions.GoogleAPICallError exception
             # subclass.
@@ -481,12 +535,14 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         def __hash__(self):
             return hash("DeleteIndex")
 
-        def __call__(self,
-                request: datastore_admin.DeleteIndexRequest, *,
-                retry: OptionalRetry=gapic_v1.method.DEFAULT,
-                timeout: Optional[float]=None,
-                metadata: Sequence[Tuple[str, str]]=(),
-                ) -> operations_pb2.Operation:
+        def __call__(
+            self,
+            request: datastore_admin.DeleteIndexRequest,
+            *,
+            retry: OptionalRetry = gapic_v1.method.DEFAULT,
+            timeout: Optional[float] = None,
+            metadata: Sequence[Tuple[str, str]] = (),
+        ) -> operations_pb2.Operation:
             r"""Call the delete index method over HTTP.
 
             Args:
@@ -508,36 +564,39 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
 
             """
 
-            http_options: List[Dict[str, str]] = [{
-                'method': 'delete',
-                'uri': '/v1/projects/{project_id}/indexes/{index_id}',
-            },
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "delete",
+                    "uri": "/v1/projects/{project_id}/indexes/{index_id}",
+                },
             ]
             request, metadata = self._interceptor.pre_delete_index(request, metadata)
             pb_request = datastore_admin.DeleteIndexRequest.pb(request)
             transcoded_request = path_template.transcode(http_options, pb_request)
 
-            uri = transcoded_request['uri']
-            method = transcoded_request['method']
+            uri = transcoded_request["uri"]
+            method = transcoded_request["method"]
 
             # Jsonify the query params
-            query_params = json.loads(json_format.MessageToJson(
-                transcoded_request['query_params'],
-                including_default_value_fields=False,
-                use_integers_for_enums=True,
-            ))
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    including_default_value_fields=False,
+                    use_integers_for_enums=True,
+                )
+            )
 
             query_params["$alt"] = "json;enum-encoding=int"
 
             # Send the request
             headers = dict(metadata)
-            headers['Content-Type'] = 'application/json'
+            headers["Content-Type"] = "application/json"
             response = getattr(self._session, method)(
                 "{host}{uri}".format(host=self._host, uri=uri),
                 timeout=timeout,
                 headers=headers,
                 params=rest_helpers.flatten_query_params(query_params, strict=True),
-                )
+            )
 
             # In case of error, raise the appropriate core_exceptions.GoogleAPICallError exception
             # subclass.
@@ -554,19 +613,24 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         def __hash__(self):
             return hash("ExportEntities")
 
-        __REQUIRED_FIELDS_DEFAULT_VALUES: Dict[str, str] =  {
-        }
+        __REQUIRED_FIELDS_DEFAULT_VALUES: Dict[str, str] = {}
 
         @classmethod
         def _get_unset_required_fields(cls, message_dict):
-            return {k: v for k, v in cls.__REQUIRED_FIELDS_DEFAULT_VALUES.items() if k not in message_dict}
+            return {
+                k: v
+                for k, v in cls.__REQUIRED_FIELDS_DEFAULT_VALUES.items()
+                if k not in message_dict
+            }
 
-        def __call__(self,
-                request: datastore_admin.ExportEntitiesRequest, *,
-                retry: OptionalRetry=gapic_v1.method.DEFAULT,
-                timeout: Optional[float]=None,
-                metadata: Sequence[Tuple[str, str]]=(),
-                ) -> operations_pb2.Operation:
+        def __call__(
+            self,
+            request: datastore_admin.ExportEntitiesRequest,
+            *,
+            retry: OptionalRetry = gapic_v1.method.DEFAULT,
+            timeout: Optional[float] = None,
+            metadata: Sequence[Tuple[str, str]] = (),
+        ) -> operations_pb2.Operation:
             r"""Call the export entities method over HTTP.
 
             Args:
@@ -588,11 +652,12 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
 
             """
 
-            http_options: List[Dict[str, str]] = [{
-                'method': 'post',
-                'uri': '/v1/projects/{project_id}:export',
-                'body': '*',
-            },
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "post",
+                    "uri": "/v1/projects/{project_id}:export",
+                    "body": "*",
+                },
             ]
             request, metadata = self._interceptor.pre_export_entities(request, metadata)
             pb_request = datastore_admin.ExportEntitiesRequest.pb(request)
@@ -601,33 +666,35 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
             # Jsonify the request body
 
             body = json_format.MessageToJson(
-                transcoded_request['body'],
-                including_default_value_fields=False,
-                use_integers_for_enums=True
-            )
-            uri = transcoded_request['uri']
-            method = transcoded_request['method']
-
-            # Jsonify the query params
-            query_params = json.loads(json_format.MessageToJson(
-                transcoded_request['query_params'],
+                transcoded_request["body"],
                 including_default_value_fields=False,
                 use_integers_for_enums=True,
-            ))
+            )
+            uri = transcoded_request["uri"]
+            method = transcoded_request["method"]
+
+            # Jsonify the query params
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    including_default_value_fields=False,
+                    use_integers_for_enums=True,
+                )
+            )
             query_params.update(self._get_unset_required_fields(query_params))
 
             query_params["$alt"] = "json;enum-encoding=int"
 
             # Send the request
             headers = dict(metadata)
-            headers['Content-Type'] = 'application/json'
+            headers["Content-Type"] = "application/json"
             response = getattr(self._session, method)(
                 "{host}{uri}".format(host=self._host, uri=uri),
                 timeout=timeout,
                 headers=headers,
                 params=rest_helpers.flatten_query_params(query_params, strict=True),
                 data=body,
-                )
+            )
 
             # In case of error, raise the appropriate core_exceptions.GoogleAPICallError exception
             # subclass.
@@ -644,12 +711,14 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         def __hash__(self):
             return hash("GetIndex")
 
-        def __call__(self,
-                request: datastore_admin.GetIndexRequest, *,
-                retry: OptionalRetry=gapic_v1.method.DEFAULT,
-                timeout: Optional[float]=None,
-                metadata: Sequence[Tuple[str, str]]=(),
-                ) -> index.Index:
+        def __call__(
+            self,
+            request: datastore_admin.GetIndexRequest,
+            *,
+            retry: OptionalRetry = gapic_v1.method.DEFAULT,
+            timeout: Optional[float] = None,
+            metadata: Sequence[Tuple[str, str]] = (),
+        ) -> index.Index:
             r"""Call the get index method over HTTP.
 
             Args:
@@ -668,36 +737,39 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
                     Datastore composite index definition.
             """
 
-            http_options: List[Dict[str, str]] = [{
-                'method': 'get',
-                'uri': '/v1/projects/{project_id}/indexes/{index_id}',
-            },
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "get",
+                    "uri": "/v1/projects/{project_id}/indexes/{index_id}",
+                },
             ]
             request, metadata = self._interceptor.pre_get_index(request, metadata)
             pb_request = datastore_admin.GetIndexRequest.pb(request)
             transcoded_request = path_template.transcode(http_options, pb_request)
 
-            uri = transcoded_request['uri']
-            method = transcoded_request['method']
+            uri = transcoded_request["uri"]
+            method = transcoded_request["method"]
 
             # Jsonify the query params
-            query_params = json.loads(json_format.MessageToJson(
-                transcoded_request['query_params'],
-                including_default_value_fields=False,
-                use_integers_for_enums=True,
-            ))
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    including_default_value_fields=False,
+                    use_integers_for_enums=True,
+                )
+            )
 
             query_params["$alt"] = "json;enum-encoding=int"
 
             # Send the request
             headers = dict(metadata)
-            headers['Content-Type'] = 'application/json'
+            headers["Content-Type"] = "application/json"
             response = getattr(self._session, method)(
                 "{host}{uri}".format(host=self._host, uri=uri),
                 timeout=timeout,
                 headers=headers,
                 params=rest_helpers.flatten_query_params(query_params, strict=True),
-                )
+            )
 
             # In case of error, raise the appropriate core_exceptions.GoogleAPICallError exception
             # subclass.
@@ -716,19 +788,24 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         def __hash__(self):
             return hash("ImportEntities")
 
-        __REQUIRED_FIELDS_DEFAULT_VALUES: Dict[str, str] =  {
-        }
+        __REQUIRED_FIELDS_DEFAULT_VALUES: Dict[str, str] = {}
 
         @classmethod
         def _get_unset_required_fields(cls, message_dict):
-            return {k: v for k, v in cls.__REQUIRED_FIELDS_DEFAULT_VALUES.items() if k not in message_dict}
+            return {
+                k: v
+                for k, v in cls.__REQUIRED_FIELDS_DEFAULT_VALUES.items()
+                if k not in message_dict
+            }
 
-        def __call__(self,
-                request: datastore_admin.ImportEntitiesRequest, *,
-                retry: OptionalRetry=gapic_v1.method.DEFAULT,
-                timeout: Optional[float]=None,
-                metadata: Sequence[Tuple[str, str]]=(),
-                ) -> operations_pb2.Operation:
+        def __call__(
+            self,
+            request: datastore_admin.ImportEntitiesRequest,
+            *,
+            retry: OptionalRetry = gapic_v1.method.DEFAULT,
+            timeout: Optional[float] = None,
+            metadata: Sequence[Tuple[str, str]] = (),
+        ) -> operations_pb2.Operation:
             r"""Call the import entities method over HTTP.
 
             Args:
@@ -750,11 +827,12 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
 
             """
 
-            http_options: List[Dict[str, str]] = [{
-                'method': 'post',
-                'uri': '/v1/projects/{project_id}:import',
-                'body': '*',
-            },
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "post",
+                    "uri": "/v1/projects/{project_id}:import",
+                    "body": "*",
+                },
             ]
             request, metadata = self._interceptor.pre_import_entities(request, metadata)
             pb_request = datastore_admin.ImportEntitiesRequest.pb(request)
@@ -763,33 +841,35 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
             # Jsonify the request body
 
             body = json_format.MessageToJson(
-                transcoded_request['body'],
-                including_default_value_fields=False,
-                use_integers_for_enums=True
-            )
-            uri = transcoded_request['uri']
-            method = transcoded_request['method']
-
-            # Jsonify the query params
-            query_params = json.loads(json_format.MessageToJson(
-                transcoded_request['query_params'],
+                transcoded_request["body"],
                 including_default_value_fields=False,
                 use_integers_for_enums=True,
-            ))
+            )
+            uri = transcoded_request["uri"]
+            method = transcoded_request["method"]
+
+            # Jsonify the query params
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    including_default_value_fields=False,
+                    use_integers_for_enums=True,
+                )
+            )
             query_params.update(self._get_unset_required_fields(query_params))
 
             query_params["$alt"] = "json;enum-encoding=int"
 
             # Send the request
             headers = dict(metadata)
-            headers['Content-Type'] = 'application/json'
+            headers["Content-Type"] = "application/json"
             response = getattr(self._session, method)(
                 "{host}{uri}".format(host=self._host, uri=uri),
                 timeout=timeout,
                 headers=headers,
                 params=rest_helpers.flatten_query_params(query_params, strict=True),
                 data=body,
-                )
+            )
 
             # In case of error, raise the appropriate core_exceptions.GoogleAPICallError exception
             # subclass.
@@ -806,12 +886,14 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         def __hash__(self):
             return hash("ListIndexes")
 
-        def __call__(self,
-                request: datastore_admin.ListIndexesRequest, *,
-                retry: OptionalRetry=gapic_v1.method.DEFAULT,
-                timeout: Optional[float]=None,
-                metadata: Sequence[Tuple[str, str]]=(),
-                ) -> datastore_admin.ListIndexesResponse:
+        def __call__(
+            self,
+            request: datastore_admin.ListIndexesRequest,
+            *,
+            retry: OptionalRetry = gapic_v1.method.DEFAULT,
+            timeout: Optional[float] = None,
+            metadata: Sequence[Tuple[str, str]] = (),
+        ) -> datastore_admin.ListIndexesResponse:
             r"""Call the list indexes method over HTTP.
 
             Args:
@@ -832,36 +914,39 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
 
             """
 
-            http_options: List[Dict[str, str]] = [{
-                'method': 'get',
-                'uri': '/v1/projects/{project_id}/indexes',
-            },
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "get",
+                    "uri": "/v1/projects/{project_id}/indexes",
+                },
             ]
             request, metadata = self._interceptor.pre_list_indexes(request, metadata)
             pb_request = datastore_admin.ListIndexesRequest.pb(request)
             transcoded_request = path_template.transcode(http_options, pb_request)
 
-            uri = transcoded_request['uri']
-            method = transcoded_request['method']
+            uri = transcoded_request["uri"]
+            method = transcoded_request["method"]
 
             # Jsonify the query params
-            query_params = json.loads(json_format.MessageToJson(
-                transcoded_request['query_params'],
-                including_default_value_fields=False,
-                use_integers_for_enums=True,
-            ))
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    including_default_value_fields=False,
+                    use_integers_for_enums=True,
+                )
+            )
 
             query_params["$alt"] = "json;enum-encoding=int"
 
             # Send the request
             headers = dict(metadata)
-            headers['Content-Type'] = 'application/json'
+            headers["Content-Type"] = "application/json"
             response = getattr(self._session, method)(
                 "{host}{uri}".format(host=self._host, uri=uri),
                 timeout=timeout,
                 headers=headers,
                 params=rest_helpers.flatten_query_params(query_params, strict=True),
-                )
+            )
 
             # In case of error, raise the appropriate core_exceptions.GoogleAPICallError exception
             # subclass.
@@ -877,52 +962,52 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
             return resp
 
     @property
-    def create_index(self) -> Callable[
-            [datastore_admin.CreateIndexRequest],
-            operations_pb2.Operation]:
+    def create_index(
+        self,
+    ) -> Callable[[datastore_admin.CreateIndexRequest], operations_pb2.Operation]:
         # The return type is fine, but mypy isn't sophisticated enough to determine what's going on here.
         # In C++ this would require a dynamic_cast
-        return self._CreateIndex(self._session, self._host, self._interceptor) # type: ignore
+        return self._CreateIndex(self._session, self._host, self._interceptor)  # type: ignore
 
     @property
-    def delete_index(self) -> Callable[
-            [datastore_admin.DeleteIndexRequest],
-            operations_pb2.Operation]:
+    def delete_index(
+        self,
+    ) -> Callable[[datastore_admin.DeleteIndexRequest], operations_pb2.Operation]:
         # The return type is fine, but mypy isn't sophisticated enough to determine what's going on here.
         # In C++ this would require a dynamic_cast
-        return self._DeleteIndex(self._session, self._host, self._interceptor) # type: ignore
+        return self._DeleteIndex(self._session, self._host, self._interceptor)  # type: ignore
 
     @property
-    def export_entities(self) -> Callable[
-            [datastore_admin.ExportEntitiesRequest],
-            operations_pb2.Operation]:
+    def export_entities(
+        self,
+    ) -> Callable[[datastore_admin.ExportEntitiesRequest], operations_pb2.Operation]:
         # The return type is fine, but mypy isn't sophisticated enough to determine what's going on here.
         # In C++ this would require a dynamic_cast
-        return self._ExportEntities(self._session, self._host, self._interceptor) # type: ignore
+        return self._ExportEntities(self._session, self._host, self._interceptor)  # type: ignore
 
     @property
-    def get_index(self) -> Callable[
-            [datastore_admin.GetIndexRequest],
-            index.Index]:
+    def get_index(self) -> Callable[[datastore_admin.GetIndexRequest], index.Index]:
         # The return type is fine, but mypy isn't sophisticated enough to determine what's going on here.
         # In C++ this would require a dynamic_cast
-        return self._GetIndex(self._session, self._host, self._interceptor) # type: ignore
+        return self._GetIndex(self._session, self._host, self._interceptor)  # type: ignore
 
     @property
-    def import_entities(self) -> Callable[
-            [datastore_admin.ImportEntitiesRequest],
-            operations_pb2.Operation]:
+    def import_entities(
+        self,
+    ) -> Callable[[datastore_admin.ImportEntitiesRequest], operations_pb2.Operation]:
         # The return type is fine, but mypy isn't sophisticated enough to determine what's going on here.
         # In C++ this would require a dynamic_cast
-        return self._ImportEntities(self._session, self._host, self._interceptor) # type: ignore
+        return self._ImportEntities(self._session, self._host, self._interceptor)  # type: ignore
 
     @property
-    def list_indexes(self) -> Callable[
-            [datastore_admin.ListIndexesRequest],
-            datastore_admin.ListIndexesResponse]:
+    def list_indexes(
+        self,
+    ) -> Callable[
+        [datastore_admin.ListIndexesRequest], datastore_admin.ListIndexesResponse
+    ]:
         # The return type is fine, but mypy isn't sophisticated enough to determine what's going on here.
         # In C++ this would require a dynamic_cast
-        return self._ListIndexes(self._session, self._host, self._interceptor) # type: ignore
+        return self._ListIndexes(self._session, self._host, self._interceptor)  # type: ignore
 
     @property
     def kind(self) -> str:
@@ -932,6 +1017,4 @@ class DatastoreAdminRestTransport(DatastoreAdminTransport):
         self._session.close()
 
 
-__all__=(
-    'DatastoreAdminRestTransport',
-)
+__all__ = ("DatastoreAdminRestTransport",)

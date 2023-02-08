@@ -55,6 +55,7 @@ from google.protobuf import empty_pb2  # type: ignore
 from .transports.base import DatastoreAdminTransport, DEFAULT_CLIENT_INFO
 from .transports.grpc import DatastoreAdminGrpcTransport
 from .transports.grpc_asyncio import DatastoreAdminGrpcAsyncIOTransport
+from .transports.rest import DatastoreAdminRestTransport
 
 
 class DatastoreAdminClientMeta(type):
@@ -70,6 +71,7 @@ class DatastoreAdminClientMeta(type):
     )  # type: Dict[str, Type[DatastoreAdminTransport]]
     _transport_registry["grpc"] = DatastoreAdminGrpcTransport
     _transport_registry["grpc_asyncio"] = DatastoreAdminGrpcAsyncIOTransport
+    _transport_registry["rest"] = DatastoreAdminRestTransport
 
     def get_transport_class(
         cls,
