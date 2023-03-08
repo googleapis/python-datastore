@@ -173,7 +173,7 @@ def test_query_ancestor_setter_w_key_property_filter():
     _NAME = "NAME"
     key = Key("KIND", 123, project=_PROJECT)
     query = _make_query(_make_client())
-    query.add_filter(property_filter=PropertyFilter("name", "=", _NAME))
+    query.add_filter(filter=PropertyFilter("name", "=", _NAME))
     query.ancestor = key
     assert query.ancestor.path == key.path
 
@@ -198,7 +198,7 @@ def test_query_add_filter_setter_w_unknown_operator():
 def test_query_add_property_filter_setter_w_unknown_operator():
     query = _make_query(_make_client())
     with pytest.raises(ValueError) as exc:
-        query.add_filter(property_filter=PropertyFilter("firstname", "~~", "John"))
+        query.add_filter(filter=PropertyFilter("firstname", "~~", "John"))
     assert "Invalid expression:" in str(exc.value)
     assert "Please use one of: =, <, <=, >, >=, !=, IN, NOT_IN." in str(exc.value)
 
@@ -212,7 +212,7 @@ def test_query_add_filter_w_known_operator():
 def test_query_add_property_filter_w_known_operator():
     query = _make_query(_make_client())
     property_filter = PropertyFilter("firstname", "=", "John")
-    query.add_filter(property_filter=property_filter)
+    query.add_filter(filter=property_filter)
     assert query.filters == [property_filter]
 
 
@@ -252,7 +252,7 @@ def test_query_add_property_filter_w_all_operators():
     property_filters = [PropertyFilter(*filter) for filter in filters]
 
     for filter in property_filters:
-        query.add_filter(property_filter=filter)
+        query.add_filter(filter=filter)
 
     assert len(query.filters) == 8
 
@@ -279,7 +279,7 @@ def test_query_add_property_filter_w_known_operator_and_entity():
     other["firstname"] = "John"
     other["lastname"] = "Smith"
     property_filter = PropertyFilter("other", "=", other)
-    query.add_filter(property_filter=property_filter)
+    query.add_filter(filter=property_filter)
     assert query.filters == [property_filter]
 
 
@@ -294,7 +294,7 @@ def test_query_add_property_filter_w_whitespace_property_name():
     query = _make_query(_make_client())
     PROPERTY_NAME = "  property with lots of space "
     property_filter = PropertyFilter(PROPERTY_NAME, "=", "John")
-    query.add_filter(property_filter=property_filter)
+    query.add_filter(filter=property_filter)
     assert query.filters == [property_filter]
 
 
@@ -313,7 +313,7 @@ def test_query_add_property_filter___key__valid_key():
     query = _make_query(_make_client())
     key = Key("Foo", project=_PROJECT)
     property_filter = PropertyFilter("__key__", "=", key)
-    query.add_filter(property_filter=property_filter)
+    query.add_filter(filter=property_filter)
     assert query.filters == [property_filter]
 
 
@@ -365,12 +365,10 @@ def test_query_positional_args_and_property_filter():
 
     query = _make_query(_make_client())
     with pytest.raises(ValueError) as exc:
-        query.add_filter(
-            "firstname", "=", "John", property_filter=("name", "=", "Blabla")
-        )
+        query.add_filter("firstname", "=", "John", filter=("name", "=", "Blabla"))
 
     assert (
-        "Can't pass in both the positional arguments and 'property_filter' at the same time"
+        "Can't pass in both the positional arguments and 'filter' at the same time"
         in str(exc.value)
     )
 
@@ -380,24 +378,10 @@ def test_query_positional_args_and_composite_filter():
     query = _make_query(_make_client())
     and_filter = And(["firstname", "=", "John"])
     with pytest.raises(ValueError) as exc:
-        query.add_filter("firstname", "=", "John", composite_filter=and_filter)
+        query.add_filter("firstname", "=", "John", filter=and_filter)
 
     assert (
-        "Can't pass in both the positional arguments and 'composite_filter' at the same time"
-        in str(exc.value)
-    )
-
-
-def test_query_add_both_property_and_composite_filter():
-
-    query = _make_query(_make_client())
-    and_filter = And(["firstname", "=", "John"])
-    property_filter = PropertyFilter("name", "=", "Bla")
-    with pytest.raises(ValueError) as exc:
-        query.add_filter(property_filter=property_filter, composite_filter=and_filter)
-
-    assert (
-        "Can't add both property filter and composite filter at the same time"
+        "Can't pass in both the positional arguments and 'filter' at the same time"
         in str(exc.value)
     )
 
@@ -432,7 +416,7 @@ def test_query_property_filter___key__not_equal_operator():
     key = Key("Foo", project=_PROJECT)
     query = _make_query(_make_client())
     property_filter = PropertyFilter("__key__", "<", key)
-    query.add_filter(property_filter=property_filter)
+    query.add_filter(filter=property_filter)
     assert query.filters == [property_filter]
 
 
@@ -446,7 +430,7 @@ def test_query_filter___key__invalid_value():
 def test_query_property_filter___key__invalid_value():
     query = _make_query(_make_client())
     with pytest.raises(ValueError) as exc:
-        query.add_filter(property_filter=PropertyFilter("__key__", "=", None))
+        query.add_filter(filter=PropertyFilter("__key__", "=", None))
     assert "Invalid key:" in str(exc.value)
 
 

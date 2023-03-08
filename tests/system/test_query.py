@@ -103,7 +103,7 @@ def test_query_w_limit_paging(ancestor_query):
 
 def test_query_w_simple_filter(ancestor_query):
     query = ancestor_query
-    query.add_filter(property_filter=PropertyFilter("appearances", ">=", 20))
+    query.add_filter(filter=PropertyFilter("appearances", ">=", 20))
     expected_matches = 6
 
     # We expect 6, but allow the query to get 1 extra.
@@ -114,8 +114,8 @@ def test_query_w_simple_filter(ancestor_query):
 
 def test_query_w_multiple_filters(ancestor_query):
     query = ancestor_query
-    query.add_filter(property_filter=PropertyFilter("appearances", ">=", 26))
-    query = query.add_filter(property_filter=PropertyFilter("family", "=", "Stark"))
+    query.add_filter(filter=PropertyFilter("appearances", ">=", 26))
+    query = query.add_filter(filter=PropertyFilter("family", "=", "Stark"))
     expected_matches = 4
 
     # We expect 4, but allow the query to get 1 extra.
@@ -350,8 +350,8 @@ def large_query(large_query_client):
 )
 def test_large_query(large_query, limit, offset, expected):
     page_query = large_query
-    page_query.add_filter(property_filter=PropertyFilter("family", "=", "Stark"))
-    page_query.add_filter(property_filter=PropertyFilter("alive", "=", False))
+    page_query.add_filter(filter=PropertyFilter("family", "=", "Stark"))
+    page_query.add_filter(filter=PropertyFilter("alive", "=", False))
 
     iterator = page_query.fetch(limit=limit, offset=offset)
 
@@ -362,7 +362,7 @@ def test_large_query(large_query, limit, offset, expected):
 def test_query_add_property_filter(ancestor_query):
     query = ancestor_query
 
-    query.add_filter(property_filter=PropertyFilter("appearances", ">=", 26))
+    query.add_filter(filter=PropertyFilter("appearances", ">=", 26))
     expected_matches = 4
 
     entities = _do_fetch(query, limit=expected_matches + 1)
@@ -376,7 +376,7 @@ def test_query_and_composite_filter(ancestor_query):
     query = ancestor_query
 
     query.add_filter(
-        composite_filter=And(
+        filter=And(
             [
                 PropertyFilter("family", "=", "Stark"),
                 PropertyFilter("name", "=", "Jon Snow"),
@@ -397,7 +397,7 @@ def test_query_or_composite_filter(ancestor_query):
 
     # name = Arya or name = Jon Snow
     query.add_filter(
-        composite_filter=Or(
+        filter=Or(
             [
                 PropertyFilter("name", "=", "Arya"),
                 PropertyFilter("name", "=", "Jon Snow"),
@@ -418,8 +418,8 @@ def test_query_add_filters(ancestor_query):
     query = ancestor_query
 
     # family = Stark AND name = Jon Snow
-    query.add_filter(property_filter=PropertyFilter("family", "=", "Stark"))
-    query.add_filter(property_filter=PropertyFilter("name", "=", "Jon Snow"))
+    query.add_filter(filter=PropertyFilter("family", "=", "Stark"))
+    query.add_filter(filter=PropertyFilter("name", "=", "Jon Snow"))
 
     expected_matches = 1
 
@@ -435,7 +435,7 @@ def test_query_add_complex_filters(ancestor_query):
 
     # (alive = True OR appearances >= 26) AND (family = Stark)
     query.add_filter(
-        composite_filter=(
+        filter=(
             Or(
                 [
                     PropertyFilter("alive", "=", True),
@@ -444,7 +444,7 @@ def test_query_add_complex_filters(ancestor_query):
             )
         )
     )
-    query.add_filter(property_filter=PropertyFilter("family", "IN", ["Stark"]))
+    query.add_filter(filter=PropertyFilter("family", "IN", ["Stark"]))
 
     entities = _do_fetch(query)
 

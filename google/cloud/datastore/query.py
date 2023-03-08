@@ -227,10 +227,8 @@ class Query(object):
 
         # Verify filters passed in.
         for filter in filters:
-            if isinstance(filter, PropertyFilter):
-                self.add_filter(property_filter=filter)
-            elif isinstance(filter, BaseCompositeFilter):
-                self.add_filter(composite_filter=filter)
+            if isinstance(filter, BaseFilter):
+                self.add_filter(filter=filter)
             else:
                 property_name, operator, value = filter
                 self.add_filter(property_name, operator, value)
@@ -335,25 +333,24 @@ class Query(object):
         operator=None,
         value=None,
         *,
-        composite_filter=None,
-        property_filter=None,
+        filter=None,
     ):
         """Filter the query based on a property name, operator and a value.
 
         Expressions take the form of::
 
           .add_filter(
-            property_filter=PropertyFilter('<property>', '<operator>', <value>)
+            filter=PropertyFilter('<property>', '<operator>', <value>)
           )
 
         where property is a property stored on the entity in the datastore
         and operator is one of ``OPERATORS``
         (ie, ``=``, ``<``, ``<=``, ``>``, ``>=``, ``!=``, ``IN``, ``NOT_IN``):
 
-        Both AND and OR operations are supported through the 'composite_filter' parameter::
+        Both AND and OR operations are supported by passing in a `CompositeFilter` object to the `filter` parameter::
 
            .add_filter(
-               composite_filter=And(
+               filter=And(
                    [
                        PropertyFilter('<property>', '<operator>', <value>),
                        PropertyFilter('<property>', '<operator>', <value>)
@@ -363,7 +360,7 @@ class Query(object):
            )
 
            .add_filter(
-               composite_filter=Or(
+               filter=Or(
                    [
                        PropertyFilter('<property>', '<operator>', <value>),
                        PropertyFilter('<property>', '<operator>', <value>)
@@ -383,8 +380,8 @@ class Query(object):
         .. doctest:: query-filter
 
             >>> query = client.query(kind='Person')
-            >>> query = query.add_filter(property_filter=PropertyFilter('name', '=', 'James'))
-            >>> query = query.add_filter(property_filter=PropertyFilter('age', '>', 50))
+            >>> query = query.add_filter(filter=PropertyFilter('name', '=', 'James'))
+            >>> query = query.add_filter(filter=PropertyFilter('age', '>', 50))
 
         :type property_name: str
         :param property_name: A property name.
@@ -397,6 +394,9 @@ class Query(object):
                      :class:`datetime.datetime`,
                      :class:`google.cloud.datastore.key.Key`
         :param value: The value to filter on.
+
+        :type filter: :class:`CompositeFilter`, :class:`PropertyFiler`
+        :param filter: A instance of a `BaseFilter`, either a `CompositeFilter` or `PropertyFilter`.
 
         :rtype: :class:`~google.cloud.datastore.query.Query`
         :returns: A query object.
@@ -415,13 +415,9 @@ class Query(object):
             )
 
         if property_name is not None and operator is not None:
-            if property_filter is not None:
+            if filter is not None:
                 raise ValueError(
-                    "Can't pass in both the positional arguments and 'property_filter' at the same time"
-                )
-            if composite_filter is not None:
-                raise ValueError(
-                    "Can't pass in both the positional arguments and 'composite_filter' at the same time"
+                    "Can't pass in both the positional arguments and 'filter' at the same time"
                 )
 
             if property_name == "__key__" and not isinstance(value, Key):
@@ -439,15 +435,8 @@ class Query(object):
             )
             self._filters.append((property_name, operator, value))
 
-        if property_filter is not None and composite_filter is not None:
-            raise ValueError(
-                "Can't add both property filter and composite filter at the same time"
-            )
-
-        if property_filter is not None:
-            self._filters.append(property_filter)
-        elif composite_filter is not None:
-            self._filters.append(composite_filter)
+        if isinstance(filter, BaseFilter):
+            self._filters.append(filter)
 
         return self
 
@@ -570,7 +559,7 @@ class Query(object):
             >>> bobby['name'] = 'Bobby'
             >>> client.put_multi([andy, sally, bobby])
             >>> query = client.query(kind='Person')
-            >>> result = list(query.add_filter(property_filter=PropertyFilter('name', '=', 'Sally')).fetch())
+            >>> result = list(query.add_filter(filter=PropertyFilter('name', '=', 'Sally')).fetch())
             >>> result
             [<Entity('Person', 2345) {'name': 'Sally'}>]
 
