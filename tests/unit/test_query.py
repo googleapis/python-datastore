@@ -346,16 +346,18 @@ def test_query_add_composite_filter_without_keyword_argument():
     with pytest.raises(ValueError) as exc:
         query.add_filter(and_filter)
 
-    assert "Or and And objects must be passed using keyword argument 'filter'" in str(
-        exc.value
+    assert (
+        "'Or' and 'And' objects must be passed using keyword argument 'filter'"
+        in str(exc.value)
     )
 
     or_filter = Or(["firstname", "=", "John"])
     with pytest.raises(ValueError) as exc:
         query.add_filter(or_filter)
 
-    assert "Or and And objects must be passed using keyword argument 'filter'" in str(
-        exc.value
+    assert (
+        "'Or' and 'And' objects must be passed using keyword argument 'filter'"
+        in str(exc.value)
     )
 
 
@@ -1083,7 +1085,7 @@ def test_build_pb_for_and():
     assert len(pb.filters) == 3
 
 
-def test_and_query_composite_filter():
+def test_base_composite_filter():
     from google.cloud.datastore_v1.types import query as query_pb2
 
     comp_filter = BaseCompositeFilter()
