@@ -334,7 +334,7 @@ def test_query_add_property_filter_without_keyword_argument():
         query.add_filter(property_filter)
 
     assert (
-        "PropertyFilter object must be passed using keyword argument 'property_filter'"
+        "PropertyFilter object must be passed using keyword argument 'filter'"
         in str(exc.value)
     )
 
@@ -346,18 +346,16 @@ def test_query_add_composite_filter_without_keyword_argument():
     with pytest.raises(ValueError) as exc:
         query.add_filter(and_filter)
 
-    assert (
-        "Or and And objects must be passed using keyword argument 'composite_filter'"
-        in str(exc.value)
+    assert "Or and And objects must be passed using keyword argument 'filter'" in str(
+        exc.value
     )
 
     or_filter = Or(["firstname", "=", "John"])
     with pytest.raises(ValueError) as exc:
         query.add_filter(or_filter)
 
-    assert (
-        "Or and And objects must be passed using keyword argument 'composite_filter'"
-        in str(exc.value)
+    assert "Or and And objects must be passed using keyword argument 'filter'" in str(
+        exc.value
     )
 
 
@@ -386,17 +384,17 @@ def test_query_positional_args_and_composite_filter():
     )
 
 
-def test_query_add_filter_with_positional_args_raises_deprecation_warning():
+def test_query_add_filter_with_positional_args_raises_user_warning():
     query = _make_query(_make_client())
     with pytest.warns(
-        DeprecationWarning,
-        match="Adding filter using positional arguments is deprecated",
+        UserWarning,
+        match="Detected filter using positional arguments",
     ):
         query.add_filter("firstname", "=", "John")
 
     with pytest.warns(
-        DeprecationWarning,
-        match="Adding filter using positional arguments is deprecated",
+        UserWarning,
+        match="Detected filter using positional arguments",
     ):
         _make_stub_query(filters=[("name", "=", "John")])
 

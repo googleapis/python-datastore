@@ -407,11 +407,11 @@ class Query(object):
         """
         if isinstance(property_name, PropertyFilter):
             raise ValueError(
-                "PropertyFilter object must be passed using keyword argument 'property_filter'"
+                "PropertyFilter object must be passed using keyword argument 'filter'"
             )
         if isinstance(property_name, BaseCompositeFilter):
             raise ValueError(
-                "Or and And objects must be passed using keyword argument 'composite_filter'"
+                "Or and And objects must be passed using keyword argument 'filter'"
             )
 
         if property_name is not None and operator is not None:
@@ -429,8 +429,8 @@ class Query(object):
                 raise ValueError(error_message, choices_message)
 
             warnings.warn(
-                "Adding filter using positional arguments is deprecated. Please use one of 'composite_filter' or 'property_filter' keyword arguments.",
-                DeprecationWarning,
+                "Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.",
+                UserWarning,
                 stacklevel=2,
             )
             self._filters.append((property_name, operator, value))
