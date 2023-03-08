@@ -40,6 +40,8 @@ _FINISHED = (
     query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_CURSOR,
 )
 
+KEY_PROPERTY_NAME = "__key__"
+
 
 class BaseFilter(ABC):
     """Base class for Filters"""
@@ -53,7 +55,7 @@ class PropertyFilter(BaseFilter):
     """Class representation of a Property Filter"""
 
     def __init__(self, property_name, operator, value):
-        if property_name == "__key__" and not isinstance(value, Key):
+        if property_name == KEY_PROPERTY_NAME and not isinstance(value, Key):
             raise ValueError('Invalid key: "%s"' % value)
         if Query.OPERATORS.get(operator) is None:
             error_message = 'Invalid expression: "%s"' % (operator,)
@@ -67,7 +69,7 @@ class PropertyFilter(BaseFilter):
         """Build the protobuf representation based on values in the Property Filter."""
         container_pb.op = Query.OPERATORS.get(self.operator)
         container_pb.property.name = self.property_name
-        if self.property_name == "__key__":
+        if self.property_name == KEY_PROPERTY_NAME:
             key_pb = self.value.to_protobuf()
             container_pb.value.key_value.CopyFrom(key_pb._pb)
         else:
@@ -99,21 +101,19 @@ class BaseCompositeFilter(BaseFilter):
         return repr
 
     def build_pb(self, container_pb=None):
-        """Build the protobuf representation based on values in the Property Filter."""
+        """Build the protobuf representation based on values in the Composite Filter."""
         container_pb.op = self.operation
         for filter in self.filters:
             if isinstance(filter, PropertyFilter):
                 child_pb = container_pb.filters.add().property_filter
-                filter.build_pb(container_pb=child_pb)
             elif isinstance(filter, BaseCompositeFilter):
                 child_pb = container_pb.filters.add().composite_filter
-                filter.build_pb(container_pb=child_pb)
             else:
                 # unpack to legacy filter
                 property_name, operator, value = filter
                 filter = PropertyFilter(property_name, operator, value)
                 child_pb = container_pb.filters.add().property_filter
-                filter.build_pb(container_pb=child_pb)
+            filter.build_pb(container_pb=child_pb)
         return container_pb
 
 
@@ -220,7 +220,7 @@ class Query(object):
         elif hasattr(client, "namespace"):
             self._namespace = client.namespace
         else:
-            self._project = None
+            self._namespace = None
 
         self._ancestor = ancestor
         self._filters = []
@@ -411,7 +411,7 @@ class Query(object):
             )
         if isinstance(property_name, BaseCompositeFilter):
             raise ValueError(
-                "Or and And objects must be passed using keyword argument 'filter'"
+                "'Or' and 'And' objects must be passed using keyword argument 'filter'"
             )
 
         if property_name is not None and operator is not None:
@@ -420,7 +420,7 @@ class Query(object):
                     "Can't pass in both the positional arguments and 'filter' at the same time"
                 )
 
-            if property_name == "__key__" and not isinstance(value, Key):
+            if property_name == KEY_PROPERTY_NAME and not isinstance(value, Key):
                 raise ValueError('Invalid key: "%s"' % value)
 
             if self.OPERATORS.get(operator) is None:
@@ -463,7 +463,7 @@ class Query(object):
 
     def keys_only(self):
         """Set the projection to include only keys."""
-        self._projection[:] = ["__key__"]
+        self._projection[:] = [KEY_PROPERTY_NAME]
 
     def key_filter(self, key, operator="="):
         """Filter on a key.
@@ -475,7 +475,7 @@ class Query(object):
         :param operator: (Optional) One of ``=``, ``<``, ``<=``, ``>``, ``>=``, ``!=``, ``IN``, ``NOT_IN``.
                          Defaults to ``=``.
         """
-        self.add_filter("__key__", operator, key)
+        self.add_filter(KEY_PROPERTY_NAME, operator, key)
 
     @property
     def order(self):
@@ -867,22 +867,20 @@ def _pb_from_query(query):
     for filter in query.filters:
         if isinstance(filter, BaseCompositeFilter):
             pb_to_add = pb.filter.composite_filter.filters._pb.add().composite_filter
-            filter.build_pb(container_pb=pb_to_add)
         elif isinstance(filter, PropertyFilter):
             pb_to_add = pb.filter.composite_filter.filters._pb.add().property_filter
-            filter.build_pb(container_pb=pb_to_add)
         else:
             property_name, operator, value = filter
             filter = PropertyFilter(property_name, operator, value)
             pb_to_add = pb.filter.composite_filter.filters._pb.add().property_filter
-            filter.build_pb(container_pb=pb_to_add)
+        filter.build_pb(container_pb=pb_to_add)
 
     if query.ancestor:
         ancestor_pb = query.ancestor.to_protobuf()
 
         # Filter on __key__ HAS_ANCESTOR == ancestor.
         ancestor_filter = composite_filter.filters._pb.add().property_filter
-        ancestor_filter.property.name = "__key__"
+        ancestor_filter.property.name = KEY_PROPERTY_NAME
         ancestor_filter.op = query_pb2.PropertyFilter.Operator.HAS_ANCESTOR
         ancestor_filter.value.key_value.CopyFrom(ancestor_pb._pb)
 

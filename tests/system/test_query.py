@@ -459,6 +459,6 @@ def test_query_add_complex_filters(ancestor_query):
         if "Stark" in e["family"]:
             stark_family_count += 1
 
-    assert alive_count > 0
-    assert appearance_count > 0
-    assert stark_family_count > 0
+    assert alive_count == 4
+    assert appearance_count == 4
+    assert stark_family_count == 5
