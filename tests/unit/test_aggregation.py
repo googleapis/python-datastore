@@ -15,7 +15,12 @@
 import mock
 import pytest
 
-from google.cloud.datastore.aggregation import CountAggregation, AggregationQuery
+from google.cloud.datastore.aggregation import (
+    CountAggregation,
+    SumAggregation,
+    AvgAggregation,
+    AggregationQuery,
+)
 
 from tests.unit.test_query import _make_query, _make_client
 
@@ -31,6 +36,30 @@ def test_count_aggregation_to_pb():
     expected_aggregation_query_pb.count = query_pb2.AggregationQuery.Aggregation.Count()
     expected_aggregation_query_pb.alias = count_aggregation.alias
     assert count_aggregation._to_pb() == expected_aggregation_query_pb
+
+
+def test_sum_aggregation_to_pb():
+    from google.cloud.datastore_v1.types import query as query_pb2
+
+    sum_aggregation = SumAggregation("person", alias="total")
+
+    expected_aggregation_query_pb = query_pb2.AggregationQuery.Aggregation()
+    expected_aggregation_query_pb.sum_ = query_pb2.AggregationQuery.Aggregation.Sum()
+    expected_aggregation_query_pb.sum_.property.name = sum_aggregation.property_ref
+    expected_aggregation_query_pb.alias = sum_aggregation.alias
+    assert sum_aggregation._to_pb() == expected_aggregation_query_pb
+
+
+def test_avg_aggregation_to_pb():
+    from google.cloud.datastore_v1.types import query as query_pb2
+
+    avg_aggregation = AvgAggregation("person", alias="total")
+
+    expected_aggregation_query_pb = query_pb2.AggregationQuery.Aggregation()
+    expected_aggregation_query_pb.avg = query_pb2.AggregationQuery.Aggregation.Avg()
+    expected_aggregation_query_pb.avg.property.name = avg_aggregation.property_ref
+    expected_aggregation_query_pb.alias = avg_aggregation.alias
+    assert avg_aggregation._to_pb() == expected_aggregation_query_pb
 
 
 @pytest.fixture
@@ -80,6 +109,8 @@ def test_pb_over_query_with_add_aggregations(client):
     aggregations = [
         CountAggregation(alias="total"),
         CountAggregation(alias="all"),
+        SumAggregation("person", alias="sum_person"),
+        AvgAggregation("person", alias="avg_person"),
     ]
 
     query = _make_query(client)
@@ -88,9 +119,63 @@ def test_pb_over_query_with_add_aggregations(client):
     aggregation_query.add_aggregations(aggregations)
     pb = aggregation_query._to_pb()
     assert pb.nested_query == _pb_from_query(query)
-    assert len(pb.aggregations) == 2
+    assert len(pb.aggregations) == 4
     assert pb.aggregations[0] == CountAggregation(alias="total")._to_pb()
     assert pb.aggregations[1] == CountAggregation(alias="all")._to_pb()
+    assert pb.aggregations[2] == SumAggregation("person", alias="sum_person")._to_pb()
+    assert pb.aggregations[3] == AvgAggregation("person", alias="avg_person")._to_pb()
+
+
+def test_pb_over_query_with_sum(client):
+    from google.cloud.datastore.query import _pb_from_query
+
+    query = _make_query(client)
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+
+    aggregation_query.sum("person", alias="total")
+    pb = aggregation_query._to_pb()
+    assert pb.nested_query == _pb_from_query(query)
+    assert len(pb.aggregations) == 1
+    assert pb.aggregations[0] == SumAggregation("person", alias="total")._to_pb()
+
+
+def test_pb_over_query_sum_with_add_aggregation(client):
+    from google.cloud.datastore.query import _pb_from_query
+
+    query = _make_query(client)
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+
+    aggregation_query.add_aggregation(SumAggregation("person", alias="total"))
+    pb = aggregation_query._to_pb()
+    assert pb.nested_query == _pb_from_query(query)
+    assert len(pb.aggregations) == 1
+    assert pb.aggregations[0] == SumAggregation("person", alias="total")._to_pb()
+
+
+def test_pb_over_query_with_avg(client):
+    from google.cloud.datastore.query import _pb_from_query
+
+    query = _make_query(client)
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+
+    aggregation_query.avg("person", alias="total")
+    pb = aggregation_query._to_pb()
+    assert pb.nested_query == _pb_from_query(query)
+    assert len(pb.aggregations) == 1
+    assert pb.aggregations[0] == AvgAggregation("person", alias="total")._to_pb()
+
+
+def test_pb_over_query_avf_with_add_aggregation(client):
+    from google.cloud.datastore.query import _pb_from_query
+
+    query = _make_query(client)
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+
+    aggregation_query.add_aggregation(AvgAggregation("person", alias="total"))
+    pb = aggregation_query._to_pb()
+    assert pb.nested_query == _pb_from_query(query)
+    assert len(pb.aggregations) == 1
+    assert pb.aggregations[0] == AvgAggregation("person", alias="total")._to_pb()
 
 
 def test_query_fetch_defaults_w_client_attr(client):
@@ -203,8 +288,11 @@ def test_iterator__build_protobuf_all_values():
     query = _make_query(client)
     alias = "total"
     limit = 2
+    property_ref = "person"
     aggregation_query = AggregationQuery(client=client, query=query)
     aggregation_query.count(alias)
+    aggregation_query.sum(property_ref)
+    aggregation_query.avg(property_ref)
 
     iterator = _make_aggregation_iterator(aggregation_query, client, limit=limit)
     iterator.num_results = 4
@@ -212,9 +300,22 @@ def test_iterator__build_protobuf_all_values():
     pb = iterator._build_protobuf()
     expected_pb = query_pb2.AggregationQuery()
     expected_pb.nested_query = query_pb2.Query()
+    expected_pb.nested_query.limit = limit
+
     expected_count_pb = query_pb2.AggregationQuery.Aggregation(alias=alias)
-    expected_count_pb.count.up_to = limit
+    expected_count_pb.count = query_pb2.AggregationQuery.Aggregation.Count()
     expected_pb.aggregations.append(expected_count_pb)
+
+    expected_sum_pb = query_pb2.AggregationQuery.Aggregation()
+    expected_sum_pb.sum_ = query_pb2.AggregationQuery.Aggregation.Sum()
+    expected_sum_pb.sum_.property.name = property_ref
+    expected_pb.aggregations.append(expected_sum_pb)
+
+    expected_avg_pb = query_pb2.AggregationQuery.Aggregation()
+    expected_avg_pb.avg = query_pb2.AggregationQuery.Aggregation.Avg()
+    expected_avg_pb.avg.property.name = property_ref
+    expected_pb.aggregations.append(expected_avg_pb)
+
     assert pb == expected_pb
 
 
