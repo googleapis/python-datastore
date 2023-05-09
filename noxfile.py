@@ -245,8 +245,6 @@ def system(session, disable_grpc, use_named_db):
     # Install pyopenssl for mTLS testing.
     if os.environ.get("GOOGLE_API_USE_CLIENT_CERTIFICATE", "false") == "true":
         session.install("pyopenssl")
-    if use_named_db and os.environ.get("RUN_NAMED_DB_TESTS", "false") == "false":
-        session.skip("RUN_NAMED_DB_TESTS is set to false, skipping")
 
     system_test_exists = os.path.exists(system_test_path)
     system_test_folder_exists = os.path.exists(system_test_folder_path)

@@ -1173,7 +1173,7 @@ def _make_stub_query(
         projection=projection,
         order=order,
         distinct_on=distinct_on,
-        database=database
+        database=database,
     )
     return query
 
