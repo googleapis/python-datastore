@@ -114,7 +114,7 @@ def test_key_ctor_parent_bad_namespace(database_id):
     parent_key = _make_key(
         "KIND", 1234, namespace="FOO", project=_DEFAULT_PROJECT, database=database_id
     )
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError) as exc:
         _make_key(
             "KIND2",
             1234,
@@ -123,13 +123,28 @@ def test_key_ctor_parent_bad_namespace(database_id):
             PROJECT=_DEFAULT_PROJECT,
             database=database_id,
         )
+    assert "Child namespace must agree with parent's." in str(exc.value)
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_key_ctor_parent_bad_project(database_id):
     parent_key = _make_key("KIND", 1234, project="FOO", database=database_id)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError) as exc:
         _make_key("KIND2", 1234, parent=parent_key, project="BAR", database=database_id)
+    assert "Child project must agree with parent's." in str(exc.value)
+
+
+def test_key_ctor_parent_bad_database():
+    parent_key = _make_key("KIND", 1234, project=_DEFAULT_PROJECT, database="db1")
+    with pytest.raises(ValueError) as exc:
+        _make_key(
+            "KIND2",
+            1234,
+            parent=parent_key,
+            PROJECT=_DEFAULT_PROJECT,
+            database="db2",
+        )
+    assert "Child database must agree with parent's" in str(exc.value)
 
 
 def test_key_ctor_parent_empty_path():
