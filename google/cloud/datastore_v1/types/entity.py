@@ -39,8 +39,7 @@ __protobuf__ = proto.module(
 class PartitionId(proto.Message):
     r"""A partition ID identifies a grouping of entities. The grouping is
     always by project. database. and namespace, however the namespace ID may be
-    empty. Default ("") and empty database ID's both refer to the default
-    database and are considered equivalent.
+    empty. Empty database ID refers to the default database.
 
     A partition ID contains several dimensions: project ID, database ID,
     and namespace ID.
@@ -64,8 +63,7 @@ class PartitionId(proto.Message):
             belong.
         database_id (str):
             If not empty, the ID of the database to which
-            the entities belong. Empty and "" both correspond
-            to the default database.
+            the entities belong. Empty corresponds to the default database.
         namespace_id (str):
             If not empty, the ID of the namespace to
             which the entities belong.

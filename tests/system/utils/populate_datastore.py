@@ -123,7 +123,7 @@ def add_large_character_entities(client=None):
 def add_characters(client=None):
     if client is None:
         # Get a client that uses the test dataset.
-        client = datastore.Client()
+        client = datastore.Client(database_id="mw-other-db")
     with client.transaction() as xact:
         for key_path, character in zip(KEY_PATHS, CHARACTERS):
             if key_path[-1] != character["name"]:
@@ -139,7 +139,7 @@ def add_characters(client=None):
 def add_uid_keys(client=None):
     if client is None:
         # Get a client that uses the test dataset.
-        client = datastore.Client()
+        client = datastore.Client(database_id="mw-other-db")
 
     num_batches = 2
     batch_size = 500

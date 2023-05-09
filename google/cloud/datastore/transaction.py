@@ -18,6 +18,8 @@ from google.cloud.datastore.batch import Batch
 from google.cloud.datastore_v1.types import TransactionOptions
 from google.protobuf import timestamp_pb2
 
+from google.cloud.datastore.helpers import _set_database_id_to_request
+
 
 def _make_retry_timeout_kwargs(retry, timeout):
     """Helper: make optional retry / timeout kwargs dict."""
@@ -225,9 +227,10 @@ class Transaction(Batch):
 
         request = {
             "project_id": self.project,
-            "database_id": self.database,
             "transaction_options": self._options,
         }
+        _set_database_id_to_request(request, self._client.database)
+
         try:
             response_pb = self._client._datastore_api.begin_transaction(
                 request=request, **kwargs
@@ -259,14 +262,13 @@ class Transaction(Batch):
 
         try:
             # No need to use the response it contains nothing.
-            self._client._datastore_api.rollback(
-                request={
-                    "project_id": self.project,
-                    "database_id": self.database,
-                    "transaction": self._id,
-                },
-                **kwargs
-            )
+            request = {
+                "project_id": self.project,
+                "transaction": self._id,
+            }
+
+            _set_database_id_to_request(request, self._client.database)
+            self._client._datastore_api.rollback(request=request, **kwargs)
         finally:
             super(Transaction, self).rollback()
             # Clear our own ID in case this gets accidentally reused.

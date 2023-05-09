@@ -21,7 +21,6 @@ from google.cloud.datastore_v1.types import entity as _entity_pb2
 
 from google.cloud._helpers import _to_bytes
 from google.cloud.datastore import _app_engine_key_pb2
-from google.cloud.datastore.constants import DEFAULT_DATABASE
 
 
 _DATABASE_ID_TEMPLATE = (
@@ -115,7 +114,8 @@ class Key(object):
         self._flat_path = path_args
         parent = self._parent = kwargs.get("parent")
         self._namespace = kwargs.get("namespace")
-        self._database = kwargs.get("database") or DEFAULT_DATABASE
+        self._database = kwargs.get("database")
+
         project = kwargs.get("project")
         self._project = _validate_project(project, parent)
         # _flat_path, _parent, _database, _namespace, and _project must be set
@@ -130,8 +130,7 @@ class Key(object):
         Completed keys compare equal if they have the same path, project,
         database, and namespace.
 
-        (Note that "" and None are considered the same in the specific case of
-        databases, as these both refer to the default database.)
+        (Note that database=None is considered to refer to the default database.)
 
         :rtype: bool
         :returns: True if the keys compare equal, else False.
@@ -142,18 +141,11 @@ class Key(object):
         if self.is_partial or other.is_partial:
             return False
 
-        self_database = self.database
-        if self_database is None:  # pragma: NO COVER
-            self_database = DEFAULT_DATABASE
-        other_database = other.database
-        if other_database is None:  # pragma: NO COVER
-            other_database = DEFAULT_DATABASE
-
         return (
             self.flat_path == other.flat_path
             and self.project == other.project
-            and self_database == other_database
             and self.namespace == other.namespace
+            and self.database == other.database
         )
 
     def __ne__(self, other):
@@ -164,8 +156,7 @@ class Key(object):
         Completed keys compare equal if they have the same path, project,
         database, and namespace.
 
-        (Note that "" and None are considered the same in the specific case of
-        databases, as these both refer to the default database.)
+        (Note that database=None is considered to refer to the default database.)
 
         :rtype: bool
         :returns: False if the keys compare equal, else True.
@@ -178,12 +169,10 @@ class Key(object):
         :rtype: int
         :returns: a hash of the key's state.
         """
-        return (
-            hash(self.flat_path)
-            + hash(self.project)
-            + hash(self.namespace)
-            + hash(self.database)
-        )
+        hash_val = hash(self.flat_path) + hash(self.project) + hash(self.namespace)
+        if self.database:
+            hash_val + hash(self.database)
+        return hash_val
 
     @staticmethod
     def _parse_path(path_args):
@@ -256,6 +245,8 @@ class Key(object):
             self._namespace = self._parent.namespace
             if self._project is not None and self._project != self._parent.project:
                 raise ValueError("Child project must agree with parent's.")
+            if self._database is not None and self._database != self._parent.database:
+                raise ValueError("Child database must agree with parent's.")
             self._database = self._parent.database
             self._project = self._parent.project
 
@@ -316,7 +307,8 @@ class Key(object):
         """
         key = _entity_pb2.Key()
         key.partition_id.project_id = self.project
-        key.partition_id.database_id = self.database or DEFAULT_DATABASE
+        if self.database:
+            key.partition_id.database_id = self.database
 
         if self.namespace:
             key.partition_id.namespace_id = self.namespace
@@ -407,9 +399,7 @@ class Key(object):
         namespace = _get_empty(reference.name_space, "")
         _check_database_id(reference.database_id)
         flat_path = _get_flat_path(reference.path)
-        return cls(
-            *flat_path, project=project, database=DEFAULT_DATABASE, namespace=namespace
-        )
+        return cls(*flat_path, project=project, namespace=namespace)
 
     @property
     def is_partial(self):
@@ -551,7 +541,7 @@ class Key(object):
         equal to the default values.
         """
         repr = "<Key%s, project=%s" % (self._flat_path, self.project)
-        if self.database is not None and self.database != DEFAULT_DATABASE:
+        if self.database:
             repr += ", database=%s" % self.database
         return repr + ">"
 

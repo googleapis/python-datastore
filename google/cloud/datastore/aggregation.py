@@ -22,7 +22,6 @@ from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore_v1.types import query as query_pb2
 from google.cloud.datastore import helpers
 from google.cloud.datastore.query import _pb_from_query
-from google.cloud.datastore.constants import DEFAULT_DATABASE
 
 
 _NOT_FINISHED = query_pb2.QueryResultBatch.MoreResultsType.NOT_FINISHED
@@ -123,18 +122,6 @@ class AggregationQuery(object):
         :returns: The project for the query.
         """
         return self._nested_query._project or self._client.project
-
-    @property
-    def database(self):
-        """Get the database for this AggregationQuery.
-        :rtype: str
-        :returns: The database for the query.
-        """
-        if self._nested_query._database or (
-            self._nested_query._database == DEFAULT_DATABASE
-        ):
-            return self._nested_query._database
-        return self._client.database
 
     @property
     def namespace(self):
@@ -389,7 +376,7 @@ class AggregationResultIterator(page_iterator.Iterator):
 
         partition_id = entity_pb2.PartitionId(
             project_id=self._aggregation_query.project,
-            database_id=self._aggregation_query.database,
+            database_id=self.client.database,
             namespace_id=self._aggregation_query.namespace,
         )
 
@@ -400,15 +387,15 @@ class AggregationResultIterator(page_iterator.Iterator):
 
         if self._timeout is not None:
             kwargs["timeout"] = self._timeout
-
+        request = {
+            "project_id": self._aggregation_query.project,
+            "partition_id": partition_id,
+            "read_options": read_options,
+            "aggregation_query": query_pb,
+        }
+        helpers._set_database_id_to_request(request, self.client.database)
         response_pb = self.client._datastore_api.run_aggregation_query(
-            request={
-                "project_id": self._aggregation_query.project,
-                "database_id": self._aggregation_query.database,
-                "partition_id": partition_id,
-                "read_options": read_options,
-                "aggregation_query": query_pb,
-            },
+            request=request,
             **kwargs,
         )
 
@@ -421,14 +408,15 @@ class AggregationResultIterator(page_iterator.Iterator):
             query_pb = query_pb2.AggregationQuery()
             query_pb._pb.CopyFrom(old_query_pb._pb)  # copy for testability
 
+            request = {
+                "project_id": self._aggregation_query.project,
+                "partition_id": partition_id,
+                "read_options": read_options,
+                "aggregation_query": query_pb,
+            }
+            helpers._set_database_id_to_request(request, self.client.database)
             response_pb = self.client._datastore_api.run_aggregation_query(
-                request={
-                    "project_id": self._aggregation_query.project,
-                    "database_id": self._aggregation_query.database,
-                    "partition_id": partition_id,
-                    "read_options": read_options,
-                    "aggregation_query": query_pb,
-                },
+                request=request,
                 **kwargs,
             )
 

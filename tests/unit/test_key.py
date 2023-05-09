@@ -90,19 +90,30 @@ def test_key_ctor_parent():
     assert key.parent is parent_key
 
 
-def test_key_ctor_partial_parent():
-    parent_key = _make_key("KIND", project=_DEFAULT_PROJECT)
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key_ctor_partial_parent(database_id):
+    parent_key = _make_key("KIND", project=_DEFAULT_PROJECT, database=database_id)
     with pytest.raises(ValueError):
-        _make_key("KIND2", 1234, parent=parent_key)
+        _make_key("KIND2", 1234, parent=parent_key, database=database_id)
 
 
-def test_key_ctor_parent_bad_type():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key_ctor_parent_bad_type(database_id):
     with pytest.raises(AttributeError):
-        _make_key("KIND2", 1234, parent=("KIND1", 1234), project=_DEFAULT_PROJECT)
+        _make_key(
+            "KIND2",
+            1234,
+            parent=("KIND1", 1234),
+            project=_DEFAULT_PROJECT,
+            database=database_id,
+        )
 
 
-def test_key_ctor_parent_bad_namespace():
-    parent_key = _make_key("KIND", 1234, namespace="FOO", project=_DEFAULT_PROJECT)
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key_ctor_parent_bad_namespace(database_id):
+    parent_key = _make_key(
+        "KIND", 1234, namespace="FOO", project=_DEFAULT_PROJECT, database=database_id
+    )
     with pytest.raises(ValueError):
         _make_key(
             "KIND2",
@@ -110,13 +121,15 @@ def test_key_ctor_parent_bad_namespace():
             namespace="BAR",
             parent=parent_key,
             PROJECT=_DEFAULT_PROJECT,
+            database=database_id,
         )
 
 
-def test_key_ctor_parent_bad_project():
-    parent_key = _make_key("KIND", 1234, project="FOO")
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key_ctor_parent_bad_project(database_id):
+    parent_key = _make_key("KIND", 1234, project="FOO", database=database_id)
     with pytest.raises(ValueError):
-        _make_key("KIND2", 1234, parent=parent_key, project="BAR")
+        _make_key("KIND2", 1234, parent=parent_key, project="BAR", database=database_id)
 
 
 def test_key_ctor_parent_empty_path():
@@ -142,15 +155,18 @@ def test_key_ctor_explicit():
     assert key.path == _PATH
 
 
-def test_key_ctor_explicit_w_unspecified_database():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key_ctor_explicit_w_unspecified_database(database_id):
     _PROJECT = "PROJECT-ALT"
     _NAMESPACE = "NAMESPACE"
     _KIND = "KIND"
     _ID = 1234
     _PATH = [{"kind": _KIND, "id": _ID}]
-    key = _make_key(_KIND, _ID, namespace=_NAMESPACE, project=_PROJECT)
+    key = _make_key(
+        _KIND, _ID, namespace=_NAMESPACE, project=_PROJECT, database=database_id
+    )
     assert key.project == _PROJECT
-    assert key.database == _DEFAULT_DATABASE
+    assert key.database == database_id
     assert key.namespace == _NAMESPACE
     assert key.kind == _KIND
     assert key.path == _PATH
@@ -192,9 +208,9 @@ def test_key__clone():
     assert clone.path == _PATH
 
 
-def test_key__clone_with_parent():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key__clone_with_parent(database_id):
     _PROJECT = "PROJECT-ALT"
-    _DATABASE = "DATABASE"
     _NAMESPACE = "NAMESPACE"
     _KIND1 = "PARENT"
     _KIND2 = "KIND"
@@ -203,91 +219,99 @@ def test_key__clone_with_parent():
     _PATH = [{"kind": _KIND1, "id": _ID1}, {"kind": _KIND2, "id": _ID2}]
 
     parent = _make_key(
-        _KIND1, _ID1, namespace=_NAMESPACE, database=_DATABASE, project=_PROJECT
+        _KIND1, _ID1, namespace=_NAMESPACE, database=database_id, project=_PROJECT
     )
-    key = _make_key(_KIND2, _ID2, parent=parent)
+    key = _make_key(_KIND2, _ID2, parent=parent, database=database_id)
     assert key.parent is parent
 
     clone = key._clone()
 
     assert clone.parent is key.parent
     assert clone.project == _PROJECT
-    assert clone.database == _DATABASE
+    assert clone.database == database_id
     assert clone.namespace == _NAMESPACE
     assert clone.path == _PATH
 
 
-def test_key___eq_____ne___w_non_key():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___w_non_key(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
     _NAME = "one"
-    key = _make_key(_KIND, _NAME, project=_PROJECT)
+    key = _make_key(_KIND, _NAME, project=_PROJECT, database=database_id)
     assert not key == object()
     assert key != object()
 
 
-def test_key___eq_____ne___two_incomplete_keys_same_kind():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___two_incomplete_keys_same_kind(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
-    key1 = _make_key(_KIND, project=_PROJECT)
-    key2 = _make_key(_KIND, project=_PROJECT)
+    key1 = _make_key(_KIND, project=_PROJECT, database=database_id)
+    key2 = _make_key(_KIND, project=_PROJECT, database=database_id)
     assert not key1 == key2
     assert key1 != key2
 
 
-def test_key___eq_____ne___incomplete_key_w_complete_key_same_kind():
-    _PROJECT = "PROJECT"
-    _KIND = "KIND"
-    _ID = 1234
-    key1 = _make_key(_KIND, project=_PROJECT)
-    key2 = _make_key(_KIND, _ID, project=_PROJECT)
-    assert not key1 == key2
-    assert key1 != key2
-
-
-def test_key___eq_____ne___complete_key_w_incomplete_key_same_kind():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___incomplete_key_w_complete_key_same_kind(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
     _ID = 1234
-    key1 = _make_key(_KIND, _ID, project=_PROJECT)
-    key2 = _make_key(_KIND, project=_PROJECT)
+    key1 = _make_key(_KIND, project=_PROJECT, database=database_id)
+    key2 = _make_key(_KIND, _ID, project=_PROJECT, database=database_id)
     assert not key1 == key2
     assert key1 != key2
 
 
-def test_key___eq_____ne___same_kind_different_ids():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___complete_key_w_incomplete_key_same_kind(database_id):
+    _PROJECT = "PROJECT"
+    _KIND = "KIND"
+    _ID = 1234
+    key1 = _make_key(_KIND, _ID, project=_PROJECT, database=database_id)
+    key2 = _make_key(_KIND, project=_PROJECT, database=database_id)
+    assert not key1 == key2
+    assert key1 != key2
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_different_ids(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
     _ID1 = 1234
     _ID2 = 2345
-    key1 = _make_key(_KIND, _ID1, project=_PROJECT)
-    key2 = _make_key(_KIND, _ID2, project=_PROJECT)
+    key1 = _make_key(_KIND, _ID1, project=_PROJECT, database=database_id)
+    key2 = _make_key(_KIND, _ID2, project=_PROJECT, database=database_id)
     assert not key1 == key2
     assert key1 != key2
 
 
-def test_key___eq_____ne___same_kind_and_id():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_and_id(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
     _ID = 1234
-    key1 = _make_key(_KIND, _ID, project=_PROJECT)
-    key2 = _make_key(_KIND, _ID, project=_PROJECT)
+    key1 = _make_key(_KIND, _ID, project=_PROJECT, database=database_id)
+    key2 = _make_key(_KIND, _ID, project=_PROJECT, database=database_id)
     assert key1 == key2
     assert not key1 != key2
 
 
-def test_key___eq_____ne___same_kind_and_id_different_project():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_and_id_different_project(database_id):
     _PROJECT1 = "PROJECT1"
     _PROJECT2 = "PROJECT2"
     _KIND = "KIND"
     _ID = 1234
-    key1 = _make_key(_KIND, _ID, project=_PROJECT1)
-    key2 = _make_key(_KIND, _ID, project=_PROJECT2)
+    key1 = _make_key(_KIND, _ID, project=_PROJECT1, database=database_id)
+    key2 = _make_key(_KIND, _ID, project=_PROJECT2, database=database_id)
     assert not key1 == key2
     assert key1 != key2
 
 
-def test_key___eq_____ne___same_kind_and_id_different_database():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_and_id_different_database(database_id):
     _PROJECT = "PROJECT"
     _DATABASE1 = "DATABASE1"
     _DATABASE2 = "DATABASE2"
@@ -296,9 +320,11 @@ def test_key___eq_____ne___same_kind_and_id_different_database():
     key1 = _make_key(_KIND, _ID, project=_PROJECT, database=_DATABASE1)
     key2 = _make_key(_KIND, _ID, project=_PROJECT, database=_DATABASE2)
     key_with_explicit_default = _make_key(
-        _KIND, _ID, project=_PROJECT, database=_DEFAULT_DATABASE
+        _KIND, _ID, project=_PROJECT, database=database_id
     )
-    key_with_implicit_default = _make_key(_KIND, _ID, project=_PROJECT)
+    key_with_implicit_default = _make_key(
+        _KIND, _ID, project=_PROJECT, database=database_id
+    )
     assert not key1 == key2
     assert key1 != key2
     assert not key1 == key_with_explicit_default
@@ -308,87 +334,105 @@ def test_key___eq_____ne___same_kind_and_id_different_database():
     assert key_with_explicit_default == key_with_implicit_default
 
 
-def test_key___eq_____ne___same_kind_and_id_different_namespace():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_and_id_different_namespace(database_id):
     _PROJECT = "PROJECT"
     _NAMESPACE1 = "NAMESPACE1"
     _NAMESPACE2 = "NAMESPACE2"
     _KIND = "KIND"
     _ID = 1234
-    key1 = _make_key(_KIND, _ID, project=_PROJECT, namespace=_NAMESPACE1)
-    key2 = _make_key(_KIND, _ID, project=_PROJECT, namespace=_NAMESPACE2)
+    key1 = _make_key(
+        _KIND, _ID, project=_PROJECT, namespace=_NAMESPACE1, database=database_id
+    )
+    key2 = _make_key(
+        _KIND, _ID, project=_PROJECT, namespace=_NAMESPACE2, database=database_id
+    )
     assert not key1 == key2
     assert key1 != key2
 
 
-def test_key___eq_____ne___same_kind_different_names():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_different_names(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
     _NAME1 = "one"
     _NAME2 = "two"
-    key1 = _make_key(_KIND, _NAME1, project=_PROJECT)
-    key2 = _make_key(_KIND, _NAME2, project=_PROJECT)
+    key1 = _make_key(_KIND, _NAME1, project=_PROJECT, database=database_id)
+    key2 = _make_key(_KIND, _NAME2, project=_PROJECT, database=database_id)
     assert not key1 == key2
     assert key1 != key2
 
 
-def test_key___eq_____ne___same_kind_and_name():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_and_name(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
     _NAME = "one"
-    key1 = _make_key(_KIND, _NAME, project=_PROJECT)
-    key2 = _make_key(_KIND, _NAME, project=_PROJECT)
+    key1 = _make_key(_KIND, _NAME, project=_PROJECT, database=database_id)
+    key2 = _make_key(_KIND, _NAME, project=_PROJECT, database=database_id)
     assert key1 == key2
     assert not key1 != key2
 
 
-def test_key___eq_____ne___same_kind_and_name_different_project():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_and_name_different_project(database_id):
     _PROJECT1 = "PROJECT1"
     _PROJECT2 = "PROJECT2"
     _KIND = "KIND"
     _NAME = "one"
-    key1 = _make_key(_KIND, _NAME, project=_PROJECT1)
-    key2 = _make_key(_KIND, _NAME, project=_PROJECT2)
+    key1 = _make_key(_KIND, _NAME, project=_PROJECT1, database=database_id)
+    key2 = _make_key(_KIND, _NAME, project=_PROJECT2, database=database_id)
     assert not key1 == key2
     assert key1 != key2
 
 
-def test_key___eq_____ne___same_kind_and_name_different_namespace():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___eq_____ne___same_kind_and_name_different_namespace(database_id):
     _PROJECT = "PROJECT"
     _NAMESPACE1 = "NAMESPACE1"
     _NAMESPACE2 = "NAMESPACE2"
     _KIND = "KIND"
     _NAME = "one"
-    key1 = _make_key(_KIND, _NAME, project=_PROJECT, namespace=_NAMESPACE1)
-    key2 = _make_key(_KIND, _NAME, project=_PROJECT, namespace=_NAMESPACE2)
+    key1 = _make_key(
+        _KIND, _NAME, project=_PROJECT, namespace=_NAMESPACE1, database=database_id
+    )
+    key2 = _make_key(
+        _KIND, _NAME, project=_PROJECT, namespace=_NAMESPACE2, database=database_id
+    )
     assert not key1 == key2
     assert key1 != key2
 
 
-def test_key___hash___incomplete():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___hash___incomplete(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
-    key = _make_key(_KIND, project=_PROJECT)
-    assert hash(key) != hash(_KIND) + hash(_PROJECT) + hash(None) + hash(None)
+    key = _make_key(_KIND, project=_PROJECT, database_id=database_id)
+    assert hash(key) != hash(_KIND) + hash(_PROJECT) + hash(None) + hash(None) + hash(
+        database_id
+    )
 
 
-def test_key___hash___completed_w_id():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___hash___completed_w_id(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
     _ID = 1234
-    key = _make_key(_KIND, _ID, project=_PROJECT)
+    key = _make_key(_KIND, _ID, project=_PROJECT, database=database_id)
     assert hash(key) != hash(_KIND) + hash(_ID) + hash(_PROJECT) + hash(None) + hash(
         None
-    )
+    ) + hash(database_id)
 
 
-def test_key___hash___completed_w_name():
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key___hash___completed_w_name(database_id):
     _PROJECT = "PROJECT"
     _KIND = "KIND"
     _NAME = "NAME"
-    key = _make_key(_KIND, _NAME, project=_PROJECT)
+    key = _make_key(_KIND, _NAME, project=_PROJECT, database=database_id)
     assert hash(key) != hash(_KIND) + hash(_NAME) + hash(_PROJECT) + hash(None) + hash(
         None
-    )
+    ) + hash(database_id)
 
 
 def test_key___hash___completed_w_database_and_namespace():
@@ -405,13 +449,15 @@ def test_key___hash___completed_w_database_and_namespace():
     ) + hash(None)
 
 
-def test_key_completed_key_on_partial_w_id():
-    key = _make_key("KIND", project=_DEFAULT_PROJECT)
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_key_completed_key_on_partial_w_id(database_id):
+    key = _make_key("KIND", project=_DEFAULT_PROJECT, database=database_id)
     _ID = 1234
     new_key = key.completed_key(_ID)
     assert key is not new_key
     assert new_key.id == _ID
     assert new_key.name is None
+    assert new_key.database == database_id
 
 
 def test_key_completed_key_on_partial_w_name():
@@ -547,7 +593,7 @@ def test_key_from_legacy_urlsafe():
     key = Key.from_legacy_urlsafe(_URLSAFE_EXAMPLE1)
 
     assert "s~" + key.project == _URLSAFE_APP1
-    assert key.database == _DEFAULT_DATABASE
+    assert key.database is None
     assert key.namespace == _URLSAFE_NAMESPACE1
     assert key.flat_path == _URLSAFE_FLAT_PATH1
     # Also make sure we didn't accidentally set the parent.
