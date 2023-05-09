@@ -226,10 +226,12 @@ class Query(object):
         # query against the default database (for which you would pass database="")
         # and a fallback to the client (for which you would either simply omit the parameter,
         # or explicitly pass database=None)
-        if database is None:
+        if database:
+            self._database = database
+        elif hasattr(client, "database"):
             self._database = client.database
         else:
-            self._database = database
+            self._database = ""
 
         if namespace:
             self._namespace = namespace
