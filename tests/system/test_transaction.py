@@ -105,3 +105,33 @@ def test_failure_with_contention(datastore_client, entities_to_delete):
             # transaction.
             entity_in_txn[contention_prop_name] = "inside"
             txn.put(entity_in_txn)
+
+
+def test_failure_with_contention_no_context_manager(datastore_client, entities_to_delete):
+    contention_prop_name = "baz"
+    local_client = _helpers.clone_client(datastore_client)
+
+    # Insert an entity which will be retrieved in a transaction
+    # and updated outside it with a contentious value.
+    key = local_client.key("BreakTxn", 1234)
+    orig_entity = datastore.Entity(key=key)
+    orig_entity["foo"] = "bar"
+    local_client.put(orig_entity)
+
+    entities_to_delete.append(orig_entity)
+
+    with pytest.raises(Conflict):
+        txn = local_client.transaction()
+        txn.begin()
+
+        entity_in_txn = local_client.get(key)
+
+        # Update the original entity outside the transaction.
+        orig_entity[contention_prop_name] = "outside"
+        datastore_client.put(orig_entity)
+
+        # Try to update the entity which we already updated outside the
+        # transaction.
+        entity_in_txn[contention_prop_name] = "inside"
+        txn.put(entity_in_txn)
+        txn.commit()
