@@ -52,6 +52,15 @@ def _make_request_pb(request, request_pb_type):
     return request
 
 
+def _make_routing_header(request):
+    """Helper for creating a routing header from the request body"""
+    database_id = request.database_id if "database_id" in request else ""
+    header = {
+        "x-goog-request-params": f"project_id={request.project_id}&database_id={database_id}"
+    }
+    return header
+
+
 def _request(
     http,
     project,
@@ -59,6 +68,7 @@ def _request(
     data,
     base_url,
     client_info,
+    headers=None,
     retry=None,
     timeout=None,
 ):
@@ -84,6 +94,9 @@ def _request(
     :type client_info: :class:`google.api_core.client_info.ClientInfo`
     :param client_info: used to generate user agent.
 
+    :type headers: :class:`dict`
+    :param headers: (Optional) custom headers for the request.
+
     :type retry: :class:`google.api_core.retry.Retry`
     :param retry: (Optional) retry policy for the request
 
@@ -96,11 +109,14 @@ def _request(
              response code is not 200 OK.
     """
     user_agent = client_info.to_user_agent()
-    headers = {
+    req_headers = {
         "Content-Type": "application/x-protobuf",
         "User-Agent": user_agent,
         connection_module.CLIENT_INFO_HEADER: user_agent,
     }
+    if headers:
+        req_headers.update(headers)
+
     api_url = build_api_url(project, method, base_url)
 
     requester = http.request
@@ -112,12 +128,12 @@ def _request(
         response = requester(
             url=api_url,
             method="POST",
-            headers=headers,
+            headers=req_headers,
             data=data,
             timeout=timeout,
         )
     else:
-        response = requester(url=api_url, method="POST", headers=headers, data=data)
+        response = requester(url=api_url, method="POST", headers=req_headers, data=data)
 
     if response.status_code != 200:
         error_status = status_pb2.Status.FromString(response.content)
@@ -136,6 +152,7 @@ def _rpc(
     client_info,
     request_pb,
     response_pb_cls,
+    headers=None,
     retry=None,
     timeout=None,
 ):
@@ -165,6 +182,9 @@ def _rpc(
     :param response_pb_cls: The class used to unmarshall the response
                             protobuf.
 
+    :type headers: :class:`dict`
+    :param headers: (Optional) custom headers for the request.
+
     :type retry: :class:`google.api_core.retry.Retry`
     :param retry: (Optional) retry policy for the request
 
@@ -177,7 +197,7 @@ def _rpc(
     req_data = request_pb._pb.SerializeToString()
     kwargs = _make_retry_timeout_kwargs(retry, timeout)
     response = _request(
-        http, project, method, req_data, base_url, client_info, **kwargs
+        http, project, method, req_data, base_url, client_info, headers, **kwargs
     )
     return response_pb_cls.deserialize(response)
 
@@ -245,6 +265,7 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.LookupResponse,
+            _make_routing_header(request_pb),
             retry=retry,
             timeout=timeout,
         )
@@ -276,6 +297,7 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.RunQueryResponse,
+            _make_routing_header(request_pb),
             retry=retry,
             timeout=timeout,
         )
@@ -309,6 +331,7 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.RunAggregationQueryResponse,
+            _make_routing_header(request_pb),
             retry=retry,
             timeout=timeout,
         )
@@ -340,6 +363,7 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.BeginTransactionResponse,
+            _make_routing_header(request_pb),
             retry=retry,
             timeout=timeout,
         )
@@ -371,6 +395,7 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.CommitResponse,
+            _make_routing_header(request_pb),
             retry=retry,
             timeout=timeout,
         )
@@ -402,6 +427,7 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.RollbackResponse,
+            _make_routing_header(request_pb),
             retry=retry,
             timeout=timeout,
         )
@@ -433,6 +459,7 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.AllocateIdsResponse,
+            _make_routing_header(request_pb),
             retry=retry,
             timeout=timeout,
         )
@@ -464,6 +491,7 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.ReserveIdsResponse,
+            _make_routing_header(request_pb),
             retry=retry,
             timeout=timeout,
         )

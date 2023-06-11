@@ -203,7 +203,7 @@ def _rpc_helper(retry=None, timeout=None):
             client_info,
             request_pb,
             datastore_pb2.BeginTransactionResponse,
-            **kwargs
+            **kwargs,
         )
 
     assert result == response_pb._pb
@@ -215,7 +215,8 @@ def _rpc_helper(retry=None, timeout=None):
         request_pb._pb.SerializeToString(),
         base_url,
         client_info,
-        **kwargs
+        None,
+        **kwargs,
     )
 
 
@@ -301,7 +302,7 @@ def _lookup_single_helper(
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.LookupRequest(),
+        datastore_pb2.LookupRequest(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -413,7 +414,7 @@ def _lookup_multiple_helper(
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.LookupRequest(),
+        datastore_pb2.LookupRequest(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -517,7 +518,7 @@ def _run_query_helper(
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.RunQueryRequest(),
+        datastore_pb2.RunQueryRequest(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -620,7 +621,7 @@ def _run_aggregation_query_helper(
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.RunAggregationQueryRequest(),
+        datastore_pb2.RunAggregationQueryRequest(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -687,7 +688,7 @@ def _begin_transaction_helper(options=None, retry=None, timeout=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.BeginTransactionRequest(),
+        datastore_pb2.BeginTransactionRequest(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -761,7 +762,7 @@ def _commit_helper(transaction=None, retry=None, timeout=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        rq_class(),
+        rq_class(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -827,7 +828,7 @@ def _rollback_helper(retry=None, timeout=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.RollbackRequest(),
+        datastore_pb2.RollbackRequest(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -887,7 +888,7 @@ def _allocate_ids_helper(count=0, retry=None, timeout=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.AllocateIdsRequest(),
+        datastore_pb2.AllocateIdsRequest(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -948,7 +949,7 @@ def _reserve_ids_helper(count=0, retry=None, timeout=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.AllocateIdsRequest(),
+        datastore_pb2.AllocateIdsRequest(project_id=project),
         retry=retry,
         timeout=timeout,
     )
@@ -1029,6 +1030,7 @@ def _verify_protobuf_call(http, expected_url, pb, retry=None, timeout=None):
         "Content-Type": "application/x-protobuf",
         "User-Agent": _USER_AGENT,
         connection_module.CLIENT_INFO_HEADER: _USER_AGENT,
+        "x-goog-request-params": f"project_id={pb.project_id}&database_id={pb.database_id}",
     }
 
     if retry is not None:
