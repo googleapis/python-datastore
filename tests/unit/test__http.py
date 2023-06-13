@@ -122,6 +122,7 @@ def _request_helper(retry=None, timeout=None):
         "Content-Type": "application/x-protobuf",
         "User-Agent": user_agent,
         connection_module.CLIENT_INFO_HEADER: user_agent,
+        "x-goog-request-params": f"project_id={project}",
     }
 
     if retry is not None:
@@ -1026,11 +1027,14 @@ def _make_client_info(user_agent=_USER_AGENT):
 def _verify_protobuf_call(http, expected_url, pb, retry=None, timeout=None):
     from google.cloud import _http as connection_module
 
+    routing_header = f"project_id={pb.project_id}"
+    if pb.database_id:
+        routing_header += f"&database_id={pb.database_id}"
     expected_headers = {
         "Content-Type": "application/x-protobuf",
         "User-Agent": _USER_AGENT,
         connection_module.CLIENT_INFO_HEADER: _USER_AGENT,
-        "x-goog-request-params": f"project_id={pb.project_id}&database_id={pb.database_id}",
+        "x-goog-request-params": routing_header,
     }
 
     if retry is not None:
