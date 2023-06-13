@@ -177,7 +177,7 @@ def test__request_failure():
     )
 
     with pytest.raises(BadRequest) as exc:
-        _request(session, project, method, data, uri, client_info)
+        _request(session, project, method, data, uri, client_info, None)
 
     expected_message = "400 Entity value is indexed."
     assert exc.match(expected_message)

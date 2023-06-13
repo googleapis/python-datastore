@@ -247,7 +247,6 @@ class HTTPDatastoreAPI(object):
         project_id = request_pb.project_id
         database_id = request_pb.database_id
 
-        database = request_pb.database_id
         return _rpc(
             self.client._http,
             project_id,
