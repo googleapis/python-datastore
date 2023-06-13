@@ -1047,6 +1047,28 @@ def test_update_headers_with_database_id():
     )
 
 
+def test_update_headers_without_database_id():
+    from google.cloud.datastore._http import _update_headers
+
+    headers = {}
+    project_id = "someproject"
+    _update_headers(headers, project_id)
+    assert headers["x-goog-request-params"] == f"project_id={project_id}"
+
+
+def test_update_headers_with_database_id():
+    from google.cloud.datastore._http import _update_headers
+
+    headers = {}
+    project_id = "someproject"
+    database_id = "somedb"
+    _update_headers(headers, project_id, database_id=database_id)
+    assert (
+        headers["x-goog-request-params"]
+        == f"project_id={project_id}&database_id={database_id}"
+    )
+
+
 def _make_http_datastore_api(*args, **kwargs):
     from google.cloud.datastore._http import HTTPDatastoreAPI
 
@@ -1101,8 +1123,6 @@ def _verify_protobuf_call(
     from google.cloud.datastore._http import _update_headers
 
     routing_header = f"project_id={pb.project_id}"
-    if pb.database_id:
-        routing_header += f"&database_id={pb.database_id}"
     expected_headers = {
         "Content-Type": "application/x-protobuf",
         "User-Agent": _USER_AGENT,
