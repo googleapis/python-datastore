@@ -126,6 +126,7 @@ def _request_helper(retry=None, timeout=None, database=None):
         "Content-Type": "application/x-protobuf",
         "User-Agent": user_agent,
         connection_module.CLIENT_INFO_HEADER: user_agent,
+        "x-goog-request-params": f"project_id={project}",
     }
     _update_headers(expected_headers, project, database_id=database)
     if retry is not None:
@@ -210,7 +211,7 @@ def _rpc_helper(retry=None, timeout=None, database=None):
             client_info,
             request_pb,
             datastore_pb2.BeginTransactionResponse,
-            database=database,
+            database,
             **kwargs,
         )
 
@@ -223,7 +224,7 @@ def _rpc_helper(retry=None, timeout=None, database=None):
         request_pb._pb.SerializeToString(),
         base_url,
         client_info,
-        database=database,
+        database,
         **kwargs,
     )
 
@@ -315,7 +316,7 @@ def _lookup_single_helper(
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.LookupRequest(),
+        datastore_pb2.LookupRequest(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -425,7 +426,7 @@ def _lookup_multiple_helper(
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.LookupRequest(),
+        datastore_pb2.LookupRequest(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -532,7 +533,7 @@ def _run_query_helper(
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.RunQueryRequest(),
+        datastore_pb2.RunQueryRequest(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -635,7 +636,7 @@ def _run_aggregation_query_helper(
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.RunAggregationQueryRequest(),
+        datastore_pb2.RunAggregationQueryRequest(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -704,7 +705,7 @@ def _begin_transaction_helper(options=None, retry=None, timeout=None, database=N
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.BeginTransactionRequest(),
+        datastore_pb2.BeginTransactionRequest(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -784,7 +785,7 @@ def _commit_helper(transaction=None, retry=None, timeout=None, database=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        rq_class(),
+        rq_class(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -857,7 +858,7 @@ def _rollback_helper(retry=None, timeout=None, database=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.RollbackRequest(),
+        datastore_pb2.RollbackRequest(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -923,7 +924,7 @@ def _allocate_ids_helper(count=0, retry=None, timeout=None, database=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.AllocateIdsRequest(),
+        datastore_pb2.AllocateIdsRequest(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -991,7 +992,7 @@ def _reserve_ids_helper(count=0, retry=None, timeout=None, database=None):
     request = _verify_protobuf_call(
         http,
         uri,
-        datastore_pb2.AllocateIdsRequest(),
+        datastore_pb2.AllocateIdsRequest(project_id=project),
         retry=retry,
         timeout=timeout,
         project=project,
@@ -1099,10 +1100,14 @@ def _verify_protobuf_call(
     from google.cloud import _http as connection_module
     from google.cloud.datastore._http import _update_headers
 
+    routing_header = f"project_id={pb.project_id}"
+    if pb.database_id:
+        routing_header += f"&database_id={pb.database_id}"
     expected_headers = {
         "Content-Type": "application/x-protobuf",
         "User-Agent": _USER_AGENT,
         connection_module.CLIENT_INFO_HEADER: _USER_AGENT,
+        "x-goog-request-params": routing_header,
     }
     _update_headers(expected_headers, project, database_id=database)
     if retry is not None:

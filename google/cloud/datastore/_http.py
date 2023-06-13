@@ -59,9 +59,9 @@ def _request(
     data,
     base_url,
     client_info,
+    database,
     retry=None,
     timeout=None,
-    database=None,
 ):
     """Make a request over the Http transport to the Cloud Datastore API.
 
@@ -85,14 +85,14 @@ def _request(
     :type client_info: :class:`google.api_core.client_info.ClientInfo`
     :param client_info: used to generate user agent.
 
+    :type database: str
+    :param database: The database to make the request for.
+
     :type retry: :class:`google.api_core.retry.Retry`
     :param retry: (Optional) retry policy for the request
 
     :type timeout: float or tuple(float, float)
     :param timeout: (Optional) timeout for the request
-
-    :type database: str
-    :param database: The database to make the request for.
 
     :rtype: str
     :returns: The string response content from the API call.
@@ -141,9 +141,9 @@ def _rpc(
     client_info,
     request_pb,
     response_pb_cls,
+    database,
     retry=None,
     timeout=None,
-    database=None,
 ):
     """Make a protobuf RPC request.
 
@@ -171,6 +171,9 @@ def _rpc(
     :param response_pb_cls: The class used to unmarshall the response
                             protobuf.
 
+    :type database: str
+    :param database: The database to make the request for.
+
     :type retry: :class:`google.api_core.retry.Retry`
     :param retry: (Optional) retry policy for the request
 
@@ -183,14 +186,7 @@ def _rpc(
     req_data = request_pb._pb.SerializeToString()
     kwargs = _make_retry_timeout_kwargs(retry, timeout)
     response = _request(
-        http,
-        project,
-        method,
-        req_data,
-        base_url,
-        client_info,
-        database=database,
-        **kwargs,
+        http, project, method, req_data, base_url, client_info, database, **kwargs
     )
     return response_pb_cls.deserialize(response)
 
@@ -249,6 +245,7 @@ class HTTPDatastoreAPI(object):
         """
         request_pb = _make_request_pb(request, _datastore_pb2.LookupRequest)
         project_id = request_pb.project_id
+        database_id = request_pb.database_id
 
         database = request_pb.database_id
         return _rpc(
@@ -259,9 +256,9 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.LookupResponse,
+            database_id,
             retry=retry,
             timeout=timeout,
-            database=database,
         )
 
     def run_query(self, request, retry=None, timeout=None):
@@ -282,7 +279,8 @@ class HTTPDatastoreAPI(object):
         """
         request_pb = _make_request_pb(request, _datastore_pb2.RunQueryRequest)
         project_id = request_pb.project_id
-        database = request_pb.database_id
+        database_id = request_pb.database_id
+
         return _rpc(
             self.client._http,
             project_id,
@@ -291,9 +289,9 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.RunQueryResponse,
+            database_id,
             retry=retry,
             timeout=timeout,
-            database=database,
         )
 
     def run_aggregation_query(self, request, retry=None, timeout=None):
@@ -316,7 +314,8 @@ class HTTPDatastoreAPI(object):
             request, _datastore_pb2.RunAggregationQueryRequest
         )
         project_id = request_pb.project_id
-        database = request_pb.database_id
+        database_id = request_pb.database_id
+
         return _rpc(
             self.client._http,
             project_id,
@@ -325,9 +324,9 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.RunAggregationQueryResponse,
+            database_id,
             retry=retry,
             timeout=timeout,
-            database=database,
         )
 
     def begin_transaction(self, request, retry=None, timeout=None):
@@ -348,7 +347,8 @@ class HTTPDatastoreAPI(object):
         """
         request_pb = _make_request_pb(request, _datastore_pb2.BeginTransactionRequest)
         project_id = request_pb.project_id
-        database = request_pb.database_id
+        database_id = request_pb.database_id
+
         return _rpc(
             self.client._http,
             project_id,
@@ -357,9 +357,9 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.BeginTransactionResponse,
+            database_id,
             retry=retry,
             timeout=timeout,
-            database=database,
         )
 
     def commit(self, request, retry=None, timeout=None):
@@ -380,7 +380,8 @@ class HTTPDatastoreAPI(object):
         """
         request_pb = _make_request_pb(request, _datastore_pb2.CommitRequest)
         project_id = request_pb.project_id
-        database = request_pb.database_id
+        database_id = request_pb.database_id
+
         return _rpc(
             self.client._http,
             project_id,
@@ -389,9 +390,9 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.CommitResponse,
+            database_id,
             retry=retry,
             timeout=timeout,
-            database=database,
         )
 
     def rollback(self, request, retry=None, timeout=None):
@@ -412,7 +413,8 @@ class HTTPDatastoreAPI(object):
         """
         request_pb = _make_request_pb(request, _datastore_pb2.RollbackRequest)
         project_id = request_pb.project_id
-        database = request_pb.database_id
+        database_id = request_pb.database_id
+
         return _rpc(
             self.client._http,
             project_id,
@@ -421,9 +423,9 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.RollbackResponse,
+            database_id,
             retry=retry,
             timeout=timeout,
-            database=database,
         )
 
     def allocate_ids(self, request, retry=None, timeout=None):
@@ -444,7 +446,8 @@ class HTTPDatastoreAPI(object):
         """
         request_pb = _make_request_pb(request, _datastore_pb2.AllocateIdsRequest)
         project_id = request_pb.project_id
-        database = request_pb.database_id
+        database_id = request_pb.database_id
+
         return _rpc(
             self.client._http,
             project_id,
@@ -453,9 +456,9 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.AllocateIdsResponse,
+            database_id,
             retry=retry,
             timeout=timeout,
-            database=database,
         )
 
     def reserve_ids(self, request, retry=None, timeout=None):
@@ -476,7 +479,8 @@ class HTTPDatastoreAPI(object):
         """
         request_pb = _make_request_pb(request, _datastore_pb2.ReserveIdsRequest)
         project_id = request_pb.project_id
-        database = request_pb.database_id
+        database_id = request_pb.database_id
+
         return _rpc(
             self.client._http,
             project_id,
@@ -485,15 +489,14 @@ class HTTPDatastoreAPI(object):
             self.client._client_info,
             request_pb,
             _datastore_pb2.ReserveIdsResponse,
+            database_id,
             retry=retry,
             timeout=timeout,
-            database=database,
         )
 
 
 def _update_headers(headers, project_id, database_id=None):
     """Update the request headers.
-
     Pass the project id, or optionally the database_id if provided.
     """
     if database_id:
