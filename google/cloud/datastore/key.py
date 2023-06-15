@@ -171,7 +171,7 @@ class Key(object):
         """
         hash_val = hash(self.flat_path) + hash(self.project) + hash(self.namespace)
         if self.database:
-            hash_val + hash(self.database)
+            hash_val = hash_val + hash(self.database)
         return hash_val
 
     @staticmethod
