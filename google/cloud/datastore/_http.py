@@ -498,9 +498,8 @@ def _update_headers(headers, project_id, database_id=None):
     """Update the request headers.
     Pass the project id, or optionally the database_id if provided.
     """
+    headers["x-goog-request-params"] = f"project_id={project_id}"
     if database_id:
         headers[
             "x-goog-request-params"
         ] = f"project_id={project_id}&database_id={database_id}"
-    else:
-        headers["x-goog-request-params"] = f"project_id={project_id}"
