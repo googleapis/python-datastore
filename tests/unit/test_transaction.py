@@ -15,7 +15,7 @@
 import mock
 import pytest
 
-from google.cloud.datastore.helpers import _set_database_id_to_request
+from google.cloud.datastore.helpers import set_database_id_to_request
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
@@ -130,7 +130,7 @@ def test_transaction_current(database_id):
         "mutations": [],
         "transaction": id_,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
 
     commit_method.assert_called_with(request=expected_request)
 
@@ -233,7 +233,7 @@ def test_transaction_begin_tombstoned(database_id):
 
     xact.rollback()
     expected_request = {"project_id": project, "transaction": id_}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     client._datastore_api.rollback.assert_called_once_with(request=expected_request)
     assert xact.id is None
 
@@ -272,7 +272,7 @@ def test_transaction_rollback(database_id):
 
     assert xact.id is None
     expected_request = {"project_id": project, "transaction": id_}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.rollback.assert_called_once_with(request=expected_request)
 
 
@@ -292,7 +292,7 @@ def test_transaction_rollback_w_retry_w_timeout(database_id):
 
     assert xact.id is None
     expected_request = {"project_id": project, "transaction": id_}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
 
     ds_api.rollback.assert_called_once_with(
         request=expected_request,
@@ -321,7 +321,7 @@ def test_transaction_commit_no_partial_keys(database_id):
         "mutations": [],
         "transaction": id_,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.commit.assert_called_once_with(request=expected_request)
     assert xact.id is None
 
@@ -353,7 +353,7 @@ def test_transaction_commit_w_partial_keys_w_retry_w_timeout(database_id):
         "mutations": xact.mutations,
         "transaction": id2,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
 
     ds_api.commit.assert_called_once_with(
         request=expected_request,
@@ -390,7 +390,7 @@ def test_transaction_context_manager_no_raise(database_id):
         "mutations": [],
         "transaction": id_,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
 
     client._datastore_api.commit.assert_called_once_with(
         request=expected_request,
@@ -418,12 +418,12 @@ def test_transaction_context_manager_w_raise(database_id):
     assert xact.id is None
 
     expected_request = _make_begin_request(project, database=database_id)
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.begin_transaction.assert_called_once_with(request=expected_request)
 
     client._datastore_api.commit.assert_not_called()
     expected_request = {"project_id": project, "transaction": id_}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     client._datastore_api.rollback.assert_called_once_with(request=expected_request)
 
 
@@ -527,7 +527,7 @@ def _make_begin_request(project, read_only=False, read_time=None, database=None)
         "project_id": project,
         "transaction_options": expected_options,
     }
-    _set_database_id_to_request(request, database)
+    set_database_id_to_request(request, database)
     return request
 
 

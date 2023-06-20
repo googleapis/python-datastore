@@ -490,7 +490,7 @@ def _set_protobuf_value(value_pb, val):
         setattr(value_pb, attr, val)
 
 
-def _set_database_id_to_request(request, database_id=None):
+def set_database_id_to_request(request, database_id=None):
     """
     Set the "database_id" field to the request only if it was provided.
     """

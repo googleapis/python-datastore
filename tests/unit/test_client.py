@@ -18,7 +18,7 @@ from typing import Any
 import mock
 import pytest
 
-from google.cloud.datastore.helpers import _set_database_id_to_request
+from google.cloud.datastore.helpers import set_database_id_to_request
 
 PROJECT = "dummy-project-123"
 DATABASE = "dummy-database-123"
@@ -451,7 +451,7 @@ def test_client_get_multi_miss(database_id):
         "keys": [key.to_protobuf()],
         "read_options": read_options,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.lookup.assert_called_once_with(request=expected_request)
 
 
@@ -492,7 +492,7 @@ def test_client_get_multi_miss_w_missing(database_id):
         "keys": [key_pb],
         "read_options": read_options,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.lookup.assert_called_once_with(request=expected_request)
 
 
@@ -545,7 +545,7 @@ def test_client_get_multi_miss_w_deferred(database_id):
         "keys": [key_pb],
         "read_options": read_options,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
 
     ds_api.lookup.assert_called_once_with(request=expected_request)
 
@@ -601,7 +601,7 @@ def test_client_get_multi_w_deferred_from_backend_but_not_passed(database_id):
         "keys": [key2_pb],
         "read_options": read_options,
     }
-    _set_database_id_to_request(expected_request_1, database_id)
+    set_database_id_to_request(expected_request_1, database_id)
     ds_api.lookup.assert_any_call(
         request=expected_request_1,
     )
@@ -611,7 +611,7 @@ def test_client_get_multi_w_deferred_from_backend_but_not_passed(database_id):
         "keys": [key1_pb, key2_pb],
         "read_options": read_options,
     }
-    _set_database_id_to_request(expected_request_2, database_id)
+    set_database_id_to_request(expected_request_2, database_id)
     ds_api.lookup.assert_any_call(
         request=expected_request_2,
     )
@@ -702,7 +702,7 @@ def test_client_get_multi_hit_w_transaction(database_id):
         "keys": [key.to_protobuf()],
         "read_options": read_options,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.lookup.assert_called_once_with(request=expected_request)
 
 
@@ -747,7 +747,7 @@ def test_client_get_multi_hit_w_read_time(database_id):
         "keys": [key.to_protobuf()],
         "read_options": read_options,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.lookup.assert_called_once_with(request=expected_request)
 
 
@@ -787,7 +787,7 @@ def test_client_get_multi_hit_multiple_keys_same_project(database_id):
         "keys": [key1.to_protobuf(), key2.to_protobuf()],
         "read_options": read_options,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.lookup.assert_called_once_with(request=expected_request)
 
 
@@ -911,7 +911,7 @@ def test_client_put_multi_no_batch_w_partial_key_w_retry_w_timeout(database_id):
         "mutations": mock.ANY,
         "transaction": None,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.commit.assert_called_once_with(
         request=expected_request,
         retry=retry,
@@ -1007,7 +1007,7 @@ def test_client_delete_multi_no_batch_w_retry_w_timeout(database_id):
         "mutations": mock.ANY,
         "transaction": None,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.commit.assert_called_once_with(
         request=expected_request,
         retry=retry,
@@ -1103,7 +1103,7 @@ def test_client_allocate_ids_w_partial_key(database_id):
 
     expected_keys = [incomplete_key.to_protobuf()] * num_ids
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     alloc_ids.assert_called_once_with(request=expected_request)
 
 
@@ -1129,7 +1129,7 @@ def test_client_allocate_ids_w_partial_key_w_retry_w_timeout(database_id):
 
     expected_keys = [incomplete_key.to_protobuf()] * num_ids
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     alloc_ids.assert_called_once_with(
         request=expected_request,
         retry=retry,
@@ -1155,7 +1155,7 @@ def test_client_reserve_ids_sequential_w_completed_key(database_id):
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     reserve_ids.assert_called_once_with(request=expected_request)
 
 
@@ -1180,7 +1180,7 @@ def test_client_reserve_ids_sequential_w_completed_key_w_retry_w_timeout(databas
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     reserve_ids.assert_called_once_with(
         request=expected_request,
         retry=retry,
@@ -1207,7 +1207,7 @@ def test_client_reserve_ids_sequential_w_completed_key_w_ancestor(database_id):
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     reserve_ids.assert_called_once_with(request=expected_request)
 
 
@@ -1313,7 +1313,7 @@ def test_client_reserve_ids_w_completed_key(database_id):
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     reserve_ids.assert_called_once_with(request=expected_request)
     _assert_reserve_ids_warning(warned)
 
@@ -1343,7 +1343,7 @@ def test_client_reserve_ids_w_completed_key_w_retry_w_timeout(database_id):
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     reserve_ids.assert_called_once_with(
         request=expected_request,
         retry=retry,
@@ -1374,7 +1374,7 @@ def test_client_reserve_ids_w_completed_key_w_ancestor(database_id):
     )
     expected_keys = [key.to_protobuf() for key in reserved_keys]
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
 
     reserve_ids.assert_called_once_with(request=expected_request)
 
@@ -1706,7 +1706,7 @@ def test_client_reserve_ids_multi(database_id):
 
     expected_keys = [key1.to_protobuf(), key2.to_protobuf()]
     expected_request = {"project_id": PROJECT, "keys": expected_keys}
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     reserve_ids.assert_called_once_with(request=expected_request)
 
 

@@ -18,7 +18,7 @@ import mock
 import pytest
 import requests
 
-from google.cloud.datastore.helpers import _set_database_id_to_request
+from google.cloud.datastore.helpers import set_database_id_to_request
 
 
 def test__make_retry_timeout_kwargs_w_empty():
@@ -297,7 +297,7 @@ def _lookup_single_helper(
         "keys": [key_pb],
         "read_options": read_options,
     }
-    _set_database_id_to_request(request, database)
+    set_database_id_to_request(request, database)
     kwargs = _retry_timeout_kw(retry, timeout, http)
 
     response = ds_api.lookup(request=request, **kwargs)
@@ -690,7 +690,7 @@ def _begin_transaction_helper(options=None, retry=None, timeout=None, database=N
     # Make request.
     ds_api = _make_http_datastore_api(client)
     request = {"project_id": project}
-    _set_database_id_to_request(request, database)
+    set_database_id_to_request(request, database)
     if options is not None:
         request["transaction_options"] = options
 
@@ -768,7 +768,7 @@ def _commit_helper(transaction=None, retry=None, timeout=None, database=None):
     ds_api = _make_http_datastore_api(client)
 
     request = {"project_id": project, "mutations": [mutation]}
-    _set_database_id_to_request(request, database)
+    set_database_id_to_request(request, database)
     if transaction is not None:
         request["transaction"] = transaction
         mode = request["mode"] = rq_class.Mode.TRANSACTIONAL
@@ -846,7 +846,7 @@ def _rollback_helper(retry=None, timeout=None, database=None):
     # Make request.
     ds_api = _make_http_datastore_api(client)
     request = {"project_id": project, "transaction": transaction}
-    _set_database_id_to_request(request, database)
+    set_database_id_to_request(request, database)
     kwargs = _retry_timeout_kw(retry, timeout, http)
 
     response = ds_api.rollback(request=request, **kwargs)
@@ -912,7 +912,7 @@ def _allocate_ids_helper(count=0, retry=None, timeout=None, database=None):
     ds_api = _make_http_datastore_api(client)
 
     request = {"project_id": project, "keys": before_key_pbs}
-    _set_database_id_to_request(request, database)
+    set_database_id_to_request(request, database)
     kwargs = _retry_timeout_kw(retry, timeout, http)
 
     response = ds_api.allocate_ids(request=request, **kwargs)
@@ -981,7 +981,7 @@ def _reserve_ids_helper(count=0, retry=None, timeout=None, database=None):
     ds_api = _make_http_datastore_api(client)
 
     request = {"project_id": project, "keys": before_key_pbs}
-    _set_database_id_to_request(request, database)
+    set_database_id_to_request(request, database)
     kwargs = _retry_timeout_kw(retry, timeout, http)
 
     response = ds_api.reserve_ids(request=request, **kwargs)

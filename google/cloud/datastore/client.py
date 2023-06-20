@@ -208,7 +208,7 @@ def _extended_lookup(
             "keys": key_pbs,
             "read_options": read_options,
         }
-        helpers._set_database_id_to_request(request, database)
+        helpers.set_database_id_to_request(request, database)
         lookup_response = datastore_api.lookup(
             request=request,
             **kwargs,
@@ -761,7 +761,7 @@ class Client(ClientWithProject):
             "project_id": incomplete_key.project,
             "keys": incomplete_key_pbs,
         }
-        helpers._set_database_id_to_request(request, self.database)
+        helpers.set_database_id_to_request(request, self.database)
         response_pb = self._datastore_api.allocate_ids(
             request=request,
             **kwargs,
@@ -1006,7 +1006,7 @@ class Client(ClientWithProject):
             "project_id": complete_key.project,
             "keys": key_pbs,
         }
-        helpers._set_database_id_to_request(request, self.database)
+        helpers.set_database_id_to_request(request, self.database)
         self._datastore_api.reserve_ids(
             request=request,
             **kwargs,
@@ -1059,7 +1059,7 @@ class Client(ClientWithProject):
             "project_id": complete_keys[0].project,
             "keys": key_pbs,
         }
-        helpers._set_database_id_to_request(request, complete_keys[0].database)
+        helpers.set_database_id_to_request(request, complete_keys[0].database)
 
         self._datastore_api.reserve_ids(
             request=request,

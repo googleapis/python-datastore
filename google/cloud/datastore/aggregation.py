@@ -393,7 +393,7 @@ class AggregationResultIterator(page_iterator.Iterator):
             "read_options": read_options,
             "aggregation_query": query_pb,
         }
-        helpers._set_database_id_to_request(request, self.client.database)
+        helpers.set_database_id_to_request(request, self.client.database)
         response_pb = self.client._datastore_api.run_aggregation_query(
             request=request,
             **kwargs,
@@ -414,7 +414,7 @@ class AggregationResultIterator(page_iterator.Iterator):
                 "read_options": read_options,
                 "aggregation_query": query_pb,
             }
-            helpers._set_database_id_to_request(request, self.client.database)
+            helpers.set_database_id_to_request(request, self.client.database)
             response_pb = self.client._datastore_api.run_aggregation_query(
                 request=request,
                 **kwargs,

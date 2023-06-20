@@ -18,7 +18,7 @@ from typing import Any
 import mock
 import pytest
 
-from google.cloud.datastore.helpers import _set_database_id_to_request
+from google.cloud.datastore.helpers import set_database_id_to_request
 
 
 def _make_batch(client):
@@ -79,7 +79,7 @@ def test_batch_current(database_id):
         "mutations": [],
         "transaction": None,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     commit_method.assert_called_with(request=expected_request)
 
 
@@ -334,7 +334,7 @@ def _batch_commit_helper(timeout=None, retry=None, database=None):
         "mutations": [],
         "transaction": None,
     }
-    _set_database_id_to_request(expected_request, database)
+    set_database_id_to_request(expected_request, database)
     commit_method.assert_called_with(request=expected_request, **kwargs)
 
 
@@ -383,7 +383,7 @@ def test_batch_commit_w_partial_key_entity(database_id):
         "mutations": [],
         "transaction": None,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     ds_api.commit.assert_called_once_with(request=expected_request)
 
     assert not entity.key.is_partial
@@ -419,7 +419,7 @@ def test_batch_as_context_mgr_wo_error(database_id):
         "mutations": batch.mutations,
         "transaction": None,
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     commit_method.assert_called_with(request=expected_request)
 
 
@@ -471,8 +471,8 @@ def test_batch_as_context_mgr_nested(database_id):
         "mutations": batch1.mutations,
         "transaction": None,
     }
-    _set_database_id_to_request(expected_request_1, database_id)
-    _set_database_id_to_request(expected_request_2, database_id)
+    set_database_id_to_request(expected_request_1, database_id)
+    set_database_id_to_request(expected_request_2, database_id)
 
     commit_method.assert_called_with(request=expected_request_1)
     commit_method.assert_called_with(request=expected_request_2)

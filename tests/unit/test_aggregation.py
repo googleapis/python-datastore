@@ -16,7 +16,7 @@ import mock
 import pytest
 
 from google.cloud.datastore.aggregation import CountAggregation, AggregationQuery
-from google.cloud.datastore.helpers import _set_database_id_to_request
+from google.cloud.datastore.helpers import set_database_id_to_request
 
 from tests.unit.test_query import _make_query, _make_client
 
@@ -398,7 +398,7 @@ def _next_page_helper(txn_id=None, retry=None, timeout=None, database_id=None):
         "read_options": read_options,
         "aggregation_query": aggregation_query._to_pb(),
     }
-    _set_database_id_to_request(expected_request, database_id)
+    set_database_id_to_request(expected_request, database_id)
     expected_call = mock.call(
         request=expected_request,
         **kwargs,

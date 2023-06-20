@@ -303,7 +303,7 @@ class Batch(object):
             "mutations": self._mutations,
         }
 
-        helpers._set_database_id_to_request(request, self._client.database)
+        helpers.set_database_id_to_request(request, self._client.database)
 
         commit_response_pb = self._client._datastore_api.commit(
             request=request,

@@ -25,7 +25,7 @@ from google.cloud.datastore.query import (
     BaseCompositeFilter,
 )
 
-from google.cloud.datastore.helpers import _set_database_id_to_request
+from google.cloud.datastore.helpers import set_database_id_to_request
 
 _PROJECT = "PROJECT"
 
@@ -880,7 +880,7 @@ def _next_page_helper(
         "read_options": read_options,
         "query": empty_query,
     }
-    _set_database_id_to_request(expected_request, database)
+    set_database_id_to_request(expected_request, database)
     ds_api.run_query.assert_called_once_with(
         request=expected_request,
         **kwargs,
@@ -977,7 +977,7 @@ def test_iterator__next_page_w_skipped_lt_offset(database_id):
             "read_options": read_options,
             "query": query,
         }
-        _set_database_id_to_request(expected_request, database_id)
+        set_database_id_to_request(expected_request, database_id)
         expected_calls.append(mock.call(request=expected_request))
 
     assert ds_api.run_query.call_args_list == expected_calls
