@@ -59,7 +59,7 @@ def _request(
     data,
     base_url,
     client_info,
-    database=None,
+    database,
     retry=None,
     timeout=None,
 ):
@@ -86,7 +86,7 @@ def _request(
     :param client_info: used to generate user agent.
 
     :type database: str
-    :param database: (Optional) The database to make the request for.
+    :param database: The database to make the request for.
 
     :type retry: :class:`google.api_core.retry.Retry`
     :param retry: (Optional) retry policy for the request
@@ -141,7 +141,7 @@ def _rpc(
     client_info,
     request_pb,
     response_pb_cls,
-    database=None,
+    database,
     retry=None,
     timeout=None,
 ):
@@ -172,7 +172,7 @@ def _rpc(
                             protobuf.
 
     :type database: str
-    :param database: (Optional) The database to make the request for.
+    :param database: The database to make the request for.
 
     :type retry: :class:`google.api_core.retry.Retry`
     :param retry: (Optional) retry policy for the request

@@ -230,8 +230,7 @@ def install_systemtest_dependencies(session, *constraints):
 
 @nox.session(python=SYSTEM_TEST_PYTHON_VERSIONS)
 @nox.parametrize("disable_grpc", [False, True])
-@nox.parametrize("use_named_db", [False, True])
-def system(session, disable_grpc, use_named_db):
+def system(session, disable_grpc):
     """Run the system test suite."""
     constraints_path = str(
         CURRENT_DIRECTORY / "testing" / f"constraints-{session.python}.txt"
@@ -257,7 +256,6 @@ def system(session, disable_grpc, use_named_db):
     env = {}
     if disable_grpc:
         env["GOOGLE_CLOUD_DISABLE_GRPC"] = "True"
-    env["SYSTEM_TESTS_DATABASE"] = "system-tests-named-db" if use_named_db else ""
 
     # Run py.test against the system tests.
     if system_test_exists:

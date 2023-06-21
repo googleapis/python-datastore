@@ -23,7 +23,6 @@ https://cloud.google.com/datastore/docs/concepts/entities#batch_operations
 
 from google.cloud.datastore import helpers
 from google.cloud.datastore_v1.types import datastore as _datastore_pb2
-from google.cloud.datastore.constants import DEFAULT_DATABASE
 
 
 class Batch(object):
@@ -228,10 +227,7 @@ class Batch(object):
         if self.project != entity.key.project:
             raise ValueError("Key must be from same project as batch")
 
-        entity_key_database = entity.key.database
-        if entity_key_database is None:
-            entity_key_database = DEFAULT_DATABASE
-        if self.database != entity_key_database:
+        if self.database != entity.key.database:
             raise ValueError("Key must be from same database as batch")
 
         if entity.key.is_partial:
@@ -261,10 +257,7 @@ class Batch(object):
         if self.project != key.project:
             raise ValueError("Key must be from same project as batch")
 
-        key_db = key.database
-        if key_db is None:
-            key_db = DEFAULT_DATABASE
-        if self.database != key_db:
+        if self.database != key.database:
             raise ValueError("Key must be from same database as batch")
 
         key_pb = key.to_protobuf()
@@ -303,14 +296,17 @@ class Batch(object):
         if timeout is not None:
             kwargs["timeout"] = timeout
 
+        request = {
+            "project_id": self.project,
+            "mode": mode,
+            "transaction": self._id,
+            "mutations": self._mutations,
+        }
+
+        helpers.set_database_id_to_request(request, self._client.database)
+
         commit_response_pb = self._client._datastore_api.commit(
-            request={
-                "project_id": self.project,
-                "database_id": self.database,
-                "mode": mode,
-                "transaction": self._id,
-                "mutations": self._mutations,
-            },
+            request=request,
             **kwargs,
         )
 

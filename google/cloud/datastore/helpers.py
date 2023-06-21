@@ -29,7 +29,6 @@ from google.cloud.datastore_v1.types import datastore as datastore_pb2
 from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore.entity import Entity
 from google.cloud.datastore.key import Key
-from google.cloud.datastore.constants import DEFAULT_DATABASE
 from google.protobuf import timestamp_pb2
 
 
@@ -301,7 +300,8 @@ def key_from_protobuf(pb):
     project = None
     if pb.partition_id.project_id:  # Simple field (string)
         project = pb.partition_id.project_id
-    database = DEFAULT_DATABASE
+    database = None
+
     if pb.partition_id.database_id:  # Simple field (string)
         database = pb.partition_id.database_id
     namespace = None
@@ -488,6 +488,14 @@ def _set_protobuf_value(value_pb, val):
         value_pb.geo_point_value.CopyFrom(val)
     else:  # scalar, just assign
         setattr(value_pb, attr, val)
+
+
+def set_database_id_to_request(request, database_id=None):
+    """
+    Set the "database_id" field to the request only if it was provided.
+    """
+    if database_id is not None:
+        request["database_id"] = database_id
 
 
 class GeoPoint(object):
