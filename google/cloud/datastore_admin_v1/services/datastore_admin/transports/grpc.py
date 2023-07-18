@@ -39,7 +39,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     The Datastore Admin API provides several admin services for
     Cloud Datastore.
     -----------------------------------------------------------------------------
-    ## Concepts
+      ## Concepts
 
     Project, namespace, kind, and entity as defined in the Google
     Cloud Datastore API.
@@ -51,7 +51,7 @@ class DatastoreAdminGrpcTransport(DatastoreAdminTransport):
     namespaces (either or both of which may be all).
 
     -----------------------------------------------------------------------------
-    ## Services
+      ## Services
 
     # Export/Import
 
