@@ -162,8 +162,8 @@ def test_pb_over_query_with_add_aggregations(client, database_id):
     assert pb.aggregations[2] == SumAggregation("person", alias="sum_person")._to_pb()
     assert pb.aggregations[3] == AvgAggregation("person", alias="avg_person")._to_pb()
 
-
-def test_pb_over_query_with_sum(client):
+@pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
+def test_pb_over_query_with_sum(client, database_id):
     from google.cloud.datastore.query import _pb_from_query
 
     query = _make_query(client)
@@ -176,7 +176,8 @@ def test_pb_over_query_with_sum(client):
     assert pb.aggregations[0] == SumAggregation("person", alias="total")._to_pb()
 
 
-def test_pb_over_query_sum_with_add_aggregation(client):
+@pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
+def test_pb_over_query_sum_with_add_aggregation(client, database_id):
     from google.cloud.datastore.query import _pb_from_query
 
     query = _make_query(client)
@@ -189,7 +190,8 @@ def test_pb_over_query_sum_with_add_aggregation(client):
     assert pb.aggregations[0] == SumAggregation("person", alias="total")._to_pb()
 
 
-def test_pb_over_query_with_avg(client):
+@pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
+def test_pb_over_query_with_avg(client, database_id):
     from google.cloud.datastore.query import _pb_from_query
 
     query = _make_query(client)
@@ -202,7 +204,8 @@ def test_pb_over_query_with_avg(client):
     assert pb.aggregations[0] == AvgAggregation("person", alias="total")._to_pb()
 
 
-def test_pb_over_query_avf_with_add_aggregation(client):
+@pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
+def test_pb_over_query_avf_with_add_aggregation(client, database_id):
     from google.cloud.datastore.query import _pb_from_query
 
     query = _make_query(client)
