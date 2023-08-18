@@ -96,8 +96,8 @@ class SumAggregation(BaseAggregation):
         """
         aggregation_pb = query_pb2.AggregationQuery.Aggregation()
         aggregation_pb.alias = self.alias
-        aggregation_pb.sum_ = query_pb2.AggregationQuery.Aggregation.Sum()
-        aggregation_pb.sum_.property.name = self.property_ref
+        aggregation_pb.sum = query_pb2.AggregationQuery.Aggregation.Sum()
+        aggregation_pb.sum.property.name = self.property_ref
         aggregation_pb.alias = self.alias
         return aggregation_pb
 

@@ -45,8 +45,8 @@ def test_sum_aggregation_to_pb():
     sum_aggregation = SumAggregation("person", alias="total")
 
     expected_aggregation_query_pb = query_pb2.AggregationQuery.Aggregation()
-    expected_aggregation_query_pb.sum_ = query_pb2.AggregationQuery.Aggregation.Sum()
-    expected_aggregation_query_pb.sum_.property.name = sum_aggregation.property_ref
+    expected_aggregation_query_pb.sum = query_pb2.AggregationQuery.Aggregation.Sum()
+    expected_aggregation_query_pb.sum.property.name = sum_aggregation.property_ref
     expected_aggregation_query_pb.alias = sum_aggregation.alias
     assert sum_aggregation._to_pb() == expected_aggregation_query_pb
 
@@ -347,8 +347,8 @@ def test_iterator__build_protobuf_all_values():
     expected_pb.aggregations.append(expected_count_pb)
 
     expected_sum_pb = query_pb2.AggregationQuery.Aggregation()
-    expected_sum_pb.sum_ = query_pb2.AggregationQuery.Aggregation.Sum()
-    expected_sum_pb.sum_.property.name = property_ref
+    expected_sum_pb.sum = query_pb2.AggregationQuery.Aggregation.Sum()
+    expected_sum_pb.sum.property.name = property_ref
     expected_pb.aggregations.append(expected_sum_pb)
 
     expected_avg_pb = query_pb2.AggregationQuery.Aggregation()
