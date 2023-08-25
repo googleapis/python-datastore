@@ -97,7 +97,8 @@ def test_aggregation_query_with_alias(
         assert r.value > 0
 
 
-def test_sum_query_default(aggregation_query_client, nested_query):
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_sum_query_default(aggregation_query_client, nested_query, database_id):
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
@@ -109,7 +110,8 @@ def test_sum_query_default(aggregation_query_client, nested_query):
         assert r.value == 8
 
 
-def test_sum_query_with_alias(aggregation_query_client, nested_query):
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_sum_query_with_alias(aggregation_query_client, nested_query, database_id):
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
@@ -121,7 +123,8 @@ def test_sum_query_with_alias(aggregation_query_client, nested_query):
         assert r.value > 0
 
 
-def test_avg_query_default(aggregation_query_client, nested_query):
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_avg_query_default(aggregation_query_client, nested_query, database_id):
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
@@ -133,7 +136,8 @@ def test_avg_query_default(aggregation_query_client, nested_query):
         assert r.value == 8
 
 
-def test_avg_query_with_alias(aggregation_query_client, nested_query):
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_avg_query_with_alias(aggregation_query_client, nested_query, database_id):
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
