@@ -45,3 +45,21 @@ indexes:
   properties:
     - name: family
     - name: appearances
+
+ - kind: Character
+   ancestor: yes
+   properties:
+     - name: person
+
+- kind: Character
+  ancestor: yes
+  properties:
+    - name: appearances
+    - name: person
+
+- kind: Character
+  ancestor: yes
+  properties:
+    - name: family
+    - name: appearances
+    - name: person
