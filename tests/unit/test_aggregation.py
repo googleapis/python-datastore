@@ -159,8 +159,15 @@ def test_pb_over_query_with_add_aggregations(client, database_id):
     assert len(pb.aggregations) == 4
     assert pb.aggregations[0] == CountAggregation(alias="total")._to_pb()
     assert pb.aggregations[1] == CountAggregation(alias="all")._to_pb()
-    assert pb.aggregations[2] == SumAggregation("appearances", alias="sum_appearances")._to_pb()
-    assert pb.aggregations[3] == AvgAggregation("appearances", alias="avg_appearances")._to_pb()
+    assert (
+        pb.aggregations[2]
+        == SumAggregation("appearances", alias="sum_appearances")._to_pb()
+    )
+    assert (
+        pb.aggregations[3]
+        == AvgAggregation("appearances", alias="avg_appearances")._to_pb()
+    )
+
 
 @pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
 def test_pb_over_query_with_sum(client, database_id):
