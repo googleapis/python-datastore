@@ -42,7 +42,7 @@ def test_count_aggregation_to_pb():
 def test_sum_aggregation_to_pb():
     from google.cloud.datastore_v1.types import query as query_pb2
 
-    sum_aggregation = SumAggregation("person", alias="total")
+    sum_aggregation = SumAggregation("appearances", alias="total")
 
     expected_aggregation_query_pb = query_pb2.AggregationQuery.Aggregation()
     expected_aggregation_query_pb.sum = query_pb2.AggregationQuery.Aggregation.Sum()
@@ -54,7 +54,7 @@ def test_sum_aggregation_to_pb():
 def test_avg_aggregation_to_pb():
     from google.cloud.datastore_v1.types import query as query_pb2
 
-    avg_aggregation = AvgAggregation("person", alias="total")
+    avg_aggregation = AvgAggregation("appearances", alias="total")
 
     expected_aggregation_query_pb = query_pb2.AggregationQuery.Aggregation()
     expected_aggregation_query_pb.avg = query_pb2.AggregationQuery.Aggregation.Avg()
@@ -146,8 +146,8 @@ def test_pb_over_query_with_add_aggregations(client, database_id):
     aggregations = [
         CountAggregation(alias="total"),
         CountAggregation(alias="all"),
-        SumAggregation("person", alias="sum_person"),
-        AvgAggregation("person", alias="avg_person"),
+        SumAggregation("appearances", alias="sum_appearances"),
+        AvgAggregation("appearances", alias="avg_appearances"),
     ]
 
     query = _make_query(client)
@@ -159,9 +159,8 @@ def test_pb_over_query_with_add_aggregations(client, database_id):
     assert len(pb.aggregations) == 4
     assert pb.aggregations[0] == CountAggregation(alias="total")._to_pb()
     assert pb.aggregations[1] == CountAggregation(alias="all")._to_pb()
-    assert pb.aggregations[2] == SumAggregation("person", alias="sum_person")._to_pb()
-    assert pb.aggregations[3] == AvgAggregation("person", alias="avg_person")._to_pb()
-
+    assert pb.aggregations[2] == SumAggregation("appearances", alias="sum_appearances")._to_pb()
+    assert pb.aggregations[3] == AvgAggregation("appearances", alias="avg_appearances")._to_pb()
 
 @pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
 def test_pb_over_query_with_sum(client, database_id):
@@ -170,11 +169,11 @@ def test_pb_over_query_with_sum(client, database_id):
     query = _make_query(client)
     aggregation_query = _make_aggregation_query(client=client, query=query)
 
-    aggregation_query.sum("person", alias="total")
+    aggregation_query.sum("appearances", alias="total")
     pb = aggregation_query._to_pb()
     assert pb.nested_query == _pb_from_query(query)
     assert len(pb.aggregations) == 1
-    assert pb.aggregations[0] == SumAggregation("person", alias="total")._to_pb()
+    assert pb.aggregations[0] == SumAggregation("appearances", alias="total")._to_pb()
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
@@ -184,11 +183,11 @@ def test_pb_over_query_sum_with_add_aggregation(client, database_id):
     query = _make_query(client)
     aggregation_query = _make_aggregation_query(client=client, query=query)
 
-    aggregation_query.add_aggregation(SumAggregation("person", alias="total"))
+    aggregation_query.add_aggregation(SumAggregation("appearances", alias="total"))
     pb = aggregation_query._to_pb()
     assert pb.nested_query == _pb_from_query(query)
     assert len(pb.aggregations) == 1
-    assert pb.aggregations[0] == SumAggregation("person", alias="total")._to_pb()
+    assert pb.aggregations[0] == SumAggregation("appearances", alias="total")._to_pb()
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
@@ -198,25 +197,25 @@ def test_pb_over_query_with_avg(client, database_id):
     query = _make_query(client)
     aggregation_query = _make_aggregation_query(client=client, query=query)
 
-    aggregation_query.avg("person", alias="total")
+    aggregation_query.avg("appearances", alias="avg")
     pb = aggregation_query._to_pb()
     assert pb.nested_query == _pb_from_query(query)
     assert len(pb.aggregations) == 1
-    assert pb.aggregations[0] == AvgAggregation("person", alias="total")._to_pb()
+    assert pb.aggregations[0] == AvgAggregation("appearances", alias="avg")._to_pb()
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
-def test_pb_over_query_avf_with_add_aggregation(client, database_id):
+def test_pb_over_query_avg_with_add_aggregation(client, database_id):
     from google.cloud.datastore.query import _pb_from_query
 
     query = _make_query(client)
     aggregation_query = _make_aggregation_query(client=client, query=query)
 
-    aggregation_query.add_aggregation(AvgAggregation("person", alias="total"))
+    aggregation_query.add_aggregation(AvgAggregation("appearances", alias="avg"))
     pb = aggregation_query._to_pb()
     assert pb.nested_query == _pb_from_query(query)
     assert len(pb.aggregations) == 1
-    assert pb.aggregations[0] == AvgAggregation("person", alias="total")._to_pb()
+    assert pb.aggregations[0] == AvgAggregation("appearances", alias="avg")._to_pb()
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
@@ -332,7 +331,7 @@ def test_iterator__build_protobuf_all_values():
     query = _make_query(client)
     alias = "total"
     limit = 2
-    property_ref = "person"
+    property_ref = "appearances"
     aggregation_query = AggregationQuery(client=client, query=query)
     aggregation_query.count(alias)
     aggregation_query.sum(property_ref)
