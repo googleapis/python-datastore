@@ -81,6 +81,7 @@ class DatastoreAdminAsyncClient:
       resource is created for each export/import. The state
       (including any errors encountered) of the export/import may be
       queried via the Operation resource.
+
     Index Service:
 
     - The index service manages Cloud Datastore composite indexes.
