@@ -150,7 +150,7 @@ def test_avg_query_with_alias(aggregation_query_client, nested_query, database_i
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_with_limit(
+def test_count_query_with_limit(
     aggregation_query_client, nested_query, database_id
 ):
     query = nested_query
@@ -170,6 +170,41 @@ def test_aggregation_query_with_limit(
     for r in result[0]:
         assert r.alias == "total_up_to"
         assert r.value == 2
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_sum_query_with_limit(
+    aggregation_query_client, nested_query, database_id
+):
+    query = nested_query
+
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.sum("appearances", alias="sum_limited")
+    limit = 2
+    result = _do_fetch(aggregation_query, limit=limit)  # count with limit = 2
+    assert len(result) == 1
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "sum_limited"
+    expected = sum(c["appearances"] for c in populate_datastore.CHARACTERS[:limit])
+    assert r.value == expected
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_avg_query_with_limit(
+    aggregation_query_client, nested_query, database_id
+):
+    query = nested_query
+
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.avg("appearances", alias="avg_limited")
+    limit = 2
+    result = _do_fetch(aggregation_query, limit=limit)  # count with limit = 2
+    assert len(result) == 1
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "avg_limited"
+    expected = sum(c["appearances"] for c in populate_datastore.CHARACTERS[:limit]) / limit
+    assert r.value == expected
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
