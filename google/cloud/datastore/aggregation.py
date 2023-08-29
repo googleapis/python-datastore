@@ -517,5 +517,8 @@ def _item_to_aggregation_result(iterator, pb):
     :rtype: :class:`google.cloud.datastore.aggregation.AggregationResult`
     :returns: The list of AggregationResults
     """
-    results = [AggregationResult(alias=k, value=pb[k].integer_value) for k in pb.keys()]
+    results = [
+        AggregationResult(alias=k, value=pb[k].integer_value or pb[k].double_value)
+        for k in pb.keys()
+    ]
     return results
