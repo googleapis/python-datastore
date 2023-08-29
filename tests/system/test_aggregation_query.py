@@ -102,7 +102,7 @@ def test_sum_query_default(aggregation_query_client, nested_query, database_id):
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
-    aggregation_query.sum("person")
+    aggregation_query.sum("appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
     for r in result[0]:
@@ -115,11 +115,11 @@ def test_sum_query_with_alias(aggregation_query_client, nested_query, database_i
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
-    aggregation_query.sum("person", alias="sum_person")
+    aggregation_query.sum("appearances", alias="sum_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
     for r in result[0]:
-        assert r.alias == "sum_person"
+        assert r.alias == "sum_appearances"
         assert r.value > 0
 
 
@@ -128,7 +128,7 @@ def test_avg_query_default(aggregation_query_client, nested_query, database_id):
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
-    aggregation_query.avg("person")
+    aggregation_query.avg("appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
     for r in result[0]:
@@ -141,11 +141,11 @@ def test_avg_query_with_alias(aggregation_query_client, nested_query, database_i
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
-    aggregation_query.avg("person", alias="avg_person")
+    aggregation_query.avg("appearances", alias="avg_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
     for r in result[0]:
-        assert r.alias == "avg_person"
+        assert r.alias == "avg_appearances"
         assert r.value > 0
 
 
@@ -181,12 +181,12 @@ def test_aggregation_query_multiple_aggregations(
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.count(alias="total")
     aggregation_query.count(alias="all")
-    aggregation_query.sum("person", alias="sum_person")
-    aggregation_query.avg("person", alias="avg_person")
+    aggregation_query.sum("appearances", alias="sum_appearances")
+    aggregation_query.avg("appearances", alias="avg_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
     for r in result[0]:
-        assert r.alias in ["all", "total", "sum_person", "avg_person"]
+        assert r.alias in ["all", "total", "sum_appearances", "avg_appearances"]
         assert r.value > 0
 
 
@@ -204,16 +204,16 @@ def test_aggregation_query_add_aggregation(
     count_aggregation = CountAggregation(alias="total")
     aggregation_query.add_aggregation(count_aggregation)
 
-    sum_aggregation = SumAggregation("person", alias="sum_person")
+    sum_aggregation = SumAggregation("appearances", alias="sum_appearances")
     aggregation_query.add_aggregation(sum_aggregation)
 
-    avg_aggregation = AvgAggregation("person", alias="avg_person")
+    avg_aggregation = AvgAggregation("appearances", alias="avg_appearances")
     aggregation_query.add_aggregation(avg_aggregation)
 
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
     for r in result[0]:
-        assert r.alias in ["total", "sum_person", "avg_person"]
+        assert r.alias in ["total", "sum_appearances", "avg_appearances"]
         assert r.value > 0
 
 
@@ -232,15 +232,15 @@ def test_aggregation_query_add_aggregations(
     aggregation_query = aggregation_query_client.aggregation_query(query)
     count_aggregation_1 = CountAggregation(alias="total")
     count_aggregation_2 = CountAggregation(alias="all")
-    sum_aggregation = SumAggregation("person", alias="sum_person")
-    avg_aggregation = AvgAggregation("person", alias="avg_person")
+    sum_aggregation = SumAggregation("appearances", alias="sum_appearances")
+    avg_aggregation = AvgAggregation("appearances", alias="avg_appearances")
     aggregation_query.add_aggregations(
         [count_aggregation_1, count_aggregation_2, sum_aggregation, avg_aggregation]
     )
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
     for r in result[0]:
-        assert r.alias in ["total", "all", "sum_person", "avg_person"]
+        assert r.alias in ["total", "all", "sum_appearances", "avg_appearances"]
         assert r.value > 0
 
 
@@ -289,13 +289,13 @@ def test_aggregation_query_with_nested_query_filtered(
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.count(alias="total")
-    aggregation_query.sum("person", alias="sum_person")
-    aggregation_query.avg("person", alias="avg_person")
+    aggregation_query.sum("appearances", alias="sum_appearances")
+    aggregation_query.avg("appearances", alias="avg_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
 
     for r in result[0]:
-        assert r.alias in ["total", "sum_person", "avg_person"]
+        assert r.alias in ["total", "sum_appearances", "avg_appearances"]
         assert r.value == 6
 
 
@@ -316,11 +316,11 @@ def test_aggregation_query_with_nested_query_multiple_filters(
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.count(alias="total")
-    aggregation_query.sum("person", alias="sum_person")
-    aggregation_query.avg("person", alias="avg_person")
+    aggregation_query.sum("appearances", alias="sum_appearances")
+    aggregation_query.avg("appearances", alias="avg_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
 
     for r in result[0]:
-        assert r.alias in ["total", "sum_person", "avg_person"]
+        assert r.alias in ["total", "sum_appearances", "avg_appearances"]
         assert r.value == 4
