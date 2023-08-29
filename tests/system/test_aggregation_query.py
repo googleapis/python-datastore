@@ -70,20 +70,22 @@ def nested_query(aggregation_query_client, ancestor_key):
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_default(aggregation_query_client, nested_query, database_id):
+def test_count_query_default(aggregation_query_client, nested_query, database_id):
     query = nested_query
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.count()
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "property_1"
-        assert r.value == 8
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "property_1"
+    expected_count = len(populate_datastore.CHARACTERS)
+    assert r.value == expected_count
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_with_alias(
+def test_count_query_with_alias(
     aggregation_query_client, nested_query, database_id
 ):
     query = nested_query
@@ -92,9 +94,11 @@ def test_aggregation_query_with_alias(
     aggregation_query.count(alias="total")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "total"
-        assert r.value > 0
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "total"
+    expected_count = len(populate_datastore.CHARACTERS)
+    assert r.value == expected_count
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -105,9 +109,11 @@ def test_sum_query_default(aggregation_query_client, nested_query, database_id):
     aggregation_query.sum("appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "property_1"
-        assert r.value == 8
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "property_1"
+    expected_sum = sum(c["appearances"] for c in populate_datastore.CHARACTERS)
+    assert r.value == expected_sum
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -118,9 +124,11 @@ def test_sum_query_with_alias(aggregation_query_client, nested_query, database_i
     aggregation_query.sum("appearances", alias="sum_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "sum_appearances"
-        assert r.value > 0
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "sum_appearances"
+    expected_sum = sum(c["appearances"] for c in populate_datastore.CHARACTERS)
+    assert r.value == expected_sum
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -131,9 +139,11 @@ def test_avg_query_default(aggregation_query_client, nested_query, database_id):
     aggregation_query.avg("appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "property_1"
-        assert r.value == 8
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "property_1"
+    expected_avg = sum(c["appearances"] for c in populate_datastore.CHARACTERS) / len(populate_datastore.CHARACTERS)
+    assert r.value == expected_avg
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -144,9 +154,11 @@ def test_avg_query_with_alias(aggregation_query_client, nested_query, database_i
     aggregation_query.avg("appearances", alias="avg_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "avg_appearances"
-        assert r.value > 0
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "avg_appearances"
+    expected_avg = sum(c["appearances"] for c in populate_datastore.CHARACTERS) / len(populate_datastore.CHARACTERS)
+    assert r.value == expected_avg
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -159,17 +171,21 @@ def test_count_query_with_limit(
     aggregation_query.count(alias="total")
     result = _do_fetch(aggregation_query)  # count without limit
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "total"
-        assert r.value == 8
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "total"
+    expected_count = len(populate_datastore.CHARACTERS)
+    assert r.value == expected_count
 
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.count(alias="total_up_to")
-    result = _do_fetch(aggregation_query, limit=2)  # count with limit = 2
+    limit = 2
+    result = _do_fetch(aggregation_query, limit=limit)  # count with limit = 2
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias == "total_up_to"
-        assert r.value == 2
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "total_up_to"
+    assert r.value == limit
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
 def test_sum_query_with_limit(
@@ -220,9 +236,12 @@ def test_aggregation_query_multiple_aggregations(
     aggregation_query.avg("appearances", alias="avg_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias in ["all", "total", "sum_appearances", "avg_appearances"]
-        assert r.value > 0
+    assert len(result[0]) == 4
+    result_dict = {r.alias: r for r in result[0]}
+    assert result_dict["total"].value == len(populate_datastore.CHARACTERS)
+    assert result_dict["all"].value == len(populate_datastore.CHARACTERS)
+    assert result_dict["sum_appearances"].value == sum(c["appearances"] for c in populate_datastore.CHARACTERS)
+    assert result_dict["avg_appearances"].value == sum(c["appearances"] for c in populate_datastore.CHARACTERS) / len(populate_datastore.CHARACTERS)
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -247,9 +266,11 @@ def test_aggregation_query_add_aggregation(
 
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias in ["total", "sum_appearances", "avg_appearances"]
-        assert r.value > 0
+    assert len(result[0]) == 3
+    result_dict = {r.alias: r for r in result[0]}
+    assert result_dict["total"].value == len(populate_datastore.CHARACTERS)
+    assert result_dict["sum_appearances"].value == sum(c["appearances"] for c in populate_datastore.CHARACTERS)
+    assert result_dict["avg_appearances"].value == sum(c["appearances"] for c in populate_datastore.CHARACTERS) / len(populate_datastore.CHARACTERS)
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -274,9 +295,12 @@ def test_aggregation_query_add_aggregations(
     )
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-    for r in result[0]:
-        assert r.alias in ["total", "all", "sum_appearances", "avg_appearances"]
-        assert r.value > 0
+    assert len(result[0]) == 4
+    result_dict = {r.alias: r for r in result[0]}
+    assert result_dict["total"].value == len(populate_datastore.CHARACTERS)
+    assert result_dict["all"].value == len(populate_datastore.CHARACTERS)
+    assert result_dict["sum_appearances"].value == sum(c["appearances"] for c in populate_datastore.CHARACTERS)
+    assert result_dict["avg_appearances"].value == sum(c["appearances"] for c in populate_datastore.CHARACTERS) / len(populate_datastore.CHARACTERS)
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -328,10 +352,12 @@ def test_aggregation_query_with_nested_query_filtered(
     aggregation_query.avg("appearances", alias="avg_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-
-    for r in result[0]:
-        assert r.alias in ["total", "sum_appearances", "avg_appearances"]
-        assert r.value == 6
+    assert len(result[0]) == 3
+    result_dict = {r.alias: r for r in result[0]}
+    assert result_dict["total"].value == expected_matches
+    expected_sum = sum(c["appearances"] for c in populate_datastore.CHARACTERS if c["appearances"] >= 20)
+    assert result_dict["sum_appearances"].value == expected_sum
+    assert result_dict["avg_appearances"].value == expected_sum / expected_matches
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -355,7 +381,9 @@ def test_aggregation_query_with_nested_query_multiple_filters(
     aggregation_query.avg("appearances", alias="avg_appearances")
     result = _do_fetch(aggregation_query)
     assert len(result) == 1
-
-    for r in result[0]:
-        assert r.alias in ["total", "sum_appearances", "avg_appearances"]
-        assert r.value == 4
+    assert len(result[0]) == 3
+    result_dict = {r.alias: r for r in result[0]}
+    assert result_dict["total"].value == expected_matches
+    expected_sum = sum(c["appearances"] for c in populate_datastore.CHARACTERS if c["appearances"] >= 26 and "Stark" in c["family"])
+    assert result_dict["sum_appearances"].value == expected_sum
+    assert result_dict["avg_appearances"].value == expected_sum / expected_matches
