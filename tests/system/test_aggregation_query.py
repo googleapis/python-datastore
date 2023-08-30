@@ -85,6 +85,68 @@ def test_count_query_default(aggregation_query_client, nested_query, database_id
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+@pytest.mark.parametrize(
+    "aggregation_type,aggregation_args,expected",
+    [
+        ("count", (), len(populate_datastore.CHARACTERS)),
+        (
+            "sum",
+            ("appearances",),
+            sum(c["appearances"] for c in populate_datastore.CHARACTERS),
+        ),
+        (
+            "avg",
+            ("appearances",),
+            sum(c["appearances"] for c in populate_datastore.CHARACTERS)
+            / len(populate_datastore.CHARACTERS),
+        ),
+    ],
+)
+def test_aggregation_query_in_transaction(
+    aggregation_query_client,
+    nested_query,
+    database_id,
+    aggregation_type,
+    aggregation_args,
+    expected,
+):
+    """
+    When an aggregation query is run in a transaction, the transaction id should be sent with the request.
+    The result is the same as when it is run outside of a transaction.
+    """
+    import mock
+
+    with aggregation_query_client.transaction() as xact:
+        query = nested_query
+
+        aggregation_query = aggregation_query_client.aggregation_query(query)
+        getattr(aggregation_query, aggregation_type)(*aggregation_args)
+        # Cannot use eventual consistency in a transaction
+        with pytest.raises(ValueError):
+            _do_fetch(aggregation_query, eventual=True)
+        # transaction id should be sent with query
+        with mock.patch.object(
+            aggregation_query_client._datastore_api, "run_aggregation_query"
+        ) as mock_api:
+            try:
+                _do_fetch(aggregation_query)
+            except ValueError:
+                # expect failure when parsing mock response
+                pass
+            assert mock_api.call_count == 1
+            request = mock_api.call_args[1]["request"]
+            read_options = request["read_options"]
+            assert read_options.transaction == xact.id
+        # run full query
+        result = _do_fetch(aggregation_query)
+        assert len(result) == 1
+        assert len(result[0]) == 1
+        r = result[0][0]
+        assert r.alias == "property_1"
+        assert r.value == expected
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
 def test_count_query_with_alias(aggregation_query_client, nested_query, database_id):
     query = nested_query
 
@@ -190,12 +252,15 @@ def test_count_query_with_limit(aggregation_query_client, nested_query, database
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.count(alias="total_high_limit")
     limit = 2
-    result = _do_fetch(aggregation_query, limit=expected_count*2)  # count with limit > total
+    result = _do_fetch(
+        aggregation_query, limit=expected_count * 2
+    )  # count with limit > total
     assert len(result) == 1
     assert len(result[0]) == 1
     r = result[0][0]
     assert r.alias == "total_high_limit"
     assert r.value == expected_count
+
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
 def test_sum_query_with_limit(aggregation_query_client, nested_query, database_id):
@@ -215,7 +280,9 @@ def test_sum_query_with_limit(aggregation_query_client, nested_query, database_i
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.sum("appearances", alias="sum_high_limit")
     num_characters = len(populate_datastore.CHARACTERS)
-    result = _do_fetch(aggregation_query, limit=num_characters*2)  # count with limit > total
+    result = _do_fetch(
+        aggregation_query, limit=num_characters * 2
+    )  # count with limit > total
     assert len(result) == 1
     assert len(result[0]) == 1
     r = result[0][0]
@@ -243,12 +310,17 @@ def test_avg_query_with_limit(aggregation_query_client, nested_query, database_i
     aggregation_query = aggregation_query_client.aggregation_query(query)
     aggregation_query.avg("appearances", alias="avg_high_limit")
     num_characters = len(populate_datastore.CHARACTERS)
-    result = _do_fetch(aggregation_query, limit=num_characters*2)  # count with limit > total
+    result = _do_fetch(
+        aggregation_query, limit=num_characters * 2
+    )  # count with limit > total
     assert len(result) == 1
     assert len(result[0]) == 1
     r = result[0][0]
     assert r.alias == "avg_high_limit"
-    assert r.value == sum(c["appearances"] for c in populate_datastore.CHARACTERS) / num_characters
+    assert (
+        r.value
+        == sum(c["appearances"] for c in populate_datastore.CHARACTERS) / num_characters
+    )
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
