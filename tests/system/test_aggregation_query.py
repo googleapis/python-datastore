@@ -187,6 +187,15 @@ def test_count_query_with_limit(aggregation_query_client, nested_query, database
     assert r.alias == "total_up_to"
     assert r.value == limit
 
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.count(alias="total_high_limit")
+    limit = 2
+    result = _do_fetch(aggregation_query, limit=expected_count*2)  # count with limit > total
+    assert len(result) == 1
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "total_high_limit"
+    assert r.value == expected_count
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
 def test_sum_query_with_limit(aggregation_query_client, nested_query, database_id):
@@ -202,6 +211,16 @@ def test_sum_query_with_limit(aggregation_query_client, nested_query, database_i
     assert r.alias == "sum_limited"
     expected = sum(c["appearances"] for c in populate_datastore.CHARACTERS[:limit])
     assert r.value == expected
+
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.sum("appearances", alias="sum_high_limit")
+    num_characters = len(populate_datastore.CHARACTERS)
+    result = _do_fetch(aggregation_query, limit=num_characters*2)  # count with limit > total
+    assert len(result) == 1
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "sum_high_limit"
+    assert r.value == sum(c["appearances"] for c in populate_datastore.CHARACTERS)
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -220,6 +239,58 @@ def test_avg_query_with_limit(aggregation_query_client, nested_query, database_i
         sum(c["appearances"] for c in populate_datastore.CHARACTERS[:limit]) / limit
     )
     assert r.value == expected
+
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.avg("appearances", alias="avg_high_limit")
+    num_characters = len(populate_datastore.CHARACTERS)
+    result = _do_fetch(aggregation_query, limit=num_characters*2)  # count with limit > total
+    assert len(result) == 1
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "avg_high_limit"
+    assert r.value == sum(c["appearances"] for c in populate_datastore.CHARACTERS) / num_characters
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_count_query_empty(aggregation_query_client, nested_query, database_id):
+    query = nested_query
+    query.add_filter("name", "=", "nonexistent")
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.count(alias="total")
+    result = _do_fetch(aggregation_query)
+    assert len(result) == 1
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "total"
+    assert r.value == 0
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_sum_query_empty(aggregation_query_client, nested_query, database_id):
+    query = nested_query
+    query.add_filter("family", "=", "nonexistent")
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.sum("appearances", alias="sum")
+    result = _do_fetch(aggregation_query)
+    assert len(result) == 1
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "sum"
+    assert r.value == 0
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_avg_query_empty(aggregation_query_client, nested_query, database_id):
+    query = nested_query
+    query.add_filter("family", "=", "nonexistent")
+    aggregation_query = aggregation_query_client.aggregation_query(query)
+    aggregation_query.avg("appearances", alias="avg")
+    result = _do_fetch(aggregation_query)
+    assert len(result) == 1
+    assert len(result[0]) == 1
+    r = result[0][0]
+    assert r.alias == "avg"
+    assert r.value == 0
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
