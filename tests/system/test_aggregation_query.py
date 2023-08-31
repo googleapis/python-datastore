@@ -114,29 +114,11 @@ def test_aggregation_query_in_transaction(
     When an aggregation query is run in a transaction, the transaction id should be sent with the request.
     The result is the same as when it is run outside of a transaction.
     """
-    import mock
-
-    with aggregation_query_client.transaction() as xact:
+    with aggregation_query_client.transaction():
         query = nested_query
 
         aggregation_query = aggregation_query_client.aggregation_query(query)
         getattr(aggregation_query, aggregation_type)(*aggregation_args)
-        # Cannot use eventual consistency in a transaction
-        with pytest.raises(ValueError):
-            _do_fetch(aggregation_query, eventual=True)
-        # transaction id should be sent with query
-        with mock.patch.object(
-            aggregation_query_client._datastore_api, "run_aggregation_query"
-        ) as mock_api:
-            try:
-                _do_fetch(aggregation_query)
-            except ValueError:
-                # expect failure when parsing mock response
-                pass
-            assert mock_api.call_count == 1
-            request = mock_api.call_args[1]["request"]
-            read_options = request["read_options"]
-            assert read_options.transaction == xact.id
         # run full query
         result = _do_fetch(aggregation_query)
         assert len(result) == 1

@@ -88,26 +88,10 @@ def test_query_in_transaction(ancestor_query, database_id):
     when a query is run in a transaction, the transaction id should be sent with the request.
     the result is the same as when it is run outside of a transaction.
     """
-    import mock
-
     query = ancestor_query
     client = query._client
     expected_matches = 8
-    with client.transaction() as xact:
-        # cannot use eventual consistency in a transaction
-        with pytest.raises(ValueError):
-            _do_fetch(query, eventual=True)
-        # transaction id should be sent with query
-        with mock.patch.object(client._datastore_api, "run_query") as mock_api:
-            try:
-                _do_fetch(query)
-            except TypeError:
-                # expect failure when parsing mock response
-                pass
-            assert mock_api.call_count == 1
-            request = mock_api.call_args[1]["request"]
-            read_options = request["read_options"]
-            assert read_options.transaction == xact.id
+    with client.transaction():
         # run full query
         entities = _do_fetch(query)
         assert len(entities) == expected_matches

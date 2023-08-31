@@ -537,6 +537,81 @@ def test__item_to_aggregation_result():
         assert result[0].value == map_composite_mock.__getitem__().integer_value
 
 
+@pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
+@pytest.mark.parametrize(
+    "aggregation_type,aggregation_args",
+    [
+        ("count", ()),
+        (
+            "sum",
+            ("appearances",),
+        ),
+        ("avg", ("appearances",)),
+    ],
+)
+def test_eventual_transaction_fails(database_id, aggregation_type, aggregation_args):
+    """
+    Queries with eventual consistency cannot be used in a transaction.
+    """
+    import mock
+
+    transaction = mock.Mock()
+    transaction.id = b"expected_id"
+    client = _Client(None, database=database_id, transaction=transaction)
+
+    query = _make_query(client)
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+    # initiate requested aggregation (ex count, sum, avg)
+    getattr(aggregation_query, aggregation_type)(*aggregation_args)
+    with pytest.raises(ValueError):
+        list(aggregation_query.fetch(eventual=True))
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
+@pytest.mark.parametrize(
+    "aggregation_type,aggregation_args",
+    [
+        ("count", ()),
+        (
+            "sum",
+            ("appearances",),
+        ),
+        ("avg", ("appearances",)),
+    ],
+)
+def test_transaction_id_populated(database_id, aggregation_type, aggregation_args):
+    """
+    When an aggregation is run in the context of a transaction, the transaction
+    ID should be populated in the request.
+    """
+    import mock
+
+    transaction = mock.Mock()
+    transaction.id = b"expected_id"
+    mock_datastore_api = mock.Mock()
+    mock_gapic = mock_datastore_api.run_aggregation_query
+    mock_gapic.return_value = _make_aggregation_query_response([])
+    client = _Client(
+        None,
+        datastore_api=mock_datastore_api,
+        database=database_id,
+        transaction=transaction,
+    )
+
+    query = _make_query(client)
+    aggregation_query = _make_aggregation_query(client=client, query=query)
+
+    # initiate requested aggregation (ex count, sum, avg)
+    getattr(aggregation_query, aggregation_type)(*aggregation_args)
+    # run mock query
+    list(aggregation_query.fetch())
+    assert mock_gapic.call_count == 1
+    request = mock_gapic.call_args[1]["request"]
+    read_options = request["read_options"]
+    # ensure transaction ID is populated
+    assert read_options.transaction == client.current_transaction.id
+
+
 class _Client(object):
     def __init__(
         self,
@@ -570,7 +645,9 @@ def _make_aggregation_iterator(*args, **kw):
     return AggregationResultIterator(*args, **kw)
 
 
-def _make_aggregation_query_response(aggregation_pbs, more_results_enum):
+def _make_aggregation_query_response(
+    aggregation_pbs, more_results_enum=3
+):  # 3 = NO_MORE_RESULTS
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
     from google.cloud.datastore_v1.types import aggregation_result
 
