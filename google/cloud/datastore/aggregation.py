@@ -95,7 +95,6 @@ class SumAggregation(BaseAggregation):
         Convert this instance to the protobuf representation
         """
         aggregation_pb = query_pb2.AggregationQuery.Aggregation()
-        aggregation_pb.alias = self.alias
         aggregation_pb.sum = query_pb2.AggregationQuery.Aggregation.Sum()
         aggregation_pb.sum.property.name = self.property_ref
         aggregation_pb.alias = self.alias
