@@ -23,7 +23,7 @@ branchProtectionRules:
     - 'unittest / cover (pull_request)'
     - 'docs / docfx (pull_request)'
     - 'docs / docs (pull_request)'
-    - 'lint / lint'
+    - 'lint / lint (pull_request)'
 # List of explicit permissions to add (additive only)
 permissionRules:
     # Team slug to add to repository permissions
