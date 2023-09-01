@@ -19,6 +19,11 @@ branchProtectionRules:
     - 'Kokoro'
     - 'Kokoro system-3.8'
     - 'cla/google'
+    - 'OwlBot Post Processor'
+    - 'unittest / cover (pull_request)'
+    - 'docs / docfx (pull_request)'
+    - 'docs / docs (pull_request)'
+    - 'lint / lint'
 # List of explicit permissions to add (additive only)
 permissionRules:
     # Team slug to add to repository permissions
