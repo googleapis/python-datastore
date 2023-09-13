@@ -118,3 +118,64 @@ class TestDatastoreSnippets:
         assert captured.err == ""
 
         client.entities_to_delete.extend(tasks)
+
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_sum_query_on_kind(self, capsys, client):
+        tasks = snippets.sum_query_on_kind(client)
+        captured = capsys.readouterr()
+        assert (
+            captured.out.strip() == "Total sum of hours in tasks is 9"
+        )
+        assert captured.err == ""
+
+        client.entities_to_delete.extend(tasks)
+
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_sum_query_property_filter(self, capsys, client):
+        tasks = snippets.sum_query_property_filter(client)
+        captured = capsys.readouterr()
+        assert (
+            captured.out.strip() == "Total sum of hours in completed tasks is 8"
+        )
+        assert captured.err == ""
+
+        client.entities_to_delete.extend(tasks)
+
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_avg_query_on_kind(self, capsys, client):
+        tasks = snippets.avg_query_on_kind(client)
+        captured = capsys.readouterr()
+        assert (
+            captured.out.strip() == "Total average of hours in tasks is 3.0"
+        )
+        assert captured.err == ""
+
+        client.entities_to_delete.extend(tasks)
+
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_avg_query_property_filter(self, capsys, client):
+        tasks = snippets.avg_query_property_filter(client)
+        captured = capsys.readouterr()
+        assert (
+            captured.out.strip() == "Total average of hours in completed tasks is 4.0"
+        )
+        assert captured.err == ""
+
+        client.entities_to_delete.extend(tasks)
+
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_multiple_aggregations_query(self, capsys, client):
+        tasks = snippets.multiple_aggregations_query(client)
+        captured = capsys.readouterr()
+        assert (
+            'avg_aggregation value is 3.0' in captured.out
+        )
+        assert (
+            'count_aggregation value is 3' in captured.out
+        )
+        assert (
+            'sum_aggregation value is 9' in captured.out
+        )
+        assert captured.err == ""
+
+        client.entities_to_delete.extend(tasks)
