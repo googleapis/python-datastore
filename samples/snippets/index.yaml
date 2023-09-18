@@ -1,6 +1,0 @@
-indexes:
-
-- kind: Task
-  properties:
-  - name: done
-  - name: hours
