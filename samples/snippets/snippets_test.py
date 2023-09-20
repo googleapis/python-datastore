@@ -74,6 +74,10 @@ def setup_indexes(request):
         # Pass if the index already exists
         except (google.api_core.exceptions.AlreadyExists):
             pass
+        except (google.api_core.exceptions.PermissionDenied):
+            # Indexes get created but run into this issue
+            # https://github.com/googleapis/python-datastore/pull/480#issuecomment-1726364556
+            pass
 
 
 @pytest.mark.flaky
