@@ -69,14 +69,11 @@ def setup_indexes(request):
     for index in indexes:
         request = datastore_admin_v1.CreateIndexRequest(project_id=PROJECT, index=index)
         # Create the required index
+        # Dependant tests will fail until the index is ready
         try:
-            admin_client.create_index(request).result()
+            admin_client.create_index(request)
         # Pass if the index already exists
         except (google.api_core.exceptions.AlreadyExists):
-            pass
-        except (google.api_core.exceptions.PermissionDenied):
-            # Indexes get created but run into this issue
-            # https://github.com/googleapis/python-datastore/pull/480#issuecomment-1726364556
             pass
 
 
