@@ -233,9 +233,9 @@ def count_query_with_stale_read(client):
 def sum_query_on_kind(client):
     # [START datastore_sum_aggregation_query_on_kind]
     # Set up sample entities
-    task1 = datastore.Entity(client.key("Task", 4871162878230528))
-    task2 = datastore.Entity(client.key("Task", 5069834475798528))
-    task3 = datastore.Entity(client.key("Task", 5081353846521856))
+    task1 = datastore.Entity(client.key("Task"))
+    task2 = datastore.Entity(client.key("Task"))
+    task3 = datastore.Entity(client.key("Task"))
 
     task1["hours"] = 5
     task2["hours"] = 3
@@ -258,9 +258,9 @@ def sum_query_on_kind(client):
 def sum_query_property_filter(client):
     # [START datastore_sum_aggregation_query_with_filters]
     # Set up sample entities
-    task1 = datastore.Entity(client.key("Task", 4871162878230528))
-    task2 = datastore.Entity(client.key("Task", 5069834475798528))
-    task3 = datastore.Entity(client.key("Task", 5081353846521856))
+    task1 = datastore.Entity(client.key("Task"))
+    task2 = datastore.Entity(client.key("Task"))
+    task3 = datastore.Entity(client.key("Task"))
 
     task1["hours"] = 5
     task2["hours"] = 3
@@ -292,9 +292,9 @@ def sum_query_property_filter(client):
 def avg_query_on_kind(client):
     # [START datastore_avg_aggregation_query_on_kind]
     # Set up sample entities
-    task1 = datastore.Entity(client.key("Task", 4871162878230528))
-    task2 = datastore.Entity(client.key("Task", 5069834475798528))
-    task3 = datastore.Entity(client.key("Task", 5081353846521856))
+    task1 = datastore.Entity(client.key("Task"))
+    task2 = datastore.Entity(client.key("Task"))
+    task3 = datastore.Entity(client.key("Task"))
 
     task1["hours"] = 5
     task2["hours"] = 3
@@ -317,9 +317,9 @@ def avg_query_on_kind(client):
 def avg_query_property_filter(client):
     # [START datastore_avg_aggregation_query_with_filters]
     # Set up sample entities
-    task1 = datastore.Entity(client.key("Task", 4871162878230528))
-    task2 = datastore.Entity(client.key("Task", 5069834475798528))
-    task3 = datastore.Entity(client.key("Task", 5081353846521856))
+    task1 = datastore.Entity(client.key("Task"))
+    task2 = datastore.Entity(client.key("Task"))
+    task3 = datastore.Entity(client.key("Task"))
 
     task1["hours"] = 5
     task2["hours"] = 3
@@ -351,9 +351,9 @@ def avg_query_property_filter(client):
 def multiple_aggregations_query(client):
     # [START datastore_multiple_aggregation_in_structured_query]
     # Set up sample entities
-    task1 = datastore.Entity(client.key("Task", 4871162878230528))
-    task2 = datastore.Entity(client.key("Task", 5069834475798528))
-    task3 = datastore.Entity(client.key("Task", 5081353846521856))
+    task1 = datastore.Entity(client.key("Task"))
+    task2 = datastore.Entity(client.key("Task"))
+    task3 = datastore.Entity(client.key("Task"))
 
     task1["hours"] = 5
     task2["hours"] = 3
