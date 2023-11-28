@@ -293,22 +293,23 @@ class Transaction(Batch):
         if self._status == self._INITIAL:
             # If we haven't begun yet, set to closed state
             self._end_empty_transaction()
-        else:
-            kwargs = _make_retry_timeout_kwargs(retry, timeout)
+            return
 
-            try:
-                # No need to use the response it contains nothing.
-                request = {
-                    "project_id": self.project,
-                    "transaction": self._id,
-                }
+        kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
-                set_database_id_to_request(request, self._client.database)
-                self._client._datastore_api.rollback(request=request, **kwargs)
-            finally:
-                super(Transaction, self).rollback()
-                # Clear our own ID in case this gets accidentally reused.
-                self._id = None
+        try:
+            # No need to use the response it contains nothing.
+            request = {
+                "project_id": self.project,
+                "transaction": self._id,
+            }
+
+            set_database_id_to_request(request, self._client.database)
+            self._client._datastore_api.rollback(request=request, **kwargs)
+        finally:
+            super(Transaction, self).rollback()
+            # Clear our own ID in case this gets accidentally reused.
+            self._id = None
 
     def commit(self, retry=None, timeout=None):
         """Commits the transaction.
@@ -335,14 +336,15 @@ class Transaction(Batch):
         if self._status == self._INITIAL:
             # If we haven't begun yet, set to closed state
             self._end_empty_transaction()
-        else:
-            kwargs = _make_retry_timeout_kwargs(retry, timeout)
+            return
 
-            try:
-                super(Transaction, self).commit(**kwargs)
-            finally:
-                # Clear our own ID in case this gets accidentally reused.
-                self._id = None
+        kwargs = _make_retry_timeout_kwargs(retry, timeout)
+
+        try:
+            super(Transaction, self).commit(**kwargs)
+        finally:
+            # Clear our own ID in case this gets accidentally reused.
+            self._id = None
 
     def put(self, entity):
         """Adds an entity to be committed.
