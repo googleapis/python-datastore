@@ -151,8 +151,10 @@ class Transaction(Batch):
 
     :type begin_later: bool
     :param begin_later: (Optional) If True, the transaction will be started
-                        when the first RPC is made. If False, the transaction
-                        will be started immediately. Default is True.
+                        lazily (i.e. when the first RPC is made). If False,
+                        the transaction will be started as soon as the context manager
+                        is entered. `self.begin()` can also be called manually to begin
+                        the transaction at any time. Default is True.
 
     :raises: :class:`ValueError` if read_time is specified when
              ``read_only=False``.
