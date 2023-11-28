@@ -428,22 +428,26 @@ def test_transaction_context_manager_w_raise(database_id):
     client._datastore_api.rollback.assert_called_once_with(request=expected_request)
 
 
+@pytest.mark.parametrize("with_exception", [False, True])
 @pytest.mark.parametrize("database_id", [None, "somedb"])
-def test_transaction_context_manager_w_begin_later(database_id):
+def test_transaction_context_manager_w_begin_later(database_id, with_exception):
     """
     If begin_later is set, don't begin transaction when entering context manager
     """
-    from google.cloud.datastore_v1.types import datastore as datastore_pb2
-
     project = "PROJECT"
     id_ = 912830
     ds_api = _make_datastore_api(xact_id=id_)
     client = _Client(project, datastore_api=ds_api, database=database_id)
     xact = _make_transaction(client, begin_later=True)
 
-    with xact:
-        assert xact._status == xact._INITIAL
-        assert xact.id is None
+    try:
+        with xact:
+            assert xact._status == xact._INITIAL
+            assert xact.id is None
+            if with_exception:
+                raise RuntimeError("expected")
+    except RuntimeError:
+        pass
     # should be finalized after context manager block
     assert xact._status == xact._ABORTED
     assert xact.id is None
@@ -464,6 +468,71 @@ def test_transaction_put_read_only(database_id):
 
     with pytest.raises(RuntimeError):
         xact.put(entity)
+
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_transaction_begin_later_with_delete(database_id):
+    """
+    begin_later transactions should begin on delete
+    """
+    project = "PROJECT"
+    id_ = 912830
+    ds_api = _make_datastore_api(xact_id=id_)
+    client = _Client(project, datastore_api=ds_api, database=database_id)
+    xact = _make_transaction(client, begin_later=True)
+
+    fake_key = mock.Mock()
+
+    with mock.patch("google.cloud.datastore.batch.Batch.delete") as delete:
+        with xact:
+            assert xact._status == xact._INITIAL
+            assert xact.id is None
+            xact.delete(fake_key)
+            # call should have started transaction
+            assert xact._status == xact._IN_PROGRESS
+            assert xact.id == id_
+            # super class delete should have been called
+            assert delete.call_count == 1
+            assert delete.call_args == mock.call(fake_key)
+    # should be finalized after context manager block
+    assert xact._status == xact._FINISHED
+    assert xact.id is None
+    # should have committed
+    assert ds_api.commit.call_count == 1
+    assert ds_api.rollback.call_count == 0
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_transaction_begin_later_with_put(database_id):
+    """
+    begin_later transactions should begin on put
+    """
+    project = "PROJECT"
+    id_ = 912830
+    ds_api = _make_datastore_api(xact_id=id_)
+    client = _Client(project, datastore_api=ds_api, database=database_id)
+    xact = _make_transaction(client, begin_later=True)
+
+    fake_entity = mock.Mock()
+
+    with mock.patch("google.cloud.datastore.batch.Batch.put") as put:
+        with xact:
+            assert xact._status == xact._INITIAL
+            assert xact.id is None
+            xact.put(fake_entity)
+            # call should have started transaction
+            assert xact._status == xact._IN_PROGRESS
+            assert xact.id == id_
+            # super class put should have been called
+            assert put.call_count == 1
+            assert put.call_args == mock.call(fake_entity)
+    # should be finalized after context manager block
+    assert xact._status == xact._FINISHED
+    assert xact.id is None
+    # should have committed
+    assert ds_api.commit.call_count == 1
+    assert ds_api.rollback.call_count == 0
 
 
 def _make_key(kind, id_, project, database=None):
