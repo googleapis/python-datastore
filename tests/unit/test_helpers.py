@@ -586,6 +586,31 @@ def test__get_read_options_w_default_wo_txn_w_read_time():
     assert read_options == expected
 
 
+def test__get_read_options_w_new_transaction():
+    from google.cloud.datastore.helpers import get_read_options
+    from google.cloud.datastore_v1.types import datastore as datastore_pb2
+    input_options = datastore_pb2.TransactionOptions()
+    read_options = get_read_options(False, None, new_transaction_options=input_options)
+    expected = datastore_pb2.ReadOptions(new_transaction=input_options)
+    assert read_options == expected
+
+
+@pytest.mark.parametrize("args", [
+    (True, "id"), (True, "id", None), (True, None, "read_time"), (True, None, None, "new"),
+    (False, "id", "read_time"), (False, "id", None, "new"),
+    (False, None, "read_time", "new"),
+])
+def test__get_read_options_w_multiple_args(args):
+    """
+    arguments are mutually exclusive.
+    Should raise ValueError if multiple are set
+    """
+    from google.cloud.datastore.helpers import get_read_options
+
+    with pytest.raises(ValueError):
+        get_read_options(*args)
+
+
 def test__pb_attr_value_w_datetime_naive():
     import calendar
     import datetime
