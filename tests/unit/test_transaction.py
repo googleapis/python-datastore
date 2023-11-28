@@ -375,6 +375,7 @@ def test_transaction_context_manager_no_raise(database_id):
     xact = _make_transaction(client)
 
     with xact:
+        assert xact._status == xact._IN_PROGRESS
         # only set between begin / commit
         assert xact.id == id_
 
@@ -425,6 +426,30 @@ def test_transaction_context_manager_w_raise(database_id):
     expected_request = {"project_id": project, "transaction": id_}
     set_database_id_to_request(expected_request, database_id)
     client._datastore_api.rollback.assert_called_once_with(request=expected_request)
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_transaction_context_manager_w_begin_later(database_id):
+    """
+    If begin_later is set, don't begin transaction when entering context manager
+    """
+    from google.cloud.datastore_v1.types import datastore as datastore_pb2
+
+    project = "PROJECT"
+    id_ = 912830
+    ds_api = _make_datastore_api(xact_id=id_)
+    client = _Client(project, datastore_api=ds_api, database=database_id)
+    xact = _make_transaction(client, begin_later=True)
+
+    with xact:
+        assert xact._status == xact._INITIAL
+        assert xact.id is None
+    # should be finalized after context manager block
+    assert xact._status == xact._ABORTED
+    assert xact.id is None
+    # no need to call commit or rollback
+    assert ds_api.commit.call_count == 0
+    assert ds_api.rollback.call_count == 0
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])

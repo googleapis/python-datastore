@@ -263,6 +263,15 @@ class Transaction(Batch):
         self._id = transaction_id
         self._status = self._IN_PROGRESS
 
+    def _end_empty_transaction(self):
+        """
+        End a transaction that was never used.
+        """
+        if self._status != self._INITIAL:
+            raise ValueError("Transaction already begun.")
+        self._status = self._ABORTED
+        self._id = None
+
     def rollback(self, retry=None, timeout=None):
         """Rolls back the current transaction.
 
@@ -281,21 +290,25 @@ class Transaction(Batch):
             Note that if ``retry`` is specified, the timeout applies
             to each individual attempt.
         """
-        kwargs = _make_retry_timeout_kwargs(retry, timeout)
+        if self._status == self._INITIAL:
+            # If we haven't begun yet, set to closed state
+            self._end_empty_transaction()
+        else:
+            kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
-        try:
-            # No need to use the response it contains nothing.
-            request = {
-                "project_id": self.project,
-                "transaction": self._id,
-            }
+            try:
+                # No need to use the response it contains nothing.
+                request = {
+                    "project_id": self.project,
+                    "transaction": self._id,
+                }
 
-            set_database_id_to_request(request, self._client.database)
-            self._client._datastore_api.rollback(request=request, **kwargs)
-        finally:
-            super(Transaction, self).rollback()
-            # Clear our own ID in case this gets accidentally reused.
-            self._id = None
+                set_database_id_to_request(request, self._client.database)
+                self._client._datastore_api.rollback(request=request, **kwargs)
+            finally:
+                super(Transaction, self).rollback()
+                # Clear our own ID in case this gets accidentally reused.
+                self._id = None
 
     def commit(self, retry=None, timeout=None):
         """Commits the transaction.
@@ -319,13 +332,17 @@ class Transaction(Batch):
             Note that if ``retry`` is specified, the timeout applies
             to each individual attempt.
         """
-        kwargs = _make_retry_timeout_kwargs(retry, timeout)
+        if self._status == self._INITIAL:
+            # If we haven't begun yet, set to closed state
+            self._end_empty_transaction()
+        else:
+            kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
-        try:
-            super(Transaction, self).commit(**kwargs)
-        finally:
-            # Clear our own ID in case this gets accidentally reused.
-            self._id = None
+            try:
+                super(Transaction, self).commit(**kwargs)
+            finally:
+                # Clear our own ID in case this gets accidentally reused.
+                self._id = None
 
     def put(self, entity):
         """Adds an entity to be committed.
