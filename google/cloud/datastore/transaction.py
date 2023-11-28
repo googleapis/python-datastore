@@ -149,15 +149,22 @@ class Transaction(Batch):
     :param read_time: (Optional) Time at which the transaction reads entities.
                       Only allowed when ``read_only=True``. This feature is in private preview.
 
+    :type begin_later: bool
+    :param begin_later: (Optional) If True, the transaction will be started
+                        when the first RPC is made. If False, the transaction
+                        will be started immediately. Default is True.
+
     :raises: :class:`ValueError` if read_time is specified when
              ``read_only=False``.
     """
 
     _status = None
 
-    def __init__(self, client, read_only=False, read_time=None):
+    def __init__(self, client, read_only=False, read_time=None, begin_later=False):
+        # TODO: begin_later defaults to True
         super(Transaction, self).__init__(client)
         self._id = None
+        self._begin_later = begin_later
 
         if read_only:
             if read_time is not None:
@@ -180,7 +187,7 @@ class Transaction(Batch):
     def id(self):
         """Getter for the transaction ID.
 
-        :rtype: str
+        :rtype: str or None
         :returns: The ID of the current transaction.
         """
         return self._id
@@ -320,4 +327,19 @@ class Transaction(Batch):
         if "read_only" in self._options:
             raise RuntimeError("Transaction is read only")
         else:
+            if self._begin_later and self._status == self._INITIAL:
+                # If we haven't begun yet, we need to do so now.
+                self.begin()
             super(Transaction, self).put(entity)
+
+    def delete(self, key):
+        if self._begin_later and self._status == self._INITIAL:
+            # If we haven't begun yet, we need to do so now.
+            self.begin()
+        super(Transaction, self).delete(key)
+
+    def __enter__(self):
+        if not self._begin_later:
+            self.begin()
+        self._client._push_batch(self)
+        return self

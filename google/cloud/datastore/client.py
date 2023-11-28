@@ -122,7 +122,7 @@ def _extended_lookup(
     missing=None,
     deferred=None,
     eventual=False,
-    transaction_id=None,
+    transaction=None,
     retry=None,
     timeout=None,
     read_time=None,
@@ -158,10 +158,10 @@ def _extended_lookup(
                      consistency.  If True, request ``EVENTUAL`` read
                      consistency.
 
-    :type transaction_id: str
-    :param transaction_id: If passed, make the request in the scope of
-                           the given transaction.  Incompatible with
-                           ``eventual==True`` or ``read_time``.
+    :type transaction: Transaction
+    :param transaction: If passed, make the request in the scope of
+                        the given transaction.  Incompatible with
+                        ``eventual==True`` or ``read_time``.
 
     :type retry: :class:`google.api_core.retry.Retry`
     :param retry:
@@ -177,7 +177,7 @@ def _extended_lookup(
     :type read_time: datetime
     :param read_time:
         (Optional) Read time to use for read consistency. Incompatible with
-        ``eventual==True`` or ``transaction_id``.
+        ``eventual==True`` or ``transaction``.
         This feature is in private preview.
 
     :type database: str
@@ -199,8 +199,15 @@ def _extended_lookup(
 
     results = []
 
+    transaction_id = None
+    new_transaction_options = None
+    if transaction is not None:
+        transaction_id = transaction.id
+        if transaction._begin_later and transaction_id is None and transaction._status == transaction._INITIAL:
+            new_transaction_options = transaction._options
+
     loop_num = 0
-    read_options = helpers.get_read_options(eventual, transaction_id, read_time)
+    read_options = helpers.get_read_options(eventual, transaction_id, read_time, new_transaction_options)
     while loop_num < _MAX_LOOPS:  # loop against possible deferred.
         loop_num += 1
         request = {
@@ -213,6 +220,11 @@ def _extended_lookup(
             request=request,
             **kwargs,
         )
+
+        # set new transaction id
+        if new_transaction_options is not None:
+            transaction._id = lookup_response.transaction
+            transaction._status = transaction._IN_PROGRESS
 
         # Accumulate the new results.
         results.extend(result.entity for result in lookup_response.found)
@@ -570,7 +582,7 @@ class Client(ClientWithProject):
             eventual=eventual,
             missing=missing,
             deferred=deferred,
-            transaction_id=transaction and transaction.id,
+            transaction=transaction,
             retry=retry,
             timeout=timeout,
             read_time=read_time,
