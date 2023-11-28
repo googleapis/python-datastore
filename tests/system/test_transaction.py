@@ -40,9 +40,12 @@ def test_transaction_via_with_statement(
     entities_to_delete.append(retrieved_entity)
     assert retrieved_entity == entity
 
+
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
 @pytest.mark.parametrize("first_call", ["get", "put", "delete"])
-def test_transaction_begin_later(datastore_client, entities_to_delete, database_id, first_call):
+def test_transaction_begin_later(
+    datastore_client, entities_to_delete, database_id, first_call
+):
     """
     transactions with begin_later should call begin on first rpc
     """

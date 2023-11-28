@@ -230,7 +230,9 @@ def entity_to_protobuf(entity):
     return entity_pb
 
 
-def get_read_options(eventual, transaction_id, read_time=None, new_transaction_options=None):
+def get_read_options(
+    eventual, transaction_id, read_time=None, new_transaction_options=None
+):
     """Validate rules for read options, and assign to the request.
 
     Helper method for ``lookup()`` and ``run_query``.
@@ -253,8 +255,13 @@ def get_read_options(eventual, transaction_id, read_time=None, new_transaction_o
     :raises: :class:`ValueError` if more than one of ``eventual==True``,
             ``transaction_id``, ``read_time``, and ``new_transaction_options`` is specified.
     """
-    if sum(bool(x) for x in (eventual, transaction_id, read_time, new_transaction_options)) > 1:
-        raise ValueError("At most one of eventual, transaction, or read_time is allowed.")
+    is_set = [
+        bool(x) for x in (eventual, transaction_id, read_time, new_transaction_options)
+    ]
+    if sum(is_set) > 1:
+        raise ValueError(
+            "At most one of eventual, transaction, or read_time is allowed."
+        )
     new_options = datastore_pb2.ReadOptions()
     if transaction_id is not None:
         new_options.transaction = transaction_id
@@ -265,7 +272,9 @@ def get_read_options(eventual, transaction_id, read_time=None, new_transaction_o
     if new_transaction_options is not None:
         new_options.new_transaction = new_transaction_options
     if eventual:
-        new_options.read_consistency = datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
+        new_options.read_consistency = (
+            datastore_pb2.ReadOptions.ReadConsistency.EVENTUAL
+        )
     return new_options
 
 

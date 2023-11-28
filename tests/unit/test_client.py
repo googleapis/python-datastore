@@ -715,7 +715,6 @@ def test_client_get_multi_hit_w_transaction_begin_later(database_id):
 
     kind = "Kind"
     id_ = 1234
-    path = [{"kind": kind, "id": id_}]
     expected_server_id = b"123"
 
     # Make a found entity pb to be returned from mock backend.
@@ -724,7 +723,9 @@ def test_client_get_multi_hit_w_transaction_begin_later(database_id):
     # Make a connection to return the entity pb.
     creds = _make_credentials()
     client = _make_client(credentials=creds, database=database_id)
-    lookup_response = _make_lookup_response(results=[entity_pb], transaction=expected_server_id)
+    lookup_response = _make_lookup_response(
+        results=[entity_pb], transaction=expected_server_id
+    )
     ds_api = _make_datastore_api(lookup_response=lookup_response)
     client._datastore_api_internal = ds_api
 

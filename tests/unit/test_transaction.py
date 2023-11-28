@@ -470,7 +470,6 @@ def test_transaction_put_read_only(database_id):
         xact.put(entity)
 
 
-
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_transaction_begin_later_with_delete(database_id):
     """

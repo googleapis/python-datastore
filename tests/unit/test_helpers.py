@@ -589,17 +589,25 @@ def test__get_read_options_w_default_wo_txn_w_read_time():
 def test__get_read_options_w_new_transaction():
     from google.cloud.datastore.helpers import get_read_options
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
+
     input_options = datastore_pb2.TransactionOptions()
     read_options = get_read_options(False, None, new_transaction_options=input_options)
     expected = datastore_pb2.ReadOptions(new_transaction=input_options)
     assert read_options == expected
 
 
-@pytest.mark.parametrize("args", [
-    (True, "id"), (True, "id", None), (True, None, "read_time"), (True, None, None, "new"),
-    (False, "id", "read_time"), (False, "id", None, "new"),
-    (False, None, "read_time", "new"),
-])
+@pytest.mark.parametrize(
+    "args",
+    [
+        (True, "id"),
+        (True, "id", None),
+        (True, None, "read_time"),
+        (True, None, None, "new"),
+        (False, "id", "read_time"),
+        (False, "id", None, "new"),
+        (False, None, "read_time", "new"),
+    ],
+)
 def test__get_read_options_w_multiple_args(args):
     """
     arguments are mutually exclusive.
