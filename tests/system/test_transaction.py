@@ -40,6 +40,52 @@ def test_transaction_via_with_statement(
     entities_to_delete.append(retrieved_entity)
     assert retrieved_entity == entity
 
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+@pytest.mark.parametrize("first_call", ["get", "put", "delete"])
+def test_transaction_begin_later(datastore_client, entities_to_delete, database_id, first_call):
+    """
+    transactions with begin_later should call begin on first rpc
+    """
+    key = datastore_client.key("Company", "Google")
+    entity = datastore.Entity(key=key)
+    entity["url"] = "www.google.com"
+
+    datastore_client.put(entity)
+    result_entity = datastore_client.get(key)
+
+    with datastore_client.transaction(begin_later=True) as xact:
+        assert xact._id is None
+        assert xact._status == xact._INITIAL
+        if first_call == "get":
+            datastore_client.get(entity.key)
+        elif first_call == "put":
+            xact.put(entity)
+        elif first_call == "delete":
+            xact.delete(result_entity.key)
+        assert xact._id is not None
+        assert xact._status == xact._IN_PROGRESS
+    assert xact._status == xact._FINISHED
+
+    entities_to_delete.append(result_entity)
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+@pytest.mark.parametrize("raise_exception", [True, False])
+def test_transaction_begin_later_noop(datastore_client, database_id, raise_exception):
+    """
+    empty begin later transactions should terminate quietly
+    """
+    try:
+        with datastore_client.transaction(begin_later=True) as xact:
+            assert xact._id is None
+            assert xact._status == xact._INITIAL
+            if raise_exception:
+                raise RuntimeError("test")
+    except RuntimeError:
+        pass
+    assert xact._status == xact._ABORTED
+    assert xact._id is None
+
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
 def test_transaction_via_explicit_begin_get_commit(
