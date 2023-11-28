@@ -203,7 +203,8 @@ def _extended_lookup(
     new_transaction_options = None
     if transaction is not None:
         transaction_id = transaction.id
-        if transaction._begin_later and transaction_id is None and transaction._status == transaction._INITIAL:
+        if transaction_id is None and transaction._begin_later and transaction._status == transaction._INITIAL:
+            # if transaction hasn't been initialized, initialize it as part of this request
             new_transaction_options = transaction._options
 
     loop_num = 0
@@ -221,10 +222,9 @@ def _extended_lookup(
             **kwargs,
         )
 
-        # set new transaction id
-        if new_transaction_options is not None:
-            transaction._id = lookup_response.transaction
-            transaction._status = transaction._IN_PROGRESS
+        # set new transaction id if we just started a transaction
+        if transaction and lookup_response.transaction:
+            transaction._begin_with_id(lookup_response.transaction)
 
         # Accumulate the new results.
         results.extend(result.entity for result in lookup_response.found)

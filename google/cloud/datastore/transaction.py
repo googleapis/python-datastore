@@ -188,7 +188,7 @@ class Transaction(Batch):
         """Getter for the transaction ID.
 
         :rtype: str or None
-        :returns: The ID of the current transaction.
+        :returns: The ID of the current transaction, or None if not started.
         """
         return self._id
 
@@ -246,6 +246,21 @@ class Transaction(Batch):
         except:  # noqa: E722 do not use bare except, specify exception instead
             self._status = self._ABORTED
             raise
+
+    def _begin_with_id(self, transaction_id):
+        """
+        Attach newly created transaction to an existing transaction ID.
+
+        This is used when begin_later is True, when the first lookup request
+        associated with this transaction creates a new transaction ID.
+
+        :type transaction_id: str
+        :param transaction_id: ID of the transaction to attach to.
+        """
+        if self._status is not self._INITIAL:
+            raise ValueError("Transaction already begun.")
+        self._id = transaction_id
+        self._status = self._IN_PROGRESS
 
     def rollback(self, retry=None, timeout=None):
         """Rolls back the current transaction.
