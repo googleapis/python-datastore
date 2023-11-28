@@ -188,7 +188,7 @@ class Transaction(Batch):
     def id(self):
         """Getter for the transaction ID.
 
-        :rtype: str or None
+        :rtype: bytes or None
         :returns: The ID of the current transaction, or None if not started.
         """
         return self._id
@@ -255,7 +255,7 @@ class Transaction(Batch):
         This is used when begin_later is True, when the first lookup request
         associated with this transaction creates a new transaction ID.
 
-        :type transaction_id: str
+        :type transaction_id: bytes
         :param transaction_id: ID of the transaction to attach to.
         """
         if self._status is not self._INITIAL:
