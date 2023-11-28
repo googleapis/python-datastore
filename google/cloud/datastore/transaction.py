@@ -263,15 +263,36 @@ class Transaction(Batch):
         self._id = transaction_id
         self._status = self._IN_PROGRESS
 
-    def _end_empty_transaction(self):
+    def _abort_if_not_began(fn):
         """
-        End a transaction that was never used.
-        """
-        if self._status != self._INITIAL:
-            raise ValueError("Transaction already begun.")
-        self._status = self._ABORTED
-        self._id = None
+        Function wrapper to abort transaction if it hasn't started when
+        the wrapped function is called.
 
+        Used by commit and rollback.
+        """
+        def wrapped(self, *args, **kwargs):
+            if self._status == self._INITIAL:
+                self._status = self._ABORTED
+                self._id = None
+                return None
+            else:
+                return fn(self, *args, **kwargs)
+        return wrapped
+
+    def _begin_if_not_began(fn):
+        """
+        Function wrapper to begin transaction if it hasn't started when
+        the wrapped function is called.
+
+        Used by put and delete.
+        """
+        def wrapped(self, *args, **kwargs):
+            if self._begin_later and self._status == self._INITIAL:
+                self.begin()
+            return fn(self, *args, **kwargs)
+        return wrapped
+
+    @_abort_if_not_began
     def rollback(self, retry=None, timeout=None):
         """Rolls back the current transaction.
 
@@ -290,11 +311,6 @@ class Transaction(Batch):
             Note that if ``retry`` is specified, the timeout applies
             to each individual attempt.
         """
-        if self._status == self._INITIAL:
-            # If we haven't begun yet, set to closed state
-            self._end_empty_transaction()
-            return
-
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         try:
@@ -311,6 +327,7 @@ class Transaction(Batch):
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
 
+    @_abort_if_not_began
     def commit(self, retry=None, timeout=None):
         """Commits the transaction.
 
@@ -333,11 +350,6 @@ class Transaction(Batch):
             Note that if ``retry`` is specified, the timeout applies
             to each individual attempt.
         """
-        if self._status == self._INITIAL:
-            # If we haven't begun yet, set to closed state
-            self._end_empty_transaction()
-            return
-
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         try:
@@ -346,6 +358,7 @@ class Transaction(Batch):
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
 
+    @_begin_if_not_began
     def put(self, entity):
         """Adds an entity to be committed.
 
@@ -362,15 +375,10 @@ class Transaction(Batch):
         if "read_only" in self._options:
             raise RuntimeError("Transaction is read only")
         else:
-            if self._begin_later and self._status == self._INITIAL:
-                # If we haven't begun yet, we need to do so now.
-                self.begin()
             super(Transaction, self).put(entity)
 
+    @_begin_if_not_began
     def delete(self, key):
-        if self._begin_later and self._status == self._INITIAL:
-            # If we haven't begun yet, we need to do so now.
-            self.begin()
         super(Transaction, self).delete(key)
 
     def __enter__(self):
