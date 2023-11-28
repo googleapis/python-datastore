@@ -160,8 +160,7 @@ class Transaction(Batch):
 
     _status = None
 
-    def __init__(self, client, read_only=False, read_time=None, begin_later=False):
-        # TODO: begin_later defaults to True
+    def __init__(self, client, read_only=False, read_time=None, begin_later=True):
         super(Transaction, self).__init__(client)
         self._id = None
         self._begin_later = begin_later

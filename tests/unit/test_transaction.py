@@ -518,6 +518,9 @@ def _make_options(read_only=False, previous_transaction=None, read_time=None):
 def _make_transaction(client, **kw):
     from google.cloud.datastore.transaction import Transaction
 
+    # default to begin_later=False
+    kw.setdefault("begin_later", False)
+
     return Transaction(client, **kw)
 
 

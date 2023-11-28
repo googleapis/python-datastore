@@ -1847,7 +1847,7 @@ def _make_commit_response(*keys):
     return datastore_pb2.CommitResponse(mutation_results=mutation_results)
 
 
-def _make_lookup_response(results=(), missing=(), deferred=()):
+def _make_lookup_response(results=(), missing=(), deferred=(), transaction=None):
     entity_results_found = [
         mock.Mock(entity=result, spec=["entity"]) for result in results
     ]
@@ -1858,7 +1858,8 @@ def _make_lookup_response(results=(), missing=(), deferred=()):
         found=entity_results_found,
         missing=entity_results_missing,
         deferred=deferred,
-        spec=["found", "missing", "deferred"],
+        transaction=transaction,
+        spec=["found", "missing", "deferred", "transaction"],
     )
 
 
