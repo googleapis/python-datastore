@@ -82,6 +82,27 @@ def test_transaction_constructor_read_write_w_read_time(database_id):
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_transaction_constructor_begin_later(database_id):
+    from google.cloud.datastore.transaction import Transaction
+
+    project = "PROJECT"
+    client = _Client(project, database=database_id)
+    expected_id = b"1234"
+
+    xact = _make_transaction(client, begin_later=True)
+    assert xact._status == Transaction._INITIAL
+    assert xact.id is None
+
+    xact._begin_with_id(expected_id)
+    assert xact._status == Transaction._IN_PROGRESS
+    assert xact.id == expected_id
+
+    # calling a second time should raise exeception
+    with pytest.raises(ValueError):
+        xact._begin_with_id(expected_id)
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_transaction_current(database_id):
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
 
