@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Create / interact with Google Cloud Datastore transactions."""
+import functools
 
 from google.cloud.datastore.batch import Batch
 from google.cloud.datastore_v1.types import TransactionOptions
@@ -270,6 +271,8 @@ class Transaction(Batch):
 
         Used by commit and rollback.
         """
+
+        @functools.wraps(fn)
         def wrapped(self, *args, **kwargs):
             if self._status == self._INITIAL:
                 self._status = self._ABORTED
@@ -277,6 +280,7 @@ class Transaction(Batch):
                 return None
             else:
                 return fn(self, *args, **kwargs)
+
         return wrapped
 
     def _begin_if_not_began(fn):
@@ -286,10 +290,13 @@ class Transaction(Batch):
 
         Used by put and delete.
         """
+
+        @functools.wraps(fn)
         def wrapped(self, *args, **kwargs):
             if self._begin_later and self._status == self._INITIAL:
                 self.begin()
             return fn(self, *args, **kwargs)
+
         return wrapped
 
     @_abort_if_not_began
