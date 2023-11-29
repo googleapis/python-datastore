@@ -14,6 +14,7 @@
 
 """Create / interact with Google Cloud Datastore transactions."""
 import functools
+from typing import Callable
 
 from google.cloud.datastore.batch import Batch
 from google.cloud.datastore_v1.types import TransactionOptions
@@ -264,8 +265,7 @@ class Transaction(Batch):
         self._id = transaction_id
         self._status = self._IN_PROGRESS
 
-    @staticmethod
-    def _abort_if_not_began(fn):
+    def _abort_if_not_began(fn: Callable) -> Callable:  # type: ignore
         """
         Function wrapper to abort transaction if it hasn't started when
         the wrapped function is called.
@@ -284,8 +284,7 @@ class Transaction(Batch):
 
         return wrapped
 
-    @staticmethod
-    def _begin_if_not_began(fn):
+    def _begin_if_not_began(fn: Callable) -> Callable:  # type: ignore
         """
         Function wrapper to begin transaction if it hasn't started when
         the wrapped function is called.
