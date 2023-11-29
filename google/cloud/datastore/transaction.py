@@ -264,6 +264,7 @@ class Transaction(Batch):
         self._id = transaction_id
         self._status = self._IN_PROGRESS
 
+    @staticmethod
     def _abort_if_not_began(fn):
         """
         Function wrapper to abort transaction if it hasn't started when
@@ -283,6 +284,7 @@ class Transaction(Batch):
 
         return wrapped
 
+    @staticmethod
     def _begin_if_not_began(fn):
         """
         Function wrapper to begin transaction if it hasn't started when
