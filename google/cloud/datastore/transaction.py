@@ -156,7 +156,7 @@ class Transaction(Batch):
                         lazily (i.e. when the first RPC is made). If False,
                         the transaction will be started as soon as the context manager
                         is entered. `self.begin()` can also be called manually to begin
-                        the transaction at any time. Default is True.
+                        the transaction at any time. Default is False.
 
     :raises: :class:`ValueError` if read_time is specified when
              ``read_only=False``.
@@ -164,7 +164,7 @@ class Transaction(Batch):
 
     _status = None
 
-    def __init__(self, client, read_only=False, read_time=None, begin_later=True):
+    def __init__(self, client, read_only=False, read_time=None, begin_later=False):
         super(Transaction, self).__init__(client)
         self._id = None
         self._begin_later = begin_later
