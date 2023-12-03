@@ -713,7 +713,7 @@ def test_client_get_multi_hit_w_read_time(database_id):
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
     from google.protobuf.timestamp_pb2 import Timestamp
 
-    read_time = datetime.utcfromtimestamp(1641058200.123456)
+    read_time = datetime.fromtimestamp(1641058200.123456)
     read_time_pb = Timestamp(seconds=1641058200, nanos=123456000)
     kind = "Kind"
     id_ = 1234

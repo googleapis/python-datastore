@@ -56,7 +56,7 @@ def test_transaction_constructor_w_read_time(database_id):
 
     project = "PROJECT"
     id_ = 850302
-    read_time = datetime.utcfromtimestamp(1641058200.123456)
+    read_time = datetime.fromtimestamp(1641058200.123456)
     ds_api = _make_datastore_api(xact=id_)
     client = _Client(project, datastore_api=ds_api, database=database_id)
     options = _make_options(read_only=True, read_time=read_time)
@@ -73,7 +73,7 @@ def test_transaction_constructor_read_write_w_read_time(database_id):
 
     project = "PROJECT"
     id_ = 850302
-    read_time = datetime.utcfromtimestamp(1641058200.123456)
+    read_time = datetime.fromtimestamp(1641058200.123456)
     ds_api = _make_datastore_api(xact=id_)
     client = _Client(project, datastore_api=ds_api, database=database_id)
 
@@ -178,7 +178,7 @@ def test_transaction_begin_w_read_time(database_id):
 
     project = "PROJECT"
     id_ = 889
-    read_time = datetime.utcfromtimestamp(1641058200.123456)
+    read_time = datetime.fromtimestamp(1641058200.123456)
     ds_api = _make_datastore_api(xact_id=id_)
     client = _Client(project, datastore_api=ds_api, database=database_id)
     xact = _make_transaction(client, read_only=True, read_time=read_time)
