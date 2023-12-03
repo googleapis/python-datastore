@@ -1245,14 +1245,14 @@ def _assert_reserve_ids_warning(warned):
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_client_reserve_ids_w_partial_key(database_id):
-    import warnings
-
     num_ids = 2
     incomplete_key = _Key(_Key.kind, None)
     creds = _make_credentials()
     client = _make_client(credentials=creds, database=database_id)
     with pytest.raises(ValueError):
-        with warnings.catch_warnings(record=True) as warned:
+        with pytest.warns(
+            DeprecationWarning, match="Client.reserve_ids is deprecated"
+        ) as warned:
             client.reserve_ids(incomplete_key, num_ids)
 
     _assert_reserve_ids_warning(warned)
@@ -1260,14 +1260,14 @@ def test_client_reserve_ids_w_partial_key(database_id):
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_client_reserve_ids_w_wrong_num_ids(database_id):
-    import warnings
-
     num_ids = "2"
     complete_key = _Key(database=database_id)
     creds = _make_credentials()
     client = _make_client(credentials=creds, database=database_id)
     with pytest.raises(ValueError):
-        with warnings.catch_warnings(record=True) as warned:
+        with pytest.warns(
+            DeprecationWarning, match="Client.reserve_ids is deprecated"
+        ) as warned:
             client.reserve_ids(complete_key, num_ids)
 
     _assert_reserve_ids_warning(warned)
@@ -1275,14 +1275,14 @@ def test_client_reserve_ids_w_wrong_num_ids(database_id):
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_client_reserve_ids_w_non_numeric_key_name(database_id):
-    import warnings
-
     num_ids = 2
     complete_key = _Key(_Key.kind, "batman", database=database_id)
     creds = _make_credentials()
     client = _make_client(credentials=creds, database=database_id)
     with pytest.raises(ValueError):
-        with warnings.catch_warnings(record=True) as warned:
+        with pytest.warns(
+            DeprecationWarning, match="Client.reserve_ids is deprecated"
+        ) as warned:
             client.reserve_ids(complete_key, num_ids)
 
     _assert_reserve_ids_warning(warned)
@@ -1290,8 +1290,6 @@ def test_client_reserve_ids_w_non_numeric_key_name(database_id):
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_client_reserve_ids_w_completed_key(database_id):
-    import warnings
-
     num_ids = 2
     creds = _make_credentials()
     client = _make_client(credentials=creds, _use_grpc=False, database=database_id)
@@ -1301,7 +1299,9 @@ def test_client_reserve_ids_w_completed_key(database_id):
     client._datastore_api_internal = ds_api
     assert not complete_key.is_partial
 
-    with warnings.catch_warnings(record=True) as warned:
+    with pytest.warns(
+        DeprecationWarning, match="Client.reserve_ids is deprecated"
+    ) as warned:
         client.reserve_ids(complete_key, num_ids)
 
     reserved_keys = (
@@ -1317,8 +1317,6 @@ def test_client_reserve_ids_w_completed_key(database_id):
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_client_reserve_ids_w_completed_key_w_retry_w_timeout(database_id):
-    import warnings
-
     num_ids = 2
     retry = mock.Mock()
     timeout = 100000
@@ -1331,7 +1329,9 @@ def test_client_reserve_ids_w_completed_key_w_retry_w_timeout(database_id):
     ds_api = mock.Mock(reserve_ids=reserve_ids, spec=["reserve_ids"])
     client._datastore_api_internal = ds_api
 
-    with warnings.catch_warnings(record=True) as warned:
+    with pytest.warns(
+        DeprecationWarning, match="Client.reserve_ids is deprecated"
+    ) as warned:
         client.reserve_ids(complete_key, num_ids, retry=retry, timeout=timeout)
 
     reserved_keys = (
@@ -1351,8 +1351,6 @@ def test_client_reserve_ids_w_completed_key_w_retry_w_timeout(database_id):
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_client_reserve_ids_w_completed_key_w_ancestor(database_id):
-    import warnings
-
     num_ids = 2
     creds = _make_credentials()
     client = _make_client(credentials=creds, _use_grpc=False, database=database_id)
@@ -1362,7 +1360,9 @@ def test_client_reserve_ids_w_completed_key_w_ancestor(database_id):
     client._datastore_api_internal = ds_api
     assert not complete_key.is_partial
 
-    with warnings.catch_warnings(record=True) as warned:
+    with pytest.warns(
+        DeprecationWarning, match="Client.reserve_ids is deprecated"
+    ) as warned:
         client.reserve_ids(complete_key, num_ids)
 
     reserved_keys = (
