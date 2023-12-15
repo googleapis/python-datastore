@@ -707,7 +707,6 @@ def test_transaction_begin_later(database_id):
     import mock
     from google.cloud.datastore_v1.types import TransactionOptions
 
-
     # make a fake begin_later transaction
     transaction = mock.Mock()
     transaction.id = None
@@ -738,8 +737,6 @@ def test_transaction_begin_later(database_id):
     # ensure new_transaction is populated
     assert not read_options.transaction
     assert read_options.new_transaction == transaction._options
-
-
 
 
 def test_iterator_constructor_defaults():

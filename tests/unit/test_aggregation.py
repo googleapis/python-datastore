@@ -662,6 +662,7 @@ def test_transaction_begin_later(database_id, aggregation_type, aggregation_args
     assert not read_options.transaction
     assert read_options.new_transaction == transaction._options
 
+
 class _Client(object):
     def __init__(
         self,
