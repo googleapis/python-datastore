@@ -705,6 +705,7 @@ def test_transaction_begin_later(database_id):
     the new_transaction field should be populated in the request read_options.
     """
     import mock
+    from google.cloud.datastore_v1.types import TransactionOptions
 
 
     # make a fake begin_later transaction
@@ -712,6 +713,7 @@ def test_transaction_begin_later(database_id):
     transaction.id = None
     transaction._begin_later = True
     transaction._state = transaction._INITIAL
+    transaction._options = TransactionOptions(read_only=TransactionOptions.ReadOnly())
 
     mock_datastore_api = mock.Mock()
     mock_gapic = mock_datastore_api.run_query
@@ -734,7 +736,7 @@ def test_transaction_begin_later(database_id):
     request = mock_gapic.call_args[1]["request"]
     read_options = request["read_options"]
     # ensure new_transaction is populated
-    assert read_options.transaction is None
+    assert not read_options.transaction
     assert read_options.new_transaction == transaction._options
 
 

@@ -203,7 +203,7 @@ def _extended_lookup(
     new_transaction_options = None
     if transaction is not None:
         transaction_id = transaction.id
-        if and transaction._begin_later and transaction._status == transaction._INITIAL:
+        if transaction._begin_later and transaction._status == transaction._INITIAL:
             # if transaction hasn't been initialized, initialize it as part of this request
             new_transaction_options = transaction._options
 
