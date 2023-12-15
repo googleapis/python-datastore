@@ -778,13 +778,16 @@ class Iterator(page_iterator.Iterator):
             return None
 
         query_pb = self._build_protobuf()
+        new_transaction_options = None
         transaction = self.client.current_transaction
         if transaction is None:
             transaction_id = None
         else:
             transaction_id = transaction.id
+            # if transaction hasn't been initialized, initialize it as part of this request
+            new_transaction_options = transaction._options
         read_options = helpers.get_read_options(
-            self._eventual, transaction_id, self._read_time
+            self._eventual, transaction_id, self._read_time, new_transaction_options
         )
 
         partition_id = entity_pb2.PartitionId(

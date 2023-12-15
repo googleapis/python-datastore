@@ -698,6 +698,48 @@ def test_transaction_id_populated(database_id):
     assert read_options.transaction == client.current_transaction.id
 
 
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_transaction_begin_later(database_id):
+    """
+    When an aggregation is run in the context of a transaction with begin_later=True,
+    the new_transaction field should be populated in the request read_options.
+    """
+    import mock
+
+
+    # make a fake begin_later transaction
+    transaction = mock.Mock()
+    transaction.id = None
+    transaction._begin_later = True
+    transaction._state = transaction._INITIAL
+
+    mock_datastore_api = mock.Mock()
+    mock_gapic = mock_datastore_api.run_query
+
+    more_results_enum = 3  # NO_MORE_RESULTS
+    response_pb = _make_query_response([], b"", more_results_enum, 0)
+    mock_gapic.return_value = response_pb
+
+    client = _Client(
+        None,
+        datastore_api=mock_datastore_api,
+        database=database_id,
+        transaction=transaction,
+    )
+
+    query = _make_query(client)
+    # run mock query
+    list(query.fetch())
+    assert mock_gapic.call_count == 1
+    request = mock_gapic.call_args[1]["request"]
+    read_options = request["read_options"]
+    # ensure new_transaction is populated
+    assert read_options.transaction is None
+    assert read_options.new_transaction == transaction._options
+
+
+
+
 def test_iterator_constructor_defaults():
     query = object()
     client = object()
