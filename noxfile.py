@@ -134,8 +134,14 @@ def format(session):
 def mypy(session):
     """Verify type hints are mypy compatible."""
     session.install("-e", ".")
+    # Exclude types-protobuf==4.24.0.20240106
+    # See https://github.com/python/typeshed/issues/11254
     session.install(
-        "mypy", "types-setuptools", "types-mock", "types-protobuf", "types-requests"
+        "mypy",
+        "types-setuptools",
+        "types-mock",
+        "types-protobuf!=4.24.0.20240106",
+        "types-requests",
     )
     session.run("mypy", "-p", "google")
 
