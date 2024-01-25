@@ -4,6 +4,13 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+## [2.20.0](https://github.com/googleapis/python-datastore/compare/v2.19.0...v2.20.0) (2024-01-25)
+
+
+### Features
+
+* Add new types QueryMode, QueryPlan, ResultSetStats ([#512](https://github.com/googleapis/python-datastore/issues/512)) ([b399c4c](https://github.com/googleapis/python-datastore/commit/b399c4c216f4f3a5226ccdf7399a6e29c7cb348a))
+
 ## [2.19.0](https://github.com/googleapis/python-datastore/compare/v2.18.0...v2.19.0) (2023-12-10)
 
 
