@@ -366,7 +366,6 @@ class Transaction(Batch):
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
 
-    @_begin_if_not_began
     def put(self, entity):
         """Adds an entity to be committed.
 
@@ -385,7 +384,6 @@ class Transaction(Batch):
         else:
             super(Transaction, self).put(entity)
 
-    @_begin_if_not_began
     def delete(self, key):
         super(Transaction, self).delete(key)
 
