@@ -284,22 +284,6 @@ class Transaction(Batch):
 
         return wrapped
 
-    def _begin_if_not_began(fn: Callable) -> Callable:  # type: ignore
-        """
-        Function wrapper to begin transaction if it hasn't started when
-        the wrapped function is called.
-
-        Used by put and delete.
-        """
-
-        @functools.wraps(fn)
-        def wrapped(self, *args, **kwargs):
-            if self._begin_later and self._status == self._INITIAL:
-                self.begin()
-            return fn(self, *args, **kwargs)
-
-        return wrapped
-
     @_abort_if_not_began
     def rollback(self, retry=None, timeout=None):
         """Rolls back the current transaction.
