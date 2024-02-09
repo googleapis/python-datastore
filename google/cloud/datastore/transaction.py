@@ -368,9 +368,6 @@ class Transaction(Batch):
         else:
             super(Transaction, self).put(entity)
 
-    def delete(self, key):
-        super(Transaction, self).delete(key)
-
     def __enter__(self):
         if not self._begin_later:
             self.begin()
