@@ -471,7 +471,9 @@ def _next_page_helper(txn_id=None, retry=None, timeout=None, database_id=None):
     if txn_id is None:
         client = _Client(project, datastore_api=ds_api, database=database_id)
     else:
-        transaction = mock.Mock(id=txn_id, spec=["id"])
+        transaction = mock.Mock(
+            id=txn_id, _begin_later=False, spec=["id", "_begin_later"]
+        )
         client = _Client(
             project, datastore_api=ds_api, transaction=transaction, database=database_id
         )

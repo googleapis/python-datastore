@@ -784,8 +784,9 @@ class Iterator(page_iterator.Iterator):
             transaction_id = None
         else:
             transaction_id = transaction.id
-            # if transaction hasn't been initialized, initialize it as part of this request
-            new_transaction_options = transaction._options
+            if transaction._begin_later and transaction._status == transaction._INITIAL:
+                # if transaction hasn't been initialized, initialize it as part of this request
+                new_transaction_options = transaction._options
         read_options = helpers.get_read_options(
             self._eventual, transaction_id, self._read_time, new_transaction_options
         )

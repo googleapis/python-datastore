@@ -667,7 +667,7 @@ def test_eventual_transaction_fails(database_id):
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_transaction_id_populated(database_id):
     """
-    When an aggregation is run in the context of a transaction, the transaction
+    When an query is run in the context of a transaction, the transaction
     ID should be populated in the request.
     """
     import mock
@@ -699,7 +699,7 @@ def test_transaction_id_populated(database_id):
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
-def test_transaction_begin_later(database_id):
+def test_query_transaction_begin_later(database_id):
     """
     When an aggregation is run in the context of a transaction with begin_later=True,
     the new_transaction field should be populated in the request read_options.
@@ -711,7 +711,7 @@ def test_transaction_begin_later(database_id):
     transaction = mock.Mock()
     transaction.id = None
     transaction._begin_later = True
-    transaction._state = transaction._INITIAL
+    transaction._status = transaction._INITIAL
     transaction._options = TransactionOptions(read_only=TransactionOptions.ReadOnly())
 
     mock_datastore_api = mock.Mock()
@@ -926,7 +926,9 @@ def _next_page_helper(
     if txn_id is None:
         client = _Client(project, database=database, datastore_api=ds_api)
     else:
-        transaction = mock.Mock(id=txn_id, spec=["id"])
+        transaction = mock.Mock(
+            id=txn_id, _begin_later=False, spec=["id", "_begin_later"]
+        )
         client = _Client(
             project, database=database, datastore_api=ds_api, transaction=transaction
         )
