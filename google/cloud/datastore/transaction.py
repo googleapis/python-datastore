@@ -265,26 +265,6 @@ class Transaction(Batch):
         self._id = transaction_id
         self._status = self._IN_PROGRESS
 
-    def _abort_if_not_began(fn: Callable) -> Callable:  # type: ignore
-        """
-        Function wrapper to abort transaction if it hasn't started when
-        the wrapped function is called.
-
-        Used by commit and rollback.
-        """
-
-        @functools.wraps(fn)
-        def wrapped(self, *args, **kwargs):
-            if self._status == self._INITIAL:
-                self._status = self._ABORTED
-                self._id = None
-                return None
-            else:
-                return fn(self, *args, **kwargs)
-
-        return wrapped
-
-    @_abort_if_not_began
     def rollback(self, retry=None, timeout=None):
         """Rolls back the current transaction.
 
@@ -303,6 +283,12 @@ class Transaction(Batch):
             Note that if ``retry`` is specified, the timeout applies
             to each individual attempt.
         """
+        # if transaction has not started, abort it
+        if self._status == self._INITIAL:
+            self._status = self._ABORTED
+            self._id = None
+            return None
+
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         try:
@@ -319,7 +305,6 @@ class Transaction(Batch):
             # Clear our own ID in case this gets accidentally reused.
             self._id = None
 
-    @_abort_if_not_began
     def commit(self, retry=None, timeout=None):
         """Commits the transaction.
 
@@ -342,6 +327,15 @@ class Transaction(Batch):
             Note that if ``retry`` is specified, the timeout applies
             to each individual attempt.
         """
+        # if transaction has not begun, either begin now, or abort if empty
+        if self._status == self._INITIAL:
+            if not self._mutations:
+                self._status = self._ABORTED
+                self._id = None
+                return None
+            else:
+                self.begin()
+
         kwargs = _make_retry_timeout_kwargs(retry, timeout)
 
         try:
@@ -373,3 +367,10 @@ class Transaction(Batch):
             self.begin()
         self._client._push_batch(self)
         return self
+
+    def _allow_mutations(self):
+        """
+        Mutations can be added to a transaction if it is in IN_PROGRESS state,
+        or if it is in INITIAL state and the begin_later flag is set.
+        """
+        return self._status == self._IN_PROGRESS or (self._begin_later and self._status == self._INITIAL)
