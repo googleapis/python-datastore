@@ -619,6 +619,58 @@ def test__get_read_options_w_multiple_args(args):
         get_read_options(*args)
 
 
+def test__get_transaction_options_none():
+    """
+    test with empty transaction input
+    """
+    from google.cloud.datastore.helpers import get_transaction_options
+
+    t_id, new_t = get_transaction_options(None)
+    assert t_id is None
+    assert new_t is None
+
+
+def test__get_transaction_options_w_id():
+    """
+    test with transaction with id set
+    """
+    from google.cloud.datastore.helpers import get_transaction_options
+    from google.cloud.datastore import Transaction
+
+    expected_id = b"123abc"
+    txn = Transaction(None, begin_later=True)
+    txn._id = expected_id
+    t_id, new_t = get_transaction_options(txn)
+    assert t_id == expected_id
+    assert new_t is None
+
+
+def test__get_transaction_options_w_begin_later():
+    """
+    if begin later is set and it hasn't begun, should return new_transaction_options
+    """
+    from google.cloud.datastore.helpers import get_transaction_options
+    from google.cloud.datastore import Transaction
+
+    txn = Transaction(None, begin_later=True)
+    t_id, new_t = get_transaction_options(txn)
+    assert t_id is None
+    assert new_t is txn._options
+
+
+def test__get_transaction_options_not_started():
+    """
+    If the transaction is noet set as begin_later, but it hasn't begun, return None for both
+    """
+    from google.cloud.datastore.helpers import get_transaction_options
+    from google.cloud.datastore import Transaction
+
+    txn = Transaction(None, begin_later=False)
+    t_id, new_t = get_transaction_options(txn)
+    assert t_id is None
+    assert new_t is None
+
+
 def test__pb_attr_value_w_datetime_naive():
     import calendar
     import datetime
