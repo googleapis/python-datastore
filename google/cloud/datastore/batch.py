@@ -383,10 +383,11 @@ class Batch(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
-            if exc_type is None:
-                self.commit()
-            else:
-                self.rollback()
+            if self._status not in (self._ABORTED, self._FINISHED):
+                if exc_type is None:
+                    self.commit()
+                else:
+                    self.rollback()
         finally:
             self._client._pop_batch()
 

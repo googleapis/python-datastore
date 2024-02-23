@@ -47,7 +47,7 @@ def test_transaction_begin_later(
     datastore_client, entities_to_delete, database_id, first_call
 ):
     """
-    transactions with begin_later should call begin on first rpc
+    transactions with begin_later should call begin on first get rpc, or on commit
     """
     key = datastore_client.key("Company", "Google")
     entity = datastore.Entity(key=key)
@@ -61,12 +61,14 @@ def test_transaction_begin_later(
         assert xact._status == xact._INITIAL
         if first_call == "get":
             datastore_client.get(entity.key)
+            assert xact._status == xact._IN_PROGRESS
+            assert xact._id is not None
         elif first_call == "put":
             xact.put(entity)
+            assert xact._status == xact._INITIAL
         elif first_call == "delete":
             xact.delete(result_entity.key)
-        assert xact._id is not None
-        assert xact._status == xact._IN_PROGRESS
+            assert xact._status == xact._INITIAL
     assert xact._status == xact._FINISHED
 
     entities_to_delete.append(result_entity)
