@@ -13,9 +13,6 @@
 # limitations under the License.
 
 """Create / interact with Google Cloud Datastore transactions."""
-import functools
-from typing import Callable
-
 from google.cloud.datastore.batch import Batch
 from google.cloud.datastore_v1.types import TransactionOptions
 from google.protobuf import timestamp_pb2
