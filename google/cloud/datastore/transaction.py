@@ -373,4 +373,6 @@ class Transaction(Batch):
         Mutations can be added to a transaction if it is in IN_PROGRESS state,
         or if it is in INITIAL state and the begin_later flag is set.
         """
-        return self._status == self._IN_PROGRESS or (self._begin_later and self._status == self._INITIAL)
+        return self._status == self._IN_PROGRESS or (
+            self._begin_later and self._status == self._INITIAL
+        )

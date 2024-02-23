@@ -509,6 +509,7 @@ def test_transaction_put_w_begin_later(database_id):
         # should still be in initial state
         assert xact._status == xact._INITIAL
 
+
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_transaction_delete_w_begin_later(database_id):
     """

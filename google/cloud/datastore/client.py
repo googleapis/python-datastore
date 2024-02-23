@@ -200,17 +200,13 @@ def _extended_lookup(
     results = []
 
     transaction_id = None
-    new_transaction_options = None
-    if transaction is not None:
-        transaction_id = transaction.id
-        if transaction._begin_later and transaction._status == transaction._INITIAL:
-            # if transaction hasn't been initialized, initialize it as part of this request
-            new_transaction_options = transaction._options
-
-    loop_num = 0
+    transaction_id, new_transaction_options = helpers.get_transaction_options(
+        transaction
+    )
     read_options = helpers.get_read_options(
         eventual, transaction_id, read_time, new_transaction_options
     )
+    loop_num = 0
     while loop_num < _MAX_LOOPS:  # loop against possible deferred.
         loop_num += 1
         request = {

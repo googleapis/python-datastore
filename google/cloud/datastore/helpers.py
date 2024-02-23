@@ -278,6 +278,26 @@ def get_read_options(
     return new_options
 
 
+def get_transaction_options(transaction):
+    """
+    Get the transaction_id or new_transaction_options field from an active transaction object,
+    for use in get_read_options
+
+    These are mutually-exclusive fields, so one or both will be None.
+
+    :rtype: Tuple[Optional[bytes], Optional[google.cloud.datastore_v1.types.TransactionOptions]]
+    :returns: The transaction_id and new_transaction_options fields from the transaction object.
+    """
+    transaction_id, new_transaction_options = None, None
+    if transaction is not None:
+        if transaction.id is not None:
+            transaction_id = transaction.id
+        elif transaction._begin_later and transaction._status == transaction._INITIAL:
+            # If the transaction has not yet been begun, we can use the new_transaction_options field.
+            new_transaction_options = transaction._options
+    return transaction_id, new_transaction_options
+
+
 def key_from_protobuf(pb):
     """Factory method for creating a key based on a protobuf.
 
