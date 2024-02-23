@@ -383,6 +383,7 @@ class Batch(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
+            # commit or rollback if not in terminal state
             if self._status not in (self._ABORTED, self._FINISHED):
                 if exc_type is None:
                     self.commit()
