@@ -61,6 +61,12 @@ from .query import (
     Query,
     QueryResultBatch,
 )
+from .query_profile import (
+    ExecutionStats,
+    ExplainMetrics,
+    ExplainOptions,
+    PlanSummary,
+)
 
 __all__ = (
     "AggregationResult",
@@ -103,4 +109,8 @@ __all__ = (
     "PropertyReference",
     "Query",
     "QueryResultBatch",
+    "ExecutionStats",
+    "ExplainMetrics",
+    "ExplainOptions",
+    "PlanSummary",
 )

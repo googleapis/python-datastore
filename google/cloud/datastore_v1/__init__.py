@@ -61,6 +61,10 @@ from .types.query import PropertyOrder
 from .types.query import PropertyReference
 from .types.query import Query
 from .types.query import QueryResultBatch
+from .types.query_profile import ExecutionStats
+from .types.query_profile import ExplainMetrics
+from .types.query_profile import ExplainOptions
+from .types.query_profile import PlanSummary
 
 __all__ = (
     "DatastoreAsyncClient",
@@ -78,6 +82,9 @@ __all__ = (
     "DatastoreClient",
     "Entity",
     "EntityResult",
+    "ExecutionStats",
+    "ExplainMetrics",
+    "ExplainOptions",
     "Filter",
     "GqlQuery",
     "GqlQueryParameter",
@@ -88,6 +95,7 @@ __all__ = (
     "Mutation",
     "MutationResult",
     "PartitionId",
+    "PlanSummary",
     "Projection",
     "PropertyFilter",
     "PropertyOrder",
