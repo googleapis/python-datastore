@@ -4,6 +4,13 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+## [2.20.0](https://github.com/googleapis/python-datastore/compare/v2.19.0...v2.20.0) (2024-03-26)
+
+
+### Features
+
+* Add new types ExplainOptions, ExplainMetrics, PlanSummary, ExecutionStats ([#521](https://github.com/googleapis/python-datastore/issues/521)) ([dfbee2d](https://github.com/googleapis/python-datastore/commit/dfbee2db800a3ca99e65a5d386ea907db1c46598))
+
 ## [2.19.0](https://github.com/googleapis/python-datastore/compare/v2.18.0...v2.19.0) (2023-12-10)
 
 
