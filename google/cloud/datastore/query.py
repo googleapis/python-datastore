@@ -813,7 +813,6 @@ class Iterator(page_iterator.Iterator):
         if not self._more_results:
             return None
 
-        query_pb = self._build_protobuf()
         new_transaction_options = None
         transaction_id, new_transaction_options = helpers.get_transaction_options(
             self.client.current_transaction
@@ -840,49 +839,38 @@ class Iterator(page_iterator.Iterator):
             "project_id": self._query.project,
             "partition_id": partition_id,
             "read_options": read_options,
-            "query": query_pb,
+            "query": self._build_protobuf(),
         }
         if self._query._explain_options:
             request["explain_options"] = self._query._explain_options._to_dict()
 
         helpers.set_database_id_to_request(request, self.client.database)
 
-        response_pb = self.client._datastore_api.run_query(
-            request=request,
-            **kwargs,
-        )
-        if response_pb.explain_metrics:
-            self._explain_metrics = response_pb.explain_metrics
+        response_pb = None
 
         while (
-            response_pb.batch.more_results == _NOT_FINISHED
-            and response_pb.batch.skipped_results < query_pb.offset
+            response_pb is None or
+            (
+                response_pb.batch.more_results == _NOT_FINISHED
+                and response_pb.batch.skipped_results < request["query"].offset
+            )
         ):
-            # We haven't finished processing. A likely reason is we haven't
-            # skipped all of the results yet. Don't return any results.
-            # Instead, rerun query, adjusting offsets. Datastore doesn't process
-            # more than 1000 skipped results in a query.
-            old_query_pb = query_pb
-            query_pb = query_pb2.Query()
-            query_pb._pb.CopyFrom(old_query_pb._pb)  # copy for testability
-            query_pb.start_cursor = response_pb.batch.skipped_cursor
-            query_pb.offset -= response_pb.batch.skipped_results
-
-            request = {
-                "project_id": self._query.project,
-                "partition_id": partition_id,
-                "read_options": read_options,
-                "query": query_pb,
-            }
-            # TODO: cut down on repeated code
-            if self._query._explain_options:
-                request["explain_options"] = self._query._explain_options._to_dict()
-            helpers.set_database_id_to_request(request, self.client.database)
+            if response_pb is not None:
+                # We haven't finished processing. A likely reason is we haven't
+                # skipped all of the results yet. Don't return any results.
+                # Instead, rerun query, adjusting offsets. Datastore doesn't process
+                # more than 1000 skipped results in a query.
+                new_query_pb = query_pb2.Query()
+                new_query_pb._pb.CopyFrom(request["query"]._pb)  # copy for testability
+                new_query_pb.start_cursor = response_pb.batch.skipped_cursor
+                new_query_pb.offset -= response_pb.batch.skipped_results
+                request["query"] = new_query_pb
 
             response_pb = self.client._datastore_api.run_query(
-                request=request,
-                **kwargs,
+                request=request.copy(), **kwargs
             )
+            # capture explain metrics if present in response
+            # should only be present in last response, and only if explain_options was set
             if response_pb.explain_metrics:
                 self._explain_metrics = response_pb.explain_metrics
 
