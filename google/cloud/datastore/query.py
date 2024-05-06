@@ -68,8 +68,18 @@ class ExecutionStats:
 
 @dataclass
 class ExplainMetrics:
+  _explain_options: ExplainOptions
   plan_summary: PlanSummary
-  execution_stats: ExecutionStats
+  _execution_stats: ExecutionStats | None
+
+  @property
+  def execution_stats(self) -> ExecutionStats:
+      if _execution_stats is not None:
+          return self._execution_stats
+      elif not self._explain_options.analyze:
+          raise QueryExplainError("execution_stats not available when explain_options.analyze is False.")
+      else:
+          raise AttributeError("execution_stats not found")
 
 
 class QueryExplainError(Exception):
@@ -879,7 +889,12 @@ class Iterator(page_iterator.Iterator):
 
     @property
     def explain_metrics(self):
-        return self._explain_metrics
+        if self._explain_metrics is not None:
+            return self._explain_metrics
+        elif not self._query.explain_options:
+            raise QueryExplainError("explain_options not set on query.")
+        else:
+            raise QueryExplainError("explain_metrics not available until query is complete.")
 
 
 def _pb_from_query(query):
