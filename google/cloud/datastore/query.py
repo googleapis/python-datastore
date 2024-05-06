@@ -14,6 +14,8 @@
 
 """Create / interact with Google Cloud Datastore queries."""
 
+from typing import Any
+
 import base64
 import warnings
 from dataclasses import dataclass
@@ -52,17 +54,8 @@ class ExplainOptions:
 
 
 @dataclass
-class ExplainMetrics:
-  plan_summary: PlanSummary
-  execution_stats: ExecutionStats
-
-
-@dataclass
 class PlanSummary:
   indexes_used: list[dict[str, Any]]
-
-class QueryExplainError(Exception):
-  pass
 
 
 @dataclass
@@ -71,6 +64,16 @@ class ExecutionStats:
   execution_duration: float
   read_operations: int
   debug_stats: dict[str, Any]
+
+
+@dataclass
+class ExplainMetrics:
+  plan_summary: PlanSummary
+  execution_stats: ExecutionStats
+
+
+class QueryExplainError(Exception):
+  pass
 
 
 class BaseFilter(ABC):
