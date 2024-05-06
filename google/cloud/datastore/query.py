@@ -16,7 +16,7 @@
 
 import base64
 import warnings
-
+from dataclasses import dataclass
 
 from google.api_core import page_iterator
 from google.cloud._helpers import _ensure_tuple_or_list
@@ -41,6 +41,36 @@ _FINISHED = (
 )
 
 KEY_PROPERTY_NAME = "__key__"
+
+
+@dataclass
+class ExplainOptions:
+  analyze: bool = False
+
+  def _to_dict(self):
+    return {"analyze": self.analyze}
+
+
+@dataclass
+class ExplainMetrics:
+  plan_summary: PlanSummary
+  execution_stats: ExecutionStats
+
+
+@dataclass
+class PlanSummary:
+  indexes_used: list[dict[str, Any]]
+
+class QueryExplainError(Exception):
+  pass
+
+
+@dataclass
+class ExecutionStats:
+  results_returned: int
+  execution_duration: float
+  read_operations: int
+  debug_stats: dict[str, Any]
 
 
 class BaseFilter(ABC):
@@ -203,6 +233,7 @@ class Query(object):
         projection=(),
         order=(),
         distinct_on=(),
+        explain_options=None,
     ):
         self._client = client
         self._kind = kind
@@ -221,6 +252,7 @@ class Query(object):
         else:
             self._namespace = None
 
+        self._explain_options = explain_options
         self._ancestor = ancestor
         self._filters = []
 
@@ -703,6 +735,7 @@ class Iterator(page_iterator.Iterator):
         self._retry = retry
         self._timeout = timeout
         self._read_time = read_time
+        self._explain_metrics = None
         # The attributes below will change over the life of the iterator.
         self._more_results = True
         self._skipped_results = 0
@@ -806,6 +839,8 @@ class Iterator(page_iterator.Iterator):
             "read_options": read_options,
             "query": query_pb,
         }
+        if self._query._explain_options:
+            request["explain_options"] = self._query._explain_options._to_dict()
 
         helpers.set_database_id_to_request(request, self.client.database)
 
@@ -813,6 +848,8 @@ class Iterator(page_iterator.Iterator):
             request=request,
             **kwargs,
         )
+        if response_pb.explain_metrics:
+            self._explain_metrics = response_pb.explain_metrics
 
         while (
             response_pb.batch.more_results == _NOT_FINISHED
@@ -834,15 +871,24 @@ class Iterator(page_iterator.Iterator):
                 "read_options": read_options,
                 "query": query_pb,
             }
+            # TODO: cut down on repeated code
+            if self._query._explain_options:
+                request["explain_options"] = self._query._explain_options._to_dict()
             helpers.set_database_id_to_request(request, self.client.database)
 
             response_pb = self.client._datastore_api.run_query(
                 request=request,
                 **kwargs,
             )
+            if response_pb.explain_metrics:
+                self._explain_metrics = response_pb.explain_metrics
 
         entity_pbs = self._process_query_results(response_pb)
         return page_iterator.Page(self, entity_pbs, self.item_to_value)
+
+    @property
+    def explain_metrics(self):
+        return self._explain_metrics
 
 
 def _pb_from_query(query):
