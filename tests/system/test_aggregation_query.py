@@ -530,3 +530,31 @@ def test_aggregation_query_with_nested_query_multiple_filters(
     )
     assert result_dict["sum_appearances"].value == expected_sum
     assert result_dict["avg_appearances"].value == expected_sum / expected_matches
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_aggregation_query_no_explain(ancestor_query, database_id):
+    """
+    When explain_options is not set, iterator.explain_metrics should raise an exception
+    """
+    assert False
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_aggregation_query_explain(ancestor_query, database_id):
+    """
+    When explain_options(analyze=False) is set, iterator should contain explain_metrics field
+    with plan_summary but no execution_stats
+    """
+    assert False
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_aggregation_query_explain_analyze(ancestor_query, database_id):
+    """
+    When explain_options(analyze=True) is set, iterator should contain explain_metrics field
+    with plan_summary and execution_stats
+
+    Should not be present until iterator is exhausted
+    """
+    assert False

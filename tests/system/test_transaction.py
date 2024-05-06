@@ -160,3 +160,11 @@ def test_failure_with_contention(datastore_client, entities_to_delete, database_
             # transaction.
             entity_in_txn[contention_prop_name] = "inside"
             txn.put(entity_in_txn)
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_client_explain_options(datastore_client, database_id):
+    """
+    Explain options should work inside a transaction context.
+    """
+    assert False

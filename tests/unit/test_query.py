@@ -1071,6 +1071,45 @@ def test_iterator__next_page_w_skipped_lt_offset(database_id):
 
     assert ds_api.run_query.call_args_list == expected_calls
 
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_sends_explain_options_w_request(database_id):
+    """
+    When query has explain_options set, all requests should include
+    the explain_options field.
+    """
+    assert False
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_metrics(database_id):
+    """
+    If query.explain_options is set, iterator.explain_metrics should contain 
+    metrics data from response_pb after stream is complete
+    """
+    assert False
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_metrics_no_explain(database_id):
+    """
+    If query has no explain_options set, iterator.explain_metrics should raise
+    an exception.
+    """
+    assert False
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_metrics_no_analyze(database_id):
+    """
+    If query.explain_options(analyze=False), iterator.explain_metrics.execution_stats
+    should raise an exception.
+    """
+    assert False
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_metrics_not_completed(database_id):
+    """
+    If query.explain_options(analyze=False), iterator.explain_metrics.execution_stats
+    should raise an exception if called before the iterator is exhausted
+    """
+    assert False
 
 def test__item_to_entity():
     from google.cloud.datastore.query import _item_to_entity
