@@ -45,41 +45,62 @@ _FINISHED = (
 KEY_PROPERTY_NAME = "__key__"
 
 
-@dataclass
+@dataclass(frozen=True)
 class ExplainOptions:
-  analyze: bool = False
+    """
+    Options for explaining a query
+    """
+    analyze: bool = False
 
-  def _to_dict(self):
-    return {"analyze": self.analyze}
+    def _to_dict(self):
+        return {"analyze": self.analyze}
 
 
-@dataclass
+@dataclass(frozen=True)
 class PlanSummary:
-  indexes_used: list[dict[str, Any]]
+    """
+    Summary of the query plan, returned when query.explain_options is set.
+    """
+    indexes_used: list[dict[str, Any]]
 
 
-@dataclass
+@dataclass(frozen=True)
 class ExecutionStats:
-  results_returned: int
-  execution_duration: float
-  read_operations: int
-  debug_stats: dict[str, Any]
+    """
+    Information about the execution of a query, returned when query.explain_options.analyze is True.
+    """
+    results_returned: int
+    execution_duration: float
+    read_operations: int
+    debug_stats: dict[str, Any]
 
 
-@dataclass
+@dataclass(frozen=True)
 class ExplainMetrics:
-  _explain_options: ExplainOptions
-  plan_summary: PlanSummary
-  _execution_stats: ExecutionStats | None
+    """
+    contains ddata from explain_metrics proto, returned wheb query.explain_options is set
 
-  @property
-  def execution_stats(self) -> ExecutionStats:
-      if _execution_stats is not None:
-          return self._execution_stats
-      elif not self._explain_options.analyze:
-          raise QueryExplainError("execution_stats not available when explain_options.analyze is False.")
-      else:
-          raise AttributeError("execution_stats not found")
+    when explain_options.analyze is false, only plan_summary is available. when explain_options.analyze is true,
+    execution_stats is also available.
+    """
+    plan_summary: PlanSummary
+
+    @property
+    def execution_stats(self) -> ExecutionStats:
+        raise QueryExplainError("execution_stats not available when explain_options.analyze is False.")
+
+
+@dataclass(frozen=True)
+class _ExplainAnalyzeMetrics(ExplainMetrics):
+    """
+    Subclass of ExplainMetrics that includes execution_stats, only available when explain_options.analyze is True.
+    """
+    plan_summary: PlanSummary
+    _execution_stats: ExecutionStats
+
+    @property
+    def execution_stats(self) -> ExecutionStats:
+        return self._execution_stats
 
 
 class QueryExplainError(Exception):
