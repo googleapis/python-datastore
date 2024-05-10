@@ -13,16 +13,18 @@
 # limitations under the License.
 
 """Create / interact with Google Cloud Datastore queries."""
+from __future__ import annotations
 
 from typing import Any
 
 import base64
 import warnings
+import datetime
 from dataclasses import dataclass
 
 from google.api_core import page_iterator
 from google.cloud._helpers import _ensure_tuple_or_list
-
+from google.protobuf.json_format import MessageToDict
 
 from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore_v1.types import query as query_pb2
@@ -40,6 +42,7 @@ _FINISHED = (
     _NO_MORE_RESULTS,
     query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_LIMIT,
     query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_AFTER_CURSOR,
+    query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_TYPE_UNSPECIFIED,  # received when explain_options(analyze=False)
 )
 
 KEY_PROPERTY_NAME = "__key__"
@@ -70,7 +73,7 @@ class ExecutionStats:
     Information about the execution of a query, returned when query.explain_options.analyze is True.
     """
     results_returned: int
-    execution_duration: float
+    execution_duration: datetime.timedelta
     read_operations: int
     debug_stats: dict[str, Any]
 
@@ -85,9 +88,25 @@ class ExplainMetrics:
     """
     plan_summary: PlanSummary
 
+    @staticmethod
+    def _from_pb(metrics_pb):
+        dict_repr = MessageToDict(metrics_pb._pb, preserving_proto_field_name=True)
+        plan_summary = PlanSummary(indexes_used=dict_repr["plan_summary"]["indexes_used"])
+        if "execution_stats" in dict_repr:
+            stats_dict = dict_repr["execution_stats"]
+            execution_stats = ExecutionStats(
+                results_returned=int(stats_dict["results_returned"]),
+                execution_duration=metrics_pb.execution_stats.execution_duration,
+                read_operations=int(stats_dict["read_operations"]),
+                debug_stats=stats_dict["debug_stats"],
+            )
+            return _ExplainAnalyzeMetrics(plan_summary=plan_summary, _execution_stats=execution_stats)
+        else:
+            return ExplainMetrics(plan_summary=plan_summary)
+
     @property
     def execution_stats(self) -> ExecutionStats:
-        raise QueryExplainError("execution_stats not available when explain_options.analyze is False.")
+        raise QueryExplainError("execution_stats not available when explain_options.analyze=False.")
 
 
 @dataclass(frozen=True)
@@ -903,19 +922,26 @@ class Iterator(page_iterator.Iterator):
             # capture explain metrics if present in response
             # should only be present in last response, and only if explain_options was set
             if response_pb.explain_metrics:
-                self._explain_metrics = response_pb.explain_metrics
+                self._explain_metrics = ExplainMetrics._from_pb(response_pb.explain_metrics)
 
         entity_pbs = self._process_query_results(response_pb)
-        return page_iterator.Page(self, entity_pbs, self.item_to_value)
+        if entity_pbs:
+            return page_iterator.Page(self, entity_pbs, self.item_to_value)
+        else:
+            return None
 
     @property
-    def explain_metrics(self):
+    def explain_metrics(self) -> ExplainMetrics:
         if self._explain_metrics is not None:
             return self._explain_metrics
-        elif not self._query.explain_options:
+        elif self._query._explain_options is None:
             raise QueryExplainError("explain_options not set on query.")
-        else:
-            raise QueryExplainError("explain_metrics not available until query is complete.")
+        elif self._query._explain_options.analyze is False:
+            # we need to run the query to get the explain_metrics
+            self._next_page()
+            if self._explain_metrics is not None:
+                return self._explain_metrics
+        raise QueryExplainError("explain_metrics not available until query is complete.")
 
 
 def _pb_from_query(query):
