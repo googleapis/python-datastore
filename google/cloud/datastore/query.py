@@ -91,7 +91,7 @@ class ExplainMetrics:
     @staticmethod
     def _from_pb(metrics_pb):
         dict_repr = MessageToDict(metrics_pb._pb, preserving_proto_field_name=True)
-        plan_summary = PlanSummary(indexes_used=dict_repr["plan_summary"]["indexes_used"])
+        plan_summary = PlanSummary(indexes_used=dict_repr.get("plan_summary", {}).get("indexes_used", []))
         if "execution_stats" in dict_repr:
             stats_dict = dict_repr["execution_stats"]
             execution_stats = ExecutionStats(
@@ -921,14 +921,11 @@ class Iterator(page_iterator.Iterator):
             )
             # capture explain metrics if present in response
             # should only be present in last response, and only if explain_options was set
-            if response_pb.explain_metrics:
+            if response_pb and response_pb.explain_metrics:
                 self._explain_metrics = ExplainMetrics._from_pb(response_pb.explain_metrics)
 
         entity_pbs = self._process_query_results(response_pb)
-        if entity_pbs:
-            return page_iterator.Page(self, entity_pbs, self.item_to_value)
-        else:
-            return None
+        return page_iterator.Page(self, entity_pbs, self.item_to_value)
 
     @property
     def explain_metrics(self) -> ExplainMetrics:
