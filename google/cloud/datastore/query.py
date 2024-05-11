@@ -788,8 +788,8 @@ class Iterator(page_iterator.Iterator):
         self._retry = retry
         self._timeout = timeout
         self._read_time = read_time
-        self._explain_metrics = None
         # The attributes below will change over the life of the iterator.
+        self._explain_metrics = None
         self._more_results = True
         self._skipped_results = 0
 

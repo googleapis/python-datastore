@@ -451,6 +451,116 @@ def test_iterator__next_page_no_more():
     ds_api.run_aggregation_query.assert_not_called()
 
 
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+@pytest.mark.parametrize("analyze", [True, False])
+def test_iterator_sends_explain_options_w_request(database_id, analyze):
+    """
+    When query has explain_options set, all requests should include
+    the explain_options field.
+    """
+    from google.cloud.datastore.query import ExplainOptions
+    response_pb = _make_aggregation_query_response([], 0)
+    ds_api = _make_datastore_api_for_aggregation(response_pb)
+    client = _Client(None, datastore_api=ds_api)
+    explain_options = ExplainOptions(analyze=analyze)
+    query = _make_aggregation_query(client, _make_query(client), explain_options=explain_options)
+    iterator = _make_aggregation_iterator(query, client)
+    iterator._next_page()
+    # ensure explain_options is set in request
+    assert ds_api.run_aggregation_query.call_count == 1
+    found_explain_options = ds_api.run_aggregation_query.call_args[1]["request"]["explain_options"]
+    assert found_explain_options == explain_options._to_dict()
+    assert found_explain_options["analyze"] == analyze
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_metrics(database_id):
+    """
+    If explain_metrics is recieved from backend, it should be set on the iterator
+    """
+    from google.cloud.datastore.query import ExplainOptions
+    from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
+    from google.protobuf import struct_pb2, duration_pb2
+
+    expected_metrics = query_profile_pb2.ExplainMetrics(
+        plan_summary=query_profile_pb2.PlanSummary(),
+        execution_stats=query_profile_pb2.ExecutionStats(
+            results_returned=100,
+            execution_duration=duration_pb2.Duration(seconds=1),
+            read_operations=10,
+            debug_stats={},
+        )
+    )
+    response_pb = _make_aggregation_query_response([], 0)
+    response_pb.explain_metrics = expected_metrics
+    ds_api = _make_datastore_api_for_aggregation(response_pb)
+    client = _Client(None, datastore_api=ds_api)
+    query = _make_aggregation_query(client=client, query=_make_query(client))
+    iterator = _make_aggregation_iterator(query, client)
+    assert iterator._explain_metrics is None
+    iterator._next_page()
+    assert isinstance(iterator._explain_metrics, ExplainMetrics)
+    assert iterator._explain_metrics == ExplainMetrics._from_pb(expected_metrics)
+    assert iterator.explain_metrics == ExplainMetrics._from_pb(expected_metrics)
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_metrics_no_explain(database_id):
+    """
+    If query has no explain_options set, iterator.explain_metrics should raise
+    an exception.
+    """
+    from google.cloud.datastore.query import QueryExplainError
+
+    ds_api = _make_datastore_api_for_aggregation()
+    client = _Client(None, datastore_api=ds_api)
+    query = _make_aggregation_query(client, _make_query(client), explain_options=None)
+    iterator = _make_aggregation_iterator(query, client)
+    assert iterator._explain_metrics is None
+    with pytest.raises(QueryExplainError) as exc:
+        iterator.explain_metrics
+    assert "explain_options not set on query" in str(exc.value)
+    # should not raise error if field is set
+    iterator._explain_metrics = object()
+    assert iterator.explain_metrics is iterator._explain_metrics
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_metrics_no_analyze_make_call(database_id):
+    """
+    If query.explain_options(analyze=False), accessing iterator.explain_metrics
+    should make a network call to get the data.
+    """
+    from google.cloud.datastore.query import ExplainOptions
+    from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
+    from google.protobuf import struct_pb2, duration_pb2
+
+    response_pb = _make_aggregation_query_response([], 0)
+    expected_metrics = query_profile_pb2.ExplainMetrics(
+        plan_summary=query_profile_pb2.PlanSummary(),
+        execution_stats=query_profile_pb2.ExecutionStats(
+            results_returned=100,
+            execution_duration=duration_pb2.Duration(seconds=1),
+            read_operations=10,
+            debug_stats={},
+        )
+    )
+    response_pb.explain_metrics = expected_metrics
+    ds_api = _make_datastore_api_for_aggregation(response_pb)
+    client = _Client(None, datastore_api=ds_api)
+    explain_options = ExplainOptions(analyze=False)
+    query = _make_aggregation_query(client, _make_query(client), explain_options=explain_options)
+    iterator = _make_aggregation_iterator(query, client)
+    assert ds_api.run_aggregation_query.call_count == 0
+    metrics = iterator.explain_metrics
+    # ensure explain_options is set in request
+    assert ds_api.run_aggregation_query.call_count == 1
+    assert isinstance(metrics, ExplainMetrics)
+    assert metrics == ExplainMetrics._from_pb(expected_metrics)
+
+
 def _next_page_helper(txn_id=None, retry=None, timeout=None, database_id=None):
     from google.api_core import page_iterator
     from google.cloud.datastore_v1.types import datastore as datastore_pb2
