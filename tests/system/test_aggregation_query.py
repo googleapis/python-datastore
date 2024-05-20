@@ -594,4 +594,43 @@ def test_aggregation_query_explain_analyze(aggregation_query_client, nested_quer
 
     Should not be present until iterator is exhausted
     """
-    assert False
+    from google.cloud.datastore.query import QueryExplainError
+    from google.cloud.datastore.query import ExplainOptions
+    from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore.query import PlanSummary
+
+    expected_error = "explain_metrics not available until query is complete."
+    agg_query = aggregation_query_client.aggregation_query(nested_query, explain_options=ExplainOptions(analyze=True))
+    agg_query.count()
+    agg_query.sum("appearances")
+    agg_query.avg("appearances")
+    iterator = agg_query.fetch()
+    # explain_metrics isn't present until iterator is exhausted
+    with pytest.raises(QueryExplainError) as excinfo:
+        iterator.explain_metrics
+    assert expected_error in str(excinfo.value)
+    # exhaust the iterator
+    results = list(iterator)
+    num_results = len(results)
+    assert num_results > 0
+    stats = iterator.explain_metrics
+    assert isinstance(stats, ExplainMetrics)
+    # verify plan_summary
+    assert isinstance(stats.plan_summary, PlanSummary)
+    assert len(stats.plan_summary.indexes_used) > 0
+    assert stats.plan_summary.indexes_used[0]["properties"] == '(__name__ ASC)'
+    assert stats.plan_summary.indexes_used[0]["query_scope"] == "Collection group"
+    # verify execution_stats
+    assert isinstance(stats.execution_stats, ExecutionStats)
+    assert stats.execution_stats.results_returned == num_results
+    assert stats.execution_stats.read_operations == num_results
+    duration = stats.execution_stats.execution_duration.total_seconds()
+    assert duration > 0
+    assert duration < 1  # we expect a number closer to 0.05
+    assert isinstance(stats.execution_stats.debug_stats, dict)
+    assert "billing_details" in stats.execution_stats.debug_stats
+    assert stats.execution_stats.debug_stats["documents_scanned"] == str(num_results)
+    assert stats.execution_stats.debug_stats["index_entries_scanned"] == str(num_results)
+
+
+
