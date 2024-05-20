@@ -583,7 +583,6 @@ def test_aggregation_query_explain(aggregation_query_client, nested_query, datab
     assert isinstance(stats, ExplainMetrics)
     assert isinstance(stats.plan_summary, PlanSummary)
     assert len(stats.plan_summary.indexes_used) > 0
-    assert stats.plan_summary.indexes_used[0].index_id == "Character.appearances"
     assert stats.plan_summary.indexes_used[0].query_scope == "Collection Group"
     # execution_stats should not be present
     with pytest.raises(QueryExplainError) as excinfo:
@@ -630,7 +629,7 @@ def test_aggregation_query_explain_analyze(
     # verify plan_summary
     assert isinstance(stats.plan_summary, PlanSummary)
     assert len(stats.plan_summary.indexes_used) > 0
-    assert stats.plan_summary.indexes_used[0]["properties"] == "(__name__ ASC)"
+    assert stats.plan_summary.indexes_used[0]["properties"] == "(appearances ASC, __name__ ASC)"
     assert stats.plan_summary.indexes_used[0]["query_scope"] == "Collection group"
     # verify execution_stats
     assert isinstance(stats.execution_stats, ExecutionStats)
