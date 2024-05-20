@@ -53,6 +53,7 @@ class ExplainOptions:
     """
     Options for explaining a query
     """
+
     analyze: bool = False
 
     def _to_dict(self):
@@ -64,6 +65,7 @@ class PlanSummary:
     """
     Summary of the query plan, returned when query.explain_options is set.
     """
+
     indexes_used: list[dict[str, Any]]
 
 
@@ -72,6 +74,7 @@ class ExecutionStats:
     """
     Information about the execution of a query, returned when query.explain_options.analyze is True.
     """
+
     results_returned: int
     execution_duration: datetime.timedelta
     read_operations: int
@@ -86,12 +89,15 @@ class ExplainMetrics:
     when explain_options.analyze is false, only plan_summary is available. when explain_options.analyze is true,
     execution_stats is also available.
     """
+
     plan_summary: PlanSummary
 
     @staticmethod
     def _from_pb(metrics_pb):
         dict_repr = MessageToDict(metrics_pb._pb, preserving_proto_field_name=True)
-        plan_summary = PlanSummary(indexes_used=dict_repr.get("plan_summary", {}).get("indexes_used", []))
+        plan_summary = PlanSummary(
+            indexes_used=dict_repr.get("plan_summary", {}).get("indexes_used", [])
+        )
         if "execution_stats" in dict_repr:
             stats_dict = dict_repr["execution_stats"]
             execution_stats = ExecutionStats(
@@ -100,13 +106,17 @@ class ExplainMetrics:
                 read_operations=int(stats_dict["read_operations"]),
                 debug_stats=stats_dict["debug_stats"],
             )
-            return _ExplainAnalyzeMetrics(plan_summary=plan_summary, _execution_stats=execution_stats)
+            return _ExplainAnalyzeMetrics(
+                plan_summary=plan_summary, _execution_stats=execution_stats
+            )
         else:
             return ExplainMetrics(plan_summary=plan_summary)
 
     @property
     def execution_stats(self) -> ExecutionStats:
-        raise QueryExplainError("execution_stats not available when explain_options.analyze=False.")
+        raise QueryExplainError(
+            "execution_stats not available when explain_options.analyze=False."
+        )
 
 
 @dataclass(frozen=True)
@@ -114,6 +124,7 @@ class _ExplainAnalyzeMetrics(ExplainMetrics):
     """
     Subclass of ExplainMetrics that includes execution_stats, only available when explain_options.analyze is True.
     """
+
     plan_summary: PlanSummary
     _execution_stats: ExecutionStats
 
@@ -123,7 +134,7 @@ class _ExplainAnalyzeMetrics(ExplainMetrics):
 
 
 class QueryExplainError(Exception):
-  pass
+    pass
 
 
 class BaseFilter(ABC):
@@ -898,12 +909,9 @@ class Iterator(page_iterator.Iterator):
 
         response_pb = None
 
-        while (
-            response_pb is None or
-            (
-                response_pb.batch.more_results == _NOT_FINISHED
-                and response_pb.batch.skipped_results < request["query"].offset
-            )
+        while response_pb is None or (
+            response_pb.batch.more_results == _NOT_FINISHED
+            and response_pb.batch.skipped_results < request["query"].offset
         ):
             if response_pb is not None:
                 # We haven't finished processing. A likely reason is we haven't
@@ -922,7 +930,9 @@ class Iterator(page_iterator.Iterator):
             # capture explain metrics if present in response
             # should only be present in last response, and only if explain_options was set
             if response_pb and response_pb.explain_metrics:
-                self._explain_metrics = ExplainMetrics._from_pb(response_pb.explain_metrics)
+                self._explain_metrics = ExplainMetrics._from_pb(
+                    response_pb.explain_metrics
+                )
 
         entity_pbs = self._process_query_results(response_pb)
         return page_iterator.Page(self, entity_pbs, self.item_to_value)
@@ -938,7 +948,9 @@ class Iterator(page_iterator.Iterator):
             self._next_page()
             if self._explain_metrics is not None:
                 return self._explain_metrics
-        raise QueryExplainError("explain_metrics not available until query is complete.")
+        raise QueryExplainError(
+            "explain_metrics not available until query is complete."
+        )
 
 
 def _pb_from_query(query):

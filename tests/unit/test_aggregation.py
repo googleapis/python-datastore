@@ -443,16 +443,21 @@ def test_iterator_sends_explain_options_w_request(database_id, analyze):
     the explain_options field.
     """
     from google.cloud.datastore.query import ExplainOptions
+
     response_pb = _make_aggregation_query_response([], 0)
     ds_api = _make_datastore_api_for_aggregation(response_pb)
     client = _Client(None, datastore_api=ds_api)
     explain_options = ExplainOptions(analyze=analyze)
-    query = _make_aggregation_query(client, _make_query(client), explain_options=explain_options)
+    query = _make_aggregation_query(
+        client, _make_query(client), explain_options=explain_options
+    )
     iterator = _make_aggregation_iterator(query, client)
     iterator._next_page()
     # ensure explain_options is set in request
     assert ds_api.run_aggregation_query.call_count == 1
-    found_explain_options = ds_api.run_aggregation_query.call_args[1]["request"]["explain_options"]
+    found_explain_options = ds_api.run_aggregation_query.call_args[1]["request"][
+        "explain_options"
+    ]
     assert found_explain_options == explain_options._to_dict()
     assert found_explain_options["analyze"] == analyze
 
@@ -462,10 +467,9 @@ def test_iterator_explain_metrics(database_id):
     """
     If explain_metrics is recieved from backend, it should be set on the iterator
     """
-    from google.cloud.datastore.query import ExplainOptions
     from google.cloud.datastore.query import ExplainMetrics
     from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
-    from google.protobuf import struct_pb2, duration_pb2
+    from google.protobuf import duration_pb2
 
     expected_metrics = query_profile_pb2.ExplainMetrics(
         plan_summary=query_profile_pb2.PlanSummary(),
@@ -474,7 +478,7 @@ def test_iterator_explain_metrics(database_id):
             execution_duration=duration_pb2.Duration(seconds=1),
             read_operations=10,
             debug_stats={},
-        )
+        ),
     )
     response_pb = _make_aggregation_query_response([], 0)
     response_pb.explain_metrics = expected_metrics
@@ -519,7 +523,7 @@ def test_iterator_explain_metrics_no_analyze_make_call(database_id):
     from google.cloud.datastore.query import ExplainOptions
     from google.cloud.datastore.query import ExplainMetrics
     from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
-    from google.protobuf import struct_pb2, duration_pb2
+    from google.protobuf import duration_pb2
 
     response_pb = _make_aggregation_query_response([], 0)
     expected_metrics = query_profile_pb2.ExplainMetrics(
@@ -529,13 +533,15 @@ def test_iterator_explain_metrics_no_analyze_make_call(database_id):
             execution_duration=duration_pb2.Duration(seconds=1),
             read_operations=10,
             debug_stats={},
-        )
+        ),
     )
     response_pb.explain_metrics = expected_metrics
     ds_api = _make_datastore_api_for_aggregation(response_pb)
     client = _Client(None, datastore_api=ds_api)
     explain_options = ExplainOptions(analyze=False)
-    query = _make_aggregation_query(client, _make_query(client), explain_options=explain_options)
+    query = _make_aggregation_query(
+        client, _make_query(client), explain_options=explain_options
+    )
     iterator = _make_aggregation_iterator(query, client)
     assert ds_api.run_aggregation_query.call_count == 0
     metrics = iterator.explain_metrics

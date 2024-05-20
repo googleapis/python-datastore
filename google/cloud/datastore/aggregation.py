@@ -23,14 +23,10 @@ from google.cloud.datastore_v1.types import query as query_pb2
 from google.cloud.datastore import helpers
 from google.cloud.datastore.query import _pb_from_query
 
-from google.cloud.datastore.query import ExplainOptions
 from google.cloud.datastore.query import ExplainMetrics
-from google.cloud.datastore.query import PlanSummary
-from google.cloud.datastore.query import ExecutionStats
 from google.cloud.datastore.query import QueryExplainError
 
 from google.cloud.datastore.query import _NOT_FINISHED
-from google.cloud.datastore.query import _NO_MORE_RESULTS
 from google.cloud.datastore.query import _FINISHED
 
 
@@ -472,7 +468,9 @@ class AggregationResultIterator(page_iterator.Iterator):
             "aggregation_query": self._build_protobuf(),
         }
         if self._aggregation_query._explain_options:
-            request["explain_options"] = self._aggregation_query._explain_options._to_dict()
+            request[
+                "explain_options"
+            ] = self._aggregation_query._explain_options._to_dict()
         helpers.set_database_id_to_request(request, self.client.database)
 
         response_pb = None
@@ -484,7 +482,9 @@ class AggregationResultIterator(page_iterator.Iterator):
                 # Instead, rerun query, adjusting offsets. Datastore doesn't process
                 # more than 1000 skipped results in a query.
                 new_query_pb = query_pb2.AggregationQuery()
-                new_query_pb._pb.CopyFrom(request["aggregation_query"]._pb)  # copy for testability
+                new_query_pb._pb.CopyFrom(
+                    request["aggregation_query"]._pb
+                )  # copy for testability
                 request["aggregation_query"] = new_query_pb
 
             response_pb = self.client._datastore_api.run_aggregation_query(
@@ -493,7 +493,9 @@ class AggregationResultIterator(page_iterator.Iterator):
             # capture explain metrics if present in response
             # should only be present in last response, and only if explain_options was set
             if response_pb.explain_metrics:
-                self._explain_metrics = ExplainMetrics._from_pb(response_pb.explain_metrics)
+                self._explain_metrics = ExplainMetrics._from_pb(
+                    response_pb.explain_metrics
+                )
 
         item_pbs = self._process_query_results(response_pb)
         return page_iterator.Page(self, item_pbs, self.item_to_value)
@@ -509,7 +511,9 @@ class AggregationResultIterator(page_iterator.Iterator):
             self._next_page()
             if self._explain_metrics is not None:
                 return self._explain_metrics
-        raise QueryExplainError("explain_metrics not available until query is complete.")
+        raise QueryExplainError(
+            "explain_metrics not available until query is complete."
+        )
 
 
 # pylint: disable=unused-argument

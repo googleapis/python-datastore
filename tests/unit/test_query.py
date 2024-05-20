@@ -1071,6 +1071,7 @@ def test_iterator__next_page_w_skipped_lt_offset(database_id):
 
     assert ds_api.run_query.call_args_list == expected_calls
 
+
 @pytest.mark.parametrize("database_id", [None, "somedb"])
 @pytest.mark.parametrize("analyze", [True, False])
 def test_iterator_sends_explain_options_w_request(database_id, analyze):
@@ -1079,6 +1080,7 @@ def test_iterator_sends_explain_options_w_request(database_id, analyze):
     the explain_options field.
     """
     from google.cloud.datastore.query import ExplainOptions
+
     response_pb = _make_query_response([], b"", 0, 0)
     ds_api = _make_datastore_api(response_pb)
     client = _Client(None, datastore_api=ds_api)
@@ -1098,10 +1100,10 @@ def test_iterator_explain_metrics(database_id):
     """
     If explain_metrics is recieved from backend, it should be set on the iterator
     """
-    from google.cloud.datastore.query import ExplainOptions
     from google.cloud.datastore.query import ExplainMetrics
     from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
-    from google.protobuf import struct_pb2, duration_pb2
+    from google.protobuf import duration_pb2
+
     expected_metrics = query_profile_pb2.ExplainMetrics(
         plan_summary=query_profile_pb2.PlanSummary(),
         execution_stats=query_profile_pb2.ExecutionStats(
@@ -1109,7 +1111,7 @@ def test_iterator_explain_metrics(database_id):
             execution_duration=duration_pb2.Duration(seconds=1),
             read_operations=10,
             debug_stats={},
-        )
+        ),
     )
     response_pb = _make_query_response([], b"", 0, 0)
     response_pb.explain_metrics = expected_metrics
@@ -1131,6 +1133,7 @@ def test_iterator_explain_metrics_no_explain(database_id):
     an exception.
     """
     from google.cloud.datastore.query import QueryExplainError
+
     ds_api = _make_datastore_api()
     client = _Client(None, datastore_api=ds_api)
     query = Query(client, explain_options=None)
@@ -1153,7 +1156,8 @@ def test_iterator_explain_metrics_no_analyze_make_call(database_id):
     from google.cloud.datastore.query import ExplainOptions
     from google.cloud.datastore.query import ExplainMetrics
     from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
-    from google.protobuf import struct_pb2, duration_pb2
+    from google.protobuf import duration_pb2
+
     response_pb = _make_query_response([], b"", 0, 0)
     expected_metrics = query_profile_pb2.ExplainMetrics(
         plan_summary=query_profile_pb2.PlanSummary(),
@@ -1162,7 +1166,7 @@ def test_iterator_explain_metrics_no_analyze_make_call(database_id):
             execution_duration=duration_pb2.Duration(seconds=1),
             read_operations=10,
             debug_stats={},
-        )
+        ),
     )
     response_pb.explain_metrics = expected_metrics
     ds_api = _make_datastore_api(response_pb)
@@ -1497,8 +1501,14 @@ def _make_datastore_api(*results):
 
     return mock.Mock(run_query=run_query, spec=["run_query"])
 
+
 def test_explain_metrics__from_pb():
-    from google.cloud.datastore.query import ExplainMetrics, _ExplainAnalyzeMetrics, QueryExplainError, PlanSummary
+    from google.cloud.datastore.query import (
+        ExplainMetrics,
+        _ExplainAnalyzeMetrics,
+        QueryExplainError,
+        PlanSummary,
+    )
     from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
     from google.protobuf import struct_pb2, duration_pb2
 
@@ -1514,13 +1524,17 @@ def test_explain_metrics__from_pb():
     assert metrics.plan_summary.indexes_used == []
     with pytest.raises(QueryExplainError) as exc:
         metrics.execution_stats
-    assert "execution_stats not available when explain_options.analyze=False" in str(exc.value)
+    assert "execution_stats not available when explain_options.analyze=False" in str(
+        exc.value
+    )
     # test with execution_stats field
     expected_metrics.execution_stats = query_profile_pb2.ExecutionStats(
         results_returned=1,
         execution_duration=duration_pb2.Duration(seconds=2),
         read_operations=3,
-        debug_stats=struct_pb2.Struct(fields={"foo": struct_pb2.Value(string_value="bar")}),
+        debug_stats=struct_pb2.Struct(
+            fields={"foo": struct_pb2.Value(string_value="bar")}
+        ),
     )
     metrics = ExplainMetrics._from_pb(expected_metrics)
     assert isinstance(metrics, ExplainMetrics)
@@ -1536,19 +1550,30 @@ def test_explain_metrics_execution_stats():
     Standard ExplainMetrics class should raise exception when execution_stats is accessed.
     _ExplainAnalyzeMetrics should include the field
     """
-    from google.cloud.datastore.query import ExplainMetrics, QueryExplainError, _ExplainAnalyzeMetrics
+    from google.cloud.datastore.query import (
+        ExplainMetrics,
+        QueryExplainError,
+        _ExplainAnalyzeMetrics,
+    )
+
     metrics = ExplainMetrics(plan_summary=object())
     with pytest.raises(QueryExplainError) as exc:
         metrics.execution_stats
-    assert "execution_stats not available when explain_options.analyze=False" in str(exc.value)
+    assert "execution_stats not available when explain_options.analyze=False" in str(
+        exc.value
+    )
     expected_stats = object()
-    metrics = _ExplainAnalyzeMetrics(plan_summary=object(), _execution_stats=expected_stats)
+    metrics = _ExplainAnalyzeMetrics(
+        plan_summary=object(), _execution_stats=expected_stats
+    )
     assert metrics.execution_stats is expected_stats
+
 
 def test_explain_options__to_dict():
     """
     Should be able to create a dict representation of ExplainOptions
     """
     from google.cloud.datastore.query import ExplainOptions
+
     assert ExplainOptions(analyze=True)._to_dict() == {"analyze": True}
     assert ExplainOptions(analyze=False)._to_dict() == {"analyze": False}

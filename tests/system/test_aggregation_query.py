@@ -533,14 +533,19 @@ def test_aggregation_query_with_nested_query_multiple_filters(
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_no_explain(aggregation_query_client, nested_query, database_id):
+def test_aggregation_query_no_explain(
+    aggregation_query_client, nested_query, database_id
+):
     """
     When explain_options is not set, iterator.explain_metrics should raise an exception
     """
     from google.cloud.datastore.query import QueryExplainError
+
     expected_error = "explain_options not set on query"
 
-    agg_query = aggregation_query_client.aggregation_query(nested_query, explain_options=None)
+    agg_query = aggregation_query_client.aggregation_query(
+        nested_query, explain_options=None
+    )
     agg_query.count()
     agg_query.sum("appearances")
     agg_query.avg("appearances")
@@ -566,7 +571,9 @@ def test_aggregation_query_explain(aggregation_query_client, nested_query, datab
     from google.cloud.datastore.query import ExplainMetrics
     from google.cloud.datastore.query import PlanSummary
 
-    agg_query = aggregation_query_client.aggregation_query(nested_query, explain_options=ExplainOptions(analyze=False))
+    agg_query = aggregation_query_client.aggregation_query(
+        nested_query, explain_options=ExplainOptions(analyze=False)
+    )
     agg_query.count()
     agg_query.sum("appearances")
     agg_query.avg("appearances")
@@ -587,7 +594,9 @@ def test_aggregation_query_explain(aggregation_query_client, nested_query, datab
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_explain_analyze(aggregation_query_client, nested_query, database_id):
+def test_aggregation_query_explain_analyze(
+    aggregation_query_client, nested_query, database_id
+):
     """
     When explain_options(analyze=True) is set, iterator should contain explain_metrics field
     with plan_summary and execution_stats
@@ -597,10 +606,13 @@ def test_aggregation_query_explain_analyze(aggregation_query_client, nested_quer
     from google.cloud.datastore.query import QueryExplainError
     from google.cloud.datastore.query import ExplainOptions
     from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore.query import ExecutionStats
     from google.cloud.datastore.query import PlanSummary
 
     expected_error = "explain_metrics not available until query is complete."
-    agg_query = aggregation_query_client.aggregation_query(nested_query, explain_options=ExplainOptions(analyze=True))
+    agg_query = aggregation_query_client.aggregation_query(
+        nested_query, explain_options=ExplainOptions(analyze=True)
+    )
     agg_query.count()
     agg_query.sum("appearances")
     agg_query.avg("appearances")
@@ -618,7 +630,7 @@ def test_aggregation_query_explain_analyze(aggregation_query_client, nested_quer
     # verify plan_summary
     assert isinstance(stats.plan_summary, PlanSummary)
     assert len(stats.plan_summary.indexes_used) > 0
-    assert stats.plan_summary.indexes_used[0]["properties"] == '(__name__ ASC)'
+    assert stats.plan_summary.indexes_used[0]["properties"] == "(__name__ ASC)"
     assert stats.plan_summary.indexes_used[0]["query_scope"] == "Collection group"
     # verify execution_stats
     assert isinstance(stats.execution_stats, ExecutionStats)
@@ -630,7 +642,6 @@ def test_aggregation_query_explain_analyze(aggregation_query_client, nested_quer
     assert isinstance(stats.execution_stats.debug_stats, dict)
     assert "billing_details" in stats.execution_stats.debug_stats
     assert stats.execution_stats.debug_stats["documents_scanned"] == str(num_results)
-    assert stats.execution_stats.debug_stats["index_entries_scanned"] == str(num_results)
-
-
-
+    assert stats.execution_stats.debug_stats["index_entries_scanned"] == str(
+        num_results
+    )
