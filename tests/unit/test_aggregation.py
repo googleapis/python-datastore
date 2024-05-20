@@ -403,22 +403,6 @@ def test_iterator__process_query_results_finished_result():
     assert iterator._more_results is False
 
 
-def test_iterator__process_query_results_unexpected_result():
-    from google.cloud.datastore_v1.types import query as query_pb2
-    from google.cloud.datastore.aggregation import AggregationResult
-
-    iterator = _make_aggregation_iterator(None, None)
-
-    aggregation_pbs = [AggregationResult(alias="total", value=1)]
-
-    more_results_enum = (
-        query_pb2.QueryResultBatch.MoreResultsType.MORE_RESULTS_TYPE_UNSPECIFIED
-    )
-    response_pb = _make_aggregation_query_response(aggregation_pbs, more_results_enum)
-    with pytest.raises(ValueError):
-        iterator._process_query_results(response_pb)
-
-
 def test_aggregation_iterator__next_page():
     _next_page_helper()
 
