@@ -533,24 +533,61 @@ def test_aggregation_query_with_nested_query_multiple_filters(
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_no_explain(ancestor_query, database_id):
+def test_aggregation_query_no_explain(aggregation_query_client, nested_query, database_id):
     """
     When explain_options is not set, iterator.explain_metrics should raise an exception
     """
-    assert False
+    from google.cloud.datastore.query import QueryExplainError
+    expected_error = "explain_options not set on query"
+
+    agg_query = aggregation_query_client.aggregation_query(nested_query, explain_options=None)
+    agg_query.count()
+    agg_query.sum("appearances")
+    agg_query.avg("appearances")
+    iterator = agg_query.fetch()
+    with pytest.raises(QueryExplainError) as excinfo:
+        iterator.explain_metrics
+    assert expected_error in str(excinfo.value)
+    # exhaust the iterator and try again
+    list(iterator)
+    with pytest.raises(QueryExplainError) as excinfo:
+        iterator.explain_metrics
+    assert expected_error in str(excinfo.value)
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_explain(ancestor_query, database_id):
+def test_aggregation_query_explain(aggregation_query_client, nested_query, database_id):
     """
     When explain_options(analyze=False) is set, iterator should contain explain_metrics field
     with plan_summary but no execution_stats
     """
-    assert False
+    from google.cloud.datastore.query import QueryExplainError
+    from google.cloud.datastore.query import ExplainOptions
+    from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore.query import PlanSummary
+
+    agg_query = aggregation_query_client.aggregation_query(nested_query, explain_options=ExplainOptions(analyze=False))
+    agg_query.count()
+    agg_query.sum("appearances")
+    agg_query.avg("appearances")
+    iterator = agg_query.fetch()
+    # should have plan_summary but no execution_stats
+    stats = iterator.explain_metrics
+    assert isinstance(stats, ExplainMetrics)
+    assert isinstance(stats.plan_summary, PlanSummary)
+    assert len(stats.plan_summary.indexes_used) > 0
+    assert stats.plan_summary.indexes_used[0].index_id == "Character.appearances"
+    assert stats.plan_summary.indexes_used[0].query_scope == "Collection Group"
+    # execution_stats should not be present
+    with pytest.raises(QueryExplainError) as excinfo:
+        stats.execution_stats
+    assert "execution_stats not available" in str(excinfo.value)
+    # should have no results
+    assert len(list(iterator)) == 0
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_explain_analyze(ancestor_query, database_id):
+def test_aggregation_query_explain_analyze(aggregation_query_client, nested_query, database_id):
     """
     When explain_options(analyze=True) is set, iterator should contain explain_metrics field
     with plan_summary and execution_stats
