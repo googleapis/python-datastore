@@ -178,6 +178,11 @@ class Query(object):
     :type distinct_on: sequence of string
     :param distinct_on: field names used to group query results.
 
+    :type explain_options: :class:`~google.cloud.datastore.ExplainOptions`
+    :param explain_options: (Optional) Options to enable query profiling for
+        this query. When set, explain_metrics will be available on the iterator
+        returned by query.fetch().
+
     :raises: ValueError if ``project`` is not passed and no implicit
              default is set.
     """
@@ -847,6 +852,17 @@ class Iterator(page_iterator.Iterator):
 
     @property
     def explain_metrics(self) -> ExplainMetrics:
+        """
+        Get the metrics associated with the query execution.
+        Metrics are only available when explain_options is set on the query. If
+        ExplainOptions.analyze is False, only plan_summary is available. If it is
+        True, execution_stats is also available.
+
+        :rtype: :class:`~google.cloud.datastore.query_profile.ExplainMetrics`
+        :returns: The metrics associated with the query execution.
+        :raises: :class:`~google.cloud.datastore.query_profile.QueryExplainError`
+            if explain_metrics is not available on the query.
+        """
         if self._explain_metrics is not None:
             return self._explain_metrics
         elif self._query._explain_options is None:

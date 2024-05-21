@@ -155,6 +155,11 @@ class AggregationQuery(object):
 
     :type query: :class:`google.cloud.datastore.query.Query`
     :param query: The query used for aggregations.
+
+    :type explain_options: :class:`~google.cloud.datastore.ExplainOptions`
+    :param explain_options: (Optional) Options to enable query profiling for
+        this query. When set, explain_metrics will be available on the iterator
+        returned by query.fetch().
     """
 
     def __init__(
@@ -502,6 +507,17 @@ class AggregationResultIterator(page_iterator.Iterator):
 
     @property
     def explain_metrics(self) -> ExplainMetrics:
+        """
+        Get the metrics associated with the query execution.
+        Metrics are only available when explain_options is set on the query. If
+        ExplainOptions.analyze is False, only plan_summary is available. If it is
+        True, execution_stats is also available.
+
+        :rtype: :class:`~google.cloud.datastore.query_profile.ExplainMetrics`
+        :returns: The metrics associated with the query execution.
+        :raises: :class:`~google.cloud.datastore.query_profile.QueryExplainError`
+            if explain_metrics is not available on the query.
+        """
         if self._explain_metrics is not None:
             return self._explain_metrics
         elif self._aggregation_query._explain_options is None:
