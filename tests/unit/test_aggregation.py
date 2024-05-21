@@ -286,7 +286,9 @@ def test_aggregation_uses_nested_query_explain_options(client, database_id):
     """
     expected_explain_options = mock.Mock()
     query = _make_query(client, explain_options=expected_explain_options)
-    aggregation_query = _make_aggregation_query(client=client, query=query, explain_options=None)
+    aggregation_query = _make_aggregation_query(
+        client=client, query=query, explain_options=None
+    )
     assert aggregation_query._explain_options is expected_explain_options
 
 
@@ -312,7 +314,9 @@ def test_iterator_constructor_explicit():
     query = object()
     client = object()
     explain_options = object()
-    aggregation_query = AggregationQuery(client=client, query=query, explain_options=explain_options)
+    aggregation_query = AggregationQuery(
+        client=client, query=query, explain_options=explain_options
+    )
     assert aggregation_query._explain_options is explain_options
     retry = mock.Mock()
     timeout = 100000

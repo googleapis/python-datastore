@@ -1500,4 +1500,3 @@ def _make_datastore_api(*results):
         run_query = mock.Mock(side_effect=results, spec=[])
 
     return mock.Mock(run_query=run_query, spec=["run_query"])
-
