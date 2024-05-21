@@ -442,7 +442,7 @@ def test_iterator_sends_explain_options_w_request(database_id, analyze):
     When query has explain_options set, all requests should include
     the explain_options field.
     """
-    from google.cloud.datastore.query import ExplainOptions
+    from google.cloud.datastore.query_profile import ExplainOptions
 
     response_pb = _make_aggregation_query_response([], 0)
     ds_api = _make_datastore_api_for_aggregation(response_pb)
@@ -467,7 +467,7 @@ def test_iterator_explain_metrics(database_id):
     """
     If explain_metrics is recieved from backend, it should be set on the iterator
     """
-    from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore.query_profile import ExplainMetrics
     from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
     from google.protobuf import duration_pb2
 
@@ -499,7 +499,7 @@ def test_iterator_explain_metrics_no_explain(database_id):
     If query has no explain_options set, iterator.explain_metrics should raise
     an exception.
     """
-    from google.cloud.datastore.query import QueryExplainError
+    from google.cloud.datastore.query_profile import QueryExplainError
 
     ds_api = _make_datastore_api_for_aggregation()
     client = _Client(None, datastore_api=ds_api)
@@ -520,8 +520,8 @@ def test_iterator_explain_metrics_no_analyze_make_call(database_id):
     If query.explain_options(analyze=False), accessing iterator.explain_metrics
     should make a network call to get the data.
     """
-    from google.cloud.datastore.query import ExplainOptions
-    from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore.query_profile import ExplainOptions
+    from google.cloud.datastore.query_profile import ExplainMetrics
     from google.cloud.datastore_v1.types import query_profile as query_profile_pb2
     from google.protobuf import duration_pb2
 

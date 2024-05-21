@@ -13,23 +13,20 @@
 # limitations under the License.
 
 """Create / interact with Google Cloud Datastore queries."""
-from __future__ import annotations
-
-from typing import Any
-
 import base64
 import warnings
-import datetime
-from dataclasses import dataclass
 
 from google.api_core import page_iterator
 from google.cloud._helpers import _ensure_tuple_or_list
-from google.protobuf.json_format import MessageToDict
 
 from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore_v1.types import query as query_pb2
 from google.cloud.datastore import helpers
 from google.cloud.datastore.key import Key
+
+
+from google.cloud.datastore.query_profile import ExplainMetrics
+from google.cloud.datastore.query_profile import QueryExplainError
 
 import abc
 from abc import ABC
@@ -46,95 +43,6 @@ _FINISHED = (
 )
 
 KEY_PROPERTY_NAME = "__key__"
-
-
-@dataclass(frozen=True)
-class ExplainOptions:
-    """
-    Options for explaining a query
-    """
-
-    analyze: bool = False
-
-    def _to_dict(self):
-        return {"analyze": self.analyze}
-
-
-@dataclass(frozen=True)
-class PlanSummary:
-    """
-    Summary of the query plan, returned when query.explain_options is set.
-    """
-
-    indexes_used: list[dict[str, Any]]
-
-
-@dataclass(frozen=True)
-class ExecutionStats:
-    """
-    Information about the execution of a query, returned when query.explain_options.analyze is True.
-    """
-
-    results_returned: int
-    execution_duration: datetime.timedelta
-    read_operations: int
-    debug_stats: dict[str, Any]
-
-
-@dataclass(frozen=True)
-class ExplainMetrics:
-    """
-    contains ddata from explain_metrics proto, returned wheb query.explain_options is set
-
-    when explain_options.analyze is false, only plan_summary is available. when explain_options.analyze is true,
-    execution_stats is also available.
-    """
-
-    plan_summary: PlanSummary
-
-    @staticmethod
-    def _from_pb(metrics_pb):
-        dict_repr = MessageToDict(metrics_pb._pb, preserving_proto_field_name=True)
-        plan_summary = PlanSummary(
-            indexes_used=dict_repr.get("plan_summary", {}).get("indexes_used", [])
-        )
-        if "execution_stats" in dict_repr:
-            stats_dict = dict_repr["execution_stats"]
-            execution_stats = ExecutionStats(
-                results_returned=int(stats_dict["results_returned"]),
-                execution_duration=metrics_pb.execution_stats.execution_duration,
-                read_operations=int(stats_dict["read_operations"]),
-                debug_stats=stats_dict["debug_stats"],
-            )
-            return _ExplainAnalyzeMetrics(
-                plan_summary=plan_summary, _execution_stats=execution_stats
-            )
-        else:
-            return ExplainMetrics(plan_summary=plan_summary)
-
-    @property
-    def execution_stats(self) -> ExecutionStats:
-        raise QueryExplainError(
-            "execution_stats not available when explain_options.analyze=False."
-        )
-
-
-@dataclass(frozen=True)
-class _ExplainAnalyzeMetrics(ExplainMetrics):
-    """
-    Subclass of ExplainMetrics that includes execution_stats, only available when explain_options.analyze is True.
-    """
-
-    plan_summary: PlanSummary
-    _execution_stats: ExecutionStats
-
-    @property
-    def execution_stats(self) -> ExecutionStats:
-        return self._execution_stats
-
-
-class QueryExplainError(Exception):
-    pass
 
 
 class BaseFilter(ABC):

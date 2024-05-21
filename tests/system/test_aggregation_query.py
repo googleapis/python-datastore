@@ -539,7 +539,7 @@ def test_aggregation_query_no_explain(
     """
     When explain_options is not set, iterator.explain_metrics should raise an exception
     """
-    from google.cloud.datastore.query import QueryExplainError
+    from google.cloud.datastore.query_profile import QueryExplainError
 
     expected_error = "explain_options not set on query"
 
@@ -566,10 +566,10 @@ def test_aggregation_query_explain(aggregation_query_client, nested_query, datab
     When explain_options(analyze=False) is set, iterator should contain explain_metrics field
     with plan_summary but no execution_stats
     """
-    from google.cloud.datastore.query import QueryExplainError
-    from google.cloud.datastore.query import ExplainOptions
-    from google.cloud.datastore.query import ExplainMetrics
-    from google.cloud.datastore.query import PlanSummary
+    from google.cloud.datastore.query_profile import QueryExplainError
+    from google.cloud.datastore.query_profile import ExplainOptions
+    from google.cloud.datastore.query_profile import ExplainMetrics
+    from google.cloud.datastore.query_profile import PlanSummary
 
     agg_query = aggregation_query_client.aggregation_query(
         nested_query, explain_options=ExplainOptions(analyze=False)
@@ -601,11 +601,11 @@ def test_aggregation_query_explain_analyze(
 
     Should not be present until iterator is exhausted
     """
-    from google.cloud.datastore.query import QueryExplainError
-    from google.cloud.datastore.query import ExplainOptions
-    from google.cloud.datastore.query import ExplainMetrics
-    from google.cloud.datastore.query import ExecutionStats
-    from google.cloud.datastore.query import PlanSummary
+    from google.cloud.datastore.query_profile import QueryExplainError
+    from google.cloud.datastore.query_profile import ExplainOptions
+    from google.cloud.datastore.query_profile import ExplainMetrics
+    from google.cloud.datastore.query_profile import ExecutionStats
+    from google.cloud.datastore.query_profile import PlanSummary
 
     expected_error = "explain_metrics not available until query is complete."
     agg_query = aggregation_query_client.aggregation_query(
@@ -656,8 +656,8 @@ def test_aggregation_query_explain_in_transaction(
     When an aggregation query is run in a transaction, the transaction id should be sent with the request.
     The result is the same as when it is run outside of a transaction.
     """
-    from google.cloud.datastore.query import ExplainMetrics
-    from google.cloud.datastore.query import ExplainOptions
+    from google.cloud.datastore.query_profile import ExplainMetrics
+    from google.cloud.datastore.query_profile import ExplainOptions
 
     with aggregation_query_client.transaction():
         agg_query = aggregation_query_client.aggregation_query(

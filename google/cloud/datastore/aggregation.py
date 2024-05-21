@@ -23,8 +23,8 @@ from google.cloud.datastore_v1.types import query as query_pb2
 from google.cloud.datastore import helpers
 from google.cloud.datastore.query import _pb_from_query
 
-from google.cloud.datastore.query import ExplainMetrics
-from google.cloud.datastore.query import QueryExplainError
+from google.cloud.datastore.query_profile import ExplainMetrics
+from google.cloud.datastore.query_profile import QueryExplainError
 
 from google.cloud.datastore.query import _NOT_FINISHED
 from google.cloud.datastore.query import _FINISHED
