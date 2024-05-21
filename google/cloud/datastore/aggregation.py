@@ -160,6 +160,7 @@ class AggregationQuery(object):
     :param explain_options: (Optional) Options to enable query profiling for
         this query. When set, explain_metrics will be available on the iterator
         returned by query.fetch().
+        If not passed, will use value from given query.
     """
 
     def __init__(
@@ -171,7 +172,8 @@ class AggregationQuery(object):
         self._client = client
         self._nested_query = query
         self._aggregations = []
-        self._explain_options = explain_options
+        # fallback to query._explain_options if not set
+        self._explain_options = explain_options or query._explain_options
 
     @property
     def project(self):

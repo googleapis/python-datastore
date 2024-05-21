@@ -278,6 +278,18 @@ def test_query_fetch_w_explicit_client_w_limit(client, database_id):
     assert iterator._limit == limit
 
 
+@pytest.mark.parametrize("database_id", [None, "somedb"], indirect=True)
+def test_aggregation_uses_nested_query_explain_options(client, database_id):
+    """
+    If explain_options is set on the nested query but not the aggregation,
+    use the nested query's explain_options.
+    """
+    expected_explain_options = mock.Mock()
+    query = _make_query(client, explain_options=expected_explain_options)
+    aggregation_query = _make_aggregation_query(client=client, query=query, explain_options=None)
+    assert aggregation_query._explain_options is expected_explain_options
+
+
 def test_iterator_constructor_defaults():
     query = object()
     client = object()
