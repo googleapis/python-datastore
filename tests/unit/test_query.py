@@ -1191,7 +1191,6 @@ def test_iterator_explain_metrics_no_analyze_make_call_failed(database_id):
     If the call does not result in explain_metrics data, it should raise a QueryExplainError.
     """
     from google.cloud.datastore.query_profile import ExplainOptions
-    from google.cloud.datastore.query_profile import ExplainMetrics
     from google.cloud.datastore.query_profile import QueryExplainError
 
     # mocked response does not return explain_metrics
