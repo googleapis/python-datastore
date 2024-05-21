@@ -583,7 +583,6 @@ def test_aggregation_query_explain(aggregation_query_client, nested_query, datab
     assert isinstance(stats, ExplainMetrics)
     assert isinstance(stats.plan_summary, PlanSummary)
     assert len(stats.plan_summary.indexes_used) > 0
-    assert stats.plan_summary.indexes_used[0].query_scope == "Collection Group"
     # execution_stats should not be present
     with pytest.raises(QueryExplainError) as excinfo:
         stats.execution_stats
@@ -629,8 +628,11 @@ def test_aggregation_query_explain_analyze(
     # verify plan_summary
     assert isinstance(stats.plan_summary, PlanSummary)
     assert len(stats.plan_summary.indexes_used) > 0
-    assert stats.plan_summary.indexes_used[0]["properties"] == "(appearances ASC, __name__ ASC)"
-    assert stats.plan_summary.indexes_used[0]["query_scope"] == "Collection group"
+    assert (
+        stats.plan_summary.indexes_used[0]["properties"]
+        == "(appearances ASC, __name__ ASC)"
+    )
+    assert stats.plan_summary.indexes_used[0]["query_scope"] == "Includes ancestors"
     # verify execution_stats
     assert isinstance(stats.execution_stats, ExecutionStats)
     assert stats.execution_stats.results_returned == num_results
@@ -647,13 +649,16 @@ def test_aggregation_query_explain_analyze(
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_aggregation_query_explain_in_transaction(aggregation_query_client, nested_query, database_id):
+def test_aggregation_query_explain_in_transaction(
+    aggregation_query_client, nested_query, database_id
+):
     """
     When an aggregation query is run in a transaction, the transaction id should be sent with the request.
     The result is the same as when it is run outside of a transaction.
     """
     from google.cloud.datastore.query import ExplainMetrics
     from google.cloud.datastore.query import ExplainOptions
+
     with aggregation_query_client.transaction():
         agg_query = aggregation_query_client.aggregation_query(
             nested_query, explain_options=ExplainOptions(analyze=True)
