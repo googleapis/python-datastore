@@ -291,9 +291,10 @@ def test_aggregation_uses_nested_query_explain_options(client, database_id):
 
 
 def test_iterator_constructor_defaults():
-    query = object()
+    query = mock.Mock()
     client = object()
     aggregation_query = AggregationQuery(client=client, query=query)
+    assert aggregation_query._explain_options == query._explain_options
     iterator = _make_aggregation_iterator(aggregation_query, client)
 
     assert not iterator._started
@@ -304,12 +305,15 @@ def test_iterator_constructor_defaults():
     assert iterator._more_results
     assert iterator._retry is None
     assert iterator._timeout is None
+    assert iterator._explain_metrics is None
 
 
 def test_iterator_constructor_explicit():
     query = object()
     client = object()
-    aggregation_query = AggregationQuery(client=client, query=query)
+    explain_options = object()
+    aggregation_query = AggregationQuery(client=client, query=query, explain_options=explain_options)
+    assert aggregation_query._explain_options is explain_options
     retry = mock.Mock()
     timeout = 100000
     limit = 2
@@ -327,6 +331,7 @@ def test_iterator_constructor_explicit():
     assert iterator._retry == retry
     assert iterator._timeout == timeout
     assert iterator._limit == limit
+    assert iterator._explain_metrics is None
 
 
 def test_iterator__build_protobuf_empty():

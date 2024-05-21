@@ -383,7 +383,6 @@ class AggregationResultIterator(page_iterator.Iterator):
         retry=None,
         timeout=None,
         read_time=None,
-        explain_metrics=None,
     ):
         super(AggregationResultIterator, self).__init__(
             client=client,
@@ -397,7 +396,7 @@ class AggregationResultIterator(page_iterator.Iterator):
         self._read_time = read_time
         self._limit = limit
         # The attributes below will change over the life of the iterator.
-        self._explain_metrics = explain_metrics
+        self._explain_metrics = None
         self._more_results = True
 
     def _build_protobuf(self):
