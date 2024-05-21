@@ -425,7 +425,6 @@ def test_iterator__process_query_results_finished_result():
 
 
 def test_iterator__process_query_results_unexpected_result():
-    from google.cloud.datastore_v1.types import query as query_pb2
     from google.cloud.datastore.aggregation import AggregationResult
 
     iterator = _make_aggregation_iterator(None, None)
