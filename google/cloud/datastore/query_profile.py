@@ -100,12 +100,12 @@ class ExplainMetrics:
             indexes_used=dict_repr.get("plan_summary", {}).get("indexes_used", [])
         )
         if "execution_stats" in dict_repr:
-            stats_dict = dict_repr["execution_stats"]
+            stats_dict = dict_repr.get("execution_stats", {})
             execution_stats = ExecutionStats(
                 results_returned=int(stats_dict.get("results_returned", 0)),
                 execution_duration=metrics_pb.execution_stats.execution_duration,
                 read_operations=int(stats_dict.get("read_operations", 0)),
-                debug_stats=stats_dict["debug_stats"],
+                debug_stats=stats_dict.get("debug_stats", {}),
             )
             return _ExplainAnalyzeMetrics(
                 plan_summary=plan_summary, _execution_stats=execution_stats
