@@ -1184,6 +1184,30 @@ def test_iterator_explain_metrics_no_analyze_make_call(database_id):
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_metrics_no_analyze_make_call_failed(database_id):
+    """
+    If query.explain_options(analyze=False), accessing iterator.explain_metrics
+    should make a network call to get the data.
+    If the call does not result in explain_metrics data, it should raise a QueryExplainError.
+    """
+    from google.cloud.datastore.query_profile import ExplainOptions
+    from google.cloud.datastore.query_profile import ExplainMetrics
+    from google.cloud.datastore.query_profile import QueryExplainError
+
+    # mocked response does not return explain_metrics
+    response_pb = _make_query_response([], b"", 0, 0)
+    ds_api = _make_datastore_api(response_pb)
+    client = _Client(None, datastore_api=ds_api)
+    explain_options = ExplainOptions(analyze=False)
+    query = Query(client, explain_options=explain_options)
+    iterator = _make_iterator(query, client)
+    assert ds_api.run_query.call_count == 0
+    with pytest.raises(QueryExplainError):
+        iterator.explain_metrics
+    assert ds_api.run_query.call_count == 1
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
 def test_iterator_explain_analyze_access_before_complete(database_id):
     """
     If query.explain_options(analyze=True), accessing iterator.explain_metrics
