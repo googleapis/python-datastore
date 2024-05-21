@@ -572,6 +572,28 @@ def test_iterator_explain_metrics_no_analyze_make_call(database_id):
     assert metrics == ExplainMetrics._from_pb(expected_metrics)
 
 
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_analyze_access_before_complete(database_id):
+    """
+    If query.explain_options(analyze=True), accessing iterator.explain_metrics
+    before the query is complete should raise an exception.
+    """
+    from google.cloud.datastore.query_profile import ExplainOptions
+    from google.cloud.datastore.query_profile import QueryExplainError
+
+    ds_api = _make_datastore_api_for_aggregation()
+    client = _Client(None, datastore_api=ds_api)
+    explain_options = ExplainOptions(analyze=True)
+    query = _make_aggregation_query(
+        client, _make_query(client), explain_options=explain_options
+    )
+    iterator = _make_aggregation_iterator(query, client)
+    expected_error = "explain_metrics not available until query is complete"
+    with pytest.raises(QueryExplainError) as exc:
+        iterator.explain_metrics
+    assert expected_error in str(exc.value)
+
+
 def _next_page_helper(txn_id=None, retry=None, timeout=None, database_id=None):
     from google.api_core import page_iterator
     from google.cloud.datastore_v1.types import datastore as datastore_pb2

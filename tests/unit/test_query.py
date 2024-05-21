@@ -1143,8 +1143,9 @@ def test_iterator_explain_metrics_no_explain(database_id):
         iterator.explain_metrics
     assert "explain_options not set on query" in str(exc.value)
     # should not raise error if field is set
-    iterator._explain_metrics = object()
-    assert iterator.explain_metrics is iterator._explain_metrics
+    expected_metrics = object()
+    iterator._explain_metrics = expected_metrics
+    assert iterator.explain_metrics is expected_metrics
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
@@ -1180,6 +1181,25 @@ def test_iterator_explain_metrics_no_analyze_make_call(database_id):
     assert ds_api.run_query.call_count == 1
     assert isinstance(metrics, ExplainMetrics)
     assert metrics == ExplainMetrics._from_pb(expected_metrics)
+
+
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_iterator_explain_analyze_access_before_complete(database_id):
+    """
+    If query.explain_options(analyze=True), accessing iterator.explain_metrics
+    before the query is complete should raise an exception.
+    """
+    from google.cloud.datastore.query_profile import ExplainOptions
+    from google.cloud.datastore.query_profile import QueryExplainError
+
+    ds_api = _make_datastore_api()
+    client = _Client(None, datastore_api=ds_api)
+    query = _make_query(client, explain_options=ExplainOptions(analyze=True))
+    iterator = _make_iterator(query, client)
+    expected_error = "explain_metrics not available until query is complete"
+    with pytest.raises(QueryExplainError) as exc:
+        iterator.explain_metrics
+    assert expected_error in str(exc.value)
 
 
 def test__item_to_entity():
