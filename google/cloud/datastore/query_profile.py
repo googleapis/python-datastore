@@ -102,9 +102,9 @@ class ExplainMetrics:
         if "execution_stats" in dict_repr:
             stats_dict = dict_repr["execution_stats"]
             execution_stats = ExecutionStats(
-                results_returned=int(stats_dict["results_returned"]),
+                results_returned=int(stats_dict.get("results_returned", 0)),
                 execution_duration=metrics_pb.execution_stats.execution_duration,
-                read_operations=int(stats_dict["read_operations"]),
+                read_operations=int(stats_dict.get("read_operations", 0)),
                 debug_stats=stats_dict["debug_stats"],
             )
             return _ExplainAnalyzeMetrics(
