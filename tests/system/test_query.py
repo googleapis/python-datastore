@@ -526,16 +526,14 @@ def test_query_explain(query_client, ancestor_key, database_id):
     from google.cloud.datastore.query import ExplainMetrics
     from google.cloud.datastore.query import PlanSummary
 
-    query = _make_ancestor_query(
-        query_client, ancestor_key, explain_options=ExplainOptions(analyze=False)
-    )
+    query = _make_ancestor_query(query_client, ancestor_key, explain_options=ExplainOptions(analyze=False))
     iterator = query.fetch()
     # should have plan_summary but no execution_stats
     stats = iterator.explain_metrics
     assert isinstance(stats, ExplainMetrics)
     assert isinstance(stats.plan_summary, PlanSummary)
     assert len(stats.plan_summary.indexes_used) > 0
-    assert stats.plan_summary.indexes_used[0]["properties"] == "(__name__ ASC)"
+    assert stats.plan_summary.indexes_used[0]["properties"] == '(__name__ ASC)'
     assert stats.plan_summary.indexes_used[0]["query_scope"] == "Collection group"
     # execution_stats should not be present
     with pytest.raises(QueryExplainError) as excinfo:
@@ -561,9 +559,7 @@ def test_query_explain_analyze(query_client, ancestor_key, database_id):
     from google.cloud.datastore.query import PlanSummary
 
     expected_error = "explain_metrics not available until query is complete."
-    query = _make_ancestor_query(
-        query_client, ancestor_key, explain_options=ExplainOptions(analyze=True)
-    )
+    query = _make_ancestor_query(query_client, ancestor_key, explain_options=ExplainOptions(analyze=True))
     iterator = query.fetch()
     # explain_metrics isn't present until iterator is exhausted
     with pytest.raises(QueryExplainError) as excinfo:
@@ -578,7 +574,7 @@ def test_query_explain_analyze(query_client, ancestor_key, database_id):
     # verify plan_summary
     assert isinstance(stats.plan_summary, PlanSummary)
     assert len(stats.plan_summary.indexes_used) > 0
-    assert stats.plan_summary.indexes_used[0]["properties"] == "(__name__ ASC)"
+    assert stats.plan_summary.indexes_used[0]["properties"] == '(__name__ ASC)'
     assert stats.plan_summary.indexes_used[0]["query_scope"] == "Collection group"
     # verify execution_stats
     assert isinstance(stats.execution_stats, ExecutionStats)
@@ -590,6 +586,22 @@ def test_query_explain_analyze(query_client, ancestor_key, database_id):
     assert isinstance(stats.execution_stats.debug_stats, dict)
     assert "billing_details" in stats.execution_stats.debug_stats
     assert stats.execution_stats.debug_stats["documents_scanned"] == str(num_results)
-    assert stats.execution_stats.debug_stats["index_entries_scanned"] == str(
-        num_results
-    )
+    assert stats.execution_stats.debug_stats["index_entries_scanned"] == str(num_results)
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_query_explain_in_transaction(query_client, ancestor_key, database_id):
+    """
+    Should be able to access explain metrics when called in a transaction
+    """
+    from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore.query import ExplainOptions
+    query = _make_ancestor_query(query_client, ancestor_key, explain_options=ExplainOptions(analyze=True))
+    client = query._client
+    with client.transaction():
+        # run full query
+        iterator = query.fetch()
+        list(iterator)
+        # check for stats
+        stats = iterator.explain_metrics
+        assert isinstance(stats, ExplainMetrics)

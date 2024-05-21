@@ -644,3 +644,26 @@ def test_aggregation_query_explain_analyze(
     assert stats.execution_stats.debug_stats["index_entries_scanned"] == str(
         num_results
     )
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_aggregation_query_explain_in_transaction(aggregation_query_client, nested_query, database_id):
+    """
+    When an aggregation query is run in a transaction, the transaction id should be sent with the request.
+    The result is the same as when it is run outside of a transaction.
+    """
+    from google.cloud.datastore.query import ExplainMetrics
+    from google.cloud.datastore.query import ExplainOptions
+    with aggregation_query_client.transaction():
+        agg_query = aggregation_query_client.aggregation_query(
+            nested_query, explain_options=ExplainOptions(analyze=True)
+        )
+        agg_query.count()
+        agg_query.sum("appearances")
+        agg_query.avg("appearances")
+        iterator = agg_query.fetch()
+        # run full query
+        list(iterator)
+        # check for stats
+        stats = iterator.explain_metrics
+        assert isinstance(stats, ExplainMetrics)
