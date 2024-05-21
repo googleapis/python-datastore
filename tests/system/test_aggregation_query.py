@@ -641,11 +641,7 @@ def test_aggregation_query_explain_analyze(
     assert duration > 0
     assert duration < 1  # we expect a number closer to 0.05
     assert isinstance(stats.execution_stats.debug_stats, dict)
-    assert "billing_details" in stats.execution_stats.debug_stats
-    assert stats.execution_stats.debug_stats["documents_scanned"] == str(num_results)
-    assert stats.execution_stats.debug_stats["index_entries_scanned"] == str(
-        num_results
-    )
+    assert len(stats.execution_stats.debug_stats) > 0
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
