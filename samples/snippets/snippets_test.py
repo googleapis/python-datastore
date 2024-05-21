@@ -213,3 +213,48 @@ class TestDatastoreSnippets:
         assert captured.err == ""
 
         client.entities_to_delete.extend(tasks)
+
+    # @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_explain_analyze_entity(self, capsys, client):
+        snippets.explain_analyze_entity(client)
+        captured = capsys.readouterr()
+        assert (
+            "Indexes used: [{'properties': '(__name__ ASC)', 'query_scope': 'Collection group'}]" in captured.out
+        )
+        assert 'Results returned: 0' in captured.out
+        assert 'Execution duration: 0:00' in captured.out
+        assert 'Read operations: 0' in captured.out
+        assert 'Debug stats: {' in captured.out
+        assert captured.err == ""
+
+    # @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_explain_entity(self, capsys, client):
+        snippets.explain_entity(client)
+        captured = capsys.readouterr()
+        assert (
+            "Indexes used: [{'properties': '(__name__ ASC)', 'query_scope': 'Collection group'}]" in captured.out
+        )
+        assert captured.err == ""
+
+    # @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_explain_analyze_aggregation(self, capsys, client):
+        snippets.explain_analyze_aggregation(client)
+        captured = capsys.readouterr()
+        assert (
+            "Indexes used: [{'properties': '(__name__ ASC)', 'query_scope': 'Collection group'}]" in captured.out
+        )
+        assert 'Results returned: 1' in captured.out
+        assert 'Execution duration: 0:00' in captured.out
+        assert 'Read operations: 1' in captured.out
+        assert 'Debug stats: {' in captured.out
+        assert captured.err == ""
+
+    # @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    def test_explain_aggregation(self, capsys, client):
+        snippets.explain_aggregation(client)
+        captured = capsys.readouterr()
+        assert (
+            "Indexes used: [{'properties': '(__name__ ASC)', 'query_scope': 'Collection group'}]" in captured.out
+        )
+        assert captured.err == ""
+

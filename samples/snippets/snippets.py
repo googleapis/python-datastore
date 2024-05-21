@@ -389,6 +389,99 @@ def multiple_aggregations_query(client):
     return tasks
 
 
+def explain_analyze_entity(client):
+    # [START datastore_query_explain_analyze_entity]
+    # Build the query with explain_options
+    # analzye = true to get back the query stats, plan info, and query results
+    query = client.query(
+        kind="Task",
+        explain_options=datastore.ExplainOptions(analyze=True)
+    )
+
+    # initiate the query
+    iterator = query.fetch()
+
+    # explain_metrics is only available after query is completed
+    for task_result in iterator:
+        print(task_result)
+
+    # get the plan summary
+    plan_summary = iterator.explain_metrics.plan_summary
+    print(f"Indexes used: {plan_summary.indexes_used}")
+
+    # get the execution stats
+    execution_stats = iterator.explain_metrics.execution_stats
+    print(f"Results returned: {execution_stats.results_returned}")
+    print(f"Execution duration: {execution_stats.execution_duration}")
+    print(f"Read operations: {execution_stats.read_operations}")
+    print(f"Debug stats: {execution_stats.debug_stats}")
+    # [END datastore_query_explain_analyze_entity]
+
+def explain_entity(client):
+    # [START datastore_query_explain_entity]
+    # Build the query with explain_options
+    # by default (analyze = false), only plan_summary property is available
+    query = client.query(
+        kind="Task",
+        explain_options=datastore.ExplainOptions()
+    )
+
+    # initiate the query
+    iterator = query.fetch()
+
+    # get the plan summary
+    plan_summary = iterator.explain_metrics.plan_summary
+    print(f"Indexes used: {plan_summary.indexes_used}")
+    # [END datastore_query_explain_entity]
+
+def explain_analyze_aggregation(client):
+    # [START datastore_query_explain_analyze_aggregation]
+    # Build the aggregation query with explain_options
+    # analzye = true to get back the query stats, plan info, and query results
+    all_tasks_query = client.query(kind="Task")
+    count_query = client.aggregation_query(
+        all_tasks_query,
+        explain_options=datastore.ExplainOptions(analyze=True)
+    ).count()
+
+    # initiate the query
+    iterator = count_query.fetch()
+
+    # explain_metrics is only available after query is completed
+    for task_result in iterator:
+        print(task_result)
+
+    # get the plan summary
+    plan_summary = iterator.explain_metrics.plan_summary
+    print(f"Indexes used: {plan_summary.indexes_used}")
+
+    # get the execution stats
+    execution_stats = iterator.explain_metrics.execution_stats
+    print(f"Results returned: {execution_stats.results_returned}")
+    print(f"Execution duration: {execution_stats.execution_duration}")
+    print(f"Read operations: {execution_stats.read_operations}")
+    print(f"Debug stats: {execution_stats.debug_stats}")
+    # [END datastore_query_explain_analyze_aggregation]
+
+def explain_aggregation(client):
+    # [START datastore_query_explain_aggregation]
+    # Build the aggregation query with explain_options
+    # by default (analyze = false), only plan_summary property is available
+    all_tasks_query = client.query(kind="Task")
+    count_query = client.aggregation_query(
+        all_tasks_query,
+        explain_options=datastore.ExplainOptions()
+    ).count()
+
+    # initiate the query
+    iterator = count_query.fetch()
+
+    # get the plan summary
+    plan_summary = iterator.explain_metrics.plan_summary
+    print(f"Indexes used: {plan_summary.indexes_used}")
+    # [END datastore_query_explain_aggregation]
+
+
 def main(project_id):
     client = datastore.Client(project_id)
 
