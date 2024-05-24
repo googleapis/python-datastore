@@ -641,6 +641,9 @@ def test_aggregation_query_explain_analyze(
     assert duration > 0
     assert duration < 1  # we expect a number closer to 0.05
     assert isinstance(stats.execution_stats.debug_stats, dict)
+    assert "billing_details" in stats.execution_stats.debug_stats
+    assert "documents_scanned" in stats.execution_stats.debug_stats
+    assert "index_entries_scanned" in stats.execution_stats.debug_stats
     assert len(stats.execution_stats.debug_stats) > 0
 
 
