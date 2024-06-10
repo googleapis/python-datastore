@@ -372,7 +372,7 @@ class DatastoreAsyncClient:
         # add these here.
         metadata = tuple(metadata) + (
             gapic_v1.routing_header.to_grpc_metadata(
-                (("project_id", request.project_id),)
+                (("project_id", request.project_id), ("database_id", request.database_id),)
             ),
         )
 
@@ -467,7 +467,7 @@ class DatastoreAsyncClient:
         # add these here.
         metadata = tuple(metadata) + (
             gapic_v1.routing_header.to_grpc_metadata(
-                (("project_id", request.project_id),)
+                (("project_id", request.project_id), ("database_id", request.database_id),)
             ),
         )
 
@@ -562,7 +562,7 @@ class DatastoreAsyncClient:
         # add these here.
         metadata = tuple(metadata) + (
             gapic_v1.routing_header.to_grpc_metadata(
-                (("project_id", request.project_id),)
+                (("project_id", request.project_id), ("database_id", request.database_id),)
             ),
         )
 
@@ -669,7 +669,7 @@ class DatastoreAsyncClient:
         # add these here.
         metadata = tuple(metadata) + (
             gapic_v1.routing_header.to_grpc_metadata(
-                (("project_id", request.project_id),)
+                (("project_id", request.project_id), ("database_id", request.database_id),)
             ),
         )
 
@@ -822,7 +822,7 @@ class DatastoreAsyncClient:
         # add these here.
         metadata = tuple(metadata) + (
             gapic_v1.routing_header.to_grpc_metadata(
-                (("project_id", request.project_id),)
+                (("project_id", request.project_id), ("database_id", request.database_id),)
             ),
         )
 
@@ -942,7 +942,7 @@ class DatastoreAsyncClient:
         # add these here.
         metadata = tuple(metadata) + (
             gapic_v1.routing_header.to_grpc_metadata(
-                (("project_id", request.project_id),)
+                (("project_id", request.project_id), ("database_id", request.database_id),)
             ),
         )
 
@@ -1062,7 +1062,7 @@ class DatastoreAsyncClient:
         # add these here.
         metadata = tuple(metadata) + (
             gapic_v1.routing_header.to_grpc_metadata(
-                (("project_id", request.project_id),)
+                (("project_id", request.project_id), ("database_id", request.database_id),)
             ),
         )
 
@@ -1191,7 +1191,7 @@ class DatastoreAsyncClient:
         # add these here.
         metadata = tuple(metadata) + (
             gapic_v1.routing_header.to_grpc_metadata(
-                (("project_id", request.project_id),)
+                (("project_id", request.project_id), ("database_id", request.database_id),)
             ),
         )
 
