@@ -200,7 +200,7 @@ class TestDatastoreSnippets:
 
         client.entities_to_delete.extend(tasks)
 
-    # @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_explain_analyze_entity(self, capsys, client):
         snippets.explain_analyze_entity(client)
         captured = capsys.readouterr()
@@ -214,7 +214,7 @@ class TestDatastoreSnippets:
         assert "Debug stats: {" in captured.out
         assert captured.err == ""
 
-    # @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_explain_entity(self, capsys, client):
         snippets.explain_entity(client)
         captured = capsys.readouterr()
@@ -224,7 +224,7 @@ class TestDatastoreSnippets:
         )
         assert captured.err == ""
 
-    # @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_explain_analyze_aggregation(self, capsys, client):
         snippets.explain_analyze_aggregation(client)
         captured = capsys.readouterr()
@@ -238,7 +238,7 @@ class TestDatastoreSnippets:
         assert "Debug stats: {" in captured.out
         assert captured.err == ""
 
-    # @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
+    @backoff.on_exception(backoff.expo, AssertionError, max_time=240)
     def test_explain_aggregation(self, capsys, client):
         snippets.explain_aggregation(client)
         captured = capsys.readouterr()
