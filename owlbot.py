@@ -141,31 +141,6 @@ assert 1 == s.replace(
 """,
 )
 
-assert 1 == s.replace(
-    "noxfile.py",
-    """\
-    # Only run system tests if found.
-    """,
-    """\
-    env = {}
-    # Only run system tests if found.
-    """,
-)
-
-assert 2 == s.replace(
-    "noxfile.py",
-    """system_test_path,\n""",
-    """system_test_path,
-            env=env,\n""",
-)
-
-assert 2 == s.replace(
-    "noxfile.py",
-    """system_test_folder_path,\n""",
-    """system_test_folder_path,
-            env=env,\n""",
-)
-
 # Add nox session to exercise doctests
 assert 1 == s.replace(
     "noxfile.py",
