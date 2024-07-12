@@ -137,8 +137,30 @@ assert 1 == s.replace(
     if disable_grpc:
         env["GOOGLE_CLOUD_DISABLE_GRPC"] = "True"
 
-# Run py.test against the system tests.
+    # Run py.test against the system tests.
 """,
+)
+
+assert 1 == s.replace(
+    "noxfile.py",
+    """system_test_path,
+            \*session.posargs,
+        \)""",
+    """system_test_path,
+            env=env,
+            *session.posargs,
+        )""",
+)
+
+assert 1 == s.replace(
+    "noxfile.py",
+    """system_test_folder_path,
+            \*session.posargs,
+        \)""",
+    """system_test_folder_path,
+            env=env,
+            *session.posargs,
+        )""",
 )
 
 # Add nox session to exercise doctests
