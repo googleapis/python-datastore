@@ -1057,9 +1057,7 @@ def test_iterator__next_page_w_skipped_lt_offset(skipped_cursor_1, database_id):
     read_options = datastore_pb2.ReadOptions()
 
     query_1 = query_pb2.Query(offset=offset)
-    query_2 = query_pb2.Query(
-        start_cursor=end_cursor_1, offset=(offset - skipped_1)
-    )
+    query_2 = query_pb2.Query(start_cursor=end_cursor_1, offset=(offset - skipped_1))
     expected_calls = []
     for query in [query_1, query_2]:
         expected_request = {
