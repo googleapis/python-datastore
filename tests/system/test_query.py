@@ -405,7 +405,8 @@ def test_large_query(large_query, limit, offset, expected, database_id):
     assert len(entities) == expected
 
 
-def test_mergejoin_query(mergejoin_query):
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_mergejoin_query(mergejoin_query, database_id):
     query = mergejoin_query
     query.add_filter(filter=PropertyFilter("a", "=", 1))
     query.add_filter(filter=PropertyFilter("b", "=", 1))
