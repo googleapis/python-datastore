@@ -31,6 +31,8 @@ ALL_KINDS = (
     "Post",
     "uuid_key",
     "timestamp_key",
+    "LargeCharacter",
+    "Mergejoin"
 )
 TRANSACTION_MAX_GROUPS = 5
 MAX_DEL_ENTITIES = 500
@@ -90,23 +92,23 @@ def remove_all_entities(client):
 
 
 def run(database):
-    client = datastore.Client(database=database)
     kinds = sys.argv[1:]
 
     if len(kinds) == 0:
         kinds = ALL_KINDS
-
     print_func(
-        "This command will remove all entities from the database "
-        + database
-        + " for the following kinds:"
-    )
+            "This command will remove all entities from the database "
+            + database
+            + " for the following kinds:"
+        )
     print_func("\n".join("- " + val for val in kinds))
     response = input("Is this OK [y/n]? ")
 
     if response.lower() == "y":
-        for kind in kinds:
-            remove_kind(kind, client)
+        for namespace in ["", "LargeCharacterEntity", "MergejoinNamespace"]:
+            client = datastore.Client(database=database, namespace=namespace)
+            for kind in kinds:
+                remove_kind(kind, client)
 
     else:
         print_func("Doing nothing.")
