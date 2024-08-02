@@ -189,7 +189,7 @@ def add_mergejoin_dataset_entities(client=None):
     Dataset to account for one bug that was seen in https://github.com/googleapis/python-datastore/issues/547
     The root cause of this is us setting a subsequent query's start_cursor to skipped_cursor instead of end_cursor.
     In niche scenarios involving mergejoins, skipped_cursor becomes empty and the query starts back from the beginning,
-    returning duplicate items. 
+    returning duplicate items.
 
     This bug is able to be reproduced with a dataset shown in b/352377540, with 7 items of a=1, b=1
     followed by 20k items of alternating a=1, b=0 and a=0, b=1, then 7 more a=1, b=1, then querying for all
@@ -222,7 +222,7 @@ def add_mergejoin_dataset_entities(client=None):
                 entity = create_entity(id, 1, 1)
                 id += 1
                 xact.put(entity)
-        
+
         while curr_intermediate_entries < count - MERGEJOIN_QUERY_NUM_RESULTS:
             start = curr_intermediate_entries
             end = min(curr_intermediate_entries + ENTITIES_TO_BATCH, count)
@@ -238,14 +238,13 @@ def add_mergejoin_dataset_entities(client=None):
                     # Saves the entity
                     xact.put(entity)
             curr_intermediate_entries += ENTITIES_TO_BATCH
-        
+
         with client.transaction() as xact:
             for _ in range(0, MERGEJOIN_QUERY_NUM_RESULTS):
                 entity = create_entity(id, 1, 1)
                 id += 1
                 xact.put(entity)
 
-    
     # If anything exists in this namespace, delete it, since we need to
     # set up something very specific.
     all_entities = [e for e in page_query.fetch()]
@@ -264,7 +263,13 @@ def run(database):
     flags = sys.argv[1:]
 
     if len(flags) == 0:
-        flags = ["--characters", "--uuid", "--timestamps", "--large-characters", "--mergejoin"]
+        flags = [
+            "--characters",
+            "--uuid",
+            "--timestamps",
+            "--large-characters",
+            "--mergejoin",
+        ]
 
     if "--characters" in flags:
         add_characters(client)
@@ -274,10 +279,10 @@ def run(database):
 
     if "--timestamps" in flags:
         add_timestamp_keys(client)
-    
+
     if "--large-characters" in flags:
         add_large_character_entities(client)
-    
+
     if "--mergejoin" in flags:
         add_mergejoin_dataset_entities(client)
 
