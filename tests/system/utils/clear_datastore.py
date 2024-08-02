@@ -32,7 +32,7 @@ ALL_KINDS = (
     "uuid_key",
     "timestamp_key",
     "LargeCharacter",
-    "Mergejoin"
+    "Mergejoin",
 )
 TRANSACTION_MAX_GROUPS = 5
 MAX_DEL_ENTITIES = 500
@@ -97,10 +97,10 @@ def run(database):
     if len(kinds) == 0:
         kinds = ALL_KINDS
     print_func(
-            "This command will remove all entities from the database "
-            + database
-            + " for the following kinds:"
-        )
+        "This command will remove all entities from the database "
+        + database
+        + " for the following kinds:"
+    )
     print_func("\n".join("- " + val for val in kinds))
     response = input("Is this OK [y/n]? ")
 
