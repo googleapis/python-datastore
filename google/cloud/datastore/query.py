@@ -831,11 +831,11 @@ class Iterator(page_iterator.Iterator):
                 # skipped all of the results yet. Don't return any results.
                 # Instead, rerun query, adjusting offsets. Datastore doesn't process
                 # more than 1000 skipped results in a query.
-                old_query_pb = query_pb
-                query_pb = query_pb2.Query()
-                query_pb._pb.CopyFrom(old_query_pb._pb)  # copy for testability
-                query_pb.start_cursor = response_pb.batch.end_cursor
-                query_pb.offset -= response_pb.batch.skipped_results
+                new_query_pb = query_pb2.Query()
+                new_query_pb._pb.CopyFrom(request["query"]._pb)  # copy for testability
+                new_query_pb.start_cursor = response_pb.batch.skipped_cursor
+                new_query_pb.offset -= response_pb.batch.end_cursor
+                request["query"] = new_query_pb
 
             response_pb = self.client._datastore_api.run_query(
                 request=request.copy(), **kwargs
