@@ -833,8 +833,8 @@ class Iterator(page_iterator.Iterator):
                 # more than 1000 skipped results in a query.
                 new_query_pb = query_pb2.Query()
                 new_query_pb._pb.CopyFrom(request["query"]._pb)  # copy for testability
-                new_query_pb.start_cursor = response_pb.batch.skipped_cursor
-                new_query_pb.offset -= response_pb.batch.end_cursor
+                new_query_pb.start_cursor = response_pb.batch.end_cursor
+                new_query_pb.offset -= response_pb.batch.skipped_results
                 request["query"] = new_query_pb
 
             response_pb = self.client._datastore_api.run_query(
