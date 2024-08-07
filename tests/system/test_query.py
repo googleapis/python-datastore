@@ -61,8 +61,8 @@ def ancestor_key(query_client, in_emulator):
         clear_datastore.remove_all_entities(client=query_client)
 
 
-def _make_ancestor_query(query_client, ancestor_key):
-    return query_client.query(kind="Character", ancestor=ancestor_key)
+def _make_ancestor_query(query_client, ancestor_key, **kwargs):
+    return query_client.query(kind="Character", ancestor=ancestor_key, **kwargs)
 
 
 @pytest.fixture(scope="function")
@@ -337,12 +337,32 @@ def large_query_client(datastore_client):
     return large_query_client
 
 
+@pytest.fixture(scope="session")
+def mergejoin_query_client(datastore_client):
+    mergejoin_query_client = _helpers.clone_client(
+        datastore_client,
+        namespace=populate_datastore.MERGEJOIN_DATASET_NAMESPACE,
+    )
+    populate_datastore.add_mergejoin_dataset_entities(client=mergejoin_query_client)
+
+    return mergejoin_query_client
+
+
 @pytest.fixture(scope="function")
 def large_query(large_query_client):
     # Use the client for this test instead of the global.
     return large_query_client.query(
         kind=populate_datastore.LARGE_CHARACTER_KIND,
         namespace=populate_datastore.LARGE_CHARACTER_NAMESPACE,
+    )
+
+
+@pytest.fixture(scope="function")
+def mergejoin_query(mergejoin_query_client):
+    # Use the client for this test instead of the global.
+    return mergejoin_query_client.query(
+        kind=populate_datastore.MERGEJOIN_DATASET_KIND,
+        namespace=populate_datastore.MERGEJOIN_DATASET_NAMESPACE,
     )
 
 
@@ -383,6 +403,20 @@ def test_large_query(large_query, limit, offset, expected, database_id):
 
     entities = [e for e in iterator]
     assert len(entities) == expected
+
+
+@pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
+def test_mergejoin_query(mergejoin_query, database_id):
+    query = mergejoin_query
+    query.add_filter(filter=PropertyFilter("a", "=", 1))
+    query.add_filter(filter=PropertyFilter("b", "=", 1))
+
+    # There should be 2 * MERGEJOIN_QUERY_NUM_RESULTS results total
+    expected_total = 2 * populate_datastore.MERGEJOIN_QUERY_NUM_RESULTS
+    for offset in range(0, expected_total + 1):
+        iterator = query.fetch(offset=offset)
+        num_entities = len([e for e in iterator])
+        assert num_entities == expected_total - offset
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
@@ -493,3 +527,123 @@ def test_query_add_complex_filters(ancestor_query, database_id):
     assert alive_count == 4
     assert appearance_count == 4
     assert stark_family_count == 5
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_query_no_explain(query_client, ancestor_key, database_id):
+    """
+    When explain_options is not set, iterator.explain_metrics should raise an exception
+    """
+    from google.cloud.datastore.query_profile import QueryExplainError
+
+    expected_error = "explain_options not set on query"
+    query = _make_ancestor_query(query_client, ancestor_key, explain_options=None)
+    iterator = query.fetch()
+    with pytest.raises(QueryExplainError) as excinfo:
+        iterator.explain_metrics
+    assert expected_error in str(excinfo.value)
+    # exhaust the iterator and try again
+    list(iterator)
+    with pytest.raises(QueryExplainError) as excinfo:
+        iterator.explain_metrics
+    assert expected_error in str(excinfo.value)
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_query_explain(query_client, ancestor_key, database_id):
+    """
+    When explain_options(analyze=False) is set, iterator should contain explain_metrics field
+    with plan_summary but no execution_stats
+    """
+    from google.cloud.datastore.query_profile import QueryExplainError
+    from google.cloud.datastore.query_profile import ExplainOptions
+    from google.cloud.datastore.query_profile import ExplainMetrics
+    from google.cloud.datastore.query_profile import PlanSummary
+
+    query = _make_ancestor_query(
+        query_client, ancestor_key, explain_options=ExplainOptions(analyze=False)
+    )
+    iterator = query.fetch()
+    # should have plan_summary but no execution_stats
+    stats = iterator.explain_metrics
+    assert isinstance(stats, ExplainMetrics)
+    assert isinstance(stats.plan_summary, PlanSummary)
+    assert len(stats.plan_summary.indexes_used) > 0
+    assert stats.plan_summary.indexes_used[0]["properties"] == "(__name__ ASC)"
+    assert stats.plan_summary.indexes_used[0]["query_scope"] == "Collection group"
+    # execution_stats should not be present
+    with pytest.raises(QueryExplainError) as excinfo:
+        stats.execution_stats
+    expected_error = "execution_stats not available when explain_options.analyze=False."
+    assert expected_error in str(excinfo.value)
+    # should have no results
+    assert list(iterator) == []
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_query_explain_analyze(query_client, ancestor_key, database_id):
+    """
+    When explain_options(analyze=True) is set, iterator should contain explain_metrics field
+    with plan_summary and execution_stats
+
+    Should not be present until iterator is exhausted
+    """
+    from google.cloud.datastore.query_profile import QueryExplainError
+    from google.cloud.datastore.query_profile import ExplainOptions
+    from google.cloud.datastore.query_profile import ExplainMetrics
+    from google.cloud.datastore.query_profile import ExecutionStats
+    from google.cloud.datastore.query_profile import PlanSummary
+
+    expected_error = "explain_metrics not available until query is complete."
+    query = _make_ancestor_query(
+        query_client, ancestor_key, explain_options=ExplainOptions(analyze=True)
+    )
+    iterator = query.fetch()
+    # explain_metrics isn't present until iterator is exhausted
+    with pytest.raises(QueryExplainError) as excinfo:
+        iterator.explain_metrics
+    assert expected_error in str(excinfo.value)
+    # exhaust the iterator
+    results = list(iterator)
+    num_results = len(results)
+    assert num_results > 0
+    stats = iterator.explain_metrics
+    assert isinstance(stats, ExplainMetrics)
+    # verify plan_summary
+    assert isinstance(stats.plan_summary, PlanSummary)
+    assert len(stats.plan_summary.indexes_used) > 0
+    assert stats.plan_summary.indexes_used[0]["properties"] == "(__name__ ASC)"
+    assert stats.plan_summary.indexes_used[0]["query_scope"] == "Collection group"
+    # verify execution_stats
+    assert isinstance(stats.execution_stats, ExecutionStats)
+    assert stats.execution_stats.results_returned == num_results
+    assert stats.execution_stats.read_operations == num_results
+    duration = stats.execution_stats.execution_duration.total_seconds()
+    assert duration > 0
+    assert duration < 1  # we expect a number closer to 0.05
+    assert isinstance(stats.execution_stats.debug_stats, dict)
+    assert "billing_details" in stats.execution_stats.debug_stats
+    assert "documents_scanned" in stats.execution_stats.debug_stats
+    assert "index_entries_scanned" in stats.execution_stats.debug_stats
+    assert len(stats.execution_stats.debug_stats) > 0
+
+
+@pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
+def test_query_explain_in_transaction(query_client, ancestor_key, database_id):
+    """
+    Should be able to access explain metrics when called in a transaction
+    """
+    from google.cloud.datastore.query_profile import ExplainMetrics
+    from google.cloud.datastore.query_profile import ExplainOptions
+
+    query = _make_ancestor_query(
+        query_client, ancestor_key, explain_options=ExplainOptions(analyze=True)
+    )
+    client = query._client
+    with client.transaction():
+        # run full query
+        iterator = query.fetch()
+        list(iterator)
+        # check for stats
+        stats = iterator.explain_metrics
+        assert isinstance(stats, ExplainMetrics)
