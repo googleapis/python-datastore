@@ -525,6 +525,7 @@ class AggregationResultIterator(page_iterator.Iterator):
             raise QueryExplainError("explain_options not set on query.")
         elif self._aggregation_query._explain_options.analyze is False:
             # we need to run the query to get the explain_metrics
+            # analyze=False only returns explain_metrics, no results
             self._next_page()
             if self._explain_metrics is not None:
                 return self._explain_metrics
