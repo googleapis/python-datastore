@@ -27,6 +27,9 @@ from google.cloud.datastore.key import Key
 
 from google.cloud.datastore.query_profile import ExplainMetrics
 from google.cloud.datastore.query_profile import QueryExplainError
+from google.cloud.datastore.vector import FindNearest
+from google.cloud.datastore.vector import DistanceMeasure
+from google.cloud.datastore.vector import Vector
 
 import abc
 from abc import ABC
@@ -636,6 +639,11 @@ class Query(object):
             read_time=read_time,
         )
 
+    @property
+    def find_nearest(self):
+        return self._find_nearest
+
+    @find_nearest.setter
     def find_nearest(
         self,
         vector_field,
@@ -643,10 +651,13 @@ class Query(object):
         limit,
         distance_measure=DistanceMeasure.EUCLIDEAN,
     ):
-        self._find_nearest = quer_pb2.FindNearest(
+        if not isinstance(query_vector, Vector):
+            query_vector = Vector(query_vector)
+
+        self._find_nearest = FindNearest(
             vector_property=vector_field,
             query_vector=query_vector,
-            distance_measure=distance_measure
+            distance_measure=distance_measure,
             limit=limit
         )
 
@@ -960,7 +971,7 @@ def _pb_from_query(query):
         pb.distinct_on.append(ref)
 
     if query._find_nearest:
-        pb.find_nearest = query._find_nearest
+        pb.find_nearest = quer_pb2.FindNearest(**query._find_nearest._to_dict())
 
     return pb
 
