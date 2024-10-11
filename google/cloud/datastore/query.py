@@ -232,6 +232,7 @@ class Query(object):
         self._explain_options = explain_options
         self._ancestor = ancestor
         self._filters = []
+        self._find_nearest = None
 
         # Verify filters passed in.
         for filter in filters:
@@ -635,6 +636,20 @@ class Query(object):
             read_time=read_time,
         )
 
+    def find_nearest(
+        self,
+        vector_field,
+        query_vector,
+        limit,
+        distance_measure=DistanceMeasure.EUCLIDEAN,
+    ):
+        self._find_nearest = quer_pb2.FindNearest(
+            vector_property=vector_field,
+            query_vector=query_vector,
+            distance_measure=distance_measure
+            limit=limit
+        )
+
 
 class Iterator(page_iterator.Iterator):
     """Represent the state of a given execution of a Query.
@@ -943,6 +958,9 @@ def _pb_from_query(query):
         ref = query_pb2.PropertyReference()
         ref.name = distinct_on_name
         pb.distinct_on.append(ref)
+
+    if query._find_nearest:
+        pb.find_nearest = query._find_nearest
 
     return pb
 
