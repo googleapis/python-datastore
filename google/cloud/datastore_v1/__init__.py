@@ -54,6 +54,7 @@ from .types.query import AggregationQuery
 from .types.query import CompositeFilter
 from .types.query import EntityResult
 from .types.query import Filter
+from .types.query import FindNearest
 from .types.query import GqlQuery
 from .types.query import GqlQueryParameter
 from .types.query import KindExpression
@@ -88,6 +89,7 @@ __all__ = (
     "ExplainMetrics",
     "ExplainOptions",
     "Filter",
+    "FindNearest",
     "GqlQuery",
     "GqlQueryParameter",
     "Key",
