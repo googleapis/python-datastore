@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from __future__ import annotations
 
 import collections
 
@@ -20,9 +21,9 @@ from enum import Enum
 
 
 class DistanceMeasure(Enum):
-    EUCLIDEAN = "euclidean"
-    COSINE = "cosine"
-    DOT_PRODUCT = "dot_product"
+    EUCLIDEAN = "EUCLEDIAN"
+    COSINE = "COSINE"
+    DOT_PRODUCT = "DOT_PRODUCT"
 
 
 class Vector(collections.abc.Sequence):
@@ -53,18 +54,25 @@ class Vector(collections.abc.Sequence):
 
 @dataclass
 class FindNearest:
-    vector_field: str
+    vector_property: str
     query_vector: Vector
     limit: int
-    distance_measure:DistanceMeasure=DistanceMeasure.EUCLIDEAN
+    distance_measure:DistanceMeasure
+    distance_result_property: str | None = None
+    distance_threshold: float | None = None
 
     def __repr__(self):
         return f"FindNearest<vector_field={self.vector_field}, query_vector={self.query_vector}, limit={self.limit}, distance_measure={self.distance_measure}>"
 
     def _to_dict(self):
-        return {
-            "vector_field": self.vector_field,
+        output = {
+            "vector_property": self.vector_property,
             "query_vector": self.query_vector.to_map_value(),
-            "limit": self.limit,
             "distance_measure": self.distance_measure.value,
+            "limit": self.limit,
         }
+        if self.distance_result_property is not None:
+            output["distance_result_property"] = self.distance_result_property
+        if self.distance_threshold is not None:
+            output["distance_threshold"] = self.distance_threshold
+        return output

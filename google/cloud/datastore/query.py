@@ -650,6 +650,8 @@ class Query(object):
         query_vector,
         limit,
         distance_measure=DistanceMeasure.EUCLIDEAN,
+        distance_result_property=None,
+        distance_threshold=None,
     ):
         if not isinstance(query_vector, Vector):
             query_vector = Vector(query_vector)
@@ -657,8 +659,10 @@ class Query(object):
         self._find_nearest = FindNearest(
             vector_property=vector_field,
             query_vector=query_vector,
+            limit=limit,
             distance_measure=distance_measure,
-            limit=limit
+            distance_result_property=distance_result_property,
+            distance_threshold=distance_threshold,
         )
 
 
