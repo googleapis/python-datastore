@@ -49,26 +49,29 @@ class Vector(collections.abc.Sequence):
         return f"Vector<{str(self.value)[1:-1]}>"
 
     def _to_dict(self):
-        return {"array_value": {"values": [{"double_value": v} for v in self._value]}
+        return {"array_value": {"values": [{"double_value": v} for v in self._value]}, "meaning": 31, "exclude_from_indexes": True}
 
 
 @dataclass
 class FindNearest:
     vector_property: str
-    query_vector: Vector
+    query_vector: Vector | Sequence[float]
     limit: int
-    distance_measure:DistanceMeasure
+    distance_measure:DistanceMeasure = DistanceMeasure.EUCLIDEAN,
     distance_result_property: str | None = None
     distance_threshold: float | None = None
+
+    def __post_init__(self):
+        if not isinstance(self.query_vector, Vector):
+            self.query_vector = Vector(self.query_vector)
 
     def __repr__(self):
         return f"FindNearest<vector_field={self.vector_field}, query_vector={self.query_vector}, limit={self.limit}, distance_measure={self.distance_measure}>"
 
     def _to_dict(self):
-        vector_dict = [{"double_value": float(v)} for v in self.query_vector]
         output = {
             "vector_property": {"name":self.vector_property},
-            "query_vector": self.query_vector.to_dict(),
+            "query_vector": self.query_vector._to_dict(),
             "distance_measure": self.distance_measure.value,
             "limit": self.limit,
         }
