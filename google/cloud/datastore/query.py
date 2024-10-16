@@ -214,6 +214,7 @@ class Query(object):
         order=(),
         distinct_on=(),
         explain_options=None,
+        find_nearest=None,
     ):
         self._client = client
         self._kind = kind
@@ -235,7 +236,7 @@ class Query(object):
         self._explain_options = explain_options
         self._ancestor = ancestor
         self._filters = []
-        self._find_nearest = None
+        self._find_nearest = find_nearest
 
         # Verify filters passed in.
         for filter in filters:
@@ -644,26 +645,8 @@ class Query(object):
         return self._find_nearest
 
     @find_nearest.setter
-    def find_nearest(
-        self,
-        vector_field,
-        query_vector,
-        limit,
-        distance_measure=DistanceMeasure.EUCLIDEAN,
-        distance_result_property=None,
-        distance_threshold=None,
-    ):
-        if not isinstance(query_vector, Vector):
-            query_vector = Vector(query_vector)
-
-        self._find_nearest = FindNearest(
-            vector_property=vector_field,
-            query_vector=query_vector,
-            limit=limit,
-            distance_measure=distance_measure,
-            distance_result_property=distance_result_property,
-            distance_threshold=distance_threshold,
-        )
+    def find_nearest(self, find_nearest):
+        self._find_nearest = find_nearest
 
 
 class Iterator(page_iterator.Iterator):
