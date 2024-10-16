@@ -21,9 +21,9 @@ from enum import Enum
 
 
 class DistanceMeasure(Enum):
-    EUCLIDEAN = "EUCLEDIAN"
-    COSINE = "COSINE"
-    DOT_PRODUCT = "DOT_PRODUCT"
+    EUCLIDEAN = 1
+    COSINE = 2
+    DOT_PRODUCT = 3
 
 
 class Vector(collections.abc.Sequence):
@@ -49,7 +49,7 @@ class Vector(collections.abc.Sequence):
         return f"Vector<{str(self.value)[1:-1]}>"
 
     def _to_dict(self):
-        return {"vector_value": self._value}
+        return {"array_value": {"values": [{"double_value": v} for v in self._value]}
 
 
 @dataclass
@@ -65,14 +65,15 @@ class FindNearest:
         return f"FindNearest<vector_field={self.vector_field}, query_vector={self.query_vector}, limit={self.limit}, distance_measure={self.distance_measure}>"
 
     def _to_dict(self):
+        vector_dict = [{"double_value": float(v)} for v in self.query_vector]
         output = {
-            "vector_property": self.vector_property,
-            "query_vector": self.query_vector.to_map_value(),
+            "vector_property": {"name":self.vector_property},
+            "query_vector": self.query_vector.to_dict(),
             "distance_measure": self.distance_measure.value,
             "limit": self.limit,
         }
         if self.distance_result_property is not None:
             output["distance_result_property"] = self.distance_result_property
         if self.distance_threshold is not None:
-            output["distance_threshold"] = self.distance_threshold
+            output["distance_threshold"] = float(self.distance_threshold)
         return output
