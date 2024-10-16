@@ -975,7 +975,7 @@ def _pb_from_query(query):
         pb.distinct_on.append(ref)
 
     if query._find_nearest:
-        pb.find_nearest = quer_pb2.FindNearest(**query._find_nearest._to_dict())
+        pb.find_nearest = query_pb2.FindNearest(**query._find_nearest._to_dict())
 
     return pb
 
