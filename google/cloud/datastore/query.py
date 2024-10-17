@@ -27,9 +27,6 @@ from google.cloud.datastore.key import Key
 
 from google.cloud.datastore.query_profile import ExplainMetrics
 from google.cloud.datastore.query_profile import QueryExplainError
-from google.cloud.datastore.vector import FindNearest
-from google.cloud.datastore.vector import DistanceMeasure
-from google.cloud.datastore.vector import Vector
 
 import abc
 from abc import ABC

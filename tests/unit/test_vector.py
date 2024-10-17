@@ -19,6 +19,7 @@ class TestVector:
     """
     tests for google.cloud.datastore.vector.Vector
     """
+
     def test_vector_ctor(self):
         v = Vector([1.0, 2.0, 3.0])
         assert len(v) == 3
@@ -73,6 +74,7 @@ class TestVector:
 
     def test_vector_to_proto(self):
         from google.cloud.datastore_v1.types import Value
+
         v = Vector([1.0, 2.0, 3.0])
         proto = Value(**v._to_dict())
         assert proto.array_value.values[0].double_value == 1.0
@@ -83,6 +85,7 @@ class TestVector:
 
     def test_empty_vector_to_proto(self):
         from google.cloud.datastore_v1.types import Value
+
         v = Vector([])
         proto = Value(**v._to_dict())
         assert proto.array_value.values == []
@@ -94,12 +97,18 @@ class TestFindNearest:
     """
     tests for google.cloud.datastore.vector.FindNearest
     """
+
     def test_ctor_defaults(self):
         expected_property = "embeddings"
         expected_vector = [1.0, 2.0, 3.0]
         expected_limit = 5
         expected_distance_measure = DistanceMeasure.DOT_PRODUCT
-        fn = FindNearest(expected_property, expected_vector, expected_limit, expected_distance_measure)
+        fn = FindNearest(
+            expected_property,
+            expected_vector,
+            expected_limit,
+            expected_distance_measure,
+        )
         assert fn.vector_property == expected_property
         assert fn.query_vector == Vector(expected_vector)
         assert fn.limit == expected_limit
@@ -114,7 +123,14 @@ class TestFindNearest:
         expected_distance_measure = DistanceMeasure.EUCLIDEAN
         expected_distance_result_property = "distance"
         expected_distance_threshold = 0.5
-        fn = FindNearest(expected_property, expected_vector, expected_limit, expected_distance_measure, expected_distance_result_property, expected_distance_threshold)
+        fn = FindNearest(
+            expected_property,
+            expected_vector,
+            expected_limit,
+            expected_distance_measure,
+            expected_distance_result_property,
+            expected_distance_threshold,
+        )
         assert fn.vector_property == expected_property
         assert fn.query_vector == expected_vector
         assert fn.limit == expected_limit

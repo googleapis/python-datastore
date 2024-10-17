@@ -106,7 +106,9 @@ def add_large_character_entities(client=None):
                     task["family"] = "Stark"
                     task["alive"] = False
                     random.seed(i)
-                    task["vector"] = datastore.vector.Vector([random.random() for _ in range(10)])
+                    task["vector"] = datastore.vector.Vector(
+                        [random.random() for _ in range(10)]
+                    )
 
                     for i in string.ascii_lowercase:
                         task["space-{}".format(i)] = MAX_STRING

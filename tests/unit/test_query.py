@@ -1308,14 +1308,17 @@ def test_pb_from_query_find_nearest():
         distance_threshold=0.5,
     )
     pb = _pb_from_query(_make_stub_query(find_nearest=find_nearest))
-    
+
     assert pb.find_nearest.vector_property.name == "embedding"
     assert pb.find_nearest.query_vector.array_value.values[0].double_value == 1.0
     assert pb.find_nearest.query_vector.array_value.values[1].double_value == 2.0
     assert pb.find_nearest.query_vector.array_value.values[2].double_value == 3.0
     assert pb.find_nearest.query_vector.meaning == 31
     assert pb.find_nearest.query_vector.exclude_from_indexes is True
-    assert pb.find_nearest.distance_measure == query_pb2.FindNearest.DistanceMeasure.EUCLIDEAN
+    assert (
+        pb.find_nearest.distance_measure
+        == query_pb2.FindNearest.DistanceMeasure.EUCLIDEAN
+    )
     assert pb.find_nearest.limit == 10
     assert pb.find_nearest.distance_threshold == 0.5
 

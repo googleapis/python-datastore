@@ -18,7 +18,6 @@ import collections
 from typing import Tuple, Sequence
 from dataclasses import dataclass
 from enum import Enum
-from google.cloud.datastore_v1.types import Value
 
 
 class DistanceMeasure(Enum):
@@ -50,7 +49,11 @@ class Vector(collections.abc.Sequence):
         return f"Vector<{str(self._value)[1:-1]}>"
 
     def _to_dict(self):
-        return {"array_value": {"values": [{"double_value": v} for v in self._value]}, "meaning": 31, "exclude_from_indexes": True}
+        return {
+            "array_value": {"values": [{"double_value": v} for v in self._value]},
+            "meaning": 31,
+            "exclude_from_indexes": True,
+        }
 
 
 @dataclass
@@ -85,7 +88,7 @@ class FindNearest:
 
     :type distance_threshold: Optional[float]
     :param distance_threshold:
-        Threshold value for which no less similar documents will be returned. 
+        Threshold value for which no less similar documents will be returned.
         The behavior of the specified ``distance_measure`` will affect the
         meaning of the distance threshold:
             For EUCLIDEAN, COSINE: WHERE distance <= distance_threshold
@@ -95,10 +98,11 @@ class FindNearest:
         If set, only documents whose distance measure is less than this value
         will be returned.
     """
+
     vector_property: str
     query_vector: Vector | Sequence[float]
     limit: int
-    distance_measure:DistanceMeasure
+    distance_measure: DistanceMeasure
     distance_result_property: str | None = None
     distance_threshold: float | None = None
 
@@ -108,7 +112,7 @@ class FindNearest:
 
     def _to_dict(self):
         output = {
-            "vector_property": {"name":self.vector_property},
+            "vector_property": {"name": self.vector_property},
             "query_vector": self.query_vector._to_dict(),
             "distance_measure": self.distance_measure.value,
             "limit": self.limit,
