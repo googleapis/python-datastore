@@ -19,6 +19,8 @@ from typing import Tuple, Sequence
 from dataclasses import dataclass
 from enum import Enum
 
+_VECTOR_VALUE = 31
+
 
 class DistanceMeasure(Enum):
     EUCLIDEAN = 1
@@ -51,7 +53,7 @@ class Vector(collections.abc.Sequence):
     def _to_dict(self):
         return {
             "array_value": {"values": [{"double_value": v} for v in self._value]},
-            "meaning": 31,
+            "meaning": _VECTOR_VALUE,
             "exclude_from_indexes": True,
         }
 

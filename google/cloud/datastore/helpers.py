@@ -30,6 +30,7 @@ from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore.entity import Entity
 from google.cloud.datastore.key import Key
 from google.cloud.datastore.vector import Vector
+from google.cloud.datastore.vector import _VECTOR_VALUE
 from google.protobuf import timestamp_pb2
 
 
@@ -461,7 +462,9 @@ def _get_value_from_value_pb(pb):
             _get_value_from_value_pb(item_value) for item_value in pb.array_value.values
         ]
         # check for vector values
-        if pb.meaning == 31 and all(isinstance(item, float) for item in result):
+        if pb.meaning == _VECTOR_VALUE and all(
+            isinstance(item, float) for item in result
+        ):
             result = Vector(result)
 
     elif value_type == "geo_point_value":
