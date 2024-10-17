@@ -24,6 +24,7 @@ from google.cloud.datastore.query import (
     Or,
     BaseCompositeFilter,
 )
+from google.cloud.datastore.vector import FindNearest, DistanceMeasure, Vector
 
 from google.cloud.datastore.helpers import set_database_id_to_request
 
@@ -44,6 +45,8 @@ def test_query_ctor_defaults(database_id):
     assert query.projection == []
     assert query.order == []
     assert query.distinct_on == []
+    assert query._explain_options is None
+    assert query.find_nearest is None
 
 
 @pytest.mark.parametrize(
@@ -68,6 +71,8 @@ def test_query_ctor_explicit(filters, database_id):
     PROJECTION = ["foo", "bar", "baz"]
     ORDER = ["foo", "bar"]
     DISTINCT_ON = ["foo"]
+    explain_options = object()
+    find_nearest = object()
 
     query = _make_query(
         client,
@@ -79,6 +84,8 @@ def test_query_ctor_explicit(filters, database_id):
         projection=PROJECTION,
         order=ORDER,
         distinct_on=DISTINCT_ON,
+        explain_options=explain_options,
+        find_nearest=find_nearest,
     )
     assert query._client is client
     assert query._client.database == database_id
@@ -90,6 +97,8 @@ def test_query_ctor_explicit(filters, database_id):
     assert query.projection == PROJECTION
     assert query.order == ORDER
     assert query.distinct_on == DISTINCT_ON
+    assert query._explain_options is explain_options
+    assert query.find_nearest is find_nearest
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
@@ -739,6 +748,20 @@ def test_query_transaction_begin_later(database_id):
     assert read_options.new_transaction == transaction._options
 
 
+@pytest.mark.parametrize("database_id", [None, "somedb"])
+def test_query_find_nearest_setter(database_id):
+    client = _make_client(database=database_id)
+    query = _make_query(client)
+    find_nearest = FindNearest(
+        vector_property="embedding",
+        query_vector=Vector([1.0, 2.0, 3.0]),
+        distance_measure=DistanceMeasure.COSINE,
+        limit=5,
+    )
+    query.find_nearest = find_nearest
+    assert query.find_nearest == find_nearest
+
+
 def test_iterator_constructor_defaults():
     query = object()
     client = object()
@@ -1255,6 +1278,7 @@ def test_pb_from_query_empty():
     assert pb.end_cursor == b""
     assert pb._pb.limit.value == 0
     assert pb.offset == 0
+    assert pb.find_nearest == query_pb2.FindNearest()
 
 
 def test_pb_from_query_projection():
@@ -1269,6 +1293,31 @@ def test_pb_from_query_kind():
 
     pb = _pb_from_query(_make_stub_query(kind="KIND"))
     assert [item.name for item in pb.kind] == ["KIND"]
+
+
+def test_pb_from_query_find_nearest():
+    from google.cloud.datastore.query import _pb_from_query
+    from google.cloud.datastore.vector import FindNearest, DistanceMeasure, Vector
+    from google.cloud.datastore_v1.types import query as query_pb2
+
+    find_nearest = FindNearest(
+        vector_property="embedding",
+        query_vector=Vector([1, 2, 3]),
+        distance_measure=DistanceMeasure.EUCLIDEAN,
+        limit=10,
+        distance_threshold=0.5,
+    )
+    pb = _pb_from_query(_make_stub_query(find_nearest=find_nearest))
+    
+    assert pb.find_nearest.vector_property.name == "embedding"
+    assert pb.find_nearest.query_vector.array_value.values[0].double_value == 1.0
+    assert pb.find_nearest.query_vector.array_value.values[1].double_value == 2.0
+    assert pb.find_nearest.query_vector.array_value.values[2].double_value == 3.0
+    assert pb.find_nearest.query_vector.meaning == 31
+    assert pb.find_nearest.query_vector.exclude_from_indexes is True
+    assert pb.find_nearest.distance_measure == query_pb2.FindNearest.DistanceMeasure.EUCLIDEAN
+    assert pb.find_nearest.limit == 10
+    assert pb.find_nearest.distance_threshold == 0.5
 
 
 @pytest.mark.parametrize("database_id", [None, "somedb"])
@@ -1447,25 +1496,11 @@ def test_pb_from_query_distinct_on():
 
 def _make_stub_query(
     client=object(),
-    kind=None,
-    project=None,
-    namespace=None,
-    ancestor=None,
-    filters=(),
-    projection=(),
-    order=(),
-    distinct_on=(),
+    **kwargs,
 ):
     query = Query(
         client,
-        kind=kind,
-        project=project,
-        namespace=namespace,
-        ancestor=ancestor,
-        filters=filters,
-        projection=projection,
-        order=order,
-        distinct_on=distinct_on,
+        **kwargs,
     )
     return query
 

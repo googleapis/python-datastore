@@ -815,6 +815,22 @@ def test__pb_attr_value_w_geo_point():
     assert value == geo_pt_pb
 
 
+def test__pb_attr_value_w_vector():
+    from google.cloud.datastore.vector import Vector
+    from google.cloud.datastore.helpers import _pb_attr_value
+    from google.cloud.datastore_v1.types import entity as entity_pb2
+
+    vector = Vector([1.0, 2.0, 3.0])
+    name, value = _pb_attr_value(vector)
+    assert name == "vector_value"
+    assert isinstance(value, entity_pb2.Value)
+    assert value.array_value.values[0].double_value == 1.0
+    assert value.array_value.values[1].double_value == 2.0
+    assert value.array_value.values[2].double_value == 3.0
+    assert value.meaning == 31
+    assert value.exclude_from_indexes is True
+
+
 def test__pb_attr_value_w_null():
     from google.protobuf import struct_pb2
     from google.cloud.datastore.helpers import _pb_attr_value
@@ -947,6 +963,22 @@ def test__get_value_from_value_pb_w_geo_point():
     assert isinstance(result, GeoPoint)
     assert result.latitude == lat
     assert result.longitude == lng
+
+
+def test__get_value_from_value_pb_w_vector():
+    from google.cloud.datastore_v1.types import entity as entity_pb2
+    from google.cloud.datastore.helpers import _get_value_from_value_pb
+    from google.cloud.datastore.vector import Vector
+
+    vector_pb = entity_pb2.Value()
+    vector_pb.array_value.values.append(entity_pb2.Value(double_value=1.0))
+    vector_pb.array_value.values.append(entity_pb2.Value(double_value=2.0))
+    vector_pb.array_value.values.append(entity_pb2.Value(double_value=3.0))
+    vector_pb.meaning = 31
+
+    result = _get_value_from_value_pb(vector_pb._pb)
+    assert isinstance(result, Vector)
+    assert result == Vector([1.0, 2.0, 3.0])
 
 
 def test__get_value_from_value_pb_w_null():
@@ -1131,6 +1163,20 @@ def test__set_protobuf_value_w_geo_point():
     geo_pt_pb = latlng_pb2.LatLng(latitude=lat, longitude=lng)
     _set_protobuf_value(pb, geo_pt)
     assert pb.geo_point_value == geo_pt_pb
+
+
+def test__set_protobuf_value_w_vector():
+    from google.cloud.datastore.vector import Vector
+    from google.cloud.datastore.helpers import _set_protobuf_value
+
+    pb = _make_empty_value_pb()
+    vector = Vector([1.0, 2.0, 3.0])
+    _set_protobuf_value(pb, vector)
+    assert pb.array_value.values[0].double_value == 1.0
+    assert pb.array_value.values[1].double_value == 2.0
+    assert pb.array_value.values[2].double_value == 3.0
+    assert pb.meaning == 31  # Vector meaning
+    assert pb.exclude_from_indexes is True
 
 
 def test__get_meaning_w_no_meaning():
