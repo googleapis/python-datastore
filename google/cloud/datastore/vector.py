@@ -106,9 +106,6 @@ class FindNearest:
         if not isinstance(self.query_vector, Vector):
             self.query_vector = Vector(self.query_vector)
 
-    def __repr__(self):
-        return f"FindNearest<vector_field={self.vector_field}, query_vector={self.query_vector}, limit={self.limit}, distance_measure={self.distance_measure}>"
-
     def _to_dict(self):
         output = {
             "vector_property": {"name":self.vector_property},
