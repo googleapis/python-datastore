@@ -241,7 +241,7 @@ class Query(object):
         self._explain_options = explain_options
         self._ancestor = ancestor
         self._filters = []
-        self._find_nearest = find_nearest
+        self.find_nearest = find_nearest
 
         # Verify filters passed in.
         for filter in filters:
@@ -540,26 +540,6 @@ class Query(object):
         if isinstance(value, str):
             value = [value]
         self._distinct_on[:] = value
-
-    @property
-    def find_nearest(self):
-        """
-        The vector search options for the query, if set.
-
-        :rtype: :class:`~google.cloud.datastore.vector.FindNearest` or None
-        :returns: The vector search options for the query, or None if not set.
-        """
-        return self._find_nearest
-
-    @find_nearest.setter
-    def find_nearest(self, find_nearest):
-        """
-        Set the vector search options for the query.
-
-        :type find_nearest: :class:`~google.cloud.datastore.vector.FindNearest`
-        :param find_nearest: The vector search options for the query.
-        """
-        self._find_nearest = find_nearest
 
     def fetch(
         self,
@@ -974,8 +954,8 @@ def _pb_from_query(query):
         ref.name = distinct_on_name
         pb.distinct_on.append(ref)
 
-    if query._find_nearest:
-        pb.find_nearest = query_pb2.FindNearest(**query._find_nearest._to_dict())
+    if query.find_nearest:
+        pb.find_nearest = query_pb2.FindNearest(**query.find_nearest._to_dict())
 
     return pb
 
