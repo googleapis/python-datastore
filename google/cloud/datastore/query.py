@@ -186,6 +186,11 @@ class Query(object):
         this query. When set, explain_metrics will be available on the iterator
         returned by query.fetch().
 
+    :type find_nearest: :class:`~google.cloud.datastore.vector.FindNearest`
+    :param find_nearest: (Optional) Options to perform a vector search for
+        entities in the query. When set, the query will return entities
+        sorted by distance from the query vector.
+
     :raises: ValueError if ``project`` is not passed and no implicit
              default is set.
     """
@@ -536,6 +541,26 @@ class Query(object):
             value = [value]
         self._distinct_on[:] = value
 
+    @property
+    def find_nearest(self):
+        """
+        The vector search options for the query, if set.
+
+        :rtype: :class:`~google.cloud.datastore.vector.FindNearest` or None
+        :returns: The vector search options for the query, or None if not set.
+        """
+        return self._find_nearest
+
+    @find_nearest.setter
+    def find_nearest(self, find_nearest):
+        """
+        Set the vector search options for the query.
+
+        :type find_nearest: :class:`~google.cloud.datastore.vector.FindNearest`
+        :param find_nearest: The vector search options for the query.
+        """
+        self._find_nearest = find_nearest
+
     def fetch(
         self,
         limit=None,
@@ -639,14 +664,6 @@ class Query(object):
             timeout=timeout,
             read_time=read_time,
         )
-
-    @property
-    def find_nearest(self):
-        return self._find_nearest
-
-    @find_nearest.setter
-    def find_nearest(self, find_nearest):
-        self._find_nearest = find_nearest
 
 
 class Iterator(page_iterator.Iterator):

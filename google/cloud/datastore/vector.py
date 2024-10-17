@@ -28,7 +28,7 @@ class DistanceMeasure(Enum):
 
 
 class Vector(collections.abc.Sequence):
-    r"""A class to represent Firestore Vector in python.
+    """A class to represent a Vector for use in query.find_nearest.
     Underlying object will be converted to a map representation in Firestore API.
     """
 
@@ -55,10 +55,50 @@ class Vector(collections.abc.Sequence):
 
 @dataclass
 class FindNearest:
+    """
+    Represents configuration for a find_nearest vector query.
+
+    :type vector_field: str
+    :param vector_field:
+        An indexed vector property to search upon.
+        Only documents which contain vectors whose dimensionality match
+        the query_vector can be returned.
+
+    :type query_vector: Union[Vector, Sequence[float]]
+    :param query_vector:
+        The query vector that we are searching on.
+        Must be a vector of no more than 2048 dimensions.
+
+    :type limit: int
+    :param limit:
+        The number of nearest neighbors to return.
+        Must be a positive integer of no more than 100.
+
+    :type distance_measure: DistanceMeasure
+    :param distance_measure:
+        The distance measure to use when comparing vectors.
+
+    :type distance_result_property: Optional[str]
+    :param distance_result_property:
+        Optional name of the field to output the result of the vector distance
+        calculation.
+
+    :type distance_threshold: Optional[float]
+    :param distance_threshold:
+        Threshold value for which no less similar documents will be returned. 
+        The behavior of the specified ``distance_measure`` will affect the
+        meaning of the distance threshold:
+            For EUCLIDEAN, COSINE: WHERE distance <= distance_threshold
+            For DOT_PRODUCT: WHERE distance >= distance_threshold
+
+        Optional threshold to apply to the distance measure.
+        If set, only documents whose distance measure is less than this value
+        will be returned.
+    """
     vector_property: str
     query_vector: Vector | Sequence[float]
     limit: int
-    distance_measure:DistanceMeasure = DistanceMeasure.EUCLIDEAN,
+    distance_measure:DistanceMeasure
     distance_result_property: str | None = None
     distance_threshold: float | None = None
 
