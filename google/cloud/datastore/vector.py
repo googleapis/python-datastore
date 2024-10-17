@@ -18,6 +18,7 @@ import collections
 from typing import Tuple, Sequence
 from dataclasses import dataclass
 from enum import Enum
+from google.cloud.datastore_v1.types import Value
 
 
 class DistanceMeasure(Enum):
@@ -46,7 +47,7 @@ class Vector(collections.abc.Sequence):
         return self._value == other._value
 
     def __repr__(self):
-        return f"Vector<{str(self.value)[1:-1]}>"
+        return f"Vector<{str(self._value)[1:-1]}>"
 
     def _to_dict(self):
         return {"array_value": {"values": [{"double_value": v} for v in self._value]}, "meaning": 31, "exclude_from_indexes": True}
