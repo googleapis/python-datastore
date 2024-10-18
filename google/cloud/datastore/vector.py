@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import collections
 
-from typing import Tuple, Sequence
+from typing import Sequence
 from dataclasses import dataclass
 from enum import Enum
 
@@ -33,18 +33,23 @@ class Vector(collections.abc.Sequence):
     Underlying object will be converted to a map representation in Firestore API.
     """
 
-    _value: Tuple[float] = ()
-
     def __init__(self, value: Sequence[float]):
         self._value = tuple([float(v) for v in value])
 
-    def __getitem__(self, arg: int):
-        return self._value[arg]
+    def __getitem__(self, arg: int | slice):
+        if isinstance(arg, int):
+            return self._value[arg]
+        elif isinstance(arg, slice):
+            return Vector(self._value[arg])
+        else:
+            raise NotImplementedError
 
     def __len__(self):
         return len(self._value)
 
     def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Vector):
+            raise NotImplementedError
         return self._value == other._value
 
     def __repr__(self):

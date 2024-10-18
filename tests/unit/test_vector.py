@@ -69,8 +69,15 @@ class TestVector:
         v = Vector(range(10))
         assert v[0] == 0.0
         assert v[3] == 3.0
+        assert v[-1] == 9.0
         for i, val in enumerate(v):
             assert i == val
+
+    def test_vector_slicing(self):
+        v = Vector(range(10))
+        assert v[1:3] == Vector([1.0, 2.0])
+        assert v[:] == Vector([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])
+        assert v[::-1] == Vector([9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0])
 
     def test_vector_to_proto(self):
         from google.cloud.datastore_v1.types import Value
