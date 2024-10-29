@@ -61,7 +61,6 @@ class TestVector:
                 ]
             },
             "meaning": 31,
-            "exclude_from_indexes": True,
         }
         assert v._to_dict() == expected
 
@@ -87,7 +86,6 @@ class TestVector:
         assert proto.array_value.values[0].double_value == 1.0
         assert proto.array_value.values[1].double_value == 2.0
         assert proto.array_value.values[2].double_value == 3.0
-        assert proto.exclude_from_indexes is True
         assert proto.meaning == 31
 
     def test_empty_vector_to_proto(self):
@@ -96,7 +94,6 @@ class TestVector:
         v = Vector([])
         proto = Value(**v._to_dict())
         assert proto.array_value.values == []
-        assert proto.exclude_from_indexes is True
         assert proto.meaning == 31
 
 
@@ -165,7 +162,6 @@ class TestFindNearest:
                     ]
                 },
                 "meaning": 31,
-                "exclude_from_indexes": True,
             },
             "distance_measure": 1,
             "limit": 10,
@@ -192,7 +188,6 @@ class TestFindNearest:
                     ]
                 },
                 "meaning": 31,
-                "exclude_from_indexes": True,
             },
             "distance_measure": 3,
             "limit": 99,

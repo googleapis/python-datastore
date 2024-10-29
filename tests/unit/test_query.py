@@ -1314,7 +1314,6 @@ def test_pb_from_query_find_nearest():
     assert pb.find_nearest.query_vector.array_value.values[1].double_value == 2.0
     assert pb.find_nearest.query_vector.array_value.values[2].double_value == 3.0
     assert pb.find_nearest.query_vector.meaning == 31
-    assert pb.find_nearest.query_vector.exclude_from_indexes is True
     assert (
         pb.find_nearest.distance_measure
         == query_pb2.FindNearest.DistanceMeasure.EUCLIDEAN

@@ -828,7 +828,6 @@ def test__pb_attr_value_w_vector():
     assert value.array_value.values[1].double_value == 2.0
     assert value.array_value.values[2].double_value == 3.0
     assert value.meaning == 31
-    assert value.exclude_from_indexes is True
 
 
 def test__pb_attr_value_w_null():
@@ -1176,7 +1175,6 @@ def test__set_protobuf_value_w_vector():
     assert pb.array_value.values[1].double_value == 2.0
     assert pb.array_value.values[2].double_value == 3.0
     assert pb.meaning == 31  # Vector meaning
-    assert pb.exclude_from_indexes is True
 
 
 def test__get_meaning_w_no_meaning():

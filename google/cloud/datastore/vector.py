@@ -59,7 +59,6 @@ class Vector(collections.abc.Sequence):
         return {
             "array_value": {"values": [{"double_value": v} for v in self._value]},
             "meaning": _VECTOR_VALUE,
-            "exclude_from_indexes": True,
         }
 
 
