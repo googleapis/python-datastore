@@ -184,7 +184,6 @@ def test_client_put_w_vector(datastore_client, entities_to_delete, database_id, 
     local_client = _helpers.clone_client(datastore_client)
 
     key = local_client.key("VectorArray", 1234)
-    local_client = datastore.Client(database=local_client.database)
     entity = datastore.Entity(key=key)
     entity["vec"] = datastore.vector.Vector(data)
     local_client.put(entity)
@@ -202,7 +201,6 @@ def test_client_put_w_empty_vector(datastore_client, entities_to_delete, databas
     local_client = _helpers.clone_client(datastore_client)
 
     key = local_client.key("VectorArray", 1234)
-    local_client = datastore.Client(database=local_client.database)
     entity = datastore.Entity(key=key)
     entity["vec"] = datastore.vector.Vector([])
     with pytest.raises(BadRequest) as e:

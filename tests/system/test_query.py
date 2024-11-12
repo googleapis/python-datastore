@@ -651,13 +651,9 @@ def test_query_explain_in_transaction(query_client, ancestor_key, database_id):
 
 
 @pytest.mark.parametrize(
-    "limit,distance_measure",
-    [
-        (5, DistanceMeasure.EUCLIDEAN),
-        (1, DistanceMeasure.COSINE),
-        (20, DistanceMeasure.DOT_PRODUCT),
-    ],
+    "distance_measure",[DistanceMeasure.EUCLIDEAN,DistanceMeasure.COSINE, DistanceMeasure.DOT_PRODUCT]
 )
+@pytest.mark.parametrize("limit", [5,10,20])
 @pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
 def test_query_vector_find_nearest(query_client, database_id, limit, distance_measure):
     q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")
@@ -675,9 +671,15 @@ def test_query_vector_find_nearest(query_client, database_id, limit, distance_me
     assert len(results) == limit
     # verify distance property is present
     assert all(r["distance"] for r in results)
-    assert all(isinstance(r["distance"], float) for r in results)
+    distance_list = [r["distance"] for r in results]
+    assert all(isinstance(d, float) for d in distance_list)
     # verify distances are sorted
-    assert all(results[i]["distance"] <= results[i + 1]["distance"] for i in range(4))
+    if distance_measure == DistanceMeasure.DOT_PRODUCT:
+        # dot product sorts high to low
+        expected = sorted(distance_list, reverse=True)
+    else:
+        expected = sorted(distance_list)
+    assert expected == distance_list
 
 
 @pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
