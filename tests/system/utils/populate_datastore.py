@@ -25,6 +25,9 @@ import uuid
 import random
 
 from google.cloud import datastore
+from google.api_core.client_options import ClientOptions
+
+USE_NIGHTLY = os.getenv("DATASTORE_USE_NIGHTLY", True)
 
 
 ANCESTOR = ("Book", "GoT")
@@ -264,7 +267,11 @@ def add_mergejoin_dataset_entities(client=None):
 
 
 def run(database):
-    client = datastore.Client(database=database)
+    kwargs = {}
+    if USE_NIGHTLY:
+        print("using nightly db")
+        kwargs["client_options"] = ClientOptions(api_endpoint="https://nightly-datastore.sandbox.googleapis.com")
+    client = datastore.Client(database=database, **kwargs)
     flags = sys.argv[1:]
 
     if len(flags) == 0:
@@ -293,8 +300,9 @@ def run(database):
 
 
 def main():
-    for database in ["", get_system_test_db()]:
-        run(database)
+    run("nightly-db")
+    # for database in ["", get_system_test_db()]:
+    #     run(database)
 
 
 if __name__ == "__main__":

@@ -14,9 +14,14 @@
 
 import pytest
 import requests
+import os
+from google.api_core.client_options import ClientOptions
 
 from google.cloud import datastore
 from . import _helpers
+
+
+USE_NIGHTLY = os.getenv("DATASTORE_USE_NIGHTLY", True)
 
 
 @pytest.fixture(scope="session")
@@ -47,7 +52,11 @@ def datastore_client(test_namespace, database_id):
             _http=http,
         )
     else:
-        client = datastore.Client(database=database_id, namespace=test_namespace)
+        kwargs = {}
+        if USE_NIGHTLY:
+            print("using nightly db")
+            kwargs["client_options"] = ClientOptions(api_endpoint="https://nightly-datastore.sandbox.googleapis.com")
+        client = datastore.Client(database=database_id, namespace=test_namespace, **kwargs)
 
     assert client.database == database_id
     return client

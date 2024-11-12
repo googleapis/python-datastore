@@ -16,11 +16,14 @@ import os
 
 from google.cloud import datastore
 from google.cloud.datastore.client import DATASTORE_DATASET
+from google.api_core.client_options import ClientOptions
 from test_utils.system import unique_resource_id
 
 _DATASTORE_DATABASE = "SYSTEM_TESTS_DATABASE"
 TEST_DATABASE = os.getenv(_DATASTORE_DATABASE, "system-tests-named-db")
 EMULATOR_DATASET = os.getenv(DATASTORE_DATASET)
+
+USE_NIGHTLY = os.getenv("DATASTORE_USE_NIGHTLY", True)
 
 
 def unique_id(prefix, separator="-"):
@@ -40,6 +43,10 @@ def clone_client(base_client, namespace=_SENTINEL, database=_SENTINEL):
     kwargs = {}
     if EMULATOR_DATASET is None:
         kwargs["credentials"] = base_client._credentials
+
+    if USE_NIGHTLY:
+        print("using nightly db")
+        kwargs["client_options"] = ClientOptions(api_endpoint="https://nightly-datastore.sandbox.googleapis.com")
 
     return datastore.Client(
         project=base_client.project,
