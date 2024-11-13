@@ -22,7 +22,7 @@ from .utils import populate_datastore
 from . import _helpers
 
 from google.cloud.datastore.query import PropertyFilter, And, Or
-from google.cloud.datastore.vector import FindNearest, DistanceMeasure
+from google.cloud.datastore.vector import FindNearest, DistanceMeasure, Vector
 
 
 retry_503 = RetryErrors(exceptions.ServiceUnavailable)
@@ -681,6 +681,32 @@ def test_query_vector_find_nearest(query_client, database_id, limit, distance_me
     else:
         expected = sorted(distance_list)
     assert expected == distance_list
+
+
+@pytest.mark.parametrize("exclude_from_indexes", [True, False])
+@pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
+def test_query_vector_find_nearest_w_vector_class(
+    query_client, database_id, exclude_from_indexes
+):
+    """
+    ensure passing Vector instance works as expected
+
+    exclude_from_indexes field should be ignored
+    """
+    q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")
+    vector = Vector(
+        [v / 10 for v in range(10)], exclude_from_indexes=exclude_from_indexes
+    )
+    q.find_nearest = FindNearest(
+        vector_property="vector",
+        query_vector=vector,
+        limit=5,
+        distance_measure=DistanceMeasure.EUCLIDEAN,
+        distance_result_property="distance",
+    )
+    iterator = q.fetch()
+    results = list(iterator)
+    assert len(results) == 5
 
 
 @pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
