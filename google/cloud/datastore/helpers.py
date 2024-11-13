@@ -465,7 +465,7 @@ def _get_value_from_value_pb(pb):
         if pb.meaning == _VECTOR_VALUE and all(
             isinstance(item, float) for item in result
         ):
-            result = Vector(result)
+            result = Vector(result, exclude_from_indexes=bool(pb.exclude_from_indexes))
 
     elif value_type == "geo_point_value":
         result = GeoPoint(

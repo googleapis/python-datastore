@@ -179,19 +179,27 @@ def test_client_put_w_empty_array(datastore_client, entities_to_delete, database
 
 
 @pytest.mark.parametrize("data", [[0], (1.0, 2.0, 3.0), range(100)])
+@pytest.mark.parametrize("exclude_from_indexes", [True, False])
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_client_put_w_vector(datastore_client, entities_to_delete, database_id, data):
+def test_client_put_w_vector(
+    datastore_client, entities_to_delete, database_id, data, exclude_from_indexes
+):
     local_client = _helpers.clone_client(datastore_client)
 
     key = local_client.key("VectorArray", 1234)
     entity = datastore.Entity(key=key)
-    entity["vec"] = datastore.vector.Vector(data)
+    entity["vec"] = datastore.vector.Vector(
+        data, exclude_from_indexes=exclude_from_indexes
+    )
     local_client.put(entity)
     entities_to_delete.append(entity)
 
     retrieved = local_client.get(entity.key)
 
     assert entity["vec"] == retrieved["vec"]
+    assert entity["vec"]._to_dict() == retrieved["vec"]._to_dict()
+    assert entity["vec"].exclude_from_indexes == exclude_from_indexes
+    assert retrieved["vec"].exclude_from_indexes == exclude_from_indexes
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)

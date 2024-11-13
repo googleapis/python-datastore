@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pytest
+
 from google.cloud.datastore.vector import Vector, FindNearest, DistanceMeasure
 
 
@@ -26,6 +28,7 @@ class TestVector:
         assert v[0] == 1.0
         assert v[1] == 2.0
         assert v[2] == 3.0
+        assert v.exclude_from_indexes == False
 
     def test_vector_ctor_w_ints(self):
         v = Vector([1, 2, 3])
@@ -33,6 +36,11 @@ class TestVector:
         assert v[0] == 1.0
         assert v[1] == 2.0
         assert v[2] == 3.0
+
+    @pytest.mark.parametrize("exclude", [True, False])
+    def test_vector_ctor_w_exclude_from_indexes(self, exclude):
+        v = Vector([1], exclude_from_indexes=exclude)
+        assert v.exclude_from_indexes == exclude
 
     def test_vector_empty_ctor(self):
         v = Vector([])
@@ -50,8 +58,9 @@ class TestVector:
         v = Vector([1, 9.4, 3.1234])
         assert repr(v) == "Vector<1.0, 9.4, 3.1234>"
 
-    def test_vector_to_dict(self):
-        v = Vector([1.0, 2.0, 3.0])
+    @pytest.mark.parametrize("exclude", [True, False])
+    def test_vector_to_dict(self, exclude):
+        v = Vector([1.0, 2.0, 3.0], exclude_from_indexes=exclude)
         expected = {
             "array_value": {
                 "values": [
@@ -61,6 +70,7 @@ class TestVector:
                 ]
             },
             "meaning": 31,
+            "exclude_from_indexes": exclude,
         }
         assert v._to_dict() == expected
 
@@ -72,21 +82,25 @@ class TestVector:
         for i, val in enumerate(v):
             assert i == val
 
-    def test_vector_slicing(self):
-        v = Vector(range(10))
+    @pytest.mark.parametrize("exclude", [True, False])
+    def test_vector_slicing(self, exclude):
+        v = Vector(range(10), exclude_from_indexes=exclude)
         assert v[1:3] == Vector([1.0, 2.0])
         assert v[:] == Vector([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])
         assert v[::-1] == Vector([9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0])
+        assert v[3:7].exclude_from_indexes == exclude
 
-    def test_vector_to_proto(self):
+    @pytest.mark.parametrize("exclude", [True, False])
+    def test_vector_to_proto(self, exclude):
         from google.cloud.datastore_v1.types import Value
 
-        v = Vector([1.0, 2.0, 3.0])
+        v = Vector([1.0, 2.0, 3.0], exclude_from_indexes=exclude)
         proto = Value(**v._to_dict())
         assert proto.array_value.values[0].double_value == 1.0
         assert proto.array_value.values[1].double_value == 2.0
         assert proto.array_value.values[2].double_value == 3.0
         assert proto.meaning == 31
+        assert proto.exclude_from_indexes == exclude
 
     def test_empty_vector_to_proto(self):
         from google.cloud.datastore_v1.types import Value
@@ -162,6 +176,7 @@ class TestFindNearest:
                     ]
                 },
                 "meaning": 31,
+                "exclude_from_indexes": False,
             },
             "distance_measure": 1,
             "limit": 10,
@@ -188,6 +203,7 @@ class TestFindNearest:
                     ]
                 },
                 "meaning": 31,
+                "exclude_from_indexes": False,
             },
             "distance_measure": 3,
             "limit": 99,

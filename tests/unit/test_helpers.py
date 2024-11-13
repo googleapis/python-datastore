@@ -815,12 +815,13 @@ def test__pb_attr_value_w_geo_point():
     assert value == geo_pt_pb
 
 
-def test__pb_attr_value_w_vector():
+@pytest.mark.parametrize("exclude", [True, False])
+def test__pb_attr_value_w_vector(exclude):
     from google.cloud.datastore.vector import Vector
     from google.cloud.datastore.helpers import _pb_attr_value
     from google.cloud.datastore_v1.types import entity as entity_pb2
 
-    vector = Vector([1.0, 2.0, 3.0])
+    vector = Vector([1.0, 2.0, 3.0], exclude_from_indexes=exclude)
     name, value = _pb_attr_value(vector)
     assert name == "vector_value"
     assert isinstance(value, entity_pb2.Value)
@@ -828,6 +829,7 @@ def test__pb_attr_value_w_vector():
     assert value.array_value.values[1].double_value == 2.0
     assert value.array_value.values[2].double_value == 3.0
     assert value.meaning == 31
+    assert value.exclude_from_indexes == exclude
 
 
 def test__pb_attr_value_w_null():
@@ -964,7 +966,8 @@ def test__get_value_from_value_pb_w_geo_point():
     assert result.longitude == lng
 
 
-def test__get_value_from_value_pb_w_vector():
+@pytest.mark.parametrize("exclude", [None, True, False])
+def test__get_value_from_value_pb_w_vector(exclude):
     from google.cloud.datastore_v1.types import entity as entity_pb2
     from google.cloud.datastore.helpers import _get_value_from_value_pb
     from google.cloud.datastore.vector import Vector
@@ -974,10 +977,13 @@ def test__get_value_from_value_pb_w_vector():
     vector_pb.array_value.values.append(entity_pb2.Value(double_value=2.0))
     vector_pb.array_value.values.append(entity_pb2.Value(double_value=3.0))
     vector_pb.meaning = 31
+    if exclude is not None:
+        vector_pb.exclude_from_indexes = exclude
 
     result = _get_value_from_value_pb(vector_pb._pb)
     assert isinstance(result, Vector)
     assert result == Vector([1.0, 2.0, 3.0])
+    assert result.exclude_from_indexes == bool(exclude)
 
 
 def test__get_value_from_value_pb_w_null():
@@ -1164,17 +1170,19 @@ def test__set_protobuf_value_w_geo_point():
     assert pb.geo_point_value == geo_pt_pb
 
 
-def test__set_protobuf_value_w_vector():
+@pytest.mark.parametrize("exclude", [True, False])
+def test__set_protobuf_value_w_vector(exclude):
     from google.cloud.datastore.vector import Vector
     from google.cloud.datastore.helpers import _set_protobuf_value
 
     pb = _make_empty_value_pb()
-    vector = Vector([1.0, 2.0, 3.0])
+    vector = Vector([1.0, 2.0, 3.0], exclude_from_indexes=exclude)
     _set_protobuf_value(pb, vector)
     assert pb.array_value.values[0].double_value == 1.0
     assert pb.array_value.values[1].double_value == 2.0
     assert pb.array_value.values[2].double_value == 3.0
     assert pb.meaning == 31  # Vector meaning
+    assert pb.exclude_from_indexes == exclude
 
 
 def test__get_meaning_w_no_meaning():

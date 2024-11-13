@@ -33,14 +33,17 @@ class Vector(collections.abc.Sequence):
     Underlying object will be converted to a map representation in Firestore API.
     """
 
-    def __init__(self, value: Sequence[float]):
+    def __init__(self, value: Sequence[float], *, exclude_from_indexes: bool = False):
+        self.exclude_from_indexes = exclude_from_indexes
         self._value = tuple([float(v) for v in value])
 
     def __getitem__(self, arg: int | slice):
         if isinstance(arg, int):
             return self._value[arg]
         elif isinstance(arg, slice):
-            return Vector(self._value[arg])
+            return Vector(
+                self._value[arg], exclude_from_indexes=self.exclude_from_indexes
+            )
         else:
             raise NotImplementedError
 
@@ -59,6 +62,7 @@ class Vector(collections.abc.Sequence):
         return {
             "array_value": {"values": [{"double_value": v} for v in self._value]},
             "meaning": _VECTOR_VALUE,
+            "exclude_from_indexes": self.exclude_from_indexes,
         }
 
 
