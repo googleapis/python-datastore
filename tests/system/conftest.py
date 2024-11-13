@@ -55,8 +55,12 @@ def datastore_client(test_namespace, database_id):
         kwargs = {}
         if USE_NIGHTLY:
             print("using nightly db")
-            kwargs["client_options"] = ClientOptions(api_endpoint="https://nightly-datastore.sandbox.googleapis.com")
-        client = datastore.Client(database=database_id, namespace=test_namespace, **kwargs)
+            kwargs["client_options"] = ClientOptions(
+                api_endpoint="https://nightly-datastore.sandbox.googleapis.com"
+            )
+        client = datastore.Client(
+            database=database_id, namespace=test_namespace, **kwargs
+        )
 
     assert client.database == database_id
     return client

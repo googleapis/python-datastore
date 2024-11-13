@@ -651,9 +651,10 @@ def test_query_explain_in_transaction(query_client, ancestor_key, database_id):
 
 
 @pytest.mark.parametrize(
-    "distance_measure",[DistanceMeasure.EUCLIDEAN,DistanceMeasure.COSINE, DistanceMeasure.DOT_PRODUCT]
+    "distance_measure",
+    [DistanceMeasure.EUCLIDEAN, DistanceMeasure.COSINE, DistanceMeasure.DOT_PRODUCT],
 )
-@pytest.mark.parametrize("limit", [5,10,20])
+@pytest.mark.parametrize("limit", [5, 10, 20])
 @pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
 def test_query_vector_find_nearest(query_client, database_id, limit, distance_measure):
     q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")

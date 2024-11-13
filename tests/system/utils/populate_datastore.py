@@ -270,7 +270,9 @@ def run(database):
     kwargs = {}
     if USE_NIGHTLY:
         print("using nightly db")
-        kwargs["client_options"] = ClientOptions(api_endpoint="https://nightly-datastore.sandbox.googleapis.com")
+        kwargs["client_options"] = ClientOptions(
+            api_endpoint="https://nightly-datastore.sandbox.googleapis.com"
+        )
     client = datastore.Client(database=database, **kwargs)
     flags = sys.argv[1:]
 

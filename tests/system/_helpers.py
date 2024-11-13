@@ -46,7 +46,9 @@ def clone_client(base_client, namespace=_SENTINEL, database=_SENTINEL):
 
     if USE_NIGHTLY:
         print("using nightly db")
-        kwargs["client_options"] = ClientOptions(api_endpoint="https://nightly-datastore.sandbox.googleapis.com")
+        kwargs["client_options"] = ClientOptions(
+            api_endpoint="https://nightly-datastore.sandbox.googleapis.com"
+        )
 
     return datastore.Client(
         project=base_client.project,
