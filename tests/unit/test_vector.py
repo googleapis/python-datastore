@@ -28,7 +28,7 @@ class TestVector:
         assert v[0] == 1.0
         assert v[1] == 2.0
         assert v[2] == 3.0
-        assert v.exclude_from_indexes == False
+        assert v.exclude_from_indexes is False
 
     def test_vector_ctor_w_ints(self):
         v = Vector([1, 2, 3])
