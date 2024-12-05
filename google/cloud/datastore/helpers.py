@@ -43,7 +43,7 @@ def _get_meaning(value_pb, is_list=False):
     :param is_list: Boolean indicating if the ``value_pb`` contains
                     a list value.
 
-    :rtype: int | Tuple[int, list[int | None] | None]
+    :rtype: int | Tuple[Optional[int], Optional[list[int | None]]] | None
     :returns: The meaning for the ``value_pb`` if one is set, else
               :data:`None`. For a list value, returns a tuple of
               the root meaning of the list, and a list of meanings
@@ -56,7 +56,7 @@ def _get_meaning(value_pb, is_list=False):
 
         # We check among all the meanings, some of which may be None,
         # the rest which may be enum/int values.
-        sub_meanings = [_get_meaning(sub_value_pb) for sub_value_pb in values]
+        sub_meanings = [sub_value_pb.meaning or None for sub_value_pb in values]
         if not any(meaning is not None for meaning in sub_meanings):
             sub_meanings = None
         return root_meaning, sub_meanings
