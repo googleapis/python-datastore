@@ -647,3 +647,11 @@ def test_query_explain_in_transaction(query_client, ancestor_key, database_id):
         # check for stats
         stats = iterator.explain_metrics
         assert isinstance(stats, ExplainMetrics)
+
+@pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
+def test_query_w_vector(query_client, database_id):
+    q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")
+    iterator = q.fetch()
+    results = list(iterator)
+    breakpoint()
+    print(results)
