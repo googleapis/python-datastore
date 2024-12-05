@@ -1179,7 +1179,8 @@ def test__get_meaning_w_array_value():
     sub_value_pb2.string_value = "bye"
 
     result = _get_meaning(value_pb, is_list=True)
-    assert meaning == result
+    # should preserve sub-value meanings as list
+    assert [meaning, meaning] == result
 
 
 def test__get_meaning_w_array_value_multiple_meanings():
