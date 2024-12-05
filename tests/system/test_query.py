@@ -652,7 +652,18 @@ def test_query_explain_in_transaction(query_client, ancestor_key, database_id):
 @pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
 def test_query_w_vector(query_client, database_id):
     q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")
-    iterator = q.fetch()
+    iterator = q.fetch(limit=5)
     results = list(iterator)
+    entity = results[0]
+    vector_result = entity["vector"]
+    print(type(vector_result))  # <class 'list'>
     breakpoint()
-    print(results)
+    # make a change and push
+    entity["space-r"] = "changed"
+    #for idx in range(len(entity["vector"])):
+    #    entity["vector"][idx] = 1
+    query_client.put(entity)
+    # fetch back
+    updated_entity = query_client.get(entity.key)
+    breakpoint()
+    print(updated_entity["space-r"])
