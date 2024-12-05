@@ -62,7 +62,8 @@ def _get_meaning(value_pb, is_list=False):
         # We check among all the meanings, some of which may be None,
         # the rest which may be enum/int values.
         all_meanings = [_get_meaning(sub_value_pb) for sub_value_pb in values]
-        return all_meanings
+        if any(meaning is not None for meaning in all_meanings):
+            return all_meanings
 
     return None
 
