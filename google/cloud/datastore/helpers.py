@@ -49,7 +49,9 @@ def _get_meaning(value_pb, is_list=False):
               means it just returns a list of meanings. If all the
               list meanings agree, it just condenses them.
     """
-    if is_list:
+    if value_pb.meaning:  # Simple field (int32).
+        return value_pb.meaning
+    elif is_list:
         values = value_pb.array_value.values
 
         # An empty list will have no values, hence no shared meaning
@@ -60,17 +62,7 @@ def _get_meaning(value_pb, is_list=False):
         # We check among all the meanings, some of which may be None,
         # the rest which may be enum/int values.
         all_meanings = [_get_meaning(sub_value_pb) for sub_value_pb in values]
-        unique_meanings = set(all_meanings)
-
-        if len(unique_meanings) == 1:
-            # If there is a unique meaning, we preserve it.
-            return unique_meanings.pop()
-        else:  # We know len(value_pb.array_value.values) > 0.
-            # If the meaning is not unique, just return all of them.
-            return all_meanings
-
-    elif value_pb.meaning:  # Simple field (int32).
-        return value_pb.meaning
+        return all_meanings
 
     return None
 
@@ -182,9 +174,7 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
         return
 
     # For lists, we set meaning on each sub-element.
-    if is_list:
-        if not isinstance(meaning, list):
-            meaning = itertools.repeat(meaning)
+    if is_list and isinstance(meaning, list):
         val_iter = zip(value_pb.array_value.values, meaning)
         for sub_value_pb, sub_meaning in val_iter:
             if sub_meaning is not None:
