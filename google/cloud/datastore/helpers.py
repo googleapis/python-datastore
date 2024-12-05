@@ -43,29 +43,25 @@ def _get_meaning(value_pb, is_list=False):
     :param is_list: Boolean indicating if the ``value_pb`` contains
                     a list value.
 
-    :rtype: int
+    :rtype: int | Tuple[int, list[int | None] | None]
     :returns: The meaning for the ``value_pb`` if one is set, else
-              :data:`None`. For a list value, if there are disagreeing
-              means it just returns a list of meanings. If all the
-              list meanings agree, it just condenses them.
+              :data:`None`. For a list value, returns a tuple of
+              the root meaning of the list, and a list of meanings
+              of each sub-value. If subvalues are all empty, returns
+              :data:`None` instead of a list.
     """
-    if value_pb.meaning:  # Simple field (int32).
-        return value_pb.meaning
-    elif is_list:
+    if is_list:
+        root_meaning = value_pb.meaning or None
         values = value_pb.array_value.values
-
-        # An empty list will have no values, hence no shared meaning
-        # set among them.
-        if len(values) == 0:
-            return None
 
         # We check among all the meanings, some of which may be None,
         # the rest which may be enum/int values.
-        all_meanings = [_get_meaning(sub_value_pb) for sub_value_pb in values]
-        if any(meaning is not None for meaning in all_meanings):
-            return all_meanings
-
-    return None
+        sub_meanings = [_get_meaning(sub_value_pb) for sub_value_pb in values]
+        if not any(meaning is not None for meaning in sub_meanings):
+            sub_meanings = None
+        return root_meaning, sub_meanings
+    else:
+        return value_pb.meaning or None
 
 
 def _new_value_pb(entity_pb, name):
@@ -175,11 +171,14 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
         return
 
     # For lists, we set meaning on each sub-element.
-    if is_list and isinstance(meaning, list):
-        val_iter = zip(value_pb.array_value.values, meaning)
-        for sub_value_pb, sub_meaning in val_iter:
-            if sub_meaning is not None:
-                sub_value_pb.meaning = sub_meaning
+    if is_list:
+        root_meaning, sub_meaning_list = meaning
+        if root_meaning is not None:
+            value_pb.meaning = root_meaning
+        if sub_meaning_list:
+            for sub_value_pb, sub_meaning in zip(value_pb.array_value.values, sub_meaning_list):
+                if sub_meaning is not None:
+                    sub_value_pb.meaning = sub_meaning
     else:
         value_pb.meaning = meaning
 

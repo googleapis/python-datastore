@@ -361,19 +361,21 @@ def test_entity_to_protobuf_w_variable_meanings():
     entity = Entity()
     name = "quux"
     entity[name] = values = [1, 20, 300]
-    meaning = 9
-    entity._meanings[name] = ([None, meaning, None], values)
+    root_meaning = 31
+    sub_meaning = 9
+    entity._meanings[name] = ((root_meaning, [None, sub_meaning, None]), values)
     entity_pb = entity_to_protobuf(entity)
 
     # Construct the expected protobuf.
     expected_pb = entity_pb2.Entity()
     value_pb = _new_value_pb(expected_pb, name)
+    value_pb.meaning = root_meaning
     value0 = value_pb.array_value.values.add()
     value0.integer_value = values[0]
     # The only array entry with a meaning is the middle one.
     value1 = value_pb.array_value.values.add()
     value1.integer_value = values[1]
-    value1.meaning = meaning
+    value1.meaning = sub_meaning
     value2 = value_pb.array_value.values.add()
     value2.integer_value = values[2]
 
@@ -1162,7 +1164,7 @@ def test__get_meaning_w_empty_array_value():
     value_pb._pb.array_value.values.pop()
 
     result = _get_meaning(value_pb, is_list=True)
-    assert result is None
+    assert result == (None, None)
 
 
 def test__get_meaning_w_array_value():
@@ -1180,7 +1182,7 @@ def test__get_meaning_w_array_value():
 
     result = _get_meaning(value_pb, is_list=True)
     # should preserve sub-value meanings as list
-    assert [meaning, meaning] == result
+    assert (None, [meaning, meaning]) == result
 
 
 def test__get_meaning_w_array_value_root_meaning():
@@ -1193,13 +1195,32 @@ def test__get_meaning_w_array_value_root_meaning():
     sub_value_pb1 = value_pb._pb.array_value.values.add()
     sub_value_pb2 = value_pb._pb.array_value.values.add()
 
-    sub_value_pb1.meaning = sub_value_pb2.meaning = meaning
     sub_value_pb1.string_value = "hi"
     sub_value_pb2.string_value = "bye"
 
     result = _get_meaning(value_pb, is_list=True)
     # should preserve sub-value meanings as list
-    assert meaning == result
+    assert (meaning, None) == result
+
+
+def test__get_meaning_w_array_value_root_and_sub_meanings():
+    from google.cloud.datastore_v1.types import entity as entity_pb2
+    from google.cloud.datastore.helpers import _get_meaning
+
+    value_pb = entity_pb2.Value()
+    root_meaning = 9
+    sub_meaning = 3
+    value_pb.meaning = root_meaning
+    sub_value_pb1 = value_pb._pb.array_value.values.add()
+    sub_value_pb2 = value_pb._pb.array_value.values.add()
+
+    sub_value_pb1.meaning = sub_value_pb2.meaning = sub_meaning
+    sub_value_pb1.string_value = "hi"
+    sub_value_pb2.string_value = "bye"
+
+    result = _get_meaning(value_pb, is_list=True)
+    # should preserve sub-value meanings as list
+    assert (root_meaning, [sub_meaning, sub_meaning]) == result
 
 
 def test__get_meaning_w_array_value_multiple_meanings():
@@ -1218,7 +1239,7 @@ def test__get_meaning_w_array_value_multiple_meanings():
     sub_value_pb2.string_value = "bye"
 
     result = _get_meaning(value_pb, is_list=True)
-    assert result == [meaning1, meaning2]
+    assert result == (None, [meaning1, meaning2])
 
 
 def test__get_meaning_w_array_value_meaning_partially_unset():
@@ -1235,7 +1256,7 @@ def test__get_meaning_w_array_value_meaning_partially_unset():
     sub_value_pb2.string_value = "bye"
 
     result = _get_meaning(value_pb, is_list=True)
-    assert result == [meaning1, None]
+    assert result == (None, [meaning1, None])
 
 
 def test__get_meaning_w_array_value_meaning_fully_unset():
@@ -1250,7 +1271,7 @@ def test__get_meaning_w_array_value_meaning_fully_unset():
     sub_value_pb2.string_value = "bye"
 
     result = _get_meaning(value_pb, is_list=True)
-    assert result is None
+    assert result == (None, None)
 
 
 def _make_geopoint(*args, **kwargs):
