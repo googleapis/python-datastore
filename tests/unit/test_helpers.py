@@ -1183,6 +1183,25 @@ def test__get_meaning_w_array_value():
     assert [meaning, meaning] == result
 
 
+def test__get_meaning_w_array_value_root_meaning():
+    from google.cloud.datastore_v1.types import entity as entity_pb2
+    from google.cloud.datastore.helpers import _get_meaning
+
+    value_pb = entity_pb2.Value()
+    meaning = 9
+    value_pb.meaning = meaning
+    sub_value_pb1 = value_pb._pb.array_value.values.add()
+    sub_value_pb2 = value_pb._pb.array_value.values.add()
+
+    sub_value_pb1.meaning = sub_value_pb2.meaning = meaning
+    sub_value_pb1.string_value = "hi"
+    sub_value_pb2.string_value = "bye"
+
+    result = _get_meaning(value_pb, is_list=True)
+    # should preserve sub-value meanings as list
+    assert meaning == result
+
+
 def test__get_meaning_w_array_value_multiple_meanings():
     from google.cloud.datastore_v1.types import entity as entity_pb2
     from google.cloud.datastore.helpers import _get_meaning
@@ -1217,6 +1236,21 @@ def test__get_meaning_w_array_value_meaning_partially_unset():
 
     result = _get_meaning(value_pb, is_list=True)
     assert result == [meaning1, None]
+
+
+def test__get_meaning_w_array_value_meaning_fully_unset():
+    from google.cloud.datastore_v1.types import entity as entity_pb2
+    from google.cloud.datastore.helpers import _get_meaning
+
+    value_pb = entity_pb2.Value()
+    sub_value_pb1 = value_pb._pb.array_value.values.add()
+    sub_value_pb2 = value_pb._pb.array_value.values.add()
+
+    sub_value_pb1.string_value = "hi"
+    sub_value_pb2.string_value = "bye"
+
+    result = _get_meaning(value_pb, is_list=True)
+    assert result is None
 
 
 def _make_geopoint(*args, **kwargs):
