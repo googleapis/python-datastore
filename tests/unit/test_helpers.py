@@ -1274,8 +1274,8 @@ def test__get_meaning_w_array_value_meaning_fully_unset():
     assert result is None
 
 
-@pytest.mark.parametrize("orig_root_meaning", [0,1])
-@pytest.mark.parametrize("orig_sub_meaning", [0,1])
+@pytest.mark.parametrize("orig_root_meaning", [0, 1])
+@pytest.mark.parametrize("orig_sub_meaning", [0, 1])
 def test__set_pb_meaning_w_array_value_fully_unset(orig_root_meaning, orig_sub_meaning):
     """
     call _set_pb_meaning_from_entity with meaning=None data.
