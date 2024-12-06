@@ -58,7 +58,11 @@ def _get_meaning(value_pb, is_list=False):
         sub_meanings = [sub_value_pb.meaning or None for sub_value_pb in values]
         if not any(meaning is not None for meaning in sub_meanings):
             sub_meanings = None
-        return root_meaning, sub_meanings
+        if root_meaning is None and sub_meanings is None:
+            # no meanings to save
+            return None
+        else:
+            return root_meaning, sub_meanings
     else:
         return value_pb.meaning or None
 
@@ -173,6 +177,10 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
     if orig_value is not value:
         return
 
+    # break early if no meaning data to set
+    if meaning is None:
+        return
+
     # For lists, we set meaning on each sub-element.
     if is_list:
         root_meaning, sub_meaning_list = meaning
@@ -184,7 +192,7 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
             ):
                 if sub_meaning is not None:
                     sub_value_pb.meaning = sub_meaning
-    elif meaning is not None:
+    else:
         value_pb.meaning = meaning
 
 
