@@ -1281,6 +1281,7 @@ def test__array_w_meaning_end_to_end():
     from google.cloud.datastore_v1.types import entity as entity_pb2
     from google.cloud.datastore.helpers import entity_from_protobuf
     from google.cloud.datastore.helpers import entity_to_protobuf
+
     orig_pb = entity_pb2.Entity()
     value_pb = orig_pb._pb.properties.get_or_create("value")
     value_pb.meaning = 31
