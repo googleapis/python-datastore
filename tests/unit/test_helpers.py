@@ -1274,6 +1274,29 @@ def test__get_meaning_w_array_value_meaning_fully_unset():
     assert result == (None, None)
 
 
+@pytest.mark.parametrize("orig_meaning_data", [0, 1])
+def test__set_pb_meaning_w_array_value_fully_unset(orig_meaning_data):
+    """
+    call _set_pb_meaning_from_entity with meaning=None data.
+    Should not touch proto's meaning field
+    """
+    from google.cloud.datastore_v1.types import entity as entity_pb2
+    from google.cloud.datastore.helpers import _set_pb_meaning_from_entity
+    from google.cloud.datastore.entity import Entity
+
+    orig_pb = entity_pb2.Entity()
+    value_pb = orig_pb._pb.properties.get_or_create("value")
+    value_pb.meaning = orig_meaning_data
+    sub_value_pb1 = value_pb.array_value.values.add()
+    sub_value_pb1.meaning = orig_meaning_data
+
+    entity = Entity(key="key")
+    entity._meanings = {"value": ((None, None), None)}
+    _set_pb_meaning_from_entity(entity, "value", None, value_pb, is_list=True)
+    assert value_pb.meaning == orig_meaning_data
+    assert value_pb.array_value.values[0].meaning == orig_meaning_data
+
+
 def test__array_w_meaning_end_to_end():
     """
     Test proto->entity->proto with an array with a meaning field

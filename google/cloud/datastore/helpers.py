@@ -144,6 +144,10 @@ def entity_from_protobuf(pb):
 def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
     """Add meaning information (from an entity) to a protobuf.
 
+    value_pb is assumed to have no `meaning` data currently present.
+    This means if the entity's meaning data is None, this function will do nothing,
+    rather than removing any existing data.
+
     :type entity: :class:`google.cloud.datastore.entity.Entity`
     :param entity: The entity to be turned into a protobuf.
 
@@ -180,7 +184,7 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
             ):
                 if sub_meaning is not None:
                     sub_value_pb.meaning = sub_meaning
-    else:
+    elif meaning is not None:
         value_pb.meaning = meaning
 
 
