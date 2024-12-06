@@ -1274,6 +1274,41 @@ def test__get_meaning_w_array_value_meaning_fully_unset():
     assert result == (None, None)
 
 
+def test__array_w_meaning_end_to_end():
+    """
+    Test proto->entity->proto with an array with a meaning field
+    """
+    from google.cloud.datastore_v1.types import entity as entity_pb2
+    from google.cloud.datastore.helpers import entity_from_protobuf
+    from google.cloud.datastore.helpers import entity_to_protobuf
+    orig_pb = entity_pb2.Entity()
+    value_pb = orig_pb._pb.properties.get_or_create("value")
+    value_pb.meaning = 31
+    sub_value_pb1 = value_pb.array_value.values.add()
+    sub_value_pb1.double_value = 1
+    sub_value_pb1.meaning = 1
+    sub_value_pb2 = value_pb.array_value.values.add()
+    sub_value_pb2.double_value = 2
+    sub_value_pb3 = value_pb.array_value.values.add()
+    sub_value_pb3.double_value = 3
+    sub_value_pb3.meaning = 3
+    # convert to entity
+    entity = entity_from_protobuf(orig_pb._pb)
+    assert entity._meanings["value"][0] == (31, [1, None, 3])
+    assert entity._meanings["value"][1] == [1, 2, 3]
+    # convert back to pb
+    output_entity_pb = entity_to_protobuf(entity)
+    final_pb = output_entity_pb._pb.properties["value"]
+    assert final_pb.meaning == 31
+    assert len(final_pb.array_value.values) == 3
+    assert final_pb.array_value.values[0].meaning == 1
+    assert final_pb.array_value.values[0].double_value == 1
+    assert final_pb.array_value.values[1].meaning == 0
+    assert final_pb.array_value.values[1].double_value == 2
+    assert final_pb.array_value.values[2].meaning == 3
+    assert final_pb.array_value.values[2].double_value == 3
+
+
 def _make_geopoint(*args, **kwargs):
     from google.cloud.datastore.helpers import GeoPoint
 
