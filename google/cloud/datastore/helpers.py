@@ -177,12 +177,11 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
     if orig_value is not value:
         return
 
-    # break early if no meaning data to set
     if meaning is None:
+        # no meaning data to set
         return
-
-    # For lists, we set meaning on each sub-element.
-    if is_list:
+    elif is_list:
+        # for lists, set meaning on the root pb and on each sub-element
         root_meaning, sub_meaning_list = meaning
         if root_meaning is not None:
             value_pb.meaning = root_meaning
