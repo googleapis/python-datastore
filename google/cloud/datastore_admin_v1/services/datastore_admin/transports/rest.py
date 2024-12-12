@@ -13,9 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import logging
+import json  # type: ignore
 
 from google.auth.transport.requests import AuthorizedSession  # type: ignore
-import json  # type: ignore
 from google.auth import credentials as ga_credentials  # type: ignore
 from google.api_core import exceptions as core_exceptions
 from google.api_core import retry as retries
@@ -45,6 +46,14 @@ try:
 except AttributeError:  # pragma: NO COVER
     OptionalRetry = Union[retries.Retry, object, None]  # type: ignore
 
+try:
+    from google.api_core import client_logging  # type: ignore
+
+    CLIENT_LOGGING_SUPPORTED = True  # pragma: NO COVER
+except ImportError:  # pragma: NO COVER
+    CLIENT_LOGGING_SUPPORTED = False
+
+_LOGGER = logging.getLogger(__name__)
 
 DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     gapic_version=BASE_DEFAULT_CLIENT_INFO.gapic_version,
@@ -125,8 +134,10 @@ class DatastoreAdminRestInterceptor:
     def pre_create_index(
         self,
         request: datastore_admin.CreateIndexRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[datastore_admin.CreateIndexRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore_admin.CreateIndexRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for create_index
 
         Override in a subclass to manipulate the request or metadata
@@ -148,8 +159,10 @@ class DatastoreAdminRestInterceptor:
     def pre_delete_index(
         self,
         request: datastore_admin.DeleteIndexRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[datastore_admin.DeleteIndexRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore_admin.DeleteIndexRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for delete_index
 
         Override in a subclass to manipulate the request or metadata
@@ -171,8 +184,10 @@ class DatastoreAdminRestInterceptor:
     def pre_export_entities(
         self,
         request: datastore_admin.ExportEntitiesRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[datastore_admin.ExportEntitiesRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore_admin.ExportEntitiesRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for export_entities
 
         Override in a subclass to manipulate the request or metadata
@@ -194,8 +209,10 @@ class DatastoreAdminRestInterceptor:
     def pre_get_index(
         self,
         request: datastore_admin.GetIndexRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[datastore_admin.GetIndexRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore_admin.GetIndexRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for get_index
 
         Override in a subclass to manipulate the request or metadata
@@ -215,8 +232,10 @@ class DatastoreAdminRestInterceptor:
     def pre_import_entities(
         self,
         request: datastore_admin.ImportEntitiesRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[datastore_admin.ImportEntitiesRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore_admin.ImportEntitiesRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for import_entities
 
         Override in a subclass to manipulate the request or metadata
@@ -238,8 +257,10 @@ class DatastoreAdminRestInterceptor:
     def pre_list_indexes(
         self,
         request: datastore_admin.ListIndexesRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[datastore_admin.ListIndexesRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore_admin.ListIndexesRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for list_indexes
 
         Override in a subclass to manipulate the request or metadata
@@ -261,8 +282,10 @@ class DatastoreAdminRestInterceptor:
     def pre_cancel_operation(
         self,
         request: operations_pb2.CancelOperationRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[operations_pb2.CancelOperationRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        operations_pb2.CancelOperationRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for cancel_operation
 
         Override in a subclass to manipulate the request or metadata
@@ -282,8 +305,10 @@ class DatastoreAdminRestInterceptor:
     def pre_delete_operation(
         self,
         request: operations_pb2.DeleteOperationRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[operations_pb2.DeleteOperationRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        operations_pb2.DeleteOperationRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for delete_operation
 
         Override in a subclass to manipulate the request or metadata
@@ -303,8 +328,10 @@ class DatastoreAdminRestInterceptor:
     def pre_get_operation(
         self,
         request: operations_pb2.GetOperationRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[operations_pb2.GetOperationRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        operations_pb2.GetOperationRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for get_operation
 
         Override in a subclass to manipulate the request or metadata
@@ -326,8 +353,10 @@ class DatastoreAdminRestInterceptor:
     def pre_list_operations(
         self,
         request: operations_pb2.ListOperationsRequest,
-        metadata: Sequence[Tuple[str, str]],
-    ) -> Tuple[operations_pb2.ListOperationsRequest, Sequence[Tuple[str, str]]]:
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        operations_pb2.ListOperationsRequest, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
         """Pre-rpc interceptor for list_operations
 
         Override in a subclass to manipulate the request or metadata
@@ -574,7 +603,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> operations_pb2.Operation:
             r"""Call the create index method over HTTP.
 
@@ -585,8 +614,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
 
             Returns:
                 ~.operations_pb2.Operation:
@@ -599,6 +630,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseCreateIndex._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_create_index(request, metadata)
             transcoded_request = _BaseDatastoreAdminRestTransport._BaseCreateIndex._get_transcoded_request(
                 http_options, request
@@ -612,6 +644,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseCreateIndex._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = json_format.MessageToJson(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.CreateIndex",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "CreateIndex",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._CreateIndex._get_response(
@@ -632,7 +691,29 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             # Return the response
             resp = operations_pb2.Operation()
             json_format.Parse(response.content, resp, ignore_unknown_fields=True)
+
             resp = self._interceptor.post_create_index(resp)
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                try:
+                    response_payload = json_format.MessageToJson(resp)
+                except:
+                    response_payload = None
+                http_response = {
+                    "payload": response_payload,
+                    "headers": dict(response.headers),
+                    "status": response.status_code,
+                }
+                _LOGGER.debug(
+                    "Received response for google.datastore.admin_v1.DatastoreAdminClient.create_index",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "CreateIndex",
+                        "metadata": http_response["headers"],
+                        "httpResponse": http_response,
+                    },
+                )
             return resp
 
     class _DeleteIndex(
@@ -669,7 +750,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> operations_pb2.Operation:
             r"""Call the delete index method over HTTP.
 
@@ -680,8 +761,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
 
             Returns:
                 ~.operations_pb2.Operation:
@@ -694,6 +777,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseDeleteIndex._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_delete_index(request, metadata)
             transcoded_request = _BaseDatastoreAdminRestTransport._BaseDeleteIndex._get_transcoded_request(
                 http_options, request
@@ -703,6 +787,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseDeleteIndex._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = json_format.MessageToJson(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.DeleteIndex",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "DeleteIndex",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._DeleteIndex._get_response(
@@ -722,7 +833,29 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             # Return the response
             resp = operations_pb2.Operation()
             json_format.Parse(response.content, resp, ignore_unknown_fields=True)
+
             resp = self._interceptor.post_delete_index(resp)
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                try:
+                    response_payload = json_format.MessageToJson(resp)
+                except:
+                    response_payload = None
+                http_response = {
+                    "payload": response_payload,
+                    "headers": dict(response.headers),
+                    "status": response.status_code,
+                }
+                _LOGGER.debug(
+                    "Received response for google.datastore.admin_v1.DatastoreAdminClient.delete_index",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "DeleteIndex",
+                        "metadata": http_response["headers"],
+                        "httpResponse": http_response,
+                    },
+                )
             return resp
 
     class _ExportEntities(
@@ -760,7 +893,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> operations_pb2.Operation:
             r"""Call the export entities method over HTTP.
 
@@ -771,8 +904,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
 
             Returns:
                 ~.operations_pb2.Operation:
@@ -785,6 +920,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseExportEntities._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_export_entities(request, metadata)
             transcoded_request = _BaseDatastoreAdminRestTransport._BaseExportEntities._get_transcoded_request(
                 http_options, request
@@ -798,6 +934,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseExportEntities._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = json_format.MessageToJson(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.ExportEntities",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "ExportEntities",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._ExportEntities._get_response(
@@ -818,7 +981,29 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             # Return the response
             resp = operations_pb2.Operation()
             json_format.Parse(response.content, resp, ignore_unknown_fields=True)
+
             resp = self._interceptor.post_export_entities(resp)
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                try:
+                    response_payload = json_format.MessageToJson(resp)
+                except:
+                    response_payload = None
+                http_response = {
+                    "payload": response_payload,
+                    "headers": dict(response.headers),
+                    "status": response.status_code,
+                }
+                _LOGGER.debug(
+                    "Received response for google.datastore.admin_v1.DatastoreAdminClient.export_entities",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "ExportEntities",
+                        "metadata": http_response["headers"],
+                        "httpResponse": http_response,
+                    },
+                )
             return resp
 
     class _GetIndex(
@@ -855,7 +1040,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> index.Index:
             r"""Call the get index method over HTTP.
 
@@ -866,8 +1051,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
 
             Returns:
                 ~.index.Index:
@@ -877,6 +1064,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseGetIndex._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_get_index(request, metadata)
             transcoded_request = (
                 _BaseDatastoreAdminRestTransport._BaseGetIndex._get_transcoded_request(
@@ -890,6 +1078,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                     transcoded_request
                 )
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = type(request).to_json(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.GetIndex",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "GetIndex",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._GetIndex._get_response(
@@ -911,7 +1126,29 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             pb_resp = index.Index.pb(resp)
 
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
+
             resp = self._interceptor.post_get_index(resp)
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                try:
+                    response_payload = index.Index.to_json(response)
+                except:
+                    response_payload = None
+                http_response = {
+                    "payload": response_payload,
+                    "headers": dict(response.headers),
+                    "status": response.status_code,
+                }
+                _LOGGER.debug(
+                    "Received response for google.datastore.admin_v1.DatastoreAdminClient.get_index",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "GetIndex",
+                        "metadata": http_response["headers"],
+                        "httpResponse": http_response,
+                    },
+                )
             return resp
 
     class _ImportEntities(
@@ -949,7 +1186,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> operations_pb2.Operation:
             r"""Call the import entities method over HTTP.
 
@@ -960,8 +1197,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
 
             Returns:
                 ~.operations_pb2.Operation:
@@ -974,6 +1213,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseImportEntities._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_import_entities(request, metadata)
             transcoded_request = _BaseDatastoreAdminRestTransport._BaseImportEntities._get_transcoded_request(
                 http_options, request
@@ -987,6 +1227,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseImportEntities._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = json_format.MessageToJson(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.ImportEntities",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "ImportEntities",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._ImportEntities._get_response(
@@ -1007,7 +1274,29 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             # Return the response
             resp = operations_pb2.Operation()
             json_format.Parse(response.content, resp, ignore_unknown_fields=True)
+
             resp = self._interceptor.post_import_entities(resp)
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                try:
+                    response_payload = json_format.MessageToJson(resp)
+                except:
+                    response_payload = None
+                http_response = {
+                    "payload": response_payload,
+                    "headers": dict(response.headers),
+                    "status": response.status_code,
+                }
+                _LOGGER.debug(
+                    "Received response for google.datastore.admin_v1.DatastoreAdminClient.import_entities",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "ImportEntities",
+                        "metadata": http_response["headers"],
+                        "httpResponse": http_response,
+                    },
+                )
             return resp
 
     class _ListIndexes(
@@ -1044,7 +1333,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> datastore_admin.ListIndexesResponse:
             r"""Call the list indexes method over HTTP.
 
@@ -1055,8 +1344,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
 
             Returns:
                 ~.datastore_admin.ListIndexesResponse:
@@ -1068,6 +1359,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseListIndexes._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_list_indexes(request, metadata)
             transcoded_request = _BaseDatastoreAdminRestTransport._BaseListIndexes._get_transcoded_request(
                 http_options, request
@@ -1077,6 +1369,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseListIndexes._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = type(request).to_json(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.ListIndexes",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "ListIndexes",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._ListIndexes._get_response(
@@ -1098,7 +1417,31 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             pb_resp = datastore_admin.ListIndexesResponse.pb(resp)
 
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
+
             resp = self._interceptor.post_list_indexes(resp)
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                try:
+                    response_payload = datastore_admin.ListIndexesResponse.to_json(
+                        response
+                    )
+                except:
+                    response_payload = None
+                http_response = {
+                    "payload": response_payload,
+                    "headers": dict(response.headers),
+                    "status": response.status_code,
+                }
+                _LOGGER.debug(
+                    "Received response for google.datastore.admin_v1.DatastoreAdminClient.list_indexes",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "ListIndexes",
+                        "metadata": http_response["headers"],
+                        "httpResponse": http_response,
+                    },
+                )
             return resp
 
     @property
@@ -1187,7 +1530,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> None:
             r"""Call the cancel operation method over HTTP.
 
@@ -1197,13 +1540,16 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
             """
 
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseCancelOperation._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_cancel_operation(
                 request, metadata
             )
@@ -1215,6 +1561,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseCancelOperation._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = json_format.MessageToJson(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.CancelOperation",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "CancelOperation",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._CancelOperation._get_response(
@@ -1271,7 +1644,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> None:
             r"""Call the delete operation method over HTTP.
 
@@ -1281,13 +1654,16 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
             """
 
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseDeleteOperation._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_delete_operation(
                 request, metadata
             )
@@ -1299,6 +1675,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseDeleteOperation._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = json_format.MessageToJson(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.DeleteOperation",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "DeleteOperation",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._DeleteOperation._get_response(
@@ -1355,7 +1758,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> operations_pb2.Operation:
             r"""Call the get operation method over HTTP.
 
@@ -1365,8 +1768,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
 
             Returns:
                 operations_pb2.Operation: Response from GetOperation method.
@@ -1375,6 +1780,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseGetOperation._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_get_operation(request, metadata)
             transcoded_request = _BaseDatastoreAdminRestTransport._BaseGetOperation._get_transcoded_request(
                 http_options, request
@@ -1384,6 +1790,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseGetOperation._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = json_format.MessageToJson(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.GetOperation",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "GetOperation",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._GetOperation._get_response(
@@ -1404,6 +1837,27 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             resp = operations_pb2.Operation()
             resp = json_format.Parse(content, resp)
             resp = self._interceptor.post_get_operation(resp)
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                try:
+                    response_payload = json_format.MessageToJson(resp)
+                except:
+                    response_payload = None
+                http_response = {
+                    "payload": response_payload,
+                    "headers": dict(response.headers),
+                    "status": response.status_code,
+                }
+                _LOGGER.debug(
+                    "Received response for google.datastore.admin_v1.DatastoreAdminAsyncClient.GetOperation",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "GetOperation",
+                        "httpResponse": http_response,
+                        "metadata": http_response["headers"],
+                    },
+                )
             return resp
 
     @property
@@ -1444,7 +1898,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             *,
             retry: OptionalRetry = gapic_v1.method.DEFAULT,
             timeout: Optional[float] = None,
-            metadata: Sequence[Tuple[str, str]] = (),
+            metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
         ) -> operations_pb2.ListOperationsResponse:
             r"""Call the list operations method over HTTP.
 
@@ -1454,8 +1908,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
-                metadata (Sequence[Tuple[str, str]]): Strings which should be
-                    sent along with the request as metadata.
+                metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
+                    sent along with the request as metadata. Normally, each value must be of type `str`,
+                    but for metadata keys ending with the suffix `-bin`, the corresponding values must
+                    be of type `bytes`.
 
             Returns:
                 operations_pb2.ListOperationsResponse: Response from ListOperations method.
@@ -1464,6 +1920,7 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             http_options = (
                 _BaseDatastoreAdminRestTransport._BaseListOperations._get_http_options()
             )
+
             request, metadata = self._interceptor.pre_list_operations(request, metadata)
             transcoded_request = _BaseDatastoreAdminRestTransport._BaseListOperations._get_transcoded_request(
                 http_options, request
@@ -1473,6 +1930,33 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             query_params = _BaseDatastoreAdminRestTransport._BaseListOperations._get_query_params_json(
                 transcoded_request
             )
+
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                request_url = "{host}{uri}".format(
+                    host=self._host, uri=transcoded_request["uri"]
+                )
+                method = transcoded_request["method"]
+                try:
+                    request_payload = json_format.MessageToJson(request)
+                except:
+                    request_payload = None
+                http_request = {
+                    "payload": request_payload,
+                    "requestMethod": method,
+                    "requestUrl": request_url,
+                    "headers": dict(metadata),
+                }
+                _LOGGER.debug(
+                    f"Sending request for google.datastore.admin_v1.DatastoreAdminClient.ListOperations",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "ListOperations",
+                        "httpRequest": http_request,
+                        "metadata": http_request["headers"],
+                    },
+                )
 
             # Send the request
             response = DatastoreAdminRestTransport._ListOperations._get_response(
@@ -1493,6 +1977,27 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             resp = operations_pb2.ListOperationsResponse()
             resp = json_format.Parse(content, resp)
             resp = self._interceptor.post_list_operations(resp)
+            if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
+                logging.DEBUG
+            ):  # pragma: NO COVER
+                try:
+                    response_payload = json_format.MessageToJson(resp)
+                except:
+                    response_payload = None
+                http_response = {
+                    "payload": response_payload,
+                    "headers": dict(response.headers),
+                    "status": response.status_code,
+                }
+                _LOGGER.debug(
+                    "Received response for google.datastore.admin_v1.DatastoreAdminAsyncClient.ListOperations",
+                    extra={
+                        "serviceName": "google.datastore.admin.v1.DatastoreAdmin",
+                        "rpcName": "ListOperations",
+                        "httpResponse": http_response,
+                        "metadata": http_response["headers"],
+                    },
+                )
             return resp
 
     @property
