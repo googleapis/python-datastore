@@ -22,6 +22,7 @@ import string
 import sys
 import time
 import uuid
+import random
 
 from google.cloud import datastore
 
@@ -104,6 +105,10 @@ def add_large_character_entities(client=None):
                     task["name"] = "{0:05d}".format(i)
                     task["family"] = "Stark"
                     task["alive"] = False
+                    random.seed(i)
+                    task["vector"] = datastore.vector.Vector(
+                        [random.random() for _ in range(10)]
+                    )
 
                     for i in string.ascii_lowercase:
                         task["space-{}".format(i)] = MAX_STRING
