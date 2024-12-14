@@ -165,7 +165,9 @@ def test_failure_with_contention(datastore_client, entities_to_delete, database_
 
 
 @pytest.mark.parametrize("database_id", [None, _helpers.TEST_DATABASE], indirect=True)
-def test_failure_with_contention_no_context_manager(datastore_client, entities_to_delete, database_id):
+def test_failure_with_contention_no_context_manager(
+    datastore_client, entities_to_delete, database_id
+):
     contention_prop_name = "baz"
     local_client = _helpers.clone_client(datastore_client)
 
