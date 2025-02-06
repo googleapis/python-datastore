@@ -162,11 +162,34 @@ class DatastoreRestInterceptor:
     ) -> datastore.AllocateIdsResponse:
         """Post-rpc interceptor for allocate_ids
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_allocate_ids_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the Datastore server but before
-        it is returned to user code.
+        it is returned to user code. This `post_allocate_ids` interceptor runs
+        before the `post_allocate_ids_with_metadata` interceptor.
         """
         return response
+
+    def post_allocate_ids_with_metadata(
+        self,
+        response: datastore.AllocateIdsResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[datastore.AllocateIdsResponse, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for allocate_ids
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the Datastore server but before it is returned to user code.
+
+        We recommend only using this `post_allocate_ids_with_metadata`
+        interceptor in new development instead of the `post_allocate_ids` interceptor.
+        When both interceptors are used, this `post_allocate_ids_with_metadata` interceptor runs after the
+        `post_allocate_ids` interceptor. The (possibly modified) response returned by
+        `post_allocate_ids` will be passed to
+        `post_allocate_ids_with_metadata`.
+        """
+        return response, metadata
 
     def pre_begin_transaction(
         self,
@@ -187,11 +210,36 @@ class DatastoreRestInterceptor:
     ) -> datastore.BeginTransactionResponse:
         """Post-rpc interceptor for begin_transaction
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_begin_transaction_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the Datastore server but before
-        it is returned to user code.
+        it is returned to user code. This `post_begin_transaction` interceptor runs
+        before the `post_begin_transaction_with_metadata` interceptor.
         """
         return response
+
+    def post_begin_transaction_with_metadata(
+        self,
+        response: datastore.BeginTransactionResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore.BeginTransactionResponse, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
+        """Post-rpc interceptor for begin_transaction
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the Datastore server but before it is returned to user code.
+
+        We recommend only using this `post_begin_transaction_with_metadata`
+        interceptor in new development instead of the `post_begin_transaction` interceptor.
+        When both interceptors are used, this `post_begin_transaction_with_metadata` interceptor runs after the
+        `post_begin_transaction` interceptor. The (possibly modified) response returned by
+        `post_begin_transaction` will be passed to
+        `post_begin_transaction_with_metadata`.
+        """
+        return response, metadata
 
     def pre_commit(
         self,
@@ -210,11 +258,34 @@ class DatastoreRestInterceptor:
     ) -> datastore.CommitResponse:
         """Post-rpc interceptor for commit
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_commit_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the Datastore server but before
-        it is returned to user code.
+        it is returned to user code. This `post_commit` interceptor runs
+        before the `post_commit_with_metadata` interceptor.
         """
         return response
+
+    def post_commit_with_metadata(
+        self,
+        response: datastore.CommitResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[datastore.CommitResponse, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for commit
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the Datastore server but before it is returned to user code.
+
+        We recommend only using this `post_commit_with_metadata`
+        interceptor in new development instead of the `post_commit` interceptor.
+        When both interceptors are used, this `post_commit_with_metadata` interceptor runs after the
+        `post_commit` interceptor. The (possibly modified) response returned by
+        `post_commit` will be passed to
+        `post_commit_with_metadata`.
+        """
+        return response, metadata
 
     def pre_lookup(
         self,
@@ -233,11 +304,34 @@ class DatastoreRestInterceptor:
     ) -> datastore.LookupResponse:
         """Post-rpc interceptor for lookup
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_lookup_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the Datastore server but before
-        it is returned to user code.
+        it is returned to user code. This `post_lookup` interceptor runs
+        before the `post_lookup_with_metadata` interceptor.
         """
         return response
+
+    def post_lookup_with_metadata(
+        self,
+        response: datastore.LookupResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[datastore.LookupResponse, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for lookup
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the Datastore server but before it is returned to user code.
+
+        We recommend only using this `post_lookup_with_metadata`
+        interceptor in new development instead of the `post_lookup` interceptor.
+        When both interceptors are used, this `post_lookup_with_metadata` interceptor runs after the
+        `post_lookup` interceptor. The (possibly modified) response returned by
+        `post_lookup` will be passed to
+        `post_lookup_with_metadata`.
+        """
+        return response, metadata
 
     def pre_reserve_ids(
         self,
@@ -256,11 +350,34 @@ class DatastoreRestInterceptor:
     ) -> datastore.ReserveIdsResponse:
         """Post-rpc interceptor for reserve_ids
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_reserve_ids_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the Datastore server but before
-        it is returned to user code.
+        it is returned to user code. This `post_reserve_ids` interceptor runs
+        before the `post_reserve_ids_with_metadata` interceptor.
         """
         return response
+
+    def post_reserve_ids_with_metadata(
+        self,
+        response: datastore.ReserveIdsResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[datastore.ReserveIdsResponse, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for reserve_ids
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the Datastore server but before it is returned to user code.
+
+        We recommend only using this `post_reserve_ids_with_metadata`
+        interceptor in new development instead of the `post_reserve_ids` interceptor.
+        When both interceptors are used, this `post_reserve_ids_with_metadata` interceptor runs after the
+        `post_reserve_ids` interceptor. The (possibly modified) response returned by
+        `post_reserve_ids` will be passed to
+        `post_reserve_ids_with_metadata`.
+        """
+        return response, metadata
 
     def pre_rollback(
         self,
@@ -279,11 +396,34 @@ class DatastoreRestInterceptor:
     ) -> datastore.RollbackResponse:
         """Post-rpc interceptor for rollback
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_rollback_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the Datastore server but before
-        it is returned to user code.
+        it is returned to user code. This `post_rollback` interceptor runs
+        before the `post_rollback_with_metadata` interceptor.
         """
         return response
+
+    def post_rollback_with_metadata(
+        self,
+        response: datastore.RollbackResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[datastore.RollbackResponse, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for rollback
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the Datastore server but before it is returned to user code.
+
+        We recommend only using this `post_rollback_with_metadata`
+        interceptor in new development instead of the `post_rollback` interceptor.
+        When both interceptors are used, this `post_rollback_with_metadata` interceptor runs after the
+        `post_rollback` interceptor. The (possibly modified) response returned by
+        `post_rollback` will be passed to
+        `post_rollback_with_metadata`.
+        """
+        return response, metadata
 
     def pre_run_aggregation_query(
         self,
@@ -304,11 +444,36 @@ class DatastoreRestInterceptor:
     ) -> datastore.RunAggregationQueryResponse:
         """Post-rpc interceptor for run_aggregation_query
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_run_aggregation_query_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the Datastore server but before
-        it is returned to user code.
+        it is returned to user code. This `post_run_aggregation_query` interceptor runs
+        before the `post_run_aggregation_query_with_metadata` interceptor.
         """
         return response
+
+    def post_run_aggregation_query_with_metadata(
+        self,
+        response: datastore.RunAggregationQueryResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore.RunAggregationQueryResponse, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
+        """Post-rpc interceptor for run_aggregation_query
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the Datastore server but before it is returned to user code.
+
+        We recommend only using this `post_run_aggregation_query_with_metadata`
+        interceptor in new development instead of the `post_run_aggregation_query` interceptor.
+        When both interceptors are used, this `post_run_aggregation_query_with_metadata` interceptor runs after the
+        `post_run_aggregation_query` interceptor. The (possibly modified) response returned by
+        `post_run_aggregation_query` will be passed to
+        `post_run_aggregation_query_with_metadata`.
+        """
+        return response, metadata
 
     def pre_run_query(
         self,
@@ -327,11 +492,34 @@ class DatastoreRestInterceptor:
     ) -> datastore.RunQueryResponse:
         """Post-rpc interceptor for run_query
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_run_query_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the Datastore server but before
-        it is returned to user code.
+        it is returned to user code. This `post_run_query` interceptor runs
+        before the `post_run_query_with_metadata` interceptor.
         """
         return response
+
+    def post_run_query_with_metadata(
+        self,
+        response: datastore.RunQueryResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[datastore.RunQueryResponse, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for run_query
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the Datastore server but before it is returned to user code.
+
+        We recommend only using this `post_run_query_with_metadata`
+        interceptor in new development instead of the `post_run_query` interceptor.
+        When both interceptors are used, this `post_run_query_with_metadata` interceptor runs after the
+        `post_run_query` interceptor. The (possibly modified) response returned by
+        `post_run_query` will be passed to
+        `post_run_query_with_metadata`.
+        """
+        return response, metadata
 
     def pre_cancel_operation(
         self,
@@ -650,6 +838,10 @@ class DatastoreRestTransport(_BaseDatastoreRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_allocate_ids(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_allocate_ids_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -801,6 +993,10 @@ class DatastoreRestTransport(_BaseDatastoreRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_begin_transaction(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_begin_transaction_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -952,6 +1148,10 @@ class DatastoreRestTransport(_BaseDatastoreRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_commit(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_commit_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -1101,6 +1301,10 @@ class DatastoreRestTransport(_BaseDatastoreRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_lookup(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_lookup_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -1252,6 +1456,10 @@ class DatastoreRestTransport(_BaseDatastoreRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_reserve_ids(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_reserve_ids_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -1402,6 +1610,10 @@ class DatastoreRestTransport(_BaseDatastoreRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_rollback(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_rollback_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -1553,6 +1765,10 @@ class DatastoreRestTransport(_BaseDatastoreRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_run_aggregation_query(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_run_aggregation_query_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -1704,6 +1920,10 @@ class DatastoreRestTransport(_BaseDatastoreRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_run_query(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_run_query_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER

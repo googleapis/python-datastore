@@ -150,11 +150,34 @@ class DatastoreAdminRestInterceptor:
     ) -> operations_pb2.Operation:
         """Post-rpc interceptor for create_index
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_create_index_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the DatastoreAdmin server but before
-        it is returned to user code.
+        it is returned to user code. This `post_create_index` interceptor runs
+        before the `post_create_index_with_metadata` interceptor.
         """
         return response
+
+    def post_create_index_with_metadata(
+        self,
+        response: operations_pb2.Operation,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[operations_pb2.Operation, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for create_index
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the DatastoreAdmin server but before it is returned to user code.
+
+        We recommend only using this `post_create_index_with_metadata`
+        interceptor in new development instead of the `post_create_index` interceptor.
+        When both interceptors are used, this `post_create_index_with_metadata` interceptor runs after the
+        `post_create_index` interceptor. The (possibly modified) response returned by
+        `post_create_index` will be passed to
+        `post_create_index_with_metadata`.
+        """
+        return response, metadata
 
     def pre_delete_index(
         self,
@@ -175,11 +198,34 @@ class DatastoreAdminRestInterceptor:
     ) -> operations_pb2.Operation:
         """Post-rpc interceptor for delete_index
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_delete_index_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the DatastoreAdmin server but before
-        it is returned to user code.
+        it is returned to user code. This `post_delete_index` interceptor runs
+        before the `post_delete_index_with_metadata` interceptor.
         """
         return response
+
+    def post_delete_index_with_metadata(
+        self,
+        response: operations_pb2.Operation,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[operations_pb2.Operation, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for delete_index
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the DatastoreAdmin server but before it is returned to user code.
+
+        We recommend only using this `post_delete_index_with_metadata`
+        interceptor in new development instead of the `post_delete_index` interceptor.
+        When both interceptors are used, this `post_delete_index_with_metadata` interceptor runs after the
+        `post_delete_index` interceptor. The (possibly modified) response returned by
+        `post_delete_index` will be passed to
+        `post_delete_index_with_metadata`.
+        """
+        return response, metadata
 
     def pre_export_entities(
         self,
@@ -200,11 +246,34 @@ class DatastoreAdminRestInterceptor:
     ) -> operations_pb2.Operation:
         """Post-rpc interceptor for export_entities
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_export_entities_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the DatastoreAdmin server but before
-        it is returned to user code.
+        it is returned to user code. This `post_export_entities` interceptor runs
+        before the `post_export_entities_with_metadata` interceptor.
         """
         return response
+
+    def post_export_entities_with_metadata(
+        self,
+        response: operations_pb2.Operation,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[operations_pb2.Operation, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for export_entities
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the DatastoreAdmin server but before it is returned to user code.
+
+        We recommend only using this `post_export_entities_with_metadata`
+        interceptor in new development instead of the `post_export_entities` interceptor.
+        When both interceptors are used, this `post_export_entities_with_metadata` interceptor runs after the
+        `post_export_entities` interceptor. The (possibly modified) response returned by
+        `post_export_entities` will be passed to
+        `post_export_entities_with_metadata`.
+        """
+        return response, metadata
 
     def pre_get_index(
         self,
@@ -223,11 +292,32 @@ class DatastoreAdminRestInterceptor:
     def post_get_index(self, response: index.Index) -> index.Index:
         """Post-rpc interceptor for get_index
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_get_index_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the DatastoreAdmin server but before
-        it is returned to user code.
+        it is returned to user code. This `post_get_index` interceptor runs
+        before the `post_get_index_with_metadata` interceptor.
         """
         return response
+
+    def post_get_index_with_metadata(
+        self, response: index.Index, metadata: Sequence[Tuple[str, Union[str, bytes]]]
+    ) -> Tuple[index.Index, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for get_index
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the DatastoreAdmin server but before it is returned to user code.
+
+        We recommend only using this `post_get_index_with_metadata`
+        interceptor in new development instead of the `post_get_index` interceptor.
+        When both interceptors are used, this `post_get_index_with_metadata` interceptor runs after the
+        `post_get_index` interceptor. The (possibly modified) response returned by
+        `post_get_index` will be passed to
+        `post_get_index_with_metadata`.
+        """
+        return response, metadata
 
     def pre_import_entities(
         self,
@@ -248,11 +338,34 @@ class DatastoreAdminRestInterceptor:
     ) -> operations_pb2.Operation:
         """Post-rpc interceptor for import_entities
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_import_entities_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the DatastoreAdmin server but before
-        it is returned to user code.
+        it is returned to user code. This `post_import_entities` interceptor runs
+        before the `post_import_entities_with_metadata` interceptor.
         """
         return response
+
+    def post_import_entities_with_metadata(
+        self,
+        response: operations_pb2.Operation,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[operations_pb2.Operation, Sequence[Tuple[str, Union[str, bytes]]]]:
+        """Post-rpc interceptor for import_entities
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the DatastoreAdmin server but before it is returned to user code.
+
+        We recommend only using this `post_import_entities_with_metadata`
+        interceptor in new development instead of the `post_import_entities` interceptor.
+        When both interceptors are used, this `post_import_entities_with_metadata` interceptor runs after the
+        `post_import_entities` interceptor. The (possibly modified) response returned by
+        `post_import_entities` will be passed to
+        `post_import_entities_with_metadata`.
+        """
+        return response, metadata
 
     def pre_list_indexes(
         self,
@@ -273,11 +386,36 @@ class DatastoreAdminRestInterceptor:
     ) -> datastore_admin.ListIndexesResponse:
         """Post-rpc interceptor for list_indexes
 
-        Override in a subclass to manipulate the response
+        DEPRECATED. Please use the `post_list_indexes_with_metadata`
+        interceptor instead.
+
+        Override in a subclass to read or manipulate the response
         after it is returned by the DatastoreAdmin server but before
-        it is returned to user code.
+        it is returned to user code. This `post_list_indexes` interceptor runs
+        before the `post_list_indexes_with_metadata` interceptor.
         """
         return response
+
+    def post_list_indexes_with_metadata(
+        self,
+        response: datastore_admin.ListIndexesResponse,
+        metadata: Sequence[Tuple[str, Union[str, bytes]]],
+    ) -> Tuple[
+        datastore_admin.ListIndexesResponse, Sequence[Tuple[str, Union[str, bytes]]]
+    ]:
+        """Post-rpc interceptor for list_indexes
+
+        Override in a subclass to read or manipulate the response or metadata after it
+        is returned by the DatastoreAdmin server but before it is returned to user code.
+
+        We recommend only using this `post_list_indexes_with_metadata`
+        interceptor in new development instead of the `post_list_indexes` interceptor.
+        When both interceptors are used, this `post_list_indexes_with_metadata` interceptor runs after the
+        `post_list_indexes` interceptor. The (possibly modified) response returned by
+        `post_list_indexes` will be passed to
+        `post_list_indexes_with_metadata`.
+        """
+        return response, metadata
 
     def pre_cancel_operation(
         self,
@@ -693,6 +831,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             json_format.Parse(response.content, resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_create_index(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_create_index_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -835,6 +977,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             json_format.Parse(response.content, resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_delete_index(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_delete_index_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -983,6 +1129,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             json_format.Parse(response.content, resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_export_entities(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_export_entities_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -1128,6 +1278,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_get_index(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_get_index_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -1276,6 +1430,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             json_format.Parse(response.content, resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_import_entities(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_import_entities_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER
@@ -1419,6 +1577,10 @@ class DatastoreAdminRestTransport(_BaseDatastoreAdminRestTransport):
             json_format.Parse(response.content, pb_resp, ignore_unknown_fields=True)
 
             resp = self._interceptor.post_list_indexes(resp)
+            response_metadata = [(k, str(v)) for k, v in response.headers.items()]
+            resp, _ = self._interceptor.post_list_indexes_with_metadata(
+                resp, response_metadata
+            )
             if CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
                 logging.DEBUG
             ):  # pragma: NO COVER

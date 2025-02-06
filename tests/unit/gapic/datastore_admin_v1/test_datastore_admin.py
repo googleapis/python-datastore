@@ -73,6 +73,14 @@ from google.protobuf import empty_pb2  # type: ignore
 import google.auth
 
 
+CRED_INFO_JSON = {
+    "credential_source": "/path/to/file",
+    "credential_type": "service account credentials",
+    "principal": "service-account@example.com",
+}
+CRED_INFO_STRING = json.dumps(CRED_INFO_JSON)
+
+
 async def mock_async_gen(data, chunk_size=1):
     for i in range(0, len(data)):  # pragma: NO COVER
         chunk = data[i : i + chunk_size]
@@ -328,6 +336,49 @@ def test__get_universe_domain():
     with pytest.raises(ValueError) as excinfo:
         DatastoreAdminClient._get_universe_domain("", None)
     assert str(excinfo.value) == "Universe Domain cannot be an empty string."
+
+
+@pytest.mark.parametrize(
+    "error_code,cred_info_json,show_cred_info",
+    [
+        (401, CRED_INFO_JSON, True),
+        (403, CRED_INFO_JSON, True),
+        (404, CRED_INFO_JSON, True),
+        (500, CRED_INFO_JSON, False),
+        (401, None, False),
+        (403, None, False),
+        (404, None, False),
+        (500, None, False),
+    ],
+)
+def test__add_cred_info_for_auth_errors(error_code, cred_info_json, show_cred_info):
+    cred = mock.Mock(["get_cred_info"])
+    cred.get_cred_info = mock.Mock(return_value=cred_info_json)
+    client = DatastoreAdminClient(credentials=cred)
+    client._transport._credentials = cred
+
+    error = core_exceptions.GoogleAPICallError("message", details=["foo"])
+    error.code = error_code
+
+    client._add_cred_info_for_auth_errors(error)
+    if show_cred_info:
+        assert error.details == ["foo", CRED_INFO_STRING]
+    else:
+        assert error.details == ["foo"]
+
+
+@pytest.mark.parametrize("error_code", [401, 403, 404, 500])
+def test__add_cred_info_for_auth_errors_no_get_cred_info(error_code):
+    cred = mock.Mock([])
+    assert not hasattr(cred, "get_cred_info")
+    client = DatastoreAdminClient(credentials=cred)
+    client._transport._credentials = cred
+
+    error = core_exceptions.GoogleAPICallError("message", details=[])
+    error.code = error_code
+
+    client._add_cred_info_for_auth_errors(error)
+    assert error.details == []
 
 
 @pytest.mark.parametrize(
@@ -4075,10 +4126,13 @@ def test_export_entities_rest_interceptors(null_interceptor):
     ), mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "post_export_entities"
     ) as post, mock.patch.object(
+        transports.DatastoreAdminRestInterceptor, "post_export_entities_with_metadata"
+    ) as post_with_metadata, mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "pre_export_entities"
     ) as pre:
         pre.assert_not_called()
         post.assert_not_called()
+        post_with_metadata.assert_not_called()
         pb_message = datastore_admin.ExportEntitiesRequest.pb(
             datastore_admin.ExportEntitiesRequest()
         )
@@ -4102,6 +4156,7 @@ def test_export_entities_rest_interceptors(null_interceptor):
         ]
         pre.return_value = request, metadata
         post.return_value = operations_pb2.Operation()
+        post_with_metadata.return_value = operations_pb2.Operation(), metadata
 
         client.export_entities(
             request,
@@ -4113,6 +4168,7 @@ def test_export_entities_rest_interceptors(null_interceptor):
 
         pre.assert_called_once()
         post.assert_called_once()
+        post_with_metadata.assert_called_once()
 
 
 def test_import_entities_rest_bad_request(
@@ -4193,10 +4249,13 @@ def test_import_entities_rest_interceptors(null_interceptor):
     ), mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "post_import_entities"
     ) as post, mock.patch.object(
+        transports.DatastoreAdminRestInterceptor, "post_import_entities_with_metadata"
+    ) as post_with_metadata, mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "pre_import_entities"
     ) as pre:
         pre.assert_not_called()
         post.assert_not_called()
+        post_with_metadata.assert_not_called()
         pb_message = datastore_admin.ImportEntitiesRequest.pb(
             datastore_admin.ImportEntitiesRequest()
         )
@@ -4220,6 +4279,7 @@ def test_import_entities_rest_interceptors(null_interceptor):
         ]
         pre.return_value = request, metadata
         post.return_value = operations_pb2.Operation()
+        post_with_metadata.return_value = operations_pb2.Operation(), metadata
 
         client.import_entities(
             request,
@@ -4231,6 +4291,7 @@ def test_import_entities_rest_interceptors(null_interceptor):
 
         pre.assert_called_once()
         post.assert_called_once()
+        post_with_metadata.assert_called_once()
 
 
 def test_create_index_rest_bad_request(request_type=datastore_admin.CreateIndexRequest):
@@ -4384,10 +4445,13 @@ def test_create_index_rest_interceptors(null_interceptor):
     ), mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "post_create_index"
     ) as post, mock.patch.object(
+        transports.DatastoreAdminRestInterceptor, "post_create_index_with_metadata"
+    ) as post_with_metadata, mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "pre_create_index"
     ) as pre:
         pre.assert_not_called()
         post.assert_not_called()
+        post_with_metadata.assert_not_called()
         pb_message = datastore_admin.CreateIndexRequest.pb(
             datastore_admin.CreateIndexRequest()
         )
@@ -4411,6 +4475,7 @@ def test_create_index_rest_interceptors(null_interceptor):
         ]
         pre.return_value = request, metadata
         post.return_value = operations_pb2.Operation()
+        post_with_metadata.return_value = operations_pb2.Operation(), metadata
 
         client.create_index(
             request,
@@ -4422,6 +4487,7 @@ def test_create_index_rest_interceptors(null_interceptor):
 
         pre.assert_called_once()
         post.assert_called_once()
+        post_with_metadata.assert_called_once()
 
 
 def test_delete_index_rest_bad_request(request_type=datastore_admin.DeleteIndexRequest):
@@ -4500,10 +4566,13 @@ def test_delete_index_rest_interceptors(null_interceptor):
     ), mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "post_delete_index"
     ) as post, mock.patch.object(
+        transports.DatastoreAdminRestInterceptor, "post_delete_index_with_metadata"
+    ) as post_with_metadata, mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "pre_delete_index"
     ) as pre:
         pre.assert_not_called()
         post.assert_not_called()
+        post_with_metadata.assert_not_called()
         pb_message = datastore_admin.DeleteIndexRequest.pb(
             datastore_admin.DeleteIndexRequest()
         )
@@ -4527,6 +4596,7 @@ def test_delete_index_rest_interceptors(null_interceptor):
         ]
         pre.return_value = request, metadata
         post.return_value = operations_pb2.Operation()
+        post_with_metadata.return_value = operations_pb2.Operation(), metadata
 
         client.delete_index(
             request,
@@ -4538,6 +4608,7 @@ def test_delete_index_rest_interceptors(null_interceptor):
 
         pre.assert_called_once()
         post.assert_called_once()
+        post_with_metadata.assert_called_once()
 
 
 def test_get_index_rest_bad_request(request_type=datastore_admin.GetIndexRequest):
@@ -4628,10 +4699,13 @@ def test_get_index_rest_interceptors(null_interceptor):
     ) as transcode, mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "post_get_index"
     ) as post, mock.patch.object(
+        transports.DatastoreAdminRestInterceptor, "post_get_index_with_metadata"
+    ) as post_with_metadata, mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "pre_get_index"
     ) as pre:
         pre.assert_not_called()
         post.assert_not_called()
+        post_with_metadata.assert_not_called()
         pb_message = datastore_admin.GetIndexRequest.pb(
             datastore_admin.GetIndexRequest()
         )
@@ -4655,6 +4729,7 @@ def test_get_index_rest_interceptors(null_interceptor):
         ]
         pre.return_value = request, metadata
         post.return_value = index.Index()
+        post_with_metadata.return_value = index.Index(), metadata
 
         client.get_index(
             request,
@@ -4666,6 +4741,7 @@ def test_get_index_rest_interceptors(null_interceptor):
 
         pre.assert_called_once()
         post.assert_called_once()
+        post_with_metadata.assert_called_once()
 
 
 def test_list_indexes_rest_bad_request(request_type=datastore_admin.ListIndexesRequest):
@@ -4748,10 +4824,13 @@ def test_list_indexes_rest_interceptors(null_interceptor):
     ) as transcode, mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "post_list_indexes"
     ) as post, mock.patch.object(
+        transports.DatastoreAdminRestInterceptor, "post_list_indexes_with_metadata"
+    ) as post_with_metadata, mock.patch.object(
         transports.DatastoreAdminRestInterceptor, "pre_list_indexes"
     ) as pre:
         pre.assert_not_called()
         post.assert_not_called()
+        post_with_metadata.assert_not_called()
         pb_message = datastore_admin.ListIndexesRequest.pb(
             datastore_admin.ListIndexesRequest()
         )
@@ -4777,6 +4856,10 @@ def test_list_indexes_rest_interceptors(null_interceptor):
         ]
         pre.return_value = request, metadata
         post.return_value = datastore_admin.ListIndexesResponse()
+        post_with_metadata.return_value = (
+            datastore_admin.ListIndexesResponse(),
+            metadata,
+        )
 
         client.list_indexes(
             request,
@@ -4788,6 +4871,7 @@ def test_list_indexes_rest_interceptors(null_interceptor):
 
         pre.assert_called_once()
         post.assert_called_once()
+        post_with_metadata.assert_called_once()
 
 
 def test_cancel_operation_rest_bad_request(
