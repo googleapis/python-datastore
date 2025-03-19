@@ -4,6 +4,20 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+## [2.21.0](https://github.com/googleapis/python-datastore/compare/v2.20.2...v2.21.0) (2025-03-19)
+
+
+### Features
+
+* Add REST Interceptors which support reading metadata ([7be9c4c](https://github.com/googleapis/python-datastore/commit/7be9c4c594af2c2414e394b8bfe62574b58ef337))
+* Add support for opt-in debug logging ([7be9c4c](https://github.com/googleapis/python-datastore/commit/7be9c4c594af2c2414e394b8bfe62574b58ef337))
+
+
+### Bug Fixes
+
+* Allow protobuf 6.x ([#598](https://github.com/googleapis/python-datastore/issues/598)) ([7c1171b](https://github.com/googleapis/python-datastore/commit/7c1171bf657f7cf4d1404e19611f6c874a8998ca))
+* Fix typing issue with gRPC metadata when key ends in -bin ([7be9c4c](https://github.com/googleapis/python-datastore/commit/7be9c4c594af2c2414e394b8bfe62574b58ef337))
+
 ## [2.20.2](https://github.com/googleapis/python-datastore/compare/v2.20.1...v2.20.2) (2024-12-12)
 
 
