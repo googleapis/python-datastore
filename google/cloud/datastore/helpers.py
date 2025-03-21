@@ -18,6 +18,7 @@ The non-private functions are part of the API.
 """
 
 import datetime
+import itertools
 
 from google.protobuf import struct_pb2
 from google.type import latlng_pb2
@@ -182,7 +183,12 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
         return
     elif is_list:
         # for lists, set meaning on the root pb and on each sub-element
-        root_meaning, sub_meaning_list = meaning
+        try:
+            root_meaning, sub_meaning_list = meaning
+        except TypeError:
+            # if meaning isn't a tuple, fall back to pre-v2.20.2 meaning format
+            root_meaning = None
+            sub_meaning_list = itertools.repeat(meaning)
         if root_meaning is not None:
             value_pb.meaning = root_meaning
         if sub_meaning_list:
