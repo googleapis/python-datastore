@@ -186,6 +186,7 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
         try:
             root_meaning, sub_meaning_list = meaning
         except TypeError:
+            # support parsing pre-v2.20.2 meaning format
             root_meaning = None
             sub_meaning_list = itertools.repeat(meaning)
         if root_meaning is not None:
