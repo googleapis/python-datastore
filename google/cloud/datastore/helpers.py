@@ -183,9 +183,9 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
         return
     elif is_list:
         # for lists, set meaning on the root pb and on each sub-element
-        try:
+        if isinstance(meaning, tuple):
             root_meaning, sub_meaning_list = meaning
-        except TypeError:
+        else:
             # if meaning isn't a tuple, fall back to pre-v2.20.2 meaning format
             root_meaning = None
             if isinstance(meaning, list):
