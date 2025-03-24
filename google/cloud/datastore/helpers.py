@@ -188,7 +188,10 @@ def _set_pb_meaning_from_entity(entity, name, value, value_pb, is_list=False):
         except TypeError:
             # if meaning isn't a tuple, fall back to pre-v2.20.2 meaning format
             root_meaning = None
-            sub_meaning_list = itertools.repeat(meaning)
+            if isinstance(meaning, list):
+                sub_meaning_list = meaning
+            else:
+                sub_meaning_list = itertools.repeat(meaning)
         if root_meaning is not None:
             value_pb.meaning = root_meaning
         if sub_meaning_list:
