@@ -45,3 +45,10 @@ indexes:
     - name: family
     - name: appearances
 
+- kind: LargeCharacter
+  properties:
+  - name: __key__
+  - name: vector
+    vectorConfig:
+      dimension: 10
+      flat: {}
