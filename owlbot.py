@@ -114,6 +114,13 @@ python.py_samples(skip_readmes=True)
 
 python.configure_previous_major_version_branches()
 
+# Ensure Python 3.14 is in the skip list for cpp proto implementation
+s.replace(
+    "noxfile.py",
+    r'''session.python in \("3.11", "3.12", "3.13"\)''',
+    r'''session.python in ("3.11", "3.12", "3.13", "3.14")'''
+)
+
 # Preserve system tests w/ GOOGLE_DISABLE_GRPC set (#133, PR #136)
 assert 1 == s.replace(
     "noxfile.py",
