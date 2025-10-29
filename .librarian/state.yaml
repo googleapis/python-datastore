@@ -1,7 +1,8 @@
 image: us-central1-docker.pkg.dev/cloud-sdk-librarian-prod/images-prod/python-librarian-generator:latest
 libraries:
   - id: google-cloud-datastore
-    version: 2.21.0
+    version: 2.21.1
+    last_generated_commit: ""
     apis: []
     source_roots:
       - .
