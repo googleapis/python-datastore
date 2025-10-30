@@ -258,7 +258,7 @@ def lint_setup_py(session):
 ''',
 )
 
-\
+
 # Ensure mypy.yml uses the default Python version
 s.replace(
     ".github/workflows/mypy.yml",
