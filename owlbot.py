@@ -104,10 +104,12 @@ templated_files = common.py_library(
     system_test_external_dependencies=["six"],
     cov_level=100,
     unit_test_python_versions=["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"],
+    default_python_version="3.12",
+    system_test_python_versions=["3.12"],
 )
 s.move(
     templated_files,
-    excludes=["docs/multiprocessing.rst", ".coveragerc", ".github/CODEOOWNERS", ".github/release-please.yml"],
+    excludes=["docs/multiprocessing.rst", ".coveragerc", ".github/CODEOOWNERS", ".github/release-please.yml", ".kokoro/presubmit/system-3.8.cfg"],
 )
 
 python.py_samples(skip_readmes=True)
