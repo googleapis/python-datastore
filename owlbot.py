@@ -99,6 +99,8 @@ s.remove_staging_dirs()
 templated_files = common.py_library(
     microgenerator=True,
     split_system_tests=True,
+    default_python_version="3.13",
+    system_test_python_versions=["3.13"],
     # six required by (but not installed by) google-cloud-core < v2.0.0
     unit_test_external_dependencies=["six"],
     system_test_external_dependencies=["six"],
