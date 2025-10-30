@@ -109,7 +109,7 @@ templated_files = common.py_library(
 )
 s.move(
     templated_files,
-    excludes=["docs/multiprocessing.rst", ".coveragerc", ".github/CODEOOWNERS", ".github/release-please.yml", ".kokoro/presubmit/system-3.8.cfg"],
+    excludes=["docs/multiprocessing.rst", ".coveragerc", ".github/CODEOOWNERS", ".github/release-please.yml", ".kokoro/presubmit/system-3.8.cfg", ".kokoro/presubmit/presubmit.cfg"],
 )
 
 python.py_samples(skip_readmes=True)
