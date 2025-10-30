@@ -262,8 +262,8 @@ def lint_setup_py(session):
 # Ensure mypy.yml uses the default Python version
 s.replace(
     ".github/workflows/mypy.yml",
-    r"python-version: \['3.8'\]",
-    "python-version: ['3.10']"
+    r'python-version: \["3.8"\]',
+    'python-version: ["3.10"]',
 )
 
 s.shell.run(["nox", "-s", "blacken"], hide_output=False)
