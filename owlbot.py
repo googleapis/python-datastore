@@ -217,14 +217,14 @@ s.replace(
 s.replace(
     "noxfile.py",
     """nox.options.sessions = \[
+    "unit",
+    "system",""",
+    """nox.options.sessions = [
     "unit-3.9",
     "unit-3.10",
     "unit-3.11",
     "unit-3.12",
     "unit-3.13",
-    "system",""",
-    """nox.options.sessions = [
-    "unit",
     "system",
     "mypy",""",
 )
