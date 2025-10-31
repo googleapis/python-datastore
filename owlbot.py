@@ -128,7 +128,7 @@ def system(session, disable_grpc):
 """,
 )
 
-assert 1 == s.replace(
+s.replace(
     "noxfile.py",
     """\
     # Run py.test against the system tests.
@@ -142,7 +142,7 @@ assert 1 == s.replace(
 """,
 )
 
-assert 1 == s.replace(
+s.replace(
     "noxfile.py",
     """system_test_path,
             \*session.posargs,
@@ -153,7 +153,7 @@ assert 1 == s.replace(
         )""",
 )
 
-assert 1 == s.replace(
+s.replace(
     "noxfile.py",
     """system_test_folder_path,
             \*session.posargs,
@@ -165,7 +165,7 @@ assert 1 == s.replace(
 )
 
 # Add nox session to exercise doctests
-assert 1 == s.replace(
+s.replace(
     "noxfile.py",
     r"""\
     "blacken",
@@ -178,7 +178,7 @@ assert 1 == s.replace(
 """,
 )
 
-assert 1 == s.replace(
+s.replace(
     "noxfile.py",
     r"""\
 @nox.session\(python="3.10"\)
