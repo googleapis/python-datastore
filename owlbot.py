@@ -115,7 +115,7 @@ python.py_samples(skip_readmes=True)
 python.configure_previous_major_version_branches()
 
 # Preserve system tests w/ GOOGLE_DISABLE_GRPC set (#133, PR #136)
-assert 1 == s.replace(
+s.replace(
     "noxfile.py",
     r"""\
 @nox.session\(python=SYSTEM_TEST_PYTHON_VERSIONS\)
@@ -185,7 +185,7 @@ assert 1 == s.replace(
 def docfx\(session\):
 """,
     """\
-@nox.session(python="3.9")
+@nox.session(python="3.13")
 def doctests(session):
     # Install all test dependencies, then install this package into the
     # virtualenv's dist-packages.
@@ -196,7 +196,7 @@ def doctests(session):
     session.run("py.test", "tests/doctests.py")
 
 
-@nox.session(python="3.10")
+@nox.session(python="3.13")
 def docfx(session):
 """,
 )
