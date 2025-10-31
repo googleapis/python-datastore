@@ -103,8 +103,8 @@ templated_files = common.py_library(
     unit_test_external_dependencies=["six"],
     system_test_external_dependencies=["six"],
     cov_level=100,
-    default_python_version="3.13",
-    system_test_python_versions=["3.13"],
+    default_python_version="3.10",
+    system_test_python_versions=["3.10"],
 )
 s.move(
     templated_files,
@@ -116,7 +116,7 @@ python.py_samples(skip_readmes=True)
 python.configure_previous_major_version_branches()
 
 # Preserve system tests w/ GOOGLE_DISABLE_GRPC set (#133, PR #136)
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     r"""\
 @nox.session\(python=SYSTEM_TEST_PYTHON_VERSIONS\)
@@ -129,7 +129,7 @@ def system(session, disable_grpc):
 """,
 )
 
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     """\
     # Run py.test against the system tests.
@@ -143,7 +143,7 @@ s.replace(
 """,
 )
 
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     """system_test_path,
             \*session.posargs,
@@ -154,7 +154,7 @@ s.replace(
         )""",
 )
 
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     """system_test_folder_path,
             \*session.posargs,
@@ -166,7 +166,7 @@ s.replace(
 )
 
 # Add nox session to exercise doctests
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     r"""\
     "blacken",
@@ -179,14 +179,14 @@ s.replace(
 """,
 )
 
-s.replace(
+assert 1 == s.replace(
     "noxfile.py",
     r"""\
 @nox.session\(python="3.10"\)
 def docfx\(session\):
 """,
     """\
-@nox.session(python="3.13")
+@nox.session(python="3.9")
 def doctests(session):
     # Install all test dependencies, then install this package into the
     # virtualenv's dist-packages.
@@ -197,7 +197,7 @@ def doctests(session):
     session.run("py.test", "tests/doctests.py")
 
 
-@nox.session(python="3.13")
+@nox.session(python="3.10")
 def docfx(session):
 """,
 )
