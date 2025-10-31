@@ -104,6 +104,7 @@ templated_files = common.py_library(
     system_test_external_dependencies=["six"],
     cov_level=100,
     default_python_version="3.13",
+    system_test_python_versions=["3.13"],
 )
 s.move(
     templated_files,
