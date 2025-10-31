@@ -1719,7 +1719,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # Certain fields should be provided within the metadata header;
         # add these here.
         metadata = tuple(metadata) + (
-            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),
+            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),  # type: ignore[union-attr] # TODO: https://github.com/googleapis/python-datastore/issues/649 - Fix type hint issue
         )
 
         # Validate the universe domain.
@@ -1778,7 +1778,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # Certain fields should be provided within the metadata header;
         # add these here.
         metadata = tuple(metadata) + (
-            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),
+            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),  # type: ignore[union-attr] # TODO: https://github.com/googleapis/python-datastore/issues/649 - Fix type hint issue
         )
 
         # Validate the universe domain.
@@ -1841,7 +1841,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # Certain fields should be provided within the metadata header;
         # add these here.
         metadata = tuple(metadata) + (
-            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),
+            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),  # type: ignore[union-attr] # TODO: https://github.com/googleapis/python-datastore/issues/649 - Fix type hint issue
         )
 
         # Validate the universe domain.
@@ -1896,7 +1896,7 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
         # Certain fields should be provided within the metadata header;
         # add these here.
         metadata = tuple(metadata) + (
-            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),
+            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),  # type: ignore[union-attr] # TODO: https://github.com/googleapis/python-datastore/issues/649 - Fix type hint issue
         )
 
         # Validate the universe domain.
