@@ -73,18 +73,6 @@ for library in get_staging_dirs(datastore_default_version, "datastore"):
     s.move(library / "scripts")
 
 for library in get_staging_dirs(datastore_admin_default_version, "datastore_admin"):
-    s.replace(
-        library / "google/**/datastore_admin_client.py",
-        "google-cloud-datastore-admin",
-        "google-cloud-datstore",
-    )
-
-    # Remove spurious markup
-    s.replace(
-        library / "google/**/datastore_admin/client.py",
-        r"\s+---------------------------------(-)+",
-        "",
-    )
 
     s.move(library / f"google/cloud/datastore_admin", excludes=["**/gapic_version.py"])
     s.move(library / f"google/cloud/datastore_admin_{library.name}", excludes=["**/gapic_version.py"])
@@ -113,16 +101,5 @@ s.move(
 )
 
 python.py_samples(skip_readmes=True)
-
-# Work around: https://github.com/googleapis/gapic-generator-python/issues/689
-s.replace(
-    [
-        "google/**/datastore_admin/async_client.py",
-        "google/**/datastore_admin/client.py",
-        "google/**/types/datastore_admin.py",
-    ],
-    r"Sequence\[.*\.LabelsEntry\]",
-    r"Dict[str, str]",
-)
 
 s.shell.run(["nox", "-s", "blacken"], hide_output=False)
