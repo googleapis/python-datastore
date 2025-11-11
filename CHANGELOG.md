@@ -4,6 +4,14 @@
 
 [1]: https://pypi.org/project/google-cloud-datastore/#history
 
+## [2.21.1](https://github.com/googleapis/python-datastore/compare/v2.21.0...v2.21.1) (2025-11-11)
+
+
+### Bug Fixes
+
+* Deprecate credentials_file argument ([2dc9afc](https://github.com/googleapis/python-datastore/commit/2dc9afcf55d2cf1efb4933aa43b5267cb8b803c9))
+* Remove setup.cfg configuration for creating universal wheels ([#601](https://github.com/googleapis/python-datastore/issues/601)) ([df72901](https://github.com/googleapis/python-datastore/commit/df729015149bd69e9d6dbced260d97c8eed77d4f))
+
 ## [2.21.0](https://github.com/googleapis/python-datastore/compare/v2.20.2...v2.21.0) (2025-04-10)
 
 
