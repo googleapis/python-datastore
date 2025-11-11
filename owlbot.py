@@ -114,8 +114,6 @@ s.move(
 
 python.py_samples(skip_readmes=True)
 
-python.configure_previous_major_version_branches()
-
 # Work around: https://github.com/googleapis/gapic-generator-python/issues/689
 s.replace(
     [
