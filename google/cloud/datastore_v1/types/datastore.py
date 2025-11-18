@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -564,10 +564,10 @@ class CommitRequest(proto.Message):
             mutations affecting a single entity are not permitted in a
             single ``Commit`` request:
 
-            -  ``insert`` followed by ``insert``
-            -  ``update`` followed by ``insert``
-            -  ``upsert`` followed by ``insert``
-            -  ``delete`` followed by ``update``
+            - ``insert`` followed by ``insert``
+            - ``update`` followed by ``insert``
+            - ``upsert`` followed by ``insert``
+            - ``delete`` followed by ``update``
 
             When mode is ``NON_TRANSACTIONAL``, no two mutations may
             affect a single entity.

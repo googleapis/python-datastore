@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ class AggregationResultBatch(proto.Message):
             The aggregation results for this batch.
         more_results (google.cloud.datastore_v1.types.QueryResultBatch.MoreResultsType):
             The state of the query after the current batch. Only
-            COUNT(*) aggregations are supported in the initial launch.
+            COUNT(\*) aggregations are supported in the initial launch.
             Therefore, expected result type is limited to
             ``NO_MORE_RESULTS``.
         read_time (google.protobuf.timestamp_pb2.Timestamp):

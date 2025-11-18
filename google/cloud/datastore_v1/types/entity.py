@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -46,12 +46,12 @@ class PartitionId(proto.Message):
 
     Partition dimensions:
 
-    -  May be ``""``.
-    -  Must be valid UTF-8 bytes.
-    -  Must have values that match regex ``[A-Za-z\d\.\-_]{1,100}`` If
-       the value of any dimension matches regex ``__.*__``, the
-       partition is reserved/read-only. A reserved/read-only partition
-       ID is forbidden in certain documented contexts.
+    - May be ``""``.
+    - Must be valid UTF-8 bytes.
+    - Must have values that match regex ``[A-Za-z\d\.\-_]{1,100}`` If
+      the value of any dimension matches regex ``__.*__``, the partition
+      is reserved/read-only. A reserved/read-only partition ID is
+      forbidden in certain documented contexts.
 
     Foreign partition IDs (in which the project ID does not match the
     context project ID ) are discouraged. Reads and writes of foreign
