@@ -22,6 +22,7 @@ from .utils import populate_datastore
 from . import _helpers
 
 from google.cloud.datastore.query import PropertyFilter, And, Or
+from google.cloud.datastore.vector import FindNearest, DistanceMeasure, Vector
 
 
 retry_503 = RetryErrors(exceptions.ServiceUnavailable)
@@ -647,3 +648,95 @@ def test_query_explain_in_transaction(query_client, ancestor_key, database_id):
         # check for stats
         stats = iterator.explain_metrics
         assert isinstance(stats, ExplainMetrics)
+
+
+@pytest.mark.parametrize(
+    "distance_measure",
+    [DistanceMeasure.EUCLIDEAN, DistanceMeasure.COSINE, DistanceMeasure.DOT_PRODUCT],
+)
+@pytest.mark.parametrize("limit", [5, 10, 20])
+@pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
+def test_query_vector_find_nearest(query_client, database_id, limit, distance_measure):
+    q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")
+    vector = [v / 10 for v in range(10)]
+    q.find_nearest = FindNearest(
+        vector_property="vector",
+        query_vector=vector,
+        limit=limit,
+        distance_measure=distance_measure,
+        distance_result_property="distance",
+    )
+    iterator = q.fetch()
+    results = list(iterator)
+    # verify limit was applied
+    assert len(results) == limit
+    # verify distance property is present
+    assert all(r["distance"] for r in results)
+    distance_list = [r["distance"] for r in results]
+    assert all(isinstance(d, float) for d in distance_list)
+    # verify distances are sorted
+    if distance_measure == DistanceMeasure.DOT_PRODUCT:
+        # dot product sorts high to low
+        expected = sorted(distance_list, reverse=True)
+    else:
+        expected = sorted(distance_list)
+    assert expected == distance_list
+
+
+@pytest.mark.parametrize("exclude_from_indexes", [True, False])
+@pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
+def test_query_vector_find_nearest_w_vector_class(
+    query_client, database_id, exclude_from_indexes
+):
+    """
+    ensure passing Vector instance works as expected
+
+    exclude_from_indexes field should be ignored
+    """
+    q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")
+    vector = Vector(
+        [v / 10 for v in range(10)], exclude_from_indexes=exclude_from_indexes
+    )
+    q.find_nearest = FindNearest(
+        vector_property="vector",
+        query_vector=vector,
+        limit=5,
+        distance_measure=DistanceMeasure.EUCLIDEAN,
+        distance_result_property="distance",
+    )
+    iterator = q.fetch()
+    results = list(iterator)
+    assert len(results) == 5
+
+
+@pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
+def test_query_empty_find_nearest(query_client, database_id):
+    """
+    vector search with empty query_vector should fail
+    """
+    q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")
+    q.find_nearest = FindNearest(
+        vector_property="vector",
+        query_vector=[],
+        limit=5,
+        distance_measure=DistanceMeasure.EUCLIDEAN,
+    )
+    with pytest.raises(ValueError):
+        list(q.fetch())
+
+
+@pytest.mark.parametrize("database_id", [_helpers.TEST_DATABASE], indirect=True)
+def test_query_find_nearest_wrong_size(query_client, database_id):
+    """
+    vector search with mismatched vector size should fail
+    """
+    q = query_client.query(kind="LargeCharacter", namespace="LargeCharacterEntity")
+    vector = [v / 10 for v in range(11)]
+    q.find_nearest = FindNearest(
+        vector_property="vector",
+        query_vector=vector,
+        limit=5,
+        distance_measure=DistanceMeasure.EUCLIDEAN,
+    )
+    with pytest.raises(ValueError):
+        list(q.fetch())

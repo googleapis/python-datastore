@@ -29,6 +29,8 @@ from google.cloud.datastore_v1.types import datastore as datastore_pb2
 from google.cloud.datastore_v1.types import entity as entity_pb2
 from google.cloud.datastore.entity import Entity
 from google.cloud.datastore.key import Key
+from google.cloud.datastore.vector import Vector
+from google.cloud.datastore.vector import _VECTOR_VALUE
 from google.protobuf import timestamp_pb2
 
 
@@ -412,6 +414,8 @@ def _pb_attr_value(val):
         name, value = "array", val
     elif isinstance(val, GeoPoint):
         name, value = "geo_point", val.to_protobuf()
+    elif isinstance(val, Vector):
+        name, value = "vector", entity_pb2.Value(**val._to_dict())
     elif val is None:
         name, value = "null", struct_pb2.NULL_VALUE
     else:
@@ -468,6 +472,11 @@ def _get_value_from_value_pb(pb):
         result = [
             _get_value_from_value_pb(item_value) for item_value in pb.array_value.values
         ]
+        # check for vector values
+        if pb.meaning == _VECTOR_VALUE and all(
+            isinstance(item, float) for item in result
+        ):
+            result = Vector(result, exclude_from_indexes=bool(pb.exclude_from_indexes))
 
     elif value_type == "geo_point_value":
         result = GeoPoint(
@@ -518,6 +527,8 @@ def _set_protobuf_value(value_pb, val):
             for item in val:
                 i_pb = l_pb.add()
                 _set_protobuf_value(i_pb, item)
+    elif attr == "vector_value":
+        value_pb.CopyFrom(val._pb)
     elif attr == "geo_point_value":
         value_pb.geo_point_value.CopyFrom(val)
     else:  # scalar, just assign

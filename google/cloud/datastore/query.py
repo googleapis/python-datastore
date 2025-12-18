@@ -183,6 +183,11 @@ class Query(object):
         this query. When set, explain_metrics will be available on the iterator
         returned by query.fetch().
 
+    :type find_nearest: :class:`~google.cloud.datastore.vector.FindNearest`
+    :param find_nearest: (Optional) Options to perform a vector search for
+        entities in the query. When set, the query will return entities
+        sorted by distance from the query vector.
+
     :raises: ValueError if ``project`` is not passed and no implicit
              default is set.
     """
@@ -211,6 +216,7 @@ class Query(object):
         order=(),
         distinct_on=(),
         explain_options=None,
+        find_nearest=None,
     ):
         self._client = client
         self._kind = kind
@@ -232,6 +238,7 @@ class Query(object):
         self._explain_options = explain_options
         self._ancestor = ancestor
         self._filters = []
+        self.find_nearest = find_nearest
 
         # Verify filters passed in.
         for filter in filters:
@@ -943,6 +950,9 @@ def _pb_from_query(query):
         ref = query_pb2.PropertyReference()
         ref.name = distinct_on_name
         pb.distinct_on.append(ref)
+
+    if query.find_nearest:
+        pb.find_nearest = query_pb2.FindNearest(**query.find_nearest._to_dict())
 
     return pb
 
